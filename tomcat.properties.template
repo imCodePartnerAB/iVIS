@@ -1,0 +1,3 @@
+tomcat.webapps.dir =
+tomcat.manager.username =
+tomcat.manager.password =
