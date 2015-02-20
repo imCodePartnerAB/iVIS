@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 
-<project name="ivis" default="package">
+<project name="iVIS" default="package">
 
     <condition property="ant.maven.executable" value="mvn.bat">
         <os family="windows"/>
@@ -29,7 +29,7 @@
     <target name="tomcat-package" depends="package">
         <delete dir="${tomcat.webapps.dir}/WEB-INF/lib"/>
         <copy todir="${tomcat.webapps.dir}">
-            <fileset dir="target/ivis"/>
+            <fileset dir="target/iVIS"/>
         </copy>
     </target>
 
@@ -40,7 +40,7 @@
     </target>
 
     <target name="quick-copy-to-target">
-        <copy todir="target/ivis">
+        <copy todir="target/iVIS">
             <fileset dir="src/main/webapp" />
         </copy>
     </target>
