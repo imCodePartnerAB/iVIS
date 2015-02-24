@@ -34,7 +34,7 @@
     <beans:bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <beans:property name="locations">
             <beans:list>
-                <beans:value>/WEB-INF/local.server.properties</beans:value>
+                <beans:value>/WEB-INF/server.properties</beans:value>
             </beans:list>
         </beans:property>
     </beans:bean>
@@ -56,12 +56,12 @@
         <beans:property name="packagesToScan" value="com.imcode.entities"/>
         <beans:property name="jpaProperties">
             <beans:props>
-                <beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</beans:prop>
+                <beans:prop key="hibernate.dialect">${hibernate-dialect}</beans:prop>
                 <beans:prop key="connection.pool_size">1</beans:prop>
                 <beans:prop key="current_session_context_class">thread</beans:prop>
                 <beans:prop key="cache.provider_class">org.hibernate.cache.NoCacheProvider</beans:prop>
                 <beans:prop key="show_sql">true</beans:prop>
-                <beans:prop key="hibernate.hbm2ddl.auto">update</beans:prop>
+                <beans:prop key="hibernate.hbm2ddl.auto">${hibernate-hbm2ddl-auto}</beans:prop>
             </beans:props>
         </beans:property>
     </beans:bean>

@@ -63,6 +63,7 @@
         <filter token="db-maxconnections" value="${db-maxconnections}"/>
 
         <filter token="hibernate-dialect" value="${hibernate-dialect}"/>
+        <filter token="hibernate.hbm2ddl.auto" value="${hibernate-hbm2ddl-auto}"/>
 </target>
 
 </project>
