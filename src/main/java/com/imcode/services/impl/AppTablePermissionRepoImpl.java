@@ -11,5 +11,5 @@ import com.imcode.services.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AppTablePermissionRepoImpl extends AbstractService<AppTablePermission, AppTableKey, AppTablePermissionRepository> implements AppTablePermissionService {
+public class AppTablePermissionRepoImpl extends AbstractService<AppTablePermission, Long, AppTablePermissionRepository> implements AppTablePermissionService {
 }
