@@ -1,12 +1,15 @@
-db-host = localhost
-db-name = imcms
-db-user = root
-db-pass = root
-db-maxconnections = 20
+DBName = @db-name@
+JdbcUrlWithoutDBName = @db-url-without-db-name@
+JdbcDriver = @db-driver@
+JdbcUrl = @db-url@
 
-# For MySQL
-db-target = mysql
-db-port = 3306
-db-driver = com.mysql.jdbc.Driver
-db-url-without-db-name = jdbc:mysql://${db-host}:${db-port}/
-db-url = ${db-url-without-db-name}${db-name}?characterEncoding=utf8
+# Database login
+User = @db-user@
+Password = @db-pass@
+
+# Max number of connections to the database
+MaxConnectionCount = @db-maxconnections@
+
+#hibernate options
+Hibernate.hbm2ddl = @hibernate-hbm2ddl-auto@
+Hibernate.dialect = @hibernate-dialect@
