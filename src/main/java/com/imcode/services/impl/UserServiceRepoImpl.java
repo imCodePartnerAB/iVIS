@@ -8,4 +8,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceRepoImpl extends AbstractService<User, Long, UserRepository> implements UserService {
+    @Override
+    public User getBylogin(String login) {
+        return getRepo().findByLogin(login);
+    }
+
+    @Override
+    public boolean checkAutorisation(String login, String pwd) {
+        return getRepo().checkAutorisation(login, pwd);
+    }
+
 }

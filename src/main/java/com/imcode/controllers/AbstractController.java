@@ -1,8 +1,7 @@
 package com.imcode.controllers;
 
-import com.imcode.entities.Role;
+import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
-import com.imcode.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
@@ -19,31 +18,36 @@ public abstract class AbstractController<T, ID extends Serializable, SERVICE_TYP
     private SERVICE_TYPE service;
 
     @Autowired
+    private ErrorFactory errorFactory;
+
+    @Autowired
     private ApplicationContext ctx;
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-    public @ResponseBody T get(@PathVariable("id") ID id) {
+    public @ResponseBody Object get(@PathVariable("id") ID id) {
         return service.find(id);
     }
 
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
-    public @ResponseBody List<T> getAll() {
+    public @ResponseBody Object getAll() {
         List<T> result = service.findAll();
-//        RoleService roleS = ctx.getBean("RoleService", RoleService.class);
-//        List<Role> roles = roleS.findAll();
         return result;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public @ResponseBody T createSchool(@RequestBody T entity) {
+    public @ResponseBody Object createSchool(@RequestBody T entity) {
         return service.save(entity);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public @ResponseBody void delete(@PathVariable("id") ID id) {
+    public @ResponseBody Object delete(@PathVariable("id") ID id) {
         service.delete(id);
+        
+        return null;
     }
+    
     // Getters & Setters
+    //------------------------------------------------------------------------------------------------------------------
     public SERVICE_TYPE getService() {
         return service;
     }
@@ -52,11 +56,20 @@ public abstract class AbstractController<T, ID extends Serializable, SERVICE_TYP
         this.service = service;
     }
 
-    public ApplicationContext getCtx() {
-        return ctx;
+    public ErrorFactory getErrorFactory() {
+        return errorFactory;
     }
 
-    public void setCtx(ApplicationContext ctx) {
-        this.ctx = ctx;
+    public void setErrorFactory(ErrorFactory errorFactory) {
+        this.errorFactory = errorFactory;
     }
+
+    //    public ApplicationContext getCtx() {
+//        return ctx;
+//    }
+    
+
+//    public void setCtx(ApplicationContext ctx) {
+//        this.ctx = ctx;
+//    }
 }

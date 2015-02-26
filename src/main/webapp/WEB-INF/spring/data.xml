@@ -71,4 +71,20 @@
     </beans:bean>
 
 
+    <beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl">
+        <beans:property name="applicationService" ref="applicationServiceRepoImpl"/>
+        <beans:property name="userService" ref="userServiceRepoImpl"/>
+    </beans:bean>
+
+    <beans:bean id="errorFactory" class="com.imcode.misc.errors.ErrorFactory">
+        <beans:property name="messageSource">
+            <beans:bean class="org.springframework.context.support.ResourceBundleMessageSource">
+                <beans:property name="basenames">
+                    <beans:list>
+                        <beans:value>/WEB-INF/errors</beans:value>
+                    </beans:list>
+                </beans:property>
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
 </beans:beans>
