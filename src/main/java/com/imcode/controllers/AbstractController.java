@@ -5,6 +5,7 @@ import com.imcode.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,23 +25,23 @@ public abstract class AbstractController<T, ID extends Serializable, SERVICE_TYP
     private ApplicationContext ctx;
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-    public @ResponseBody Object get(@PathVariable("id") ID id) {
+    public @ResponseBody Object get(@PathVariable("id") ID id, WebRequest webRequest) {
         return service.find(id);
     }
 
     @RequestMapping(value = "/getall", method = RequestMethod.GET)
-    public @ResponseBody Object getAll() {
+    public @ResponseBody Object getAll(WebRequest webRequest) {
         List<T> result = service.findAll();
         return result;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public @ResponseBody Object createSchool(@RequestBody T entity) {
+    public @ResponseBody Object createSchool(@RequestBody T entity, WebRequest webRequest) {
         return service.save(entity);
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public @ResponseBody Object delete(@PathVariable("id") ID id) {
+    public @ResponseBody Object delete(@PathVariable("id") ID id, WebRequest webRequest) {
         service.delete(id);
         
         return null;

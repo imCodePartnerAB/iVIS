@@ -9,7 +9,7 @@ import java.util.Map;
 public class Error implements Serializable{
     private String id;
     private String description;
-    private Map<String, String> requestParams;
+    private Map<String, String[]> requestParams;
 
     public Error() { }
 
@@ -22,7 +22,7 @@ public class Error implements Serializable{
         this.description = description;
     }
 
-    public Error(String id, String description, Map<String, String> requestParams) {
+    public Error(String id, String description, Map<String, String[]> requestParams) {
         this.id = id;
         this.description = description;
         this.requestParams = requestParams;
@@ -44,11 +44,11 @@ public class Error implements Serializable{
         this.description = description;
     }
 
-    public Map<String, String> getrequestParams() {
+    public Map<String, String[]> getrequestParams() {
         return requestParams;
     }
 
-    public void setrequestParams(Map<String, String> requestParams) {
+    public void setrequestParams(Map<String, String[]> requestParams) {
         this.requestParams = requestParams;
     }
 

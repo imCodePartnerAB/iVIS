@@ -6,10 +6,12 @@ import com.imcode.exceptions.ApplicationNotFoundException;
 import com.imcode.exceptions.AutorizationException;
 import com.imcode.exceptions.RestException;
 import com.imcode.exceptions.UserNotfoundException;
+import com.imcode.repositories.TokenInfoRepository;
 import com.imcode.services.ApplicationService;
 import com.imcode.services.UserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,6 +24,7 @@ public class SecurityServiceImpl implements SecurityService {
     private Map<UUID, TokenInfo> tokenInfoMap = new HashMap<>();
     private ApplicationService applicationService;
     private UserService userService;
+    private TokenInfoRepository tokenInfoRepository;
 
     public UUID createToken(String userName, String pwd, Long applicationId) throws RestException{
         UUID uuid = null;
@@ -42,6 +45,7 @@ public class SecurityServiceImpl implements SecurityService {
             synchronized (this) {
                 tokenInfoMap.put(uuid, tokenInfo);
             }
+        tokenInfoRepository.save(tokenInfo);
 //        }
 
         return uuid;
@@ -51,9 +55,7 @@ public class SecurityServiceImpl implements SecurityService {
         TokenInfo tokenInfo = tokenInfoMap.get(token);
 
         if (tokenInfo != null && tokenInfo.isRotten()) {
-            synchronized (this) {
-                tokenInfoMap.remove(tokenInfo);
-            }
+            removeToken(token);
             tokenInfo = null;
         }
 
@@ -66,11 +68,28 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public synchronized void removeToken(UUID token) {
-        tokenInfoMap.remove(token);
+    public void removeToken(UUID token) {
+        synchronized (this) {
+            tokenInfoMap.remove(token);
+        }
+        
+        tokenInfoRepository.delete(token);
     }
+    
     public void removeToken(String tokenName) {
         removeToken(UUID.fromString(tokenName));
+    }
+
+    public void initialize() {
+        List<TokenInfo> tokenInfoList = tokenInfoRepository.findAll();
+        
+        for (TokenInfo tokenInfo : tokenInfoList) {
+            if (!tokenInfo.isRotten()) {
+                tokenInfoMap.put(tokenInfo.getId(), tokenInfo);
+            } else {
+                tokenInfoRepository.delete(tokenInfo);
+            }
+        }
     }
 
     public ApplicationService getApplicationService() {
@@ -87,6 +106,14 @@ public class SecurityServiceImpl implements SecurityService {
 
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    public TokenInfoRepository getTokenInfoRepository() {
+        return tokenInfoRepository;
+    }
+
+    public void setTokenInfoRepository(TokenInfoRepository tokenInfoRepository) {
+        this.tokenInfoRepository = tokenInfoRepository;
     }
 }
 

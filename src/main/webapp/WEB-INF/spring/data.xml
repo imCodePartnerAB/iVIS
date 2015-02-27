@@ -4,7 +4,7 @@
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:jpa="http://www.springframework.org/schema/data/jpa"
              xmlns:context="http://www.springframework.org/schema/context"
-             xmlns:tx="http://www.springframework.org/schema/tx"
+             xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
                   http://www.springframework.org/schema/beans/spring-beans.xsd
                   http://www.springframework.org/schema/data/jpa
@@ -14,7 +14,7 @@
                   http://www.springframework.org/schema/context
                   http://www.springframework.org/schema/context/spring-context.xsd
                   http://www.springframework.org/schema/tx
-                  http://www.springframework.org/schema/tx/spring-tx.xsd">
+                  http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- Настраивает управление транзакциями с помощью аннотации @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -53,9 +53,15 @@
     <beans:bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <beans:property name="dataSource" ref="dataSource"/>
         <beans:property name="persistenceProvider" ref="hibernatePersistence"/>
-        <beans:property name="packagesToScan" value="com.imcode.entities"/>
+        <beans:property name="packagesToScan">
+            <beans:list>
+                <beans:value>com.imcode.entities</beans:value>
+                <beans:value>com.imcode.misc</beans:value>
+            </beans:list>
+        </beans:property>
         <beans:property name="jpaProperties">
             <beans:props>
+                <!--<beans:prop key="hibernate.dialect">${Hibernate.dialect}</beans:prop>-->
                 <beans:prop key="hibernate.dialect">${Hibernate.dialect}</beans:prop>
                 <beans:prop key="connection.pool_size">1</beans:prop>
                 <beans:prop key="current_session_context_class">thread</beans:prop>
@@ -71,9 +77,10 @@
     </beans:bean>
 
 
-    <beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl">
+    <beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl" init-method="initialize">
         <beans:property name="applicationService" ref="applicationServiceRepoImpl"/>
         <beans:property name="userService" ref="userServiceRepoImpl"/>
+        <beans:property name="tokenInfoRepository" ref="tokenInfoRepository"/>
     </beans:bean>
 
     <beans:bean id="errorFactory" class="com.imcode.misc.errors.ErrorFactory">
@@ -81,10 +88,24 @@
             <beans:bean class="org.springframework.context.support.ResourceBundleMessageSource">
                 <beans:property name="basenames">
                     <beans:list>
-                        <beans:value>/WEB-INF/errors</beans:value>
+                        <beans:value>errors</beans:value>
                     </beans:list>
                 </beans:property>
             </beans:bean>
         </beans:property>
     </beans:bean>
+
+    <!--<beans:bean id="tokenCheckAdvice" class="com.imcode.oauth2.TokenCheckAdvice"/>-->
+    <!--<aop:aspectj-autoproxy />-->
+    <!--&lt;!&ndash;<aop:config>&ndash;&gt;-->
+        <!--&lt;!&ndash;<aop:pointcut id="tokenRequared" expression="execution(* com.imcode.controllers.SchoolClassControllerImpl.test(..))"/>&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<aop:aspect ref="tokenCheckAdvice">&ndash;&gt;-->
+            <!--&lt;!&ndash;<aop:around method="aroundAdvice" pointcut-ref="tokenRequared"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</aop:aspect>&ndash;&gt;-->
+    <!--&lt;!&ndash;</aop:config>&ndash;&gt;-->
+    <!--<aop:aspectj-autoproxy>-->
+        <!--<aop:include name="tokenCheckAdvice"/>-->
+    <!--</aop:aspectj-autoproxy>-->
+    
 </beans:beans>
