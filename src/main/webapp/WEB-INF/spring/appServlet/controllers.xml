@@ -11,13 +11,14 @@
     <!-- Определяем папку, в которой будем искать веб компоненты (контроллеры)-->
     <context:component-scan base-package="com.imcode.controllers" />
 
-    <bean id="tokenCheckAdvice" class="com.imcode.oauth2.TokenCheckAdvice">
-        <property name="securityService" ref="securityService"/>
-    </bean>
+    <!--Ввеменно закоментил для внедрения Spring Security + OAuth2-->
+    <!--<bean id="tokenCheckAdvice" class="com.imcode.oauth2.TokenCheckAdvice">-->
+        <!--<property name="securityService" ref="securityService"/>-->
+    <!--</bean>-->
 
-    <aop:aspectj-autoproxy />
+    <!--<aop:aspectj-autoproxy />-->
 
-    <aop:aspectj-autoproxy>
-        <aop:include name="tokenCheckAdvice"/>
-    </aop:aspectj-autoproxy>
+    <!--<aop:aspectj-autoproxy>-->
+        <!--<aop:include name="tokenCheckAdvice"/>-->
+    <!--</aop:aspectj-autoproxy>-->
 </beans>
