@@ -17,7 +17,7 @@ import java.util.Map;
  */
 
 @Component
-@Aspect
+//@Aspect
 public class TokenCheckAdvice {
     private SecurityService securityService;
     @Pointcut("within(@org.springframework.stereotype.Controller *)")

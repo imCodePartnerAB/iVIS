@@ -17,8 +17,7 @@
     <resources mapping="/resources/**" location="/resources/" />
 
     <!-- Отображение видов на jsp-файлы, лежащие в папке /WEB-INF/views -->
-    <beans:bean
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
@@ -34,6 +33,7 @@
 
     <!-- Configure bean to convert JSON to POJO and vice versa -->
     <beans:bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        
     </beans:bean>
 
     <!-- Файл с настройками контроллеров -->

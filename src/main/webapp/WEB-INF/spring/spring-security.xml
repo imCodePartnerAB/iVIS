@@ -23,28 +23,59 @@
                             http://www.springframework.org/schema/context/spring-context-4.1.xsd ">
 
 <!--=============================================================================================================-->
-    <http pattern="/oauth/token" create-session="stateless"
-          authentication-manager-ref="clientAuthenticationManager"
-          xmlns="http://www.springframework.org/schema/security">
-        <intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
-        <anonymous enabled="false" />
-        <http-basic entry-point-ref="clientAuthenticationEntryPoint" />
-        <!-- include this only if you need to authenticate clients via request parameters -->
-        <custom-filter ref="clientCredentialsTokenEndpointFilter" after="BASIC_AUTH_FILTER"/>
-        <access-denied-handler ref="oauthAccessDeniedHandler" />
-    </http>
+    <sec:http pattern="/oauth/token" create-session="stateless"
+              authentication-manager-ref="authenticationManager">
+        <sec:intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
+        <sec:anonymous enabled="false" />
+        <sec:http-basic entry-point-ref="clientAuthenticationEntryPoint" />
+        <sec:custom-filter ref="clientCredentialsTokenEndpointFilter" before="BASIC_AUTH_FILTER" />
+        <sec:access-denied-handler ref="oauthAccessDeniedHandler" />
+    </sec:http>
+    
+    <!--<http pattern="/oauth/token" create-session="stateless"-->
+          <!--authentication-manager-ref="clientAuthenticationManager"-->
+          <!--xmlns="http://www.springframework.org/schema/security">-->
+        <!--<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />-->
+        <!--<anonymous enabled="false" />-->
+        <!--<http-basic entry-point-ref="clientAuthenticationEntryPoint" />-->
+        <!--&lt;!&ndash; include this only if you need to authenticate clients via request parameters &ndash;&gt;-->
+        <!--<custom-filter ref="clientCredentialsTokenEndpointFilter" after="BASIC_AUTH_FILTER"/>-->
+        <!--<access-denied-handler ref="oauthAccessDeniedHandler" />-->
+    <!--</http>-->
 
     <!-- This is where we tells spring security what URL should be protected and what roles have access to them -->
-    <http pattern="/sclasses/**" create-session="never"
+    <http pattern="/schools/**" create-session="never"
           entry-point-ref="oauthAuthenticationEntryPoint"
           access-decision-manager-ref="accessDecisionManager"
           xmlns="http://www.springframework.org/schema/security">
         <anonymous enabled="false" />
-        <intercept-url pattern="/sclasses/**" access="ROLE_APP" />
+        <intercept-url pattern="/schools/**" access="ROLE_ADMIN" />
         <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
+<!--Glogal Security-->
+    <sec:http access-denied-page="/error403.jsp">
+        <sec:intercept-url pattern="/index*" access="ROLE_USER,ROLE_ADMIN" />
+        <sec:intercept-url pattern="/add*" access="ROLE_USER" />
+        <sec:intercept-url pattern="/delete/*" access="ROLE_ADMIN" />
+        <sec:form-login login-page="/login.jsp" default-target-url="/index"
+                    authentication-failure-url="/login.jsp?error=true" />
+        <sec:logout logout-url="/logout" logout-success-url="/index" />
 
+        <sec:anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />
+        <!--<sec:remember-me />-->
+    </sec:http>
+
+    <!--<sec:authentication-manager>-->
+        <!--<sec:authentication-provider>-->
+            <!--<sec:user-service>-->
+                <!--<sec:user name="admin" password="pass" authorities="ROLE_ADMIN,ROLE_USER" />-->
+                <!--<sec:user name="user1" password="1111" authorities="ROLE_USER" />-->
+                <!--<sec:user name="user2" password="2222" disabled="true" authorities="ROLE_USER" />-->
+            <!--</sec:user-service>-->
+        <!--</sec:authentication-provider>-->
+    <!--</sec:authentication-manager>-->
+<!--Glogal Security-->
 
     <bean id="oauthAuthenticationEntryPoint"
           class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
@@ -89,7 +120,10 @@
                             xmlns="http://www.springframework.org/schema/security">
         <authentication-provider>
             <user-service>
-                <user name="beingjavaguys" password="spring@java" authorities="ROLE_APP" />
+                <user name="beingjavaguys" password="spring@java" authorities="ROLE_ADMIN" />
+                <user name="admin" password="pass" authorities="ROLE_ADMIN,ROLE_USER" />
+                <user name="user1" password="1111" authorities="ROLE_USER" />
+                <user name="user2" password="2222" disabled="true" authorities="ROLE_USER" />
             </user-service>
         </authentication-provider>
     </authentication-manager>
@@ -101,7 +135,7 @@
 
 
     <!-- This defined token store, we have used inmemory tokenstore for now but this can be changed to a user defined one -->
-    <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />
+    <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />
 
     <!-- This is where we defined token based configurations, token validity and other things -->
     <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
@@ -112,8 +146,13 @@
         <property name="refreshTokenValiditySeconds" value="86400"/>
     </bean>
 
-    <bean id="userApprovalHandler" class="org.springframework.security.oauth2.provider.approval.TokenServicesUserApprovalHandler">
-        <property name="tokenServices" ref="tokenServices" />
+    <bean id="userApprovalHandler" class="org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler">
+        <property name="tokenStore" ref="tokenStore" />
+        <property name="requestFactory">
+            <bean class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
+                <constructor-arg ref="clientDetails"/>
+            </bean>
+        </property>
     </bean>
 
     <oauth:authorization-server
@@ -133,13 +172,15 @@
         <!-- client -->
         <oauth:client client-id="restapp"
                       authorized-grant-types="authorization_code,client_credentials"
-                      authorities="ROLE_APP" 
+                      authorities="ROLE_ADMIN" 
                       scope="read,write,trust" 
                       secret="secret" />
 
-        <oauth:client client-id="restapp"
-                      authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                      secret="restapp" authorities="ROLE_APP" />
+        <oauth:client client-id="restapp2"
+                      authorized-grant-types="password,authorization_code,refresh_token,implicit,assertion"
+                      authorities="ROLE_ADMIN"
+                      scope="read,write,trust"
+                      secret="restapp2"/>
 
     </oauth:client-details-service>
 
