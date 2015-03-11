@@ -77,11 +77,11 @@
     </beans:bean>
 
 
-    <beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl" init-method="initialize">
-        <beans:property name="applicationService" ref="applicationServiceRepoImpl"/>
-        <beans:property name="userService" ref="userServiceRepoImpl"/>
-        <beans:property name="tokenInfoRepository" ref="tokenInfoRepository"/>
-    </beans:bean>
+    <!--<beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl" init-method="initialize">-->
+        <!--<beans:property name="applicationService" ref="applicationServiceRepoImpl"/>-->
+        <!--<beans:property name="userService" ref="userServiceRepoImpl"/>-->
+        <!--<beans:property name="tokenInfoRepository" ref="tokenInfoRepository"/>-->
+    <!--</beans:bean>-->
 
     <beans:bean id="errorFactory" class="com.imcode.misc.errors.ErrorFactory">
         <beans:property name="messageSource">
