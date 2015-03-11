@@ -14,25 +14,25 @@ import java.util.Locale;
 /**
  * Created by vitaly on 27.02.15.
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class ExceptionHandlerControllerImpl {
-    @Autowired
-    private ErrorFactory errorFactory;
-    
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    Object exceptionHandler(Exception e, WebRequest webRequest) {
-
-        com.imcode.misc.errors.Error error = errorFactory.getErrorWithDescription(5);
-        error.setrequestParams(webRequest.getParameterMap());
-        return new ErrorResponse(error);
-    }
-
-    public ErrorFactory getErrorFactory() {
-        return errorFactory;
-    }
-
-    public void setErrorFactory(ErrorFactory errorFactory) {
-        this.errorFactory = errorFactory;
-    }
+//    @Autowired
+//    private ErrorFactory errorFactory;
+//
+//    @ExceptionHandler(Exception.class)
+//    @ResponseBody
+//    Object exceptionHandler(Exception e, WebRequest webRequest) {
+//
+//        com.imcode.misc.errors.Error error = errorFactory.getErrorWithDescription(5);
+//        error.setrequestParams(webRequest.getParameterMap());
+//        return new ErrorResponse(error);
+//    }
+//
+//    public ErrorFactory getErrorFactory() {
+//        return errorFactory;
+//    }
+//
+//    public void setErrorFactory(ErrorFactory errorFactory) {
+//        this.errorFactory = errorFactory;
+//    }
 }
