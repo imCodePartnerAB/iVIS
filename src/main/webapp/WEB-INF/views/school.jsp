@@ -19,9 +19,9 @@
 </head>
 <body>
 
-<a href="<c:url value="/logout" />">Logout</a>
+<a href="<c:url value="/logout.do" />">Logout</a>
 <br/>
-<a href="<c:url value="/schools/getall" />">Schools RESTful</a>
+<a href="<c:url value="/schools"/>">Schools RESTful</a>
 <br/>
 
 

@@ -1,10 +1,11 @@
-package com.imcode.controllers;
+package com.imcode.controllers.html;
 
 import com.imcode.entities.School;
 import com.imcode.services.SchoolClassService;
 import com.imcode.services.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;

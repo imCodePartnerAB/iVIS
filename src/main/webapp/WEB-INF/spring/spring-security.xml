@@ -32,17 +32,6 @@
         <sec:access-denied-handler ref="oauthAccessDeniedHandler" />
     </sec:http>
     
-    <!--<http pattern="/oauth/token" create-session="stateless"-->
-          <!--authentication-manager-ref="clientAuthenticationManager"-->
-          <!--xmlns="http://www.springframework.org/schema/security">-->
-        <!--<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />-->
-        <!--<anonymous enabled="false" />-->
-        <!--<http-basic entry-point-ref="clientAuthenticationEntryPoint" />-->
-        <!--&lt;!&ndash; include this only if you need to authenticate clients via request parameters &ndash;&gt;-->
-        <!--<custom-filter ref="clientCredentialsTokenEndpointFilter" after="BASIC_AUTH_FILTER"/>-->
-        <!--<access-denied-handler ref="oauthAccessDeniedHandler" />-->
-    <!--</http>-->
-
     <!-- This is where we tells spring security what URL should be protected and what roles have access to them -->
     <http pattern="/schools/**" create-session="never"
           entry-point-ref="oauthAuthenticationEntryPoint"
@@ -66,17 +55,7 @@
         <!--<sec:remember-me />-->
     </sec:http>
 
-    <!--<sec:authentication-manager>-->
-        <!--<sec:authentication-provider>-->
-            <!--<sec:user-service>-->
-                <!--<sec:user name="admin" password="pass" authorities="ROLE_ADMIN,ROLE_USER" />-->
-                <!--<sec:user name="user1" password="1111" authorities="ROLE_USER" />-->
-                <!--<sec:user name="user2" password="2222" disabled="true" authorities="ROLE_USER" />-->
-            <!--</sec:user-service>-->
-        <!--</sec:authentication-provider>-->
-    <!--</sec:authentication-manager>-->
 <!--Glogal Security-->
-
     <bean id="oauthAuthenticationEntryPoint"
           class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
         <property name="realmName" value="test" />

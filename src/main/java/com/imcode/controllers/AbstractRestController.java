@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by vitaly on 17.02.15.
  */
-public abstract class AbstractController<T, ID extends Serializable, SERVICE_TYPE extends GenericService<T, ID>> {
+public abstract class AbstractRestController<T, ID extends Serializable, SERVICE_TYPE extends GenericService<T, ID>> {
 
     @Autowired
     private SERVICE_TYPE service;
@@ -24,27 +24,30 @@ public abstract class AbstractController<T, ID extends Serializable, SERVICE_TYP
     @Autowired
     private ApplicationContext ctx;
 
-    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public @ResponseBody Object get(@PathVariable("id") ID id, WebRequest webRequest) {
         return service.find(id);
     }
 
-    @RequestMapping(value = "/getall", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody Object getAll(WebRequest webRequest) {
         List<T> result = service.findAll();
         return result;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public @ResponseBody Object createSchool(@RequestBody T entity, WebRequest webRequest) {
+    @RequestMapping(method = RequestMethod.POST)
+    public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) {
         return service.save(entity);
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public @ResponseBody Object delete(@PathVariable("id") ID id, WebRequest webRequest) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") ID id, WebRequest webRequest) {
         service.delete(id);
-        
-        return null;
+    }
+    
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public @ResponseBody Object update(@PathVariable("id") ID id, @RequestBody(required = false) T entity, WebRequest webRequest) {
+        return service.find(id);
     }
     
     // Getters & Setters

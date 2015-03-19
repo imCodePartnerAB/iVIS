@@ -1,5 +1,6 @@
-package com.imcode.controllers;
+package com.imcode.controllers.restful;
 
+import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.SchoolClass;
 import com.imcode.services.SchoolClassService;
 import org.springframework.stereotype.Controller;
@@ -9,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 @Controller
-@RequestMapping("/sclasses")
-public class SchoolClassControllerImpl extends AbstractController<SchoolClass, Long, SchoolClassService> {
+@RequestMapping("/v1/{format}/classes")
+public class SchoolClassRestControllerImpl extends AbstractRestController<SchoolClass, Long, SchoolClassService> {
 
     @RequestMapping("/test")
     @ResponseBody

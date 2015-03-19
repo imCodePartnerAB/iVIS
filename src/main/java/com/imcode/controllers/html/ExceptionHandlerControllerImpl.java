@@ -1,4 +1,4 @@
-package com.imcode.controllers;
+package com.imcode.controllers.html;
 
 import com.imcode.misc.ErrorResponse;
 import com.imcode.misc.errors.*;

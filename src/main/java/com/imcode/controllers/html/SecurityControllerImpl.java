@@ -1,4 +1,4 @@
-package com.imcode.controllers;
+package com.imcode.controllers.html;
 
 import com.imcode.entities.User;
 import com.imcode.exceptions.ApplicationNotFoundException;

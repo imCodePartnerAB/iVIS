@@ -98,7 +98,7 @@
     <!--<beans:bean id="tokenCheckAdvice" class="com.imcode.oauth2.TokenCheckAdvice"/>-->
     <!--<aop:aspectj-autoproxy />-->
     <!--&lt;!&ndash;<aop:config>&ndash;&gt;-->
-        <!--&lt;!&ndash;<aop:pointcut id="tokenRequared" expression="execution(* com.imcode.controllers.SchoolClassControllerImpl.test(..))"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<aop:pointcut id="tokenRequared" expression="execution(* com.imcode.controllers.restful.SchoolClassControllerImpl.test(..))"/>&ndash;&gt;-->
 
         <!--&lt;!&ndash;<aop:aspect ref="tokenCheckAdvice">&ndash;&gt;-->
             <!--&lt;!&ndash;<aop:around method="aroundAdvice" pointcut-ref="tokenRequared"/>&ndash;&gt;-->

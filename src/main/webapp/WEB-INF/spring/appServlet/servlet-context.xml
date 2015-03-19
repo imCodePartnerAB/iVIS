@@ -23,20 +23,20 @@
     </beans:bean>
 
     <!-- Configure to plugin JSON as request and response in method handler -->
-    <beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <beans:property name="messageConverters">
-            <beans:list>
-                <beans:ref bean="jsonMessageConverter"/>
-            </beans:list>
-        </beans:property>
-    </beans:bean>
+    <!--<beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
+        <!--<beans:property name="messageConverters">-->
+            <!--<beans:list>-->
+                <!--<beans:ref bean="jsonMessageConverter"/>-->
+            <!--</beans:list>-->
+        <!--</beans:property>-->
+    <!--</beans:bean>-->
 
-    <!-- Configure bean to convert JSON to POJO and vice versa -->
-    <beans:bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-        
-    </beans:bean>
+    <!--&lt;!&ndash; Configure bean to convert JSON to POJO and vice versa &ndash;&gt;-->
+    <!--<beans:bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+        <!---->
+    <!--</beans:bean>-->
 
-    <!-- Файл с настройками контроллеров -->
-    <beans:import resource="controllers.xml" />
-
+    <!--&lt;!&ndash; Файл с настройками контроллеров &ndash;&gt;-->
+    <!--<beans:import resource="controllers.xml" />-->
+    <context:component-scan base-package="com.imcode.controllers.html"/>
 </beans:beans>
