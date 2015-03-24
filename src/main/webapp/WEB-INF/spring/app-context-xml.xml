@@ -13,13 +13,11 @@
 
     <context:annotation-config/>
     <!--<aop:aspectj-autoproxy/>-->
-    
+    <beans:import resource="data.xml"/>
+    <beans:import resource="spring-security3Jdbc.xml"/>
+
     <context:component-scan base-package="com.imcode.services"/>
     <!--<context:component-scan base-package="com.imcode.misc"/>-->
-
-    <beans:import resource="data.xml"/>
-    <beans:import resource="spring-security2.xml"/>
-
 
 </beans:beans>
 

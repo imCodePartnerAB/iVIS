@@ -83,7 +83,13 @@
             <!--<version>1.0.5.RELEASE</version>-->
             <version>2.0.5.RELEASE</version>
         </dependency>
-        
+
+        <!--Spring Tests-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
 
 
         <!-- Hibernate -->
@@ -227,6 +233,13 @@
             <artifactId>junit</artifactId>
             <version>4.7</version>
             <scope>test</scope>
+        </dependency>
+
+        <!--Common-->
+        <dependency>
+            <groupId>org.apache.directory.studio</groupId>
+            <artifactId>org.apache.commons.io</artifactId>
+            <version>2.4</version>
         </dependency>
     </dependencies>
     <build>

@@ -21,10 +21,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 //import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -92,27 +95,26 @@ public class AdminController {
 
     @RequestMapping(value = "/oauth/tokens", method = {RequestMethod.GET})
     public String tokenList(Model model) {
-        String[] clients = {
-                "my-trusted-client",
-                "my-trusted-client-with-secre",
-                "my-client-with-secret",
-                "my-less-trusted-client",
-                "my-less-trusted-autoapprove-client",
-                "my-client-with-registered-redirect",
-                "my-untrusted-client-with-registered-redirect",
-                "tonr",
-                "tonr-with-redirect",
-        };
+        JdbcClientDetailsService jdbcClientDetailsService = (JdbcClientDetailsService) clientDetailsService;
+        List<ClientDetails> clients = jdbcClientDetailsService.listClientDetails();
 
         List<OAuth2AccessToken> tokens = new LinkedList<>();
 
-        for (int i = 0; i < clients.length; i++) {
-            Collection<OAuth2AccessToken> tokensByClientId = tokenStore.findTokensByClientId(clients[i]);
+        for (ClientDetails clientDetails : clients) {
+            Collection<OAuth2AccessToken> tokensByClientId = tokenStore.findTokensByClientId(clientDetails.getClientId());
 
             if (tokensByClientId != null) {
                 tokens.addAll(tokensByClientId);
             }
         }
+
+//        for (int i = 0; i < clients.length; i++) {
+//            Collection<OAuth2AccessToken> tokensByClientId = tokenStore.findTokensByClientId(clients[i]);
+//
+//            if (tokensByClientId != null) {
+//                tokens.addAll(tokensByClientId);
+//            }
+//        }
 
         model.addAttribute("tokens", tokens);
 

@@ -5,6 +5,8 @@ import com.imcode.services.SchoolClassService;
 import com.imcode.services.SchoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,7 +20,7 @@ import java.util.Map;
  * Created by vitaly on 05.03.15.
  */
 @Controller
-public class MainControler {
+public class MockControler {
     @Autowired
     private SchoolService schoolService;
 

@@ -24,13 +24,7 @@
           <!--xmlns="http://www.springframework.org/schema/security" />-->
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
-    <!--<sec:http pattern="/*"-->
-              <!--create-session="stateless">-->
-        <!--<sec:intercept-url pattern='/**' access='ROLE_USER' />-->
-        <!--<sec:http-basic />-->
-    <!--</sec:http>-->
-    
-    <!-- This is where we tells spring security what URL should be protected and what roles have access to them -->
+    <!--&lt;!&ndash; This is where we tells spring security what URL should be protected and what roles have access to them &ndash;&gt;-->
     <!--<http pattern="/schools/**" create-session="stateless"-->
           <!--entry-point-ref="oauthAuthenticationEntryPoint"-->
           <!--access-decision-manager-ref="accessDecisionManager"-->
@@ -41,7 +35,7 @@
         <!--&lt;!&ndash;<access-denied-handler ref="oauthAccessDeniedHandler" />&ndash;&gt;-->
     <!--</http>-->
     
-    <http pattern="/oauth/token" create-session="stateless"
+    <http pattern="/oauth/token" create-session="never"
           authentication-manager-ref="clientAuthenticationManager"
           xmlns="http://www.springframework.org/schema/security">
         <intercept-url pattern="/**" method="GET" access="ROLE_DENY" />
@@ -55,14 +49,15 @@
         <custom-filter ref="clientCredentialsTokenEndpointFilter"
                        after="BASIC_AUTH_FILTER" />
         <access-denied-handler ref="oauthAccessDeniedHandler" />
-        <!--<csrf/>-->
     </http>
 
     <!-- The OAuth2 protected resources are separated out into their own block
         so we can deal with authorization and error handling separately. This isn't
         mandatory, but it makes it easier to control the behaviour. -->
-    <http pattern="/oauth/(users|clients)/.*" request-matcher="regex"
-          create-session="stateless" entry-point-ref="oauthAuthenticationEntryPoint"
+    <http pattern="/oauth/(users|clients)/.*"
+          request-matcher="regex"
+          create-session="never"
+          entry-point-ref="oauthAuthenticationEntryPoint"
           use-expressions="true" xmlns="http://www.springframework.org/schema/security">
         <anonymous enabled="false" />
         <intercept-url pattern="/oauth/users/([^/].*?)/tokens/.*"
@@ -78,7 +73,6 @@
         <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
         <access-denied-handler ref="oauthAccessDeniedHandler" />
         <expression-handler ref="oauthWebExpressionHandler" />
-        <!--<csrf/>-->
     </http>
 
     <!-- The OAuth2 protected resources are separated out into their own block
@@ -98,25 +92,10 @@
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
 
-    <!-- The OAuth2 protected resources are separated out into their own block
-        so we can deal with authorization and error handling separately. This isn't
-        mandatory, but it makes it easier to control the behaviour. -->
-    <!--<http pattern="/me/**" create-session="never"-->
-          <!--entry-point-ref="oauthAuthenticationEntryPoint"-->
-          <!--access-decision-manager-ref="accessDecisionManager"-->
-          <!--xmlns="http://www.springframework.org/schema/security">-->
-        <!--<anonymous enabled="false" />-->
-        <!--<intercept-url pattern="/me" access="ROLE_USER,SCOPE_READ" />-->
-        <!--<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />-->
-        <!--<access-denied-handler ref="oauthAccessDeniedHandler" />-->
-    <!--</http>-->
-
     <http access-denied-page="/login.jsp?authorization_error=true"
           disable-url-rewriting="true" xmlns="http://www.springframework.org/schema/security">
-        <intercept-url pattern="/oauth/**" access="ROLE_USER" />
+        <!--<intercept-url pattern="/oauth/**" access="ROLE_USER" />-->
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <!--<intercept-url pattern="/index*" access="ROLE_USER" />-->
-        <!--<intercept-url pattern="/schools*" access="ROLE_USER" />-->
 
         <form-login authentication-failure-url="/login.jsp?authentication_error=true"
                     default-target-url="/index" login-page="/login.jsp"
@@ -177,10 +156,11 @@
     <authentication-manager alias="authenticationManager"
                             xmlns="http://www.springframework.org/schema/security">
         <authentication-provider>
-            <user-service id="userDetailsService">
-                <user name="admin" password="pass" authorities="ROLE_USER" />
-                <user name="user1" password="1111" authorities="ROLE_USER" />
-            </user-service>
+            <jdbc-user-service data-source-ref="dataSource"/>
+            <!--<user-service id="userDetailsService">-->
+                <!--<user name="admin" password="pass" authorities="ROLE_USER" />-->
+                <!--<user name="user1" password="1111" authorities="ROLE_USER" />-->
+            <!--</user-service>-->
         </authentication-provider>
     </authentication-manager>
 
@@ -189,9 +169,10 @@
         <constructor-arg ref="clientDetails" />
     </bean>
 
-    <bean id="tokenStore"
-          class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />
-          <!--class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore" />-->
+    <!--<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />-->
+    <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore"
+          c:dataSource-ref="dataSource"/>
+
 
     <bean id="tokenServices"
           class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
@@ -203,26 +184,27 @@
 
     <bean id="tokenEnhancer"
           class="com.imcode.oauth2.SparklrTokenEnhancer" />
-          <!--class="org.springframework.security.oauth.examples.sparklr.oauth.SparklrTokenEnhancer" />-->
 
     <bean id="requestFactory"
           class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
-          <!--class="org.springframework.security.oauth2.provider.DefaultOAuth2RequestFactory">-->
         <constructor-arg name="clientDetailsService" ref="clientDetails" />
     </bean>
 
     <bean id="userApprovalHandler"
           class="com.imcode.oauth2.IvisUserApprovalHandler">
-          <!--class="org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler">-->
         <property name="approvalStore" ref="approvalStore" />
         <property name="clientDetailsService" ref="clientDetails" />
         <property name="requestFactory" ref="requestFactory" />
     </bean>
 
+    <!--<bean id="approvalStore"-->
+          <!--class="org.springframework.security.oauth2.provider.approval.TokenApprovalStore">-->
+        <!--<property name="tokenStore" ref="tokenStore" />-->
+    <!--</bean>-->
     <bean id="approvalStore"
-          class="org.springframework.security.oauth2.provider.approval.TokenApprovalStore">
-        <property name="tokenStore" ref="tokenStore" />
-    </bean>
+          class="org.springframework.security.oauth2.provider.approval.JdbcApprovalStore"
+          c:dataSource-ref="dataSource"/>
+
 
     <oauth:authorization-server
             client-details-service-ref="clientDetails" token-services-ref="tokenServices"
@@ -235,39 +217,42 @@
     </oauth:authorization-server>
 
     <oauth:resource-server id="resourceServerFilter"
-                           resource-id="sparklr" token-services-ref="tokenServices" />
+                           resource-id="ivis" token-services-ref="tokenServices"/>
 
-    <oauth:client-details-service id="clientDetails">
-        <oauth:client client-id="my-trusted-client"
-                      authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                      authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" scope="read,write,trust"
-                      access-token-validity="60" />
-        <oauth:client client-id="my-trusted-client-with-secret"
-                      authorized-grant-types="password,authorization_code,refresh_token,implicit"
-                      secret="somesecret" authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" />
-        <oauth:client client-id="my-client-with-secret"
-                      authorized-grant-types="client_credentials" authorities="ROLE_CLIENT"
-                      scope="read" secret="secret" />
-        <oauth:client client-id="my-less-trusted-client"
-                      authorized-grant-types="authorization_code,implicit" authorities="ROLE_CLIENT" />
-        <oauth:client client-id="my-less-trusted-autoapprove-client"
-                      authorized-grant-types="implicit" authorities="ROLE_CLIENT" scope="read,write,trust"
-                      autoapprove="true" />
-        <oauth:client client-id="my-client-with-registered-redirect"
-                      authorized-grant-types="authorization_code,client_credentials"
-                      authorities="ROLE_CLIENT" redirect-uri="http://anywhere?key=value"
-                      scope="read,trust" />
-        <oauth:client client-id="my-untrusted-client-with-registered-redirect"
-                      authorized-grant-types="authorization_code" authorities="ROLE_CLIENT"
-                      redirect-uri="http://anywhere" scope="read" />
-        <oauth:client client-id="tonr" resource-ids="sparklr"
-                      authorized-grant-types="authorization_code,implicit" authorities="ROLE_CLIENT"
-                      scope="read,write" secret="secret" />
-        <oauth:client client-id="tonr-with-redirect"
-                      resource-ids="sparklr" authorized-grant-types="authorization_code,implicit"
-                      authorities="ROLE_CLIENT" scope="read,write" secret="secret"
-                      redirect-uri="http://localhost:8080/tonr2/sparklr/redirect" />
-    </oauth:client-details-service>
+    <!--<oauth:client-details-service id="clientDetails">-->
+        <!--<oauth:client client-id="my-trusted-client"-->
+                      <!--authorized-grant-types="password,authorization_code,refresh_token,implicit"-->
+                      <!--authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" scope="read,write,trust"-->
+                      <!--access-token-validity="60" />-->
+        <!--<oauth:client client-id="my-trusted-client-with-secret"-->
+                      <!--authorized-grant-types="password,authorization_code,refresh_token,implicit"-->
+                      <!--secret="somesecret" authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" />-->
+        <!--<oauth:client client-id="my-client-with-secret"-->
+                      <!--authorized-grant-types="client_credentials" authorities="ROLE_CLIENT"-->
+                      <!--scope="read" secret="secret" />-->
+        <!--<oauth:client client-id="my-less-trusted-client"-->
+                      <!--authorized-grant-types="authorization_code,implicit" authorities="ROLE_CLIENT" />-->
+        <!--<oauth:client client-id="my-less-trusted-autoapprove-client"-->
+                      <!--authorized-grant-types="implicit" authorities="ROLE_CLIENT" scope="read,write,trust"-->
+                      <!--autoapprove="true" />-->
+        <!--<oauth:client client-id="my-client-with-registered-redirect"-->
+                      <!--authorized-grant-types="authorization_code,client_credentials"-->
+                      <!--authorities="ROLE_CLIENT" redirect-uri="http://anywhere?key=value"-->
+                      <!--scope="read,trust" />-->
+        <!--<oauth:client client-id="my-untrusted-client-with-registered-redirect"-->
+                      <!--authorized-grant-types="authorization_code" authorities="ROLE_CLIENT"-->
+                      <!--redirect-uri="http://anywhere" scope="read" />-->
+        <!--<oauth:client client-id="tonr" resource-ids="sparklr"-->
+                      <!--authorized-grant-types="authorization_code,implicit" authorities="ROLE_CLIENT"-->
+                      <!--scope="read,write" secret="secret" />-->
+        <!--<oauth:client client-id="tonr-with-redirect"-->
+                      <!--resource-ids="sparklr" authorized-grant-types="authorization_code,implicit"-->
+                      <!--authorities="ROLE_CLIENT" scope="read,write" secret="secret"-->
+                      <!--redirect-uri="http://localhost:8080/tonr2/sparklr/redirect" />-->
+    <!--</oauth:client-details-service>-->
+    <bean id="clientDetails" class="org.springframework.security.oauth2.provider.client.JdbcClientDetailsService"
+          c:dataSource-ref="dataSource"/>
+
 
     <mvc:annotation-driven />
 
@@ -386,5 +371,7 @@
             <!--</list>-->
         <!--</property>-->
     <!--</bean>-->
+    <bean id="initializator" class="com.imcode.misc.Initializator"/>
+
 
 </beans>
