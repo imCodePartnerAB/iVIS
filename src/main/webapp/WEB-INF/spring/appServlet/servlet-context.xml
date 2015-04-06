@@ -3,37 +3,57 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:c="http://www.springframework.org/schema/c"
              xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- DispatcherServlet Context: определяет настройки одного сервлета; бины, которые доступны только ему -->
 
-    <!-- Разрешаем использование аннотаций Spring MVC (то есть @Controller и.т.д) -->
-    <annotation-driven />
-
+    <!-- Разрешаем использование аннотаций Spring MVC (то есть @Controller и.@Valid, MessageConverters) -->
+    <annotation-driven/>
     <!-- Всю статику (изображения, css-файлы, javascript) положим в папку webapp/resources
         и замаппим их на урл вида /resources/** -->
-    <resources mapping="/resources/**" location="/resources/" />
+    <resources mapping="/resources/**" location="/WEB-INF/web-resources/"/>
+
+    <default-servlet-handler/>
 
     <!-- Отображение видов на jsp-файлы, лежащие в папке /WEB-INF/views -->
     <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <beans:property name="prefix" value="/WEB-INF/views/" />
-        <beans:property name="suffix" value=".jsp" />
+        <beans:property name="prefix" value="/WEB-INF/views/"/>
+        <beans:property name="suffix" value=".jsp"/>
     </beans:bean>
 
+    <interceptors>
+        <beans:bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor"/>
+        <beans:bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="lang"/>
+    </interceptors>
+
+    <beans:bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" id="messageSource"
+                p:basenames="WEB-INF/i18n/messages,WEB-INF/i18n/application"
+                p:fallbackToSystemLocale="false"/>
+
+    <beans:bean class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
+                id="localeResolver"
+                p:cookieName="locale"/>
+
+    <beans:bean class="org.springframework.ui.context.support.ResourceBundleThemeSource" id="themeSource"/>
+    <beans:bean class="org.springframework.web.servlet.theme.CookieThemeResolver" id="themeResolver"
+                p:cookieName="theme"
+                p:defaultThemeName="general"/>
     <!-- Configure to plugin JSON as request and response in method handler -->
     <!--<beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
-        <!--<beans:property name="messageConverters">-->
-            <!--<beans:list>-->
-                <!--<beans:ref bean="jsonMessageConverter"/>-->
-            <!--</beans:list>-->
-        <!--</beans:property>-->
+    <!--<beans:property name="messageConverters">-->
+    <!--<beans:list>-->
+    <!--<beans:ref bean="jsonMessageConverter"/>-->
+    <!--</beans:list>-->
+    <!--</beans:property>-->
     <!--</beans:bean>-->
 
     <!--&lt;!&ndash; Configure bean to convert JSON to POJO and vice versa &ndash;&gt;-->
     <!--<beans:bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
-        <!---->
+    <!---->
     <!--</beans:bean>-->
 
     <!--&lt;!&ndash; Файл с настройками контроллеров &ndash;&gt;-->

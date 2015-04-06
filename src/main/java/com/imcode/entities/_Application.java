@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="dbo_application")
-public class Application {
+public class _Application {
 
     @Id
     @GeneratedValue

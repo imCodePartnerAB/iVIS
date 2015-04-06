@@ -2,6 +2,7 @@ package com.imcode.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.List;

@@ -84,7 +84,7 @@ public class MockControler {
         return "redirect:" + allRequestParams.get("redirect_uri");
     }
    @RequestMapping("/resp")
-    @ResponseBody
+   @ResponseBody
     String getToken(@RequestParam Map<String,String> allRequestParams) {
 //        if (allRequestParams.get("redirect_uri") != null) {
 //            System.out.println(allRequestParams.get("redirect_uri"));

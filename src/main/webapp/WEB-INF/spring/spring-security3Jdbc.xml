@@ -22,7 +22,7 @@
           <!--xmlns="http://www.springframework.org/schema/security" />-->
     <!--<http pattern="/oauth/uncache_approvals" security="none"-->
           <!--xmlns="http://www.springframework.org/schema/security" />-->
-    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <!--<mvc:resources mapping="/resources/**" location="/resources/" />-->
 
     <!--&lt;!&ndash; This is where we tells spring security what URL should be protected and what roles have access to them &ndash;&gt;-->
     <!--<http pattern="/schools/**" create-session="stateless"-->
@@ -44,8 +44,7 @@
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
         <anonymous enabled="false" />
         <http-basic entry-point-ref="clientAuthenticationEntryPoint" />
-        <!-- include this only if you need to authenticate clients via request
-            parameters -->
+        <!-- include this only if you need to authenticate clients via request parameters -->
         <custom-filter ref="clientCredentialsTokenEndpointFilter"
                        after="BASIC_AUTH_FILTER" />
         <access-denied-handler ref="oauthAccessDeniedHandler" />

@@ -1,6 +1,6 @@
 package com.imcode.misc;
 
-import com.imcode.entities.Application;
+import com.imcode.entities._Application;
 import com.imcode.entities.User;
 
 import javax.persistence.*;
@@ -24,7 +24,7 @@ public class TokenInfo {
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "application")
-    private Application application;
+    private _Application application;
 
     @Column
     private Date receiptDate;
@@ -38,7 +38,7 @@ public class TokenInfo {
     public TokenInfo() {
     }
 
-    public TokenInfo(User user, Application application, Long lifeTime) {
+    public TokenInfo(User user, _Application application, Long lifeTime) {
         this.user = user;
         this.application = application;
         this.lifeTime = lifeTime;
@@ -71,11 +71,11 @@ public class TokenInfo {
         this.user = user;
     }
 
-    public Application getApplication() {
+    public _Application getApplication() {
         return application;
     }
 
-    public void setApplication(Application application) {
+    public void setApplication(_Application application) {
         this.application = application;
     }
 

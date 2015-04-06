@@ -1,6 +1,6 @@
 package com.imcode.services;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.oauth2.provider.ClientDetails;
 
 import java.util.List;
 
@@ -8,14 +8,13 @@ import java.util.List;
  * Created by vitaly on 17.02.15.
  */
 public interface GenericService<T, ID> {
-    public T save(T entity);
+    T save(T entity);
 
-    public T find(ID id);
+    T find(ID id);
 
-    public boolean exist(ID id);
+    boolean exist(ID id);
 
-    public void delete(ID id);
+    void delete(ID id);
 
-    @Transactional
-    public List<T> findAll();
+    List<T> findAll();
 }
