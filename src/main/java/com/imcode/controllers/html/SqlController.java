@@ -29,12 +29,17 @@ public class SqlController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String execute(@RequestParam("sql") String sql, Model model, WebRequest webRequest) {
+    public String execute(@RequestParam("sql") String sql, @RequestParam("action") String action, Model model, WebRequest webRequest) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         List<Map<String, Object>> resultList = null;
+        Integer updateRows = null;
         try {
-            resultList = jdbcTemplate.queryForList(sql);
+            if ("select".equalsIgnoreCase(action))
+                resultList = jdbcTemplate.queryForList(sql);
+            else if ("update".equalsIgnoreCase(action))
+                updateRows  = jdbcTemplate.update(sql);
             model.addAttribute("results", resultList);
+            model.addAttribute("updateRows", updateRows);
         } catch (DataAccessException e) {
             model.addAttribute("message", "Error:" + e.getMessage());
         }

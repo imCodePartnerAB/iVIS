@@ -24,29 +24,31 @@ SQL Executor:
 SELECT * FROM db_ivis.oauth_client_details;
     </textarea>
     <br>
-    <button type="submit" name="select">Select</button>
-    <button type="submit" name="update">Update</button>
+    <button type="submit" name="action" value="select">Select</button>
+    <button type="submit" name="action" value="update">Update</button>
     <button type="reset">Reset</button>
 </form>
 <c:if test="${not empty results}">
-    <table border="1">
-        <thead>
-            <tr>
+    <%--<table border="1">--%>
+        <%--<thead>--%>
+            <%--<tr>--%>
 
-            </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="resultMap" items="results">
-            <tr>
-                <c:forEach var="resulRow" items="resultMap">
-                    <td>${resulRow}</td>
-                </c:forEach>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
+            <%--</tr>--%>
+        <%--</thead>--%>
+        <%--<tbody>--%>
+        <%--<c:forEach var="resultMap" items="results">--%>
+            <%--<tr>--%>
+                <%--<c:forEach var="resulRow" items="resultMap">--%>
+                    <%--<td>${resulRow}</td>--%>
+                <%--</c:forEach>--%>
+            <%--</tr>--%>
+        <%--</c:forEach>--%>
+        <%--</tbody>--%>
+    <%--</table>--%>
+<h1>Selected rows: ${results.size()}</h1>
 </c:if>
-
+<c:if test="${not empty updateRows}">
+    <h1>Updated rows: ${updateRows}</h1>
+</c:if>
 </body>
 </html>
