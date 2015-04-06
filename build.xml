@@ -27,7 +27,8 @@
     </target>
 
     <target name="tomcat-package" depends="package">
-        <delete dir="${tomcat.webapps.dir}/WEB-INF/lib"/>
+        <!--<delete dir="${tomcat.webapps.dir}/WEB-INF/lib"/>-->
+        <delete dir="${tomcat.webapps.dir}/*"/>
         <copy todir="${tomcat.webapps.dir}">
             <fileset dir="target/iVIS"/>
         </copy>

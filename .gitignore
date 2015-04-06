@@ -15,4 +15,4 @@ hs_err_pid*
 .idea
 
 
-iVIS.iml
+*.iml
