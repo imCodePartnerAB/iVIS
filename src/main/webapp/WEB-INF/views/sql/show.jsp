@@ -21,34 +21,38 @@
 SQL Executor:
 <form action="/sql" method="post">
     <textarea cols="60" rows="8" name="sql">
-SELECT * FROM db_ivis.oauth_client_details;
+SELECT * FROM users;
     </textarea>
     <br>
     <button type="submit" name="action" value="select">Select</button>
     <button type="submit" name="action" value="update">Update</button>
     <button type="reset">Reset</button>
 </form>
-<c:if test="${not empty results}">
-    <%--<table border="1">--%>
-        <%--<thead>--%>
-            <%--<tr>--%>
-
-            <%--</tr>--%>
-        <%--</thead>--%>
-        <%--<tbody>--%>
-        <%--<c:forEach var="resultMap" items="results">--%>
-            <%--<tr>--%>
-                <%--<c:forEach var="resulRow" items="resultMap">--%>
-                    <%--<td>${resulRow}</td>--%>
-                <%--</c:forEach>--%>
-            <%--</tr>--%>
-        <%--</c:forEach>--%>
-        <%--</tbody>--%>
-    <%--</table>--%>
+<c:if test="${not empty results and results.size() gt 0}">
+    <table border="1">
+        <thead>
+            <tr>
+                <c:forEach var="tableHeder" items="${results.get(0).keySet()}">
+                    <td>${tableHeder}</td>
+                </c:forEach>
+            </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="resultMap" items="results">
+            <tr>
+                <c:forEach var="value" items="${resultMap.values()}">
+                    <td>${value}</td>
+                </c:forEach>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 <h1>Selected rows: ${results.size()}</h1>
 </c:if>
 <c:if test="${not empty updateRows}">
     <h1>Updated rows: ${updateRows}</h1>
 </c:if>
+        <%--<c:set var="tableHeaders" value="${results.get(0).keySet()}"/>--%>
+        <%--${tableHeaders}--%>
 </body>
 </html>

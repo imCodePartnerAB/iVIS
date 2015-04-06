@@ -2,8 +2,8 @@
 DELETE FROM authorities;
 DELETE FROM users;
 
-INSERT INTO `db_ivis`.`users`
-  (`username`, `password`, `enabled`)
+INSERT INTO users
+  (username, password, enabled)
 VALUES
   ('admin', 'pass', 1),
   ('user1', '1111', 1),
@@ -11,7 +11,7 @@ VALUES
   ('user3', '3333', 0);
 
 
-INSERT INTO `db_ivis`.authorities (username, authority) VALUES
+INSERT INTO authorities (username, authority) VALUES
   ('admin', 'ROLE_ADMIN'),
   ('admin', 'ROLE_USER'),
   ('user1', 'ROLE_USER'),
