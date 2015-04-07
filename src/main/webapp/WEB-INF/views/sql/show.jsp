@@ -1,3 +1,6 @@
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Set" %>
 <%@ taglib prefix="spirng" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -11,48 +14,78 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title></title>
+    <title>Sql Executor</title>
+    <script>function k(e) {
+        if (e.ctrlKey && e.which == 13) document.sqlForm.submit();
+    }</script>
 </head>
 <body>
-<c:if test="${not empty message}">
-    <font color="#b22222">${message}</font>
-    <br>
-</c:if>
 SQL Executor:
-<form action="/sql" method="post">
-    <textarea cols="60" rows="8" name="sql">
-SELECT * FROM users;
+<form method="post" name="sqlForm">
+    <textarea cols="60" rows="8" name="sql" onkeyup="k(event);">
+        ${sqlString}
     </textarea>
     <br>
-    <button type="submit" name="action" value="select">Select</button>
-    <button type="submit" name="action" value="update">Update</button>
+    <button type="submit">Execute</button>
     <button type="reset">Reset</button>
 </form>
-<c:if test="${not empty results and results.size() gt 0}">
+<c:if test="${not empty resultList and resultList.size() gt 0}">
+    <%
+        List<Map<String, Object>> results = (List<Map<String, Object>>) request.getAttribute("resultList");
+        int i = 0;
+        for (Map<String, Object> resultMap : results) {
+            Integer rowCount = (Integer) resultMap.get("rowCount");
+            List<Map<String, Map<String, String>>> result = (List<Map<String, Map<String, String>>>) resultMap.get("result");
+            String errorMessage = (String) resultMap.get("errorMessage");
+
+            out.println("<h2>Sql: ");
+            out.print(i++);
+
+            if (rowCount != null) {
+                out.print(" (" + rowCount + ")");
+            }
+
+            out.println("</h2>");
+            out.println("<br>");
+
+            if (errorMessage != null) {
+                out.println("<font color=\"#b22222\">" + errorMessage + "</font>");
+                out.println("<br>");
+            }
+
+            if (result != null && result.size() > 0) {%>
     <table border="1">
         <thead>
-            <tr>
-                <c:forEach var="tableHeder" items="${results.get(0).keySet()}">
-                    <td>${tableHeder}</td>
-                </c:forEach>
-            </tr>
+        <tr bgcolor="#a9a9a9">
+            <%
+                Set<String> headers = result.get(0).keySet();
+                for (String header : headers) {
+                    out.println("<td>" + header + "</td>");
+                }
+            %>
+        </tr>
         </thead>
         <tbody>
-        <c:forEach var="resultMap" items="results">
-            <tr>
-                <c:forEach var="value" items="${resultMap.values()}">
-                    <td>${value}</td>
-                </c:forEach>
-            </tr>
-        </c:forEach>
+        <%
+            for (Map<String, Map<String, String>> row : result) {
+                out.println("<tr>");
+                for (Map.Entry<String, Map<String, String>> stringMapEntry : row.entrySet()) {
+                    out.println("<td>");
+                    out.println(stringMapEntry.getValue());
+                    out.println("</td>");
+                }
+                out.println("</tr>");
+            }
+
+        %>
         </tbody>
     </table>
-<h1>Selected rows: ${results.size()}</h1>
+    <%
+            }
+
+        }
+
+    %>
 </c:if>
-<c:if test="${not empty updateRows}">
-    <h1>Updated rows: ${updateRows}</h1>
-</c:if>
-        <%--<c:set var="tableHeaders" value="${results.get(0).keySet()}"/>--%>
-        <%--${tableHeaders}--%>
 </body>
 </html>
