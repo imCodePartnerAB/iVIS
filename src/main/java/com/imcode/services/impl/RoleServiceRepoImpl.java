@@ -8,4 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RoleServiceRepoImpl extends AbstractService<Role, Long, RoleRepository> implements RoleService{
+    @Override
+    public Role findByName(String name) {
+        return getRepo().findByName(name);
+    }
 }

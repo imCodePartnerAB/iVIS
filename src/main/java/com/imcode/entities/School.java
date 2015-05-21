@@ -1,52 +1,24 @@
 package com.imcode.entities;
 
+import com.imcode.entities.enums.ServiceTypeEnum;
+
 import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name="dbo_school")
-public class School {
+public class School extends AbstractNamedEntity{
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @JoinTable(name = "dbo_school_service_cross")
+    private Set<ServiceTypeEnum> services;
 
-    @Id
-    @GeneratedValue
-    @Column(name="id")
-    private Long id;
-
-    @Column(name="name")
-    private String name;
-
-//    @Column(name="name1")
-//    private String name1;
-
-    public Long getId() {
-        return id;
+    public Set<ServiceTypeEnum> getServices() {
+        return services;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-//    public String getName1() {
-//        return name1;
-//    }
-//
-//    public void setName1(String name1) {
-//        this.name1 = name1;
-//    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("School{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public void setServices(Set<ServiceTypeEnum> services) {
+        this.services = services;
     }
 }

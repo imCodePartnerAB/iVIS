@@ -1,7 +1,9 @@
 package com.imcode.controllers.restful;
 
-import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.imcode.controllers.CrudController;
+import com.imcode.entities.oauth2.JpaClientDetails;
+import com.imcode.oauth2.IvisClientDetails;
+import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -18,16 +20,17 @@ import java.util.Map;
 @RequestMapping("/v1/{format}/applications")
 //@RequestMapping("/test/applications")
 //public class ApplicationRestControllerImpl extends AbstractRestController<BaseClientDetails, String, ApplicationService>{
-public class ApplicationRestControllerImpl implements CrudController<BaseClientDetails, String> {
+public class ApplicationRestControllerImpl implements CrudController<JpaClientDetails, String> {
     @Autowired
-    private ApplicationService applicationService;
+    private IvisClientDetailsService clietnDetailsService;
 
     @Override
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Object get(@PathVariable("id") String id, WebRequest webRequest) {
         Principal user = webRequest.getUserPrincipal();
 
-        return getService().findUserApplication(id, user.getName());
+        return null;
+//        return getService().findAllUserClients(id, user.getName());
     }
 
     @Override
@@ -35,45 +38,46 @@ public class ApplicationRestControllerImpl implements CrudController<BaseClientD
     public Object getAll(WebRequest webRequest, Model model) {
         Principal user = webRequest.getUserPrincipal();
 
-        return getService().findAllUserApplications(user.getName());
+        return null;
+//        return getService().findAllUserApplications(user.getName());
     }
 
     @Override
     @RequestMapping(method = RequestMethod.POST)
-    public Object create(@RequestBody BaseClientDetails entity, WebRequest webRequest) {
+    public Object create(@RequestBody JpaClientDetails entity, WebRequest webRequest) {
         Map<String, String> aditionalInfo = new HashMap<>();
         aditionalInfo.put("user", webRequest.getUserPrincipal().getName());
         entity.setAdditionalInformation(aditionalInfo);
-        ClientDetails created = applicationService.save(entity);
+        clietnDetailsService.addClientDetails(entity);
 
-        return created;
+        return "OK";
     }
 
     @Override
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Object update(@PathVariable("id") String id, @RequestBody BaseClientDetails entity, WebRequest webRequest) {
+    public Object update(@PathVariable("id") String id, @RequestBody JpaClientDetails entity, WebRequest webRequest) {
         entity.setClientId(id);
-        BaseClientDetails oldEntity = (BaseClientDetails) applicationService.find(id);
+        ClientDetails oldEntity = clietnDetailsService.loadClientByClientId(id);
         entity.setAdditionalInformation(oldEntity.getAdditionalInformation());
-        applicationService.delete(id);
+        clietnDetailsService.removeClientDetails(id);
 
-        ClientDetails saved = applicationService.save(entity);
+        clietnDetailsService.updateClientDetails(entity);
 
-        return saved;
+        return "OK";
     }
 
     @Override
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") String id, WebRequest webRequest) {
-        applicationService.delete(id);
+        clietnDetailsService.removeClientDetails(id);
     }
 
     //Getters & Setters
-    public ApplicationService getService() {
-        return applicationService;
+    public IvisClientDetailsService getService() {
+        return clietnDetailsService;
     }
 
-    public void setService(ApplicationService applicationService) {
-        this.applicationService = applicationService;
+    public void setService(IvisClientDetailsService clietnDetailsService) {
+        this.clietnDetailsService = clietnDetailsService;
     }
 }

@@ -14,10 +14,10 @@ import java.util.Map;
 /**
  * Created by root on 27.03.15.
  */
-@Service
+//@Service
 public class JdbcApplicationServiceImpl implements ApplicationService {
-    @Autowired
-    JdbcClientDetailsService jdbcClientDetailsService;
+//    @Autowired
+    private JdbcClientDetailsService jdbcClientDetailsService;
 
     @Override
     public ClientDetails save(ClientDetails entity) {

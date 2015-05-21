@@ -1,18 +1,19 @@
 package com.imcode.entities;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "dbo_role")
-public class Role {
+@AttributeOverrides(@AttributeOverride(name = "name", column = @Column(name = "authority", nullable = false, length = 100, unique = true)))
+public class Role extends AbstractNamedEntity implements GrantedAuthority{
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private Long id;
+    public Role() { }
 
-    @Column(name = "name", unique = true, nullable = false, length = 100)
-    private String name;
+    public Role(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -38,5 +39,11 @@ public class Role {
         sb.append('}');
         return sb.toString();
     }
+
+    @Override
+    public String getAuthority() {
+        return name;
+    }
+
 }
 

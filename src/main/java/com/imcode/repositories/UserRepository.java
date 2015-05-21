@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query("select u from User u where u.name = :username")
+    public User findByUsername(@Param("username") String username);
+//    @Query("select u from _User u where u.login = :login")
+//    _User findByLogin(@Param("login") String login);
 
-    @Query("select u from User u where u.login = :login")
-    User findByLogin(@Param("login") String login);
-
-    @Query("select case when count(e) > 0 then true else false end from User e where e.login = :login and e.pwd = :pwd")
-    boolean checkAutorisation(@Param("login") String login, @Param("pwd") String pwd);
+//    @Query("select case when count(e) > 0 then true else false end from _User e where e.login = :login and e.pwd = :pwd")
+//    boolean checkAutorisation(@Param("login") String login, @Param("pwd") String pwd);
 
 }
 

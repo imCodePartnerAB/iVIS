@@ -20,25 +20,45 @@
     <default-servlet-handler/>
 
     <!-- Отображение видов на jsp-файлы, лежащие в папке /WEB-INF/views -->
-    <beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <beans:property name="prefix" value="/WEB-INF/views/"/>
-        <beans:property name="suffix" value=".jsp"/>
+    <!--<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<beans:property name="prefix" value="/WEB-INF/views/"/>-->
+        <!--<beans:property name="suffix" value=".jsp"/>-->
+    <!--</beans:bean>-->
+    <!-- Apache tiles view Resolver-->
+    <beans:bean id="tilesConfigurer"
+                class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <beans:property name="definitions">
+            <beans:list>
+                <beans:value>/WEB-INF/tiles.xml</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="viewResolver"
+                class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <beans:property name="viewClass"
+                        value="org.springframework.web.servlet.view.tiles2.TilesView" />
     </beans:bean>
 
     <interceptors>
         <beans:bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor"/>
-        <beans:bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" p:paramName="lang"/>
+        <beans:bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
+                    p:paramName="lang"/>
     </interceptors>
 
     <beans:bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" id="messageSource"
                 p:basenames="WEB-INF/i18n/messages,WEB-INF/i18n/application"
-                p:fallbackToSystemLocale="false"/>
+                p:fallbackToSystemLocale="false"
+                p:defaultEncoding="UTF-8"/>
 
     <beans:bean class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
                 id="localeResolver"
                 p:cookieName="locale"/>
 
-    <beans:bean class="org.springframework.ui.context.support.ResourceBundleThemeSource" id="themeSource"/>
+    <beans:bean class="org.springframework.ui.context.support.ResourceBundleThemeSource"
+                id="themeSource"
+                p:basenamePrefix="theme/" />
+
     <beans:bean class="org.springframework.web.servlet.theme.CookieThemeResolver" id="themeResolver"
                 p:cookieName="theme"
                 p:defaultThemeName="general"/>

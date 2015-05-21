@@ -1,6 +1,10 @@
 package com.imcode.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +12,11 @@ import java.io.Serializable;
 import java.util.List;
 
 public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYPE extends JpaRepository<T, ID>> implements GenericService<T, ID> {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    @Qualifier("messages")
+    private MessageSource messageSource;
 
     @Autowired
     private REPOSITORY_TYPE repo;
@@ -47,5 +56,13 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
 
     public void setRepo(REPOSITORY_TYPE repo) {
         this.repo = repo;
+    }
+
+    public Logger getLogger() {
+        return logger;
+    }
+
+    public MessageSource getMessageSource() {
+        return messageSource;
     }
 }

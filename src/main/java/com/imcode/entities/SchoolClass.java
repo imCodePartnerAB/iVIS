@@ -1,52 +1,63 @@
 package com.imcode.entities;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by vitaly on 09.02.15.
  */
 
 @Entity
-@Table(name="dbo_schoolClass")
-public class SchoolClass {
+@Table(name="dbo_school_class")
+public class SchoolClass extends AbstractNamedEntity{
 
-    @Id
-    @GeneratedValue
-    @Column(name="id")
-    private Long id;
+    @Temporal(TemporalType.TIME)
+    @Column
+    private Date schoolDayStart;
 
-    @Column(name="name")
-    private String name;
+    @Temporal(TemporalType.TIME)
+    @Column
+    private Date schoolDayEnd;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "school")
     private School school;
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("SchoolClass{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", school=").append(school);
-        sb.append('}');
-        return sb.toString();
+    @OneToMany(mappedBy = "schoolClass")
+    private Set<Pupil> pupils;
+
+
+    public SchoolClass() {
     }
 
-    public Long getId() {
-        return id;
+    public SchoolClass(String name, School school, Date schoolDayStart, Date schoolDayEnd) {
+        super(name);
+        this.school = school;
+        this.schoolDayStart = schoolDayStart;
+        this.schoolDayEnd = schoolDayEnd;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public SchoolClass(String name) {
+        super(name);
     }
 
-    public String getName() {
-        return name;
+    public Date getSchoolDayStart() {
+        return schoolDayStart;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSchoolDayStart(Date schoolDayStart) {
+        this.schoolDayStart = schoolDayStart;
     }
+
+    public Date getSchoolDayEnd() {
+        return schoolDayEnd;
+    }
+
+    public void setSchoolDayEnd(Date schoolDayEnd) {
+        this.schoolDayEnd = schoolDayEnd;
+    }
+
 
     public School getSchool() {
         return school;
@@ -54,5 +65,13 @@ public class SchoolClass {
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    public Set<Pupil> getPupils() {
+        return pupils;
+    }
+
+    public void setPupils(Set<Pupil> pupils) {
+        this.pupils = pupils;
     }
 }

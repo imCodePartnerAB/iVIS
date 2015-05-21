@@ -202,7 +202,7 @@
     </bean>
 
     <bean id="tokenEnhancer"
-          class="com.imcode.oauth2.SparklrTokenEnhancer" />
+          class="com.imcode.oauth2.IvisTokenEnhancer" />
           <!--class="org.springframework.security.oauth.examples.sparklr.oauth.SparklrTokenEnhancer" />-->
 
     <bean id="requestFactory"

@@ -165,7 +165,7 @@
 
     <bean id="clientDetailsUserService"
           class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
-        <constructor-arg ref="clientDetails" />
+        <constructor-arg name="clientDetailsService" ref="clientDetails" />
     </bean>
 
     <!--<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />-->
@@ -182,7 +182,7 @@
     </bean>
 
     <bean id="tokenEnhancer"
-          class="com.imcode.oauth2.SparklrTokenEnhancer" />
+          class="com.imcode.oauth2.IvisTokenEnhancer" />
 
     <bean id="requestFactory"
           class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
@@ -249,8 +249,8 @@
                       <!--authorities="ROLE_CLIENT" scope="read,write" secret="secret"-->
                       <!--redirect-uri="http://localhost:8080/tonr2/sparklr/redirect" />-->
     <!--</oauth:client-details-service>-->
-    <bean id="clientDetails" class="org.springframework.security.oauth2.provider.client.JdbcClientDetailsService"
-          c:dataSource-ref="dataSource"/>
+    <!--<bean id="clientDetails" class="org.springframework.security.oauth2.provider.client.JdbcClientDetailsService"-->
+          <!--c:dataSource-ref="dataSource"/>-->
 
 
     <mvc:annotation-driven />

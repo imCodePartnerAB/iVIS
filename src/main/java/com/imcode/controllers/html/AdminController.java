@@ -15,6 +15,7 @@
  */
 package com.imcode.controllers.html;
 
+import com.imcode.oauth2.IvisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class AdminController {
     private TokenStore tokenStore;
 
     @Autowired
-    private ClientDetailsService clientDetailsService;
+    private IvisClientDetailsService clientDetailsService;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
 //
@@ -95,8 +96,8 @@ public class AdminController {
 
     @RequestMapping(value = "/oauth/tokens", method = {RequestMethod.GET})
     public String tokenList(Model model) {
-        JdbcClientDetailsService jdbcClientDetailsService = (JdbcClientDetailsService) clientDetailsService;
-        List<ClientDetails> clients = jdbcClientDetailsService.listClientDetails();
+        IvisClientDetailsService ClientDetailsService =  clientDetailsService;
+        List<ClientDetails> clients = clientDetailsService.listClientDetails();
 
         List<OAuth2AccessToken> tokens = new LinkedList<>();
 
@@ -135,6 +136,15 @@ public class AdminController {
 //        return "redirect:/oauth/tokens";
 //    }
 
+	@RequestMapping("/login")
+	public String login() {
+		return "security/login";
+	}
+
+	@RequestMapping({"/", "/home", "index"})
+	public String home() {
+		return "default";
+	}
 
 	private void checkResourceOwner(String user, Principal principal) {
 		if (principal instanceof OAuth2Authentication) {
@@ -167,7 +177,7 @@ public class AdminController {
 		this.tokenStore = tokenStore;
 	}
 
-    public void setClientDetailsService(ClientDetailsService clientDetailsService) {
+    public void setClientDetailsService(IvisClientDetailsService clientDetailsService) {
         this.clientDetailsService = clientDetailsService;
     }
 }

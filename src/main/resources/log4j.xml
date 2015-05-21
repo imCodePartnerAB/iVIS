@@ -10,7 +10,7 @@
 		</layout>
 	</appender>
 	
-	<!-- Application Loggers -->
+	<!-- JpaClientDetails Loggers -->
 	<logger name="com.journaldev.spring">
 		<level value="info" />
 	</logger>
