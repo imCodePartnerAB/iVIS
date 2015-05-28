@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <!--bean class="com.imcode.imcms.addon.imagearchive.service.Facade"/>
+    <bean class="com.imcode.imcms.addon.imagearchive.service.UserService"/>
+    <bean class="com.imcode.imcms.addon.imagearchive.service.CommonService"/>
+    <bean class="com.imcode.imcms.addon.imagearchive.service.file.FileService"/>
+    <bean class="com.imcode.imcms.addon.imagearchive.service.ImageService"/>
+    <bean class="com.imcode.imcms.addon.imagearchive.service.RoleService"/>
+    <bean class="com.imcode.imcms.addon.imagearchive.service.LibraryService"/>
+    <bean class="com.imcode.imcms.addon.imagearchive.service.CategoryService"/-->
+
+    <bean id="ivisClient"
+          class="org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails"
+          p:grantType="authorization_code"
+          p:clientId="2e9fa895-e577-4156-844a-2cbb1ebbe06d"
+          p:clientSecret="secret"
+          p:accessTokenUri="http://localhost:8080/ivis/oauth/token"
+          p:userAuthorizationUri="http://localhost:8080/ivis/oauth/authorize"
+          p:scope="#{{'read','write'}}"/>
+</beans>

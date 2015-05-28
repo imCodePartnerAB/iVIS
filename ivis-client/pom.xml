@@ -1,0 +1,328 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>iVIS</artifactId>
+        <groupId>iVIS</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ivis-client</artifactId>
+    <packaging>war</packaging>
+    <name>ivis-client Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <spring-framework.version>4.1.1.RELEASE</spring-framework.version>
+        <spring-security.version>4.0.1.RELEASE</spring-security.version>
+    </properties>
+    <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.security.oauth</groupId>-->
+            <!--<artifactId>spring-security-oauth2</artifactId>-->
+            <!--<version>2.0.5.RELEASE</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>2.0.5.RELEASE</version>
+        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.security</groupId>-->
+        <!--<artifactId>spring-security-web</artifactId>-->
+        <!--<version>3.2.5.RELEASE</version>-->
+        <!--</dependency>-->
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.imcode.imcms</groupId>
+            <artifactId>imcms</artifactId>
+            <version>SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>com.imcode.imcms</groupId>
+            <artifactId>imcms</artifactId>
+            <version>SNAPSHOT</version>
+            <classifier>classes</classifier>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.34</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>commons-io</groupId>-->
+        <!--<artifactId>commons-io</artifactId>-->
+        <!--<version>1.4</version>-->
+        <!--</dependency>-->
+
+
+    </dependencies>
+
+
+
+    <build>
+        <finalName>ivis-client</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-idea-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <dependentWarExcludes>WEB-INF/lib/mysql*.jar</dependentWarExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+                                <if>
+                                    <not>
+                                        <available file="${basedir}/local.server.properties"/>
+                                    </not>
+                                    <then>
+                                        <copy file="${basedir}/local.server.properties.template"
+                                              tofile="${basedir}/local.server.properties"/>
+                                        <fail>Edit "local.server.properties".</fail>
+                                    </then>
+                                </if>
+
+                                <taskdef name="mergeproperties" classname="com.imcode.ant.tasks.PropertiesMerge"/>
+                                <mergeproperties
+                                        srcFile="target/${project.build.finalName}/WEB-INF/conf/server.properties"
+                                        mergeFile="${basedir}/local.server.properties"
+                                        destFile="target/${project.build.finalName}/WEB-INF/conf/server.properties"/>
+
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/WEB-INF/web.xml"/>
+                                    <then>
+                                        <copy file="${basedir}/src/main/webapp/WEB-INF/web.xml"
+                                              tofile="${project.build.directory}/${project.build.finalName}/WEB-INF/web.xml"
+                                              overwrite="true"/>
+                                    </then>
+                                </if>
+                                <if>
+                                    <available file="${project.build.directory}/classes"/>
+                                    <then>
+                                        <jar destfile="${project.build.directory}/${project.build.finalName}/WEB-INF/lib/${project.build.finalName}.jar"
+                                             basedir="${project.build.directory}/classes" includes="**"/>
+                                        <delete dir="${project.build.directory}/${project.build.finalName}/WEB-INF/classes"/>
+                                    </then>
+                                </if>
+                                <!-- Copy all webapp files, to force overwrite, since the copied wanna-be site has newer files -->
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/imcms/" type="dir"/>
+                                    <then>
+                                        <copy todir="${project.build.directory}/${project.build.finalName}/imcms/"
+                                              overwrite="true">
+                                            <fileset dir="${basedir}/src/main/webapp/imcms/"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/jsp/" type="dir"/>
+                                    <then>
+                                        <copy todir="${project.build.directory}/${project.build.finalName}/jsp/"
+                                              overwrite="true">
+                                            <fileset dir="${basedir}/src/main/webapp/jsp/"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/javascript/" type="dir"/>
+                                    <then>
+                                        <copy todir="${project.build.directory}/${project.build.finalName}/javascript/"
+                                              overwrite="true">
+                                            <fileset dir="${basedir}/src/main/webapp/javascript/"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/css/" type="dir"/>
+                                    <then>
+                                        <copy todir="${project.build.directory}/${project.build.finalName}/css/"
+                                              overwrite="true">
+                                            <fileset dir="${basedir}/src/main/webapp/css/"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/images_gui/" type="dir"/>
+                                    <then>
+                                        <copy todir="${project.build.directory}/${project.build.finalName}/images_gui/"
+                                              overwrite="true">
+                                            <fileset dir="${basedir}/src/main/webapp/images_gui/"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/WEB-INF/jsp/" type="dir"/>
+                                    <then>
+                                        <copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/jsp/"
+                                              overwrite="true">
+                                            <fileset dir="${basedir}/src/main/webapp/WEB-INF/jsp/"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                                <if>
+                                    <available file="${basedir}/src/main/webapp/WEB-INF/templates/text/" type="dir"/>
+                                    <then>
+                                        <copy todir="${project.build.directory}/${project.build.finalName}/WEB-INF/templates/text/"
+                                              overwrite="true">
+                                            <fileset dir="${basedir}/src/main/webapp/WEB-INF/templates/text/"/>
+                                        </copy>
+                                    </then>
+                                </if>
+                                <!-- / Copy all webapp files, to force overwrite -->
+                                <property file="local.server.properties"/>
+                                <if>
+                                    <available
+                                            file="${project.build.directory}/${project.build.finalName}/${KeyStorePath}"/>
+                                    <then>
+                                        <signjar alias="${KeyStoreAlias}" storepass="${KeyStorePassword}"
+                                                 keystore="${project.build.directory}/${project.build.finalName}/${KeyStorePath}">
+                                            <fileset
+                                                    dir="${project.build.directory}/${project.build.finalName}/WEB-INF/lib">
+                                                <include name="${project.build.finalName}.jar"/>
+                                            </fileset>
+                                        </signjar>
+                                    </then>
+                                </if>
+
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.imcode.ant.tasks</groupId>
+                        <artifactId>imcode-ant-tasks</artifactId>
+                        <version>1.3</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>20020829</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>imcode</id>
+            <url>http://repo.imcode.com/maven2</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>central</id>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>sourceforge-releases</id>
+            <name>Sourceforge Release Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/sourceforge-releases</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>imcode</id>
+            <url>http://repo.imcode.com/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

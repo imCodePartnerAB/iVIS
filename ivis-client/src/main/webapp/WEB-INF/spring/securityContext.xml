@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xmlns:sec="http://www.springframework.org/schema/security" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2
+       http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <sec:http auto-config='true'>
+        <sec:intercept-url pattern="/**" access="ROLE_USER" />
+    </sec:http>
+
+    <!--&lt;!&ndash;<context:property-placeholder location="classpath:oauth.properties"/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash; Just for testing... &ndash;&gt;-->
+    <!--&lt;!&ndash;<http pattern="/oauth/cache_approvals" security="none"&ndash;&gt;-->
+    <!--&lt;!&ndash;xmlns="http://www.springframework.org/schema/security" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<http pattern="/oauth/uncache_approvals" security="none"&ndash;&gt;-->
+    <!--&lt;!&ndash;xmlns="http://www.springframework.org/schema/security" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<mvc:resources mapping="/resources/**" location="/resources/" />&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash; This is where we tells spring security what URL should be protected and what roles have access to them &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<http pattern="/schools/**" create-session="stateless"&ndash;&gt;-->
+    <!--&lt;!&ndash;entry-point-ref="oauthAuthenticationEntryPoint"&ndash;&gt;-->
+    <!--&lt;!&ndash;access-decision-manager-ref="accessDecisionManager"&ndash;&gt;-->
+    <!--&lt;!&ndash;xmlns="http://www.springframework.org/schema/security">&ndash;&gt;-->
+    <!--&lt;!&ndash;<anonymous enabled="false" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<intercept-url pattern="/schools/**" access="ROLE_USER" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />&ndash;&gt;-->
+    <!--&lt;!&ndash;&lt;!&ndash;<access-denied-handler ref="oauthAccessDeniedHandler" />&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;</http>&ndash;&gt;-->
+
+    <!--<http pattern="/oauth/token" create-session="never"-->
+          <!--authentication-manager-ref="clientAuthenticationManager"-->
+          <!--xmlns="http://www.springframework.org/schema/security">-->
+        <!--<intercept-url pattern="/**" method="GET" access="ROLE_DENY" />-->
+        <!--<intercept-url pattern="/**" method="PUT" access="ROLE_DENY" />-->
+        <!--<intercept-url pattern="/**" method="DELETE" access="ROLE_DENY" />-->
+        <!--<intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />-->
+        <!--<anonymous enabled="false" />-->
+        <!--<http-basic entry-point-ref="clientAuthenticationEntryPoint" />-->
+        <!--&lt;!&ndash; include this only if you need to authenticate clients via request parameters &ndash;&gt;-->
+        <!--<custom-filter ref="clientCredentialsTokenEndpointFilter"-->
+                       <!--after="BASIC_AUTH_FILTER" />-->
+        <!--&lt;!&ndash;after="ANONYMOUS_FILTER" />&ndash;&gt;-->
+        <!--<access-denied-handler ref="oauthAccessDeniedHandler" />-->
+    <!--</http>-->
+
+    <!--&lt;!&ndash; The OAuth2 protected resources are separated out into their own block-->
+        <!--so we can deal with authorization and error handling separately. This isn't-->
+        <!--mandatory, but it makes it easier to control the behaviour. &ndash;&gt;-->
+    <!--<http pattern="/oauth/(users|clients)/.*"-->
+          <!--request-matcher="regex"-->
+          <!--create-session="never"-->
+          <!--entry-point-ref="oauthAuthenticationEntryPoint"-->
+          <!--use-expressions="true" xmlns="http://www.springframework.org/schema/security">-->
+        <!--<anonymous enabled="false" />-->
+        <!--<intercept-url pattern="/oauth/users/([^/].*?)/tokens/.*"-->
+                       <!--access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('write')"-->
+                       <!--method="DELETE" />-->
+        <!--<intercept-url pattern="/oauth/users/.*"-->
+                       <!--access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('read')"-->
+                       <!--method="GET" />-->
+        <!--<intercept-url pattern="/oauth/clients/.*"-->
+                       <!--access="#oauth2.clientHasRole('ROLE_CLIENT') and #oauth2.isClient() and #oauth2.hasScope('read')"-->
+                       <!--method="GET" />-->
+        <!--<intercept-url pattern="/**" access="denyAll()" />-->
+        <!--<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />-->
+        <!--<access-denied-handler ref="oauthAccessDeniedHandler" />-->
+        <!--<expression-handler ref="oauthWebExpressionHandler" />-->
+    <!--</http>-->
+
+    <!--&lt;!&ndash; The OAuth2 protected resources are separated out into their own block-->
+        <!--so we can deal with authorization and error handling separately. This isn't-->
+        <!--mandatory, but it makes it easier to control the behaviour. &ndash;&gt;-->
+    <!--<http pattern="/api/v1/**" create-session="never"-->
+          <!--entry-point-ref="oauthAuthenticationEntryPoint"-->
+          <!--access-decision-manager-ref="accessDecisionManager"-->
+          <!--xmlns="http://www.springframework.org/schema/security">-->
+        <!--<anonymous enabled="false" />-->
+        <!--<intercept-url pattern="/api/v1/**" access="ROLE_USER,SCOPE_READ" />-->
+        <!--&lt;!&ndash;<intercept-url pattern="/photos" access="ROLE_USER,SCOPE_READ" />&ndash;&gt;-->
+        <!--&lt;!&ndash;<intercept-url pattern="/photos/trusted/**" access="ROLE_CLIENT,SCOPE_TRUST" />&ndash;&gt;-->
+        <!--&lt;!&ndash;<intercept-url pattern="/photos/user/**" access="ROLE_USER,SCOPE_TRUST" />&ndash;&gt;-->
+        <!--&lt;!&ndash;<intercept-url pattern="/photos/**" access="ROLE_USER,SCOPE_READ" />&ndash;&gt;-->
+        <!--<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />-->
+        <!--<access-denied-handler ref="oauthAccessDeniedHandler" />-->
+    <!--</http>-->
+
+    <!--<http access-denied-page="/login?authorization_error=true"-->
+          <!--disable-url-rewriting="true" xmlns="http://www.springframework.org/schema/security">-->
+        <!--&lt;!&ndash;<intercept-url pattern="/oauth/**" access="ROLE_USER" />&ndash;&gt;-->
+        <!--&lt;!&ndash;<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />&ndash;&gt;-->
+        <!--&lt;!&ndash;<intercept-url pattern="/oauth/authorize" access="IS_AUTHENTICATED_ANONYMOUSLY" />&ndash;&gt;-->
+        <!--<intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <!--<intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <!--<intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />-->
+
+
+        <!--<form-login authentication-failure-url="/login?authentication_error=true"-->
+                    <!--default-target-url="/index" login-page="/login"-->
+                    <!--login-processing-url="/login.do" />-->
+        <!--<logout logout-success-url="/login" logout-url="/logout.do" />-->
+        <!--<anonymous />-->
+        <!--&lt;!&ndash;<csrf/>&ndash;&gt;-->
+    <!--</http>-->
+
+    <!--&lt;!&ndash;Glogal Security&ndash;&gt;-->
+    <!--&lt;!&ndash;<http access-denied-page="/error403.jsp">&ndash;&gt;-->
+    <!--&lt;!&ndash;<sec:intercept-url pattern="/index*" access="ROLE_USER,ROLE_ADMIN" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<sec:intercept-url pattern="/add*" access="ROLE_USER" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<sec:intercept-url pattern="/delete/*" access="ROLE_ADMIN" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<sec:form-login login-page="/login.jsp" default-target-url="/index"&ndash;&gt;-->
+    <!--&lt;!&ndash;authentication-failure-url="/login.jsp?error=true" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<sec:logout logout-url="/logout" logout-success-url="/index" />&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<sec:anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />&ndash;&gt;-->
+    <!--&lt;!&ndash;&lt;!&ndash;<sec:remember-me />&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;</http>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<bean id="" class="com.imcode.entities.oauth2.JpaClientDetails"/>&ndash;&gt;-->
+
+    <!--<bean id="oauthAuthenticationEntryPoint"-->
+          <!--class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">-->
+        <!--<property name="realmName" value="sparklr2" />-->
+    <!--</bean>-->
+
+    <!--<bean id="clientAuthenticationEntryPoint"-->
+          <!--class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">-->
+        <!--<property name="realmName" value="sparklr2/client" />-->
+        <!--<property name="typeName" value="Basic" />-->
+    <!--</bean>-->
+
+    <!--<bean id="oauthAccessDeniedHandler"-->
+          <!--class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />-->
+
+    <!--<bean id="clientCredentialsTokenEndpointFilter"-->
+          <!--class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">-->
+        <!--<property name="authenticationManager" ref="clientAuthenticationManager" />-->
+    <!--</bean>-->
+
+    <!--<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased"-->
+          <!--xmlns="http://www.springframework.org/schema/beans">-->
+        <!--<constructor-arg>-->
+            <!--<list>-->
+                <!--<bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />-->
+                <!--<bean class="org.springframework.security.access.vote.RoleVoter" />-->
+                <!--<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />-->
+            <!--</list>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+    <!--<authentication-manager id="clientAuthenticationManager"-->
+                            <!--xmlns="http://www.springframework.org/schema/security">-->
+        <!--<authentication-provider user-service-ref="clientDetailsUserService" />-->
+    <!--</authentication-manager>-->
+
+    <!--<authentication-manager alias="authenticationManager"-->
+                            <!--xmlns="http://www.springframework.org/schema/security">-->
+        <!--<authentication-provider user-service-ref="userServiceRepoImpl">-->
+            <!--&lt;!&ndash;<jdbc-user-service data-source-ref="dataSource"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash;<user-service id="userDetailsService">&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash;<user name="admin" password="pass" authorities="ROLE_USER" />&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash;<user name="user1" password="1111" authorities="ROLE_USER" />&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash;</user-service>&ndash;&gt;&ndash;&gt;-->
+        <!--</authentication-provider>-->
+    <!--</authentication-manager>-->
+
+    <!--<bean id="clientDetailsUserService"-->
+          <!--class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">-->
+        <!--<constructor-arg name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />&ndash;&gt;-->
+    <!--<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore"-->
+          <!--c:dataSource-ref="dataSource"/>-->
+
+
+    <!--<bean id="tokenServices"-->
+          <!--class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">-->
+        <!--<property name="tokenStore" ref="tokenStore" />-->
+        <!--<property name="tokenEnhancer" ref="tokenEnhancer" />-->
+        <!--<property name="supportRefreshToken" value="true" />-->
+        <!--<property name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />-->
+    <!--</bean>-->
+
+    <!--<bean id="tokenEnhancer"-->
+          <!--class="com.imcode.oauth2.IvisTokenEnhancer" />-->
+
+    <!--<bean id="requestFactory"-->
+          <!--class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">-->
+        <!--<constructor-arg name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />-->
+    <!--</bean>-->
+
+    <!--<bean id="userApprovalHandler"-->
+          <!--class="com.imcode.oauth2.IvisUserApprovalHandler">-->
+        <!--<property name="approvalStore" ref="approvalStore" />-->
+        <!--<property name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />-->
+        <!--<property name="requestFactory" ref="requestFactory" />-->
+    <!--</bean>-->
+
+    <!--<bean id="approvalStore"-->
+          <!--class="org.springframework.security.oauth2.provider.approval.TokenApprovalStore">-->
+        <!--<property name="tokenStore" ref="tokenStore" />-->
+    <!--</bean>-->
+    <!--&lt;!&ndash;<bean id="approvalStore"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth2.provider.approval.JdbcApprovalStore"&ndash;&gt;-->
+    <!--&lt;!&ndash;c:dataSource-ref="dataSource"/>&ndash;&gt;-->
+
+
+    <!--<oauth:authorization-server-->
+            <!--client-details-service-ref="clientDetailsServiceRepoImpl" token-services-ref="tokenServices"-->
+            <!--user-approval-handler-ref="userApprovalHandler">-->
+        <!--<oauth:authorization-code />-->
+        <!--<oauth:implicit />-->
+        <!--<oauth:refresh-token />-->
+        <!--<oauth:client-credentials />-->
+        <!--<oauth:password />-->
+    <!--</oauth:authorization-server>-->
+
+    <!--<oauth:resource-server id="resourceServerFilter"-->
+                           <!--resource-id="ivis" token-services-ref="tokenServices"/>-->
+
+    <!--&lt;!&ndash;<oauth:client-details-service id="clientDetails">&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="my-trusted-client"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="password,authorization_code,refresh_token,implicit"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" scope="read,write,trust"&ndash;&gt;-->
+    <!--&lt;!&ndash;access-token-validity="60" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="my-trusted-client-with-secret"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="password,authorization_code,refresh_token,implicit"&ndash;&gt;-->
+    <!--&lt;!&ndash;secret="somesecret" authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="my-client-with-secret"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="client_credentials" authorities="ROLE_CLIENT"&ndash;&gt;-->
+    <!--&lt;!&ndash;scope="read" secret="secret" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="my-less-trusted-client"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="authorization_code,implicit" authorities="ROLE_CLIENT" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="my-less-trusted-autoapprove-client"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="implicit" authorities="ROLE_CLIENT" scope="read,write,trust"&ndash;&gt;-->
+    <!--&lt;!&ndash;autoapprove="true" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="my-client-with-registered-redirect"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="authorization_code,client_credentials"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorities="ROLE_CLIENT" redirect-uri="http://anywhere?key=value"&ndash;&gt;-->
+    <!--&lt;!&ndash;scope="read,trust" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="my-untrusted-client-with-registered-redirect"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="authorization_code" authorities="ROLE_CLIENT"&ndash;&gt;-->
+    <!--&lt;!&ndash;redirect-uri="http://anywhere" scope="read" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="tonr" resource-ids="sparklr"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorized-grant-types="authorization_code,implicit" authorities="ROLE_CLIENT"&ndash;&gt;-->
+    <!--&lt;!&ndash;scope="read,write" secret="secret" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<oauth:client client-id="tonr-with-redirect"&ndash;&gt;-->
+    <!--&lt;!&ndash;resource-ids="sparklr" authorized-grant-types="authorization_code,implicit"&ndash;&gt;-->
+    <!--&lt;!&ndash;authorities="ROLE_CLIENT" scope="read,write" secret="secret"&ndash;&gt;-->
+    <!--&lt;!&ndash;redirect-uri="http://localhost:8080/tonr2/sparklr/redirect" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</oauth:client-details-service>&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean id="clientDetails" class="org.springframework.security.oauth2.provider.client.JdbcClientDetailsService"&ndash;&gt;-->
+    <!--&lt;!&ndash;c:dataSource-ref="dataSource"/>&ndash;&gt;-->
+
+
+    <!--<mvc:annotation-driven />-->
+
+    <!--<mvc:default-servlet-handler />-->
+
+    <!--<sec:global-method-security-->
+            <!--pre-post-annotations="enabled" proxy-target-class="true">-->
+        <!--&lt;!&ndash;you could also wire in the expression handler up at the layer of the-->
+            <!--http filters. See https://jira.springsource.org/browse/SEC-1452 &ndash;&gt;-->
+        <!--<sec:expression-handler ref="oauthExpressionHandler" />-->
+    <!--</sec:global-method-security>-->
+
+    <!--<oauth:expression-handler id="oauthExpressionHandler" />-->
+
+    <!--<oauth:web-expression-handler id="oauthWebExpressionHandler" />-->
+
+    <!--&lt;!&ndash;Basic application beans. &ndash;&gt;-->
+    <!--&lt;!&ndash;<bean id="viewResolver"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="mediaTypes">&ndash;&gt;-->
+    <!--&lt;!&ndash;<map>&ndash;&gt;-->
+    <!--&lt;!&ndash;<entry key="json" value="application/json" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</map>&ndash;&gt;-->
+    <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="viewResolvers">&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.web.servlet.view.InternalResourceViewResolver">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="prefix" value="/WEB-INF/jsp/"></property>&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="suffix" value=".jsp"></property>&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="defaultViews">&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="extractValueFromSingleKeyModel" value="true" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<bean id="photoController"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.mvc.PhotoController">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="photoService" ref="photoServices" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<bean id="photoServiceUserController"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.mvc.PhotoServiceUserController">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userDetailsService" ref="userDetailsService" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<bean id="adminController"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.mvc.AdminController">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="tokenServices" ref="tokenServices" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="tokenStore" ref="tokenStore" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userApprovalHandler" ref="userApprovalHandler" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;&lt;!&ndash; Override the default mappings for approval and error pages &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean id="accessConfirmationController"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.mvc.AccessConfirmationController">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="clientDetailsService" ref="clientDetails" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="approvalStore" ref="approvalStore" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<bean id="photoServices"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.impl.PhotoServiceImpl">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="photos">&ndash;&gt;-->
+    <!--&lt;!&ndash;<list>&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.PhotoInfo">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="id" value="1" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="name" value="photo1.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userId" value="marissa" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="resourceURL"&ndash;&gt;-->
+    <!--&lt;!&ndash;value="/org/springframework/security/oauth/examples/sparklr/impl/resources/photo1.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.PhotoInfo">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="id" value="2" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="name" value="photo2.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userId" value="paul" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="resourceURL"&ndash;&gt;-->
+    <!--&lt;!&ndash;value="/org/springframework/security/oauth/examples/sparklr/impl/resources/photo2.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.PhotoInfo">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="id" value="3" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="name" value="photo3.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userId" value="marissa" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="resourceURL"&ndash;&gt;-->
+    <!--&lt;!&ndash;value="/org/springframework/security/oauth/examples/sparklr/impl/resources/photo3.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.PhotoInfo">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="id" value="4" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="name" value="photo4.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userId" value="paul" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="resourceURL"&ndash;&gt;-->
+    <!--&lt;!&ndash;value="/org/springframework/security/oauth/examples/sparklr/impl/resources/photo4.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.PhotoInfo">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="id" value="5" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="name" value="photo5.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userId" value="marissa" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="resourceURL"&ndash;&gt;-->
+    <!--&lt;!&ndash;value="/org/springframework/security/oauth/examples/sparklr/impl/resources/photo5.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;<bean&ndash;&gt;-->
+    <!--&lt;!&ndash;class="org.springframework.security.oauth.examples.sparklr.PhotoInfo">&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="id" value="6" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="name" value="photo6.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="userId" value="paul" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<property name="resourceURL"&ndash;&gt;-->
+    <!--&lt;!&ndash;value="/org/springframework/security/oauth/examples/sparklr/impl/resources/photo6.jpg" />&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+    <!--&lt;!&ndash;</list>&ndash;&gt;-->
+    <!--&lt;!&ndash;</property>&ndash;&gt;-->
+    <!--&lt;!&ndash;</bean>&ndash;&gt;-->
+
+
+
+</beans>
