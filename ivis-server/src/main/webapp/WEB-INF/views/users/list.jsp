@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <spring:message code="label.user.list" var="labelUserList"/>
-<spring:url value="/users/?form" var="addUserUrl"/>
+<spring:url value="/users/?form" var="addUrl"/>
 <spring:url value="/users" var="listUrl"/>
 <h1>${labelUserList}</h1>
 
@@ -41,5 +41,5 @@
 </table>
 
 <div class="buttons">
-    <a class="button positive" href="${addUserUrl}">Add</a>
+    <a class="button positive" href="${addUrl}">Add</a>
 </div>

@@ -2,6 +2,7 @@ package com.imcode.controllers;
 
 import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,14 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 //    @ResponseBody
     public Object update(@PathVariable("id") ID id, @RequestBody(required = false) T entity, WebRequest webRequest) {
-        return service.find(id);
+        T existsEntity = getService().find(id);
+
+        if (existsEntity != null) {
+            BeanUtils.copyProperties(entity, existsEntity, "id");
+            service.save(entity);
+        }
+
+        return existsEntity;
     }
 
     //Deleting entity

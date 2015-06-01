@@ -6,6 +6,7 @@ import com.imcode.services.AppTablePermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Deprecated
 @Controller
 @RequestMapping("/permissions")
 public class AppTablePermissionRestControllerImpl extends AbstractRestController<AppTablePermission, Long, AppTablePermissionService> {

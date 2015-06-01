@@ -1,4 +1,4 @@
-package com.imcode.services.impl;
+package com.imcode.services.jpa;
 
 import com.imcode.entities.oauth2.ClientRole;
 import com.imcode.repositories.oauth2.ClientRoleRepository;

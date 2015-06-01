@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>iVIS</artifactId>
-        <groupId>iVIS</groupId>
+        <groupId>com.imcode.ivis</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,12 +13,13 @@
     <properties>
         <spring-framework.version>4.1.1.RELEASE</spring-framework.version>
         <spring-security.version>4.0.1.RELEASE</spring-security.version>
+        <hibernate.version>4.3.10.Final</hibernate.version>
     </properties>
     <dependencies>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.security.oauth</groupId>-->
-            <!--<artifactId>spring-security-oauth2</artifactId>-->
-            <!--<version>2.0.5.RELEASE</version>-->
+        <!--<groupId>org.springframework.security.oauth</groupId>-->
+        <!--<artifactId>spring-security-oauth2</artifactId>-->
+        <!--<version>2.0.5.RELEASE</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -80,11 +81,45 @@
             <artifactId>spring-security-oauth2</artifactId>
             <version>2.0.5.RELEASE</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.security</groupId>-->
-        <!--<artifactId>spring-security-web</artifactId>-->
-        <!--<version>3.2.5.RELEASE</version>-->
-        <!--</dependency>-->
+
+        <!--Hibernate-->
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+
+        <!--Persistence-->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <!--Dinamic code injections-->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+
+        <!--Connection Pool-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.0.1</version>
+        </dependency>
 
 
         <dependency>
@@ -98,6 +133,21 @@
             <artifactId>imcms</artifactId>
             <version>SNAPSHOT</version>
             <type>war</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-entitymanager</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate.javax.persistence</groupId>
+                    <artifactId>hibernate-jpa-2.1-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.imcode.imcms</groupId>
@@ -106,6 +156,21 @@
             <classifier>classes</classifier>
             <type>jar</type>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-core</artifactId>
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-entitymanager</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hibernate.javax.persistence</groupId>
+                    <artifactId>hibernate-jpa-2.1-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -122,6 +187,17 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.5.1</version>
         </dependency>
+        <!--iVIS-->
+        <dependency>
+            <groupId>com.imcode.ivis</groupId>
+            <artifactId>ivis-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.imcode.ivis</groupId>
+            <artifactId>ivis-sdk</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--<dependency>-->
         <!--<groupId>commons-io</groupId>-->
         <!--<artifactId>commons-io</artifactId>-->
@@ -130,7 +206,6 @@
 
 
     </dependencies>
-
 
 
     <build>
@@ -149,6 +224,15 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
+                    <overlays>
+                        <overlay>
+                            <groupId>com.imcode.imcms</groupId>
+                            <artifactId>imcms</artifactId>
+                            <excludes>
+                                <exclude>WEB-INF/lib/hibernate*.jar</exclude>
+                            </excludes>
+                        </overlay>
+                    </overlays>
                     <dependentWarExcludes>WEB-INF/lib/mysql*.jar</dependentWarExcludes>
                 </configuration>
             </plugin>

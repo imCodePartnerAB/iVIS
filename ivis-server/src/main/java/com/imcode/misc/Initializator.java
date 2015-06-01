@@ -1,12 +1,15 @@
 package com.imcode.misc;
 
 import com.imcode.entities.Role;
+import com.imcode.entities.Statement;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
+import com.imcode.entities.enums.StatementStatus;
 import com.imcode.entities.oauth2.ClientRole;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.repositories.RoleRepository;
+import com.imcode.repositories.StatementRepository;
 import com.imcode.repositories.UserRepository;
 import com.imcode.repositories.oauth2.ClientRoleRepository;
 import com.imcode.repositories.oauth2.ClietnDetailsRepository;
@@ -38,6 +41,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -66,6 +70,9 @@ public class Initializator {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private StatementRepository statementRepository;
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
 //    @Autowired
@@ -76,6 +83,23 @@ public class Initializator {
         intializeSecurityJpa();
         intializeOAuth2Jpa();
         initializeToken();
+        initializeStatementJpa();
+
+    }
+
+    private void initializeStatementJpa() {
+        List<Statement> statementList = statementRepository.findAll();
+
+        if (statementList.size() == 0) {
+            Random random = new Random();
+
+            for (int i = 0; i < 5; i++) {
+                Statement statement = new Statement();
+                statement.setId(Long.valueOf(i));
+                statement.setStatus(StatementStatus.values()[random.nextInt(StatementStatus.values().length)]);
+                statementRepository.save(statement);
+            }
+        }
     }
 
     private void initializeToken() {
@@ -188,7 +212,7 @@ public class Initializator {
 
             clientDetails = new JpaClientDetails();
             clientDetails.setName("ivis");
-//            clientDetails.setClientId("2711e4f2-4d95-431e-b4ad-ad32fc1adf3b");
+//            clientDetails.setClientId("ee4b69d1-e375-4612-a22f-812a5ecacd35");
             clientDetails.setClientSecret("secret");
             clientDetails.setScope("read", "write", "execute");
             clientDetails.setResourceIds("ivis");
@@ -202,7 +226,7 @@ public class Initializator {
 
             clientDetails = new JpaClientDetails();
             clientDetails.setName("admin");
-//            clientDetails.setClientId("2e01f54f-20f2-45bd-9690-d15298a2318a");
+//            clientDetails.setClientId("477263aa-2193-49ca-ac2e-1a2f043c48a7");
             clientDetails.setClientSecret("secret");
             clientDetails.setScope("read", "write", "execute");
             clientDetails.setResourceIds("ivis");

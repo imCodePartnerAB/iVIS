@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Created by vitaly on 17.02.15.
  */
+@Deprecated
 public interface ApplicationService extends GenericService<ClientDetails, String> {
 
     List<ClientDetails> findAllUserApplications(String UserId);

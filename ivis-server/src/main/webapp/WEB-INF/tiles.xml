@@ -37,8 +37,18 @@
     <definition name="users/edit" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/users/edit.jsp"/>
     </definition>
+
 <!--Admin/Security-->
     <definition name="security/login" extends="simple">
         <put-attribute name="content" value="/WEB-INF/views/security/login.jsp"/>
     </definition>
+    <!--Admin/SQL -->
+    <definition name="sql/show" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/sql/show.jsp"/>
+    </definition>
+    <!--Admin/XML -->
+    <definition name="xml/show" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/xml/show.jsp"/>
+    </definition>
+
 </tiles-definitions>

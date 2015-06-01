@@ -23,6 +23,10 @@ public class OAuth2SchoolService extends AbstractOAuth2Service implements School
         super(client, accessToken, mainServiceAddres);
     }
 
+    public OAuth2SchoolService(IvisServiceFactory ivisServiceFactory) {
+        super(ivisServiceFactory);
+    }
+
     public School save(School entity) {
         return null;
     }
@@ -49,7 +53,7 @@ public class OAuth2SchoolService extends AbstractOAuth2Service implements School
 
         ResponseEntity<School[]> responseEntity = restTemplate.exchange(uri, method, null, School[].class);
 
-        if (responseEntity.getBody() == null) {
+        if (responseEntity.getBody() != null) {
             result = Arrays.asList(responseEntity.getBody());
         }
 

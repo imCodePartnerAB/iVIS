@@ -1,19 +1,19 @@
 package com.imcode;
 
-import com.imcode.entities.*;
-import com.imcode.entities.enums.AddressTypeEnum;
-import com.imcode.entities.enums.ServiceTypeEnum;
-import com.imcode.entities.oauth2.ClientRole;
-import com.imcode.entities.oauth2.JpaClientDetails;
-import com.imcode.misc.Initializator;
-import com.imcode.repositories.*;
-import com.imcode.repositories.oauth2.ClientRoleRepository;
-import com.imcode.repositories.oauth2.ClietnDetailsRepository;
-import com.imcode.services.*;
-import org.springframework.context.support.GenericXmlApplicationContext;
-import org.springframework.web.client.RestTemplate;
+import com.imcode.entities.enums.StatementStatus;
+import org.exolab.castor.xml.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+//import sun.plugin.dom.core.Document;
 
-import java.util.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by vitaly on 17.02.15.
@@ -32,13 +32,116 @@ public class MainTest {
 //        System.out.println(uuid.variant());
 //    }
 
-    public static void main(String[] args) {
-        RestTemplate restTemplate = new RestTemplate();
+//    private static Marshaller getMarshaller() {
+//        XMLContext xmlContext = new XMLContext();
+//
+//        return xmlContext.createMarshaller();
+//    }
+//
+//    private static Unmarshaller getUnmarshaller() {
+//        XMLContext xmlContext = new XMLContext();
+//
+//        return xmlContext.createUnmarshaller();
+//    }
+//
+//    public static void convertFromObjectToXML(Object object, String filepath)
+//            throws IOException {
+//
+//        FileOutputStream os = null;
+//        try {
+//            os = new FileOutputStream(filepath);
+//            getMarshaller().marshal(object, new StreamResult(os));
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//        }
+//    }
+//
+//    public static Object convertFromXMLToObject(String xmlfile) throws IOException, MarshalException, ValidationException {
+//
+//        FileInputStream is = null;
+//        try {
+//            is = new FileInputStream(xmlfile);
+//            return getUnmarshaller().unmarshal(new StreamSource(is));
+//        } finally {
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
+
+
+    public static Map<String, Object> convertNodesFromXml(String xml) throws Exception {
+
+        InputStream is = new ByteArrayInputStream(xml.getBytes());
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document document = db.parse(is);
+        return createMap(document.getDocumentElement());
+    }
+
+    public static Map<String, Object> createMap(Node node) {
+        Map<String, Object> map = new HashMap<>();
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node currentNode = nodeList.item(i);
+//            if (currentNode.hasAttributes()) {
+//                for (int j = 0; j < currentNode.getAttributes().getLength(); j++) {
+//                    Node item = currentNode.getAttributes().item(i);
+//                    map.put(item.getNodeName(), item.getTextContent());
+//                }
+//            }
+            if (node.getFirstChild() != null && node.getFirstChild().getNodeType() == Node.ELEMENT_NODE) {
+                map.putAll(createMap(currentNode));
+            } else if (node.getFirstChild().getNodeType() == Node.TEXT_NODE) {
+                map.put(node.getLocalName(), node.getTextContent());
+            }
+        }
+        return map;
+    }
+
+    public static void main(String[] args) throws Exception {
+        XMLContext context = new XMLContext();
+//        context.addMapping();
+
+        String s = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" +
+                "<FlowInstance>\n" +
+                "              <FamilyID>37</FamilyID>\n" +
+                "              <Version>3</Version>\n" +
+                "              <FlowID>181</FlowID>\n" +
+                "</FlowInstance>";
+        Map<String, Object> map = convertNodesFromXml(s);
+        System.out.println(map);
+//        // Create a Reader to the file to unmarshal from
+//
+//        FileReader reader = new FileReader("/home/vitaly/SkypeFiles/0.xml");
+//
+//// Create a new Unmarshaller
+//        Unmarshaller unmarshaller =
+//                context.createUnmarshaller();
+//        unmarshaller.setClass(Object.class);
+//
+//// Unmarshal the person object
+//        Object o = unmarshaller.unmarshal(reader);
+
+
+//        System.out.println(StatementStatus.valueOf("created"));
+//        Object o = convertFromXMLToObject("/home/vitaly/SkypeFiles/795.xml");
+//        System.out.println(o);
+//        FileReader fis = null;
+//        try (fis = new FileReader("/home/vitaly/SkypeFiles/795.xml");){
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        RestTemplate restTemplate = new RestTemplate();
 
 ////        System.out.println("Hello world");
 ////        JpaClientDetails clientDetails = new JpaClientDetails();
 //        Role role = new Role();
-        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+//        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
 //        ctx.load("classpath:/spring/data.xml");
 ////        javax.el.ExpressionFactory
 //        ctx.refresh();
@@ -59,7 +162,7 @@ public class MainTest {
 //        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
 //        ctx.load("classpath:/spring/data.xml");
 //        ctx.refresh();
-        PersonService personService = ctx.getBean(PersonService.class);
+//        PersonService personService = ctx.getBean(PersonService.class);
 //        AddressService addressService = ctx.getBean(AddressService.class);
 //        PhoneService phoneService = ctx.getBean(PhoneService.class);
 //        EmailService emailService = ctx.getBean(EmailService.class);

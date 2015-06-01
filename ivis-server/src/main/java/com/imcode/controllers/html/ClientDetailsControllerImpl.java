@@ -8,6 +8,7 @@ import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ClientRoleService;
 import com.imcode.services.UserService;
+import com.imcode.validators.JpaClientDetailsValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +40,10 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JpaClientDetailsValidator clientValidator;
+
+
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAll(WebRequest webRequest, Model model, Authentication principal) {
@@ -67,6 +72,8 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
                          WebRequest webRequest,
                          RedirectAttributes redirectAttributes,
                          Authentication principal) {
+
+//        clientValidator.validate(client, bindingResult);
 
         if (bindingResult.hasErrors()) {
             uiModel.addAttribute("message", new Message(MessageType.ERROR, "Client save fail"));

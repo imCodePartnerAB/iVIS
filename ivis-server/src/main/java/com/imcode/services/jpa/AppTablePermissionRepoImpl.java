@@ -1,4 +1,4 @@
-package com.imcode.services.impl;
+package com.imcode.services.jpa;
 
 import com.imcode.entities.oauth2.AppTablePermission;
 import com.imcode.repositories.oauth2.AppTablePermissionRepository;

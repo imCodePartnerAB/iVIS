@@ -5,7 +5,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <spring:message code="label.client.list" var="labelClientList"/>
-<spring:url value="/clients/?form" var="addClientUrl"/>
+<spring:url value="/clients/?form" var="addUrl"/>
 <h1>${labelClientList}</h1>
 <table cellpadding="0" cellspacing="0">
     <thead>
@@ -50,7 +50,7 @@
 </table>
 
 <div class="buttons">
-    <button class="positive" type="submit">Add</button>
+    <a class="button positive" href="${addUrl}">Add</a>
 </div>
 <%--<div class="buttons">--%>
 <%--<a href="${addClientUrl}">Add</a>--%>

@@ -1,11 +1,21 @@
-package com.imcode.imcms.addon.ivisclient.utils;
+package imcode.services.utils;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Created by vitaly on 28.05.15.
@@ -61,5 +71,37 @@ public class IvisOAuth2Utils {
 
         return accessToken;
     }
-    
+
+    public static String getOAuth2AuthirizationUrl(AuthorizationCodeResourceDetails client, String redirectUri) throws URISyntaxException {
+
+        List<NameValuePair> parameters = new ArrayList<>();
+        parameters.add(new BasicNameValuePair("response_type", "code"));
+        parameters.add(new BasicNameValuePair("client_id", client.getClientId()));
+        parameters.add(new BasicNameValuePair("redirect_uri", redirectUri));
+
+        if (client.isScoped()) {
+
+            StringBuilder builder = new StringBuilder();
+            List<String> scope = client.getScope();
+
+            if (scope != null) {
+                Iterator<String> scopeIt = scope.iterator();
+                while (scopeIt.hasNext()) {
+                    builder.append(scopeIt.next());
+                    if (scopeIt.hasNext()) {
+                        builder.append(' ');
+                    }
+                }
+            }
+
+            parameters.add(new BasicNameValuePair("scope", builder.toString()));
+        }
+
+
+        URIBuilder uriBuilder = new URIBuilder(client.getUserAuthorizationUri());
+        uriBuilder.addParameters(parameters);
+
+        return uriBuilder.toString();
+    }
+
 }

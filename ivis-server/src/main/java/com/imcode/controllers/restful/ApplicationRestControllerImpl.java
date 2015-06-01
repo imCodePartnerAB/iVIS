@@ -15,7 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-
+@Deprecated
 @RestController
 @RequestMapping("/v1/{format}/applications")
 //@RequestMapping("/test/applications")

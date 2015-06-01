@@ -1,4 +1,4 @@
-package com.imcode.services.impl;
+package com.imcode.services.jpa;
 
 import com.imcode.entities.Role;
 import com.imcode.repositories.RoleRepository;

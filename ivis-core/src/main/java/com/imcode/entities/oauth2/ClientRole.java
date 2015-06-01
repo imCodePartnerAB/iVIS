@@ -15,8 +15,30 @@ public class ClientRole extends AbstractNamedEntity implements GrantedAuthority,
     public ClientRole() {
     }
 
+
     public ClientRole(String name) {
         super(name);
+    }
+
+
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
+    public Long getId() {
+        return super.getId();
+    }
+
+    @Override
+    public void setId(Long id) {
+        super.setId(id);
     }
 
     @Override

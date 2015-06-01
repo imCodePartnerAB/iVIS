@@ -17,9 +17,9 @@
     <bean id="ivisClient"
           class="org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails"
           p:grantType="authorization_code"
-          p:clientId="2e9fa895-e577-4156-844a-2cbb1ebbe06d"
+          p:clientId="${ClientId}"
           p:clientSecret="secret"
-          p:accessTokenUri="http://localhost:8080/ivis/oauth/token"
-          p:userAuthorizationUri="http://localhost:8080/ivis/oauth/authorize"
-          p:scope="#{{'read','write'}}"/>
+          p:accessTokenUri="${AccessTokenUri}"
+          p:userAuthorizationUri="${UserAuthorizationUri}"
+          p:scope="read"/>
 </beans>

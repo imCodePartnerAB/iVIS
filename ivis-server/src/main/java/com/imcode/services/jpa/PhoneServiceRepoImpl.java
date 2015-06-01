@@ -1,4 +1,4 @@
-package com.imcode.services.impl;
+package com.imcode.services.jpa;
 
 import com.imcode.entities.Phone;
 import com.imcode.repositories.PhoneRepository;

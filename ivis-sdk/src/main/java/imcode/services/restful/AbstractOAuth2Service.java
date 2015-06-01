@@ -1,6 +1,5 @@
 package imcode.services.restful;
 
-import com.sun.xml.internal.ws.api.policy.PolicyResolver;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -14,10 +13,11 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 public class AbstractOAuth2Service {
     private String mainServiceAddres;
     private RestServiseRequest findAllRequest;
-//    private String findServiceAddres;
-//    private String saveServiceAddres;
-//    private String existsServiceAddres;
-//    private String deleteServiceAddres;
+    private RestServiseRequest findRequest;
+    private RestServiseRequest createRequest;
+    private RestServiseRequest updateRequest;
+    private RestServiseRequest existsRequest;
+    private RestServiseRequest deleteRequest;
 
     private OAuth2AccessToken accessToken;
 
@@ -47,7 +47,6 @@ public class AbstractOAuth2Service {
         return new OAuth2RestTemplate(client, clientContext);
     }
 
-
     public void setClient(OAuth2ProtectedResourceDetails client) {
         this.client = client;
     }
@@ -76,9 +75,55 @@ public class AbstractOAuth2Service {
         this.findAllRequest = findAllRequest;
     }
 
-    protected void fillServiseAdderess(String mainServiceAddres) {
+    public RestServiseRequest getFindRequest() {
+        return findRequest;
+    }
+
+    public void setFindRequest(RestServiseRequest findRequest) {
+        this.findRequest = findRequest;
+    }
+
+    public RestServiseRequest getCreateRequest() {
+        return createRequest;
+    }
+
+    public void setCreateRequest(RestServiseRequest createRequest) {
+        this.createRequest = createRequest;
+    }
+
+    public RestServiseRequest getUpdateRequest() {
+        return updateRequest;
+    }
+
+    public void setUpdateRequest(RestServiseRequest updateRequest) {
+        this.updateRequest = updateRequest;
+    }
+
+    public RestServiseRequest getExistsRequest() {
+        return existsRequest;
+    }
+
+    public void setExistsRequest(RestServiseRequest existsRequest) {
+        this.existsRequest = existsRequest;
+    }
+
+    public RestServiseRequest getDeleteRequest() {
+        return deleteRequest;
+    }
+
+    public void setDeleteRequest(RestServiseRequest deleteRequest) {
+        this.deleteRequest = deleteRequest;
+    }
+
+    public void fillServiseAdderess(String mainServiceAddres) {
         this.mainServiceAddres = mainServiceAddres;
+        createRequest = new RestServiseRequest(mainServiceAddres, HttpMethod.POST);
         findAllRequest = new RestServiseRequest(mainServiceAddres);
+        findRequest = new RestServiseRequest(mainServiceAddres + "/{id}");
+        existsRequest = new RestServiseRequest(findRequest.address);
+        updateRequest = new RestServiseRequest(findRequest.address, HttpMethod.PUT);
+        deleteRequest = new RestServiseRequest(findRequest.address, HttpMethod.DELETE);
+
     }
 
     public static class RestServiseRequest {

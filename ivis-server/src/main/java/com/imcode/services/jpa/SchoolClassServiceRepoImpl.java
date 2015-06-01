@@ -1,4 +1,4 @@
-package com.imcode.services.impl;
+package com.imcode.services.jpa;
 
 import com.imcode.entities.SchoolClass;
 import com.imcode.repositories.SchoolClassRepository;
