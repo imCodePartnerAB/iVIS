@@ -46,9 +46,9 @@
     <definition name="sql/show" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/sql/show.jsp"/>
     </definition>
-    <!--Admin/XML -->
-    <definition name="xml/show" extends="default">
-        <put-attribute name="content" value="/WEB-INF/views/xml/show.jsp"/>
-    </definition>
+    <!--&lt;!&ndash;Admin/XML &ndash;&gt;-->
+    <!--<definition name="xml/show" extends="default">-->
+        <!--<put-attribute name="content" value="/WEB-INF/views/xml/show.jsp"/>-->
+    <!--</definition>-->
 
 </tiles-definitions>

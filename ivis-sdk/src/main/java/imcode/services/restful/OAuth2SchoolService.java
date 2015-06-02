@@ -19,12 +19,12 @@ public class OAuth2SchoolService extends AbstractOAuth2Service implements School
     public OAuth2SchoolService() {
     }
 
-    public OAuth2SchoolService(OAuth2ProtectedResourceDetails client, OAuth2AccessToken accessToken, String mainServiceAddres) {
-        super(client, accessToken, mainServiceAddres);
+    public OAuth2SchoolService(IvisServiceFactory factory, String mainServiceAddres) {
+        super(factory, mainServiceAddres);
     }
 
-    public OAuth2SchoolService(IvisServiceFactory ivisServiceFactory) {
-        super(ivisServiceFactory);
+    public OAuth2SchoolService(IvisServiceFactory factory) {
+        super(factory);
     }
 
     public School save(School entity) {

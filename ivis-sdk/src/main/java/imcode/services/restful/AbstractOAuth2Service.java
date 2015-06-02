@@ -18,46 +18,52 @@ public class AbstractOAuth2Service {
     private RestServiseRequest updateRequest;
     private RestServiseRequest existsRequest;
     private RestServiseRequest deleteRequest;
+    private IvisServiceFactory factory;
 
-    private OAuth2AccessToken accessToken;
-
-    private OAuth2ProtectedResourceDetails client;
+//    private OAuth2AccessToken accessToken;
+//
+//    private OAuth2ProtectedResourceDetails client;
 
     public AbstractOAuth2Service() {
     }
 
-    public AbstractOAuth2Service(OAuth2ProtectedResourceDetails client, OAuth2AccessToken accessToken, String mainServiceAddres) {
-        this.client = client;
-        this.accessToken = accessToken;
+    public AbstractOAuth2Service(IvisServiceFactory factory, String mainServiceAddres) {
+//        this.client = client;
+//        this.accessToken = accessToken;
+        this.factory = factory;
         fillServiseAdderess(mainServiceAddres);
     }
 
-    public AbstractOAuth2Service(IvisServiceFactory ivisServiceFactory) {
-        this.setClient(ivisServiceFactory.getClient());
-        this.setAccessToken(ivisServiceFactory.getAccessToken());
+    public AbstractOAuth2Service(IvisServiceFactory factory) {
+//        this.setClient(ivisServiceFactory.getClient());
+//        this.setAccessToken(ivisServiceFactory.getAccessToken());
+        this.factory = factory;
     }
 
-    public OAuth2ProtectedResourceDetails getClient() {
-        return client;
+    private OAuth2ProtectedResourceDetails getClient() {
+        return factory.getClient();
+    }
+    private OAuth2ClientContext getClientContext() {
+        return factory.getClientContext();
     }
 
     protected OAuth2RestTemplate getRestTemplate() {
-        OAuth2ClientContext clientContext = new DefaultOAuth2ClientContext(accessToken);
+//        OAuth2ClientContext clientContext = new DefaultOAuth2ClientContext(accessToken);
 
-        return new OAuth2RestTemplate(client, clientContext);
+        return new OAuth2RestTemplate(getClient(), getClientContext());
     }
 
-    public void setClient(OAuth2ProtectedResourceDetails client) {
-        this.client = client;
-    }
+//    public void setClient(OAuth2ProtectedResourceDetails client) {
+//        this.client = client;
+//    }
+//
+//    public OAuth2AccessToken getAccessToken() {
+//        return accessToken;
+//    }
 
-    public OAuth2AccessToken getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(OAuth2AccessToken accessToken) {
-        this.accessToken = accessToken;
-    }
+//    public void setAccessToken(OAuth2AccessToken accessToken) {
+//        this.accessToken = accessToken;
+//    }
 
     public String getMainServiceAddres() {
         return mainServiceAddres;

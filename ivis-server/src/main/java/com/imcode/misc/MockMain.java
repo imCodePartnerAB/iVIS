@@ -18,8 +18,8 @@ import java.sql.Connection;
  */
 public class MockMain {
     public static void main(String[] args) throws IOException {
-        String s = new MockMain().getFileWithUtil("sql/oauth2_data.sql");
-        System.out.println(s);
+//        String s = new MockMain().getFileWithUtil("sql/oauth2_data.sql");
+//        System.out.println(s);
     }
 
 

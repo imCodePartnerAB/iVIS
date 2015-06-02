@@ -14,12 +14,16 @@
     <bean class="com.imcode.imcms.addon.imagearchive.service.LibraryService"/>
     <bean class="com.imcode.imcms.addon.imagearchive.service.CategoryService"/-->
 
+    <!--class="org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails"-->
     <bean id="ivisClient"
-          class="org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails"
+          class="com.imcode.imcms.addon.ivisclient.oauth2.IvisAuthorizationCodeResourceDetails"
+          p:clientOnly="true"
           p:grantType="authorization_code"
           p:clientId="${ClientId}"
           p:clientSecret="secret"
           p:accessTokenUri="${AccessTokenUri}"
           p:userAuthorizationUri="${UserAuthorizationUri}"
-          p:scope="read"/>
+          p:scope="#{{'read', 'write'}}"/>
+    <!--p:scope="read"/>-->
+
 </beans>

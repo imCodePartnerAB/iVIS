@@ -11,6 +11,7 @@
 <%@ page import="org.springframework.web.context.support.WebApplicationContextUtils" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
+<%@ page import="org.springframework.security.oauth2.client.OAuth2ClientContext" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -95,8 +96,8 @@
 </script>
 <%
     } else {
-//        OAuth2ClientContext clientContext = IvisOAuth2Utils.getClientContext(session);
-        OAuth2AccessToken accessToken = IvisOAuth2Utils.getAccessToken(session);
+        OAuth2ClientContext clientContext = IvisOAuth2Utils.getClientContext(session);
+//        OAuth2AccessToken accessToken = IvisOAuth2Utils.getAccessToken(session);
 //        URIBuilder uriBuilder = new URIBuilder();
 //        uriBuilder.setScheme(request.getScheme());
 //        uriBuilder.setHost(request.getServerName());
@@ -109,7 +110,7 @@
                     .endPointUrl(Imcms.getServerProperties().getProperty("ServerAddress"))
                     .responseType("json")
                     .version("v1").build());
-            IvisServiceFactory factory = ivis.getServiceFactory(client, accessToken);
+            IvisServiceFactory factory = ivis.getServiceFactory(client, clientContext);
             StatementService service = factory.getStatementService();
             List<Statement> statementList = null;
             try {
@@ -117,6 +118,7 @@
             } catch (UserRedirectRequiredException e) {
                 IvisOAuth2Utils.setAccessToken(session, null);
                 response.sendRedirect(Imcms.getServerProperties().getProperty("StatementsAddress"));
+                return;
             }
             request.setAttribute("statements", statementList);
 //            out.println(statementList);
@@ -142,7 +144,7 @@
                         <th>SubmitDate</th>
                         <th>ChangeDate</th>
                         <th>Status</th>
-                            <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -153,12 +155,14 @@
                             <td>${app.changedDate}</td>
                             <td>${app.status}</td>
                             <td class="buttons">
-                                <form action="<%=Imcms.getServerProperties().getProperty("ClietnAddress")%>/api/content/ivis/${app.id}" method="post">
+                                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                                      method="post">
                                     <button class="positive" type="submit">Approve</button>
                                     <input type="hidden" name="status" value="approved"/>
                                 </form>
-                                <form action="<%=Imcms.getServerProperties().getProperty("ClietnAddress")%>/api/content/ivis/${app.id}" method="post">
-                                <button class="negative" type="submit">Decline</button>
+                                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                                      method="post">
+                                    <button class="negative" type="submit">Decline</button>
                                     <input type="hidden" name="status" value="declined"/>
                                 </form>
                             </td>
@@ -170,6 +174,26 @@
         </div>
     </div>
 </c:if>
+<imcms:menu no='1' docId="1001" label='<br/><br/>Meny (punktlista)'>
+    <ul>
+        <imcms:menuloop>
+            <imcms:menuitem>
+                <li style="padding-bottom:5px; color:green;"><imcms:menuitemlink><c:out
+                        value="${menuitem.document.headline}"/></imcms:menuitemlink>
+                    <imcms:menuloop>
+                        <imcms:menuitem>
+                            <div style="padding-bottom:5px; color:green;">
+                                <imcms:menuitemlink><c:out
+                                        value="${menuitem.document.headline}"/></imcms:menuitemlink>
+                            </div>
+                        </imcms:menuitem>
+                    </imcms:menuloop>
+                </li>
+            </imcms:menuitem>
+        </imcms:menuloop>
+    </ul>
+</imcms:menu>
+<imcms:admin/>
 <%--<div class="col-sm-6">--%>
 <%--<div class="mb-md">--%>
 <%--<button id="addToTable" class="btn btn-primary" onclick="addApplication()">Add <i class="fa fa-plus"></i></button>--%>

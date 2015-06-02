@@ -19,12 +19,12 @@ public class OAuth2StatementService extends AbstractOAuth2Service implements Sta
     public OAuth2StatementService() {
     }
 
-    public OAuth2StatementService(OAuth2ProtectedResourceDetails client, OAuth2AccessToken accessToken, String mainServiceAddres) {
-        super(client, accessToken, mainServiceAddres);
+    public OAuth2StatementService(IvisServiceFactory factory, String mainServiceAddres) {
+        super(factory, mainServiceAddres);
     }
 
-    public OAuth2StatementService(IvisServiceFactory ivisServiceFactory) {
-        super(ivisServiceFactory);
+    public OAuth2StatementService(IvisServiceFactory factory) {
+        super(factory);
     }
 
     public Statement save(Statement entity) {
@@ -38,7 +38,7 @@ public class OAuth2StatementService extends AbstractOAuth2Service implements Sta
             request = getCreateRequest();
             String uri = request.getAddress();
             HttpMethod method = request.getMethod();
-            Statement res = restTemplate.postForObject(uri, entity, Statement.class, uriVariables);
+            Statement res = restTemplate.postForObject(uri, entity, Statement.class);
         } else {
             request = getUpdateRequest();
             uriVariables = new Object[]{entity.getId()};

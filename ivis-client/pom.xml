@@ -11,7 +11,7 @@
     <name>ivis-client Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <spring-framework.version>4.1.1.RELEASE</spring-framework.version>
+        <spring-framework.version>4.1.5.RELEASE</spring-framework.version>
         <spring-security.version>4.0.1.RELEASE</spring-security.version>
         <hibernate.version>4.3.10.Final</hibernate.version>
     </properties>
@@ -21,6 +21,20 @@
         <!--<artifactId>spring-security-oauth2</artifactId>-->
         <!--<version>2.0.5.RELEASE</version>-->
         <!--</dependency>-->
+        <!-- Apache Commons FileUpload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+        <!-- Apache Commons IO -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -133,21 +147,21 @@
             <artifactId>imcms</artifactId>
             <version>SNAPSHOT</version>
             <type>war</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-core</artifactId>
-                </exclusion>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.hibernate</groupId>-->
+                    <!--<artifactId>hibernate-core</artifactId>-->
+                <!--</exclusion>-->
 
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-entitymanager</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.hibernate.javax.persistence</groupId>
-                    <artifactId>hibernate-jpa-2.1-api</artifactId>
-                </exclusion>
-            </exclusions>
+                <!--<exclusion>-->
+                    <!--<groupId>org.hibernate</groupId>-->
+                    <!--<artifactId>hibernate-entitymanager</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.hibernate.javax.persistence</groupId>-->
+                    <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
         </dependency>
         <dependency>
             <groupId>com.imcode.imcms</groupId>
@@ -156,21 +170,21 @@
             <classifier>classes</classifier>
             <type>jar</type>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-core</artifactId>
-                </exclusion>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.hibernate</groupId>-->
+                    <!--<artifactId>hibernate-core</artifactId>-->
+                <!--</exclusion>-->
 
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-entitymanager</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.hibernate.javax.persistence</groupId>
-                    <artifactId>hibernate-jpa-2.1-api</artifactId>
-                </exclusion>
-            </exclusions>
+                <!--<exclusion>-->
+                    <!--<groupId>org.hibernate</groupId>-->
+                    <!--<artifactId>hibernate-entitymanager</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.hibernate.javax.persistence</groupId>-->
+                    <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

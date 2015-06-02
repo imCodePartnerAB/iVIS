@@ -17,6 +17,7 @@ package com.imcode.controllers.html;
 
 import com.imcode.oauth2.IvisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,7 +46,6 @@ import java.util.List;
  */
 @Controller
 public class AdminController {
-
     @Autowired
 	private ConsumerTokenServices tokenServices;
 
@@ -54,6 +54,9 @@ public class AdminController {
 
     @Autowired
     private IvisClientDetailsService clientDetailsService;
+
+	@Value("${Hibernate.dialect}")
+	private String test;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
 //

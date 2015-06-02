@@ -7,14 +7,16 @@
 <script>function k(e) {
     if (e.ctrlKey && e.which == 13) document.sqlForm.submit();
 }</script>
-SQL Executor:
+
 <form method="post" name="sqlForm">
-    <textarea cols="60" rows="8" name="sql" onkeyup="k(event);">
-        ${sqlString}
-    </textarea>
-    <br>
-    <button type="submit">Execute</button>
-    <button type="reset">Reset</button>
+    <div class="field">
+        <label>SQL Executor:</label>
+        <textarea cols="60" rows="8" name="sql" onkeyup="k(event);">${sqlString}</textarea>
+    </div>
+    <div class="buttons">
+        <button class="positive" type="submit">Import</button>
+        <button class="negative" type="reset">Reset</button>
+    </div>
 </form>
 <c:if test="${not empty resultList and resultList.size() gt 0}">
     <%

@@ -181,6 +181,16 @@ input, button {
   width: 350px;
 }
 
+.field textarea {
+  border: 1px solid #f0f0ff;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  padding: 7.5px 10px;
+  width: 700px;
+  height: 350px;
+}
+
 .field select {
   border: 1px solid #f0f0ff;
   border-radius: 3px;

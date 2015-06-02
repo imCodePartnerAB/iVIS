@@ -5,6 +5,7 @@ import com.imcode.services.SchoolService;
 import com.imcode.services.StatementService;
 import imcode.services.utils.IvisOAuth2Utils;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
@@ -20,16 +21,17 @@ import java.util.*;
 public class IvisServiceFactory {
     private final String apiUrl; //= "http://ivis.dev.imcode.com/api/v1/json/";
     //    private String ivisServiceAddress = apiUrl;
-    private OAuth2AccessToken accessToken;
+//    private OAuth2AccessToken accessToken;
+    private OAuth2ClientContext clientContext;
 
     private OAuth2ProtectedResourceDetails client;
 
     private Map<Class<? extends GenericService>, GenericService> serviceMap;
 
 
-    public IvisServiceFactory(String apiUrl, OAuth2ProtectedResourceDetails client, OAuth2AccessToken accessToken) {
+    public IvisServiceFactory(String apiUrl, OAuth2ProtectedResourceDetails client, OAuth2ClientContext clientContext) {
         this.client = client;
-        this.accessToken = accessToken;
+        this.clientContext = clientContext;
         this.apiUrl = apiUrl;
         Map<Class<? extends GenericService>, GenericService> map = new HashMap<>();
 
@@ -57,13 +59,13 @@ public class IvisServiceFactory {
         return getService(StatementService.class);
     }
 
-    public OAuth2AccessToken getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(OAuth2AccessToken accessToken) {
-        this.accessToken = accessToken;
-    }
+//    public OAuth2AccessToken getAccessToken() {
+//        return accessToken;
+//    }
+//
+//    public void setAccessToken(OAuth2AccessToken accessToken) {
+//        this.accessToken = accessToken;
+//    }
 
     public OAuth2ProtectedResourceDetails getClient() {
         return client;
@@ -73,7 +75,19 @@ public class IvisServiceFactory {
         this.client = client;
     }
 
-//    private static final class SchoolServiceRestful implements SchoolService {
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    public OAuth2ClientContext getClientContext() {
+        return clientContext;
+    }
+
+    public void setClientContext(OAuth2ClientContext clientContext) {
+        this.clientContext = clientContext;
+    }
+
+    //    private static final class SchoolServiceRestful implements SchoolService {
 //
 //        public School save(School entity) {
 //            return null;
@@ -159,7 +173,7 @@ public class IvisServiceFactory {
             IvisFacade.Configuration config = new IvisFacade.Configuration.Builder().endPointUrl("http://localhost:8080").build();
 //            config.endPointUrl
             IvisFacade facade = IvisFacade.instance(config);
-            IvisServiceFactory serviceFactory = facade.getServiceFactory(resource, accessToken);
+            IvisServiceFactory serviceFactory = facade.getServiceFactory(resource, clientContext);
             StatementService statementService = serviceFactory.getStatementService();
             System.out.println(statementService.findAll());
 //            System.out.println(IvisOAuth2Utils.getOAuth2AuthirizationUrl(resource, "http://localhost"));

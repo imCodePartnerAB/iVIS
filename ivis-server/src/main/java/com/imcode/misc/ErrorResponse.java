@@ -6,6 +6,7 @@ import com.imcode.misc.errors.Error;
 /**
  * Created by vitaly on 26.02.15.
  */
+@Deprecated
 public class ErrorResponse extends Response {
     private com.imcode.misc.errors.Error error;
 

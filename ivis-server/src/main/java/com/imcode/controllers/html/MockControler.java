@@ -44,28 +44,28 @@ public class MockControler {
 //        return "school";
 //    }
 //
-    @RequestMapping(value = "/xml", method = RequestMethod.POST)
-    public String importApplication(@RequestParam("body") String body, Model model) {
-
-
-        try {
-            Statement statement = new Statement();
-            statement.setStatus(StatementStatus.created);
-            statementService.save(statement);
-            model.asMap().clear();
-            model.addAttribute("message", new Message(MessageType.SUCCESS, "SUCCESS"));
-        } catch (Exception e) {
-            model.addAttribute("message", new Message(MessageType.ERROR, "ERROR"));
-        }
-
-        return "xml/show";
-    }
-
-    @RequestMapping(value = "/xml", method = RequestMethod.GET)
-    public String showImportApplicationForm() {
-
-        return "xml/show";
-    }
+//    @RequestMapping(value = "/xml", method = RequestMethod.POST)
+//    public String importApplication(@RequestParam("body") String body, Model model) {
+//
+//
+//        try {
+//            Statement statement = new Statement();
+//            statement.setStatus(StatementStatus.created);
+//            statementService.save(statement);
+//            model.asMap().clear();
+//            model.addAttribute("message", new Message(MessageType.SUCCESS, "SUCCESS"));
+//        } catch (Exception e) {
+//            model.addAttribute("message", new Message(MessageType.ERROR, "ERROR"));
+//        }
+//
+//        return "xml/show";
+//    }
+//
+//    @RequestMapping(value = "/xml", method = RequestMethod.GET)
+//    public String showImportApplicationForm() {
+//
+//        return "xml/show";
+//    }
 
 //    @RequestMapping(value = "/add", method = RequestMethod.POST)
 //    public String addContact(@ModelAttribute("contact") School school,

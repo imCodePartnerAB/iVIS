@@ -7,16 +7,18 @@
 <script>function k(e) {
     if (e.ctrlKey && e.which == 13) document.sqlForm.submit();
 }</script>
-XML import:
 <c:if test="${message != null}">
-    <br>
+    <div class="field">
     ${message.message}
+    </div>
 </c:if>
 <form method="post" name="xmlForm">
-    <textarea cols="60" rows="8" name="body" onkeyup="k(event);">
-        ${body}
-    </textarea>
-    <br>
-    <button type="submit">Import</button>
-    <button type="reset">Reset</button>
+    <div class="field">
+        <label>XML to import</label>
+        <textarea cols="60" rows="8" name="body" onkeyup="k(event);">${body}</textarea>
+    </div>
+    <div class="buttons">
+        <button class="positive" type="submit">Import</button>
+        <button class="negative" type="reset">Reset</button>
+    </div>
 </form>
