@@ -1,9 +1,12 @@
 package com.imcode.imcms.addon.ivisclient.controllers;
 
+import com.imcode.entities.Person;
+import com.imcode.entities.Pupil;
 import com.imcode.entities.Statement;
 import com.imcode.entities.enums.StatementStatus;
 import com.imcode.imcms.addon.ivisclient.controllers.form.Message;
 import com.imcode.imcms.addon.ivisclient.controllers.form.MessageType;
+import com.imcode.services.PupilService;
 import com.imcode.services.StatementService;
 import imcode.services.restful.IvisFacade;
 import imcode.services.restful.IvisServiceFactory;
@@ -27,12 +30,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 
 /**
  * Created by vitaly on 26.05.15.
@@ -83,15 +93,17 @@ public class IvisController {
         ResponseEntity<OAuth2AccessToken> result = restTemplate.postForEntity(client.getAccessTokenUri(), httpEntity, OAuth2AccessToken.class);
 
         IvisOAuth2Utils.setAccessToken(request, result.getBody());
-        response.sendRedirect(statementsAddress);
+//        response.sendRedirect(statementsAddress);
+        response.sendRedirect(clientAddress + "/show.jsp");
 
         return result.getBody().toString();
     }
 
     @RequestMapping(value = "/token")
     @ResponseBody
-    public String getToken() {
+    public String getToken(HttpServletResponse response) throws IOException {
         String s = "sdfas";
+        response.sendRedirect(clientAddress + "/show.jsp");
         return s;
     }
 
@@ -130,21 +142,34 @@ public class IvisController {
     @RequestMapping(value = "/xml", method = RequestMethod.POST)
     public void importApplication(HttpServletRequest request,
                                     HttpServletResponse response,
-                                  @RequestParam(value = "file", required = false) Part file,
+                                  @RequestParam(value = "file", required = false) MultipartFile file,
 //                                    @RequestParam("body") String body,
                                     Model model) throws IOException, URISyntaxException {
-        IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
-                .endPointUrl(serverAddress)
-                .responseType("json")
-                .version("v1").build());
-        IvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
-        StatementService statementService = factory.getStatementService();
+
+        InputStream inputStream = file.getInputStream();
+        Statement statement = pharseXml(inputStream);
+
+        if (statement == null) {
+            throw new RuntimeException("Unknown xml format");
+        }
 
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
 
+            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
+                    .endPointUrl(serverAddress)
+                    .responseType("json")
+                    .version("v1").build());
+            IvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
+            StatementService statementService = factory.getStatementService();
+            PupilService pupilService = factory.getPupilService();
+
             try {
-                Statement statement = new Statement();
-                statement.setStatus(StatementStatus.created);
+//                statement = new Statement();
+//                statement.setStatus(StatementStatus.created);
+                if (statement.getPupil() != null) {
+                    Pupil pupil = pupilService.findByPersonalId(statement.getPupil().getPerson().getPersonalId());
+                    statement.setPupil(pupil);
+                }
                 statementService.save(statement);
                 model.asMap().clear();
                 model.addAttribute("message", new Message(MessageType.SUCCESS, "SUCCESS"));
@@ -165,5 +190,69 @@ public class IvisController {
     public String showImportApplicationForm() {
 
         return "xml/show";
+    }
+
+    private static Statement pharseXml(InputStream inputStream) {
+        StatmentHandler handler = new StatmentHandler();
+
+        try {
+
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+
+            saxParser.parse(inputStream, handler);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return handler.getStatement();
+    }
+
+   private static class StatmentHandler extends DefaultHandler {
+        private Statement statement;
+        private LinkedList<String> nodes = new LinkedList<>();
+        private String fullElementName;
+        private String elementName;
+
+
+        @Override
+        public void startDocument() throws SAXException {
+            if (statement != null) {
+                throw new SAXException("This statement handler " + this + " is allredy used, please create a new one.");
+            }
+
+            statement = new Statement();
+            statement.setStatus(StatementStatus.created);
+        }
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            nodes.add(qName);
+        }
+
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            String currentNode = nodes.getLast();
+            String value = new String(ch, start, length);
+            System.out.println(ch);
+
+            if (nodes.contains("student") && "Personnummer".equalsIgnoreCase(currentNode)) {
+                Person person = new Person(value, null, null);
+                Pupil pupil = new Pupil();
+                pupil.setPerson(person);
+                statement.setPupil(pupil);
+            }
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            nodes.removeLast();
+        }
+
+        public Statement getStatement() {
+            return statement;
+        }
     }
 }

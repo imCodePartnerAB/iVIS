@@ -1,4 +1,5 @@
 <%@ page import="com.fasterxml.jackson.databind.ObjectMapper" pageEncoding="UTF-8" %>
+<%@ page import="com.imcode.imcms.addon.ivisAPI.entities.Application_" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.server.parser.ParserParameters" %>
 <%@ page import="org.apache.oro.text.perl.Perl5Util" %>
@@ -6,6 +7,7 @@
 <%@ page import="org.springframework.http.HttpHeaders" %>
 <%@ page import="org.springframework.http.HttpMethod" %>
 <%@ page import="org.springframework.http.ResponseEntity" %>
+<%@ page import="org.springframework.security.oauth2.provider.client.BaseClientDetails" %>
 <%@ page import="org.springframework.web.client.RestTemplate" %>
 <%@ page import="java.io.IOException" %>
 
@@ -13,16 +15,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%--<%--%>
-<%--//    String site = new String("http://www.google.com");--%>
-<%--//    response.setStatus(response.SC_MOVED_TEMPORARILY);--%>
-<%--//    response.setHeader("Location", site);--%>
-    <%--response.sendRedirect("http://google.com");--%>
-    <%--return;--%>
-<%--%>--%>
-<%--<c:redirect url="/web2/ivis/schools"/>--%>
 <imcms:variables/>
 <%
 
@@ -103,8 +95,6 @@
     <script src="${pageContext.request.contextPath}/vendor/excanvas/excanvas.js"></script>
     <![endif]-->
 
-    <script src="${pageContext.request.contextPath}/js/ivis.js"></script>
-
 </head>
 <body>
 <div class="body">
@@ -164,86 +154,97 @@
                                 pre='<div class="row"><div class="col-md-12">'
                                 post='</div></div>'
                             />
+
+                    <h1>Application</h1>
                     <%
-                        String address = "http://" + request.getServerName() + ":" + request.getServerPort();
-                        RestTemplate restTemplate = new RestTemplate();
-                        HttpHeaders requestHeaders = new HttpHeaders();
-                        requestHeaders.add("Cookie", "JSESSIONID=" + request.getSession().getId());
-                        HttpEntity httpEntity = new HttpEntity(null, requestHeaders);
-                        ResponseEntity<Boolean> hasToken = restTemplate.exchange(address + "/web2/ivis/hastoken", HttpMethod.GET, httpEntity, Boolean.class);
-                        boolean result = hasToken.getBody();
+                        String id = null;
+                        try {
+                            id = request.getParameterMap().get("id")[0];
+                        } catch (Exception ignore) {
+                        }
+                        if (id != null) {
+                            String address = "http://" + request.getServerName() + ":" + request.getServerPort();
+                            request.setAttribute("address", address);
+                            request.setAttribute("id", id);
+                            RestTemplate restTemplate = new RestTemplate();
+                            HttpHeaders requestHeaders = new HttpHeaders();
+                            requestHeaders.add("Cookie", "JSESSIONID=" + request.getSession().getId());
+                            HttpEntity httpEntity = new HttpEntity(null, requestHeaders);
+                            ResponseEntity<Boolean> hasToken = restTemplate.exchange(address + "/web2/ivis/hastoken", HttpMethod.GET, httpEntity, Boolean.class);
+                            boolean result = hasToken.getBody();
 
-                        if (result) {%>
-                         <%
-                             String applicationsString = restTemplate.exchange(address + "/web2/ivis/applications", HttpMethod.GET, httpEntity, String.class).getBody();
-                             Applications applications = null;
-                             ObjectMapper jsonMapper = new ObjectMapper();
+                            if (result) {%>
+                    <%
+                        String applicationString = restTemplate.exchange(address + "/web2/ivis/applications/" + id, HttpMethod.GET, httpEntity, String.class).getBody();
+                        BaseClientDetails app = null;
+                        ObjectMapper jsonMapper = new ObjectMapper();
 
-                             try {
-                                 applications = jsonMapper.readValue(applicationsString, Applications.class);
-                                 request.setAttribute("applications", applications.getApplications());
-                             } catch (IOException ignore) { }
-                         %>
-                        <%} else {%>
-                            <script>location.href ="<%=address%>/web2/ivis/go?to=/applications" </script>
-                        <%}%>
-                    <%--<spring:url value="applications" var="applicationUrl"/>--%>
-                    <%--<h1><c:out value="${pageContext.session.id}"/></h1>--%>
-                    <c:if test="${not empty applications}">
-                    <table class="table table-bordered table-striped mb-none">
-                        <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Resource Ids</th>
-                            <%--<th>Secret</th>--%>
-                            <th>Scope</th>
-                            <th>Authorized Grant Types</th>
-                            <th>Registered Redirect Uri</th>
-                            <%--<th>Authorities</th>--%>
-                            <th>Access Token Validity(sec)</th>
-                            <th>Refresh Token Validity(sec)</th>
-                            <th>&nbsp;</th>
-                            <%--<th>Auto Approve</th>--%>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${applications}" var="app">
-                            <tr data-application-id = "${app.clientId}">
-                                <td>${app.clientId}</td>
-                                <td>${app.resourceIds}</td>
-                                <%--<td>${app.clientSecret}</td>--%>
-                                <td>${app.scope}</td>
-                                <td>${app.authorizedGrantTypes}</td>
-                                <td>${app.registeredRedirectUri}</td>
-                                <%--<td>${app.authorities}</td>--%>
-                                <td>${app.accessTokenValiditySeconds}</td>
-                                <td>${app.refreshTokenValiditySeconds}</td>
-                                <td>
-                                    <spring:url value="/applications/edit?id=${app.clientId}" var="applicationEditUrl"/>
-                                    <spring:url value="/applications/details?id=${app.clientId}" var="applicationDetailsUrl"/>
-                                    <%--<a href="${applicationDetailsUrl}">Details</a>--%>
-                                    <%--<a href="${applicationEditUrl}">Edit</a>--%>
-                                    <%--<form:form id="applicationEditForm" method="get" action="${applicationEditUrl}"><button type="submit">Edit</button></form:form>--%>
-                                    <%--<button type="button" onclick="deleteApplication('${app.clientId}')">Delete</button>--%>
-                                    <a href="${applicationDetailsUrl}" class="on-default edit-row"><i class="fa fa-search"></i></a>
-                                    <a href="${applicationEditUrl}" class="on-default edit-row"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="on-default remove-row" onclick="deleteApplication('${app.clientId}')"><i class="fa fa-trash-o"></i></a>
-                                    <%--<a href="#dfdd" >Delete</a>--%>
-                                    <%--<form:form id="applicationEditForm" method="get" action="${applicationDetailsUrl}"><button type="submit">Details</button></form:form>--%>
-                                </td>
-                                    <%--<td>${application.isAutoApprove(application.scope)}</td>--%>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
+//
+                        try {
+                            Application_ node = jsonMapper.readValue(applicationString, Application_.class);
+                            request.setAttribute("app", node.getApplication());
+                        } catch (IOException ignore) {
+                            ignore.printStackTrace();
+                        }
+                    %>
+                    <%} else {%>
+                    <script>location.href = "${address}/web2/ivis/go?to=/applications/details?id=${id}" </script>
+                    <%
+                            }
+                        }
+                    %>
+
+                    <c:if test="${not empty message}">
+                        <div id="message" class="${message.type}">${message.message}</div>
                     </c:if>
-                    <div class="col-sm-6">
-                        <div class="mb-md">
-                            <button id="addToTable" class="btn btn-primary" onclick="addApplication()">Add <i class="fa fa-plus"></i></button>
-                        </div>
-                    </div>
-                    <%--<a href="/applications/edit">Add Application</a>--%>
-
+                    <c:if test="${not empty app}">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <td>Id</td>
+                                <td>${app.clientId}</td>
+                            </tr>
+                            <tr>
+                                <td>Resource Ids</td>
+                                <td>${app.resourceIds}</td>
+                            </tr>
+                            <tr>
+                                <td>Secret</td>
+                                <td>${app.clientSecret}</td>
+                            </tr>
+                            <tr>
+                                <td>Scope</td>
+                                <td>${app.scope}</td>
+                            </tr>
+                            <tr>
+                                <td>Authorized Grant Types</td>
+                                <td>${app.authorizedGrantTypes}</td>
+                            </tr>
+                            <tr>
+                                <td>Registered Redirect Uri</td>
+                                <td>${app.registeredRedirectUri}</td>
+                            </tr>
+                            <tr>
+                                <td>Authorities</td>
+                                <td>${app.authorities}</td>
+                            </tr>
+                            <tr>
+                                <td>Access Token Validity(sec)</td>
+                                <td>${app.accessTokenValiditySeconds}</td>
+                            </tr>
+                            <tr>
+                                <td>Refresh Token Validity(sec)</td>
+                                <td>${app.refreshTokenValiditySeconds}</td>
+                            </tr>
+                            <tr>
+                                <td>Auto aproove</td>
+                                <td>${app.isAutoApprove(app.scope)}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <a href="/applications/edit?id=${app.clientId}" class="on-default edit-row"><i class="fa fa-pencil"> Edit</i></a>
+                        <%--<a href="/${application.clientId}?form">Edit</a>--%>
+                    </c:if>
                 </div>
 
             </div>
@@ -316,16 +317,6 @@
 
 </script>
  -->
-
-<%--<script type="text/javascript">--%>
-    <%--$(document).ready(--%>
-      <%--function () {--%>
-          <%--init();--%>
-      <%--}--%>
-
-    <%--);--%>
-
-<%--</script>--%>
 
 </body>
 </html>

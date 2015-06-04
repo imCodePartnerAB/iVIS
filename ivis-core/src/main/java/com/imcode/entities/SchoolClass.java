@@ -1,21 +1,29 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
+
 /**
  * Created by vitaly on 09.02.15.
  */
 
 @Entity
-@Table(name="dbo_school_class")
-public class SchoolClass extends AbstractNamedEntity  implements Serializable {
+@Table(name = "dbo_school_class")
+public class SchoolClass extends AbstractNamedEntity implements Serializable {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
     @Column
     private Date schoolDayStart;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
     @Column
     private Date schoolDayEnd;
@@ -24,7 +32,9 @@ public class SchoolClass extends AbstractNamedEntity  implements Serializable {
     @JoinColumn(name = "school")
     private School school;
 
-    @OneToMany(mappedBy = "schoolClass")
+    //    @JsonIgnore
+    @JsonManagedReference
+    @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
     private Set<Pupil> pupils;
 
 

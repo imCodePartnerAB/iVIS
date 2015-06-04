@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "dbo_person")
 public class Person extends AbstractIdEntity  implements Serializable {
     @Column
-    private Long personalIdentificationNumber;
+    private String personalId;
 
     @Column
     private String firstName;
@@ -18,19 +18,19 @@ public class Person extends AbstractIdEntity  implements Serializable {
     @Column
     private String lastName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_person_address_cross",
             joinColumns = @JoinColumn(name = "personId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "id"))
     private Set<Address> addresses;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_person_email_cross",
             joinColumns = @JoinColumn(name = "personId"),
             inverseJoinColumns = @JoinColumn(name = "emailId"))
     private Set<Email> emails;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_person_phone_cross",
             joinColumns = @JoinColumn(name = "personId"),
             inverseJoinColumns = @JoinColumn(name = "phoneId"))
@@ -39,19 +39,19 @@ public class Person extends AbstractIdEntity  implements Serializable {
     public Person(){
     }
 
-    public Person(long pid, String firstName, String lastName) {
-        this.personalIdentificationNumber = pid;
+    public Person(String pid, String firstName, String lastName) {
+        this.personalId = pid;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -77,12 +77,12 @@ public class Person extends AbstractIdEntity  implements Serializable {
         this.addresses = addresses;
     }
 
-    public Long getPersonalIdentificationNumber() {
-        return personalIdentificationNumber;
+    public String getPersonalId() {
+        return personalId;
     }
 
-    public void setPersonalIdentificationNumber(Long personalIdentificationNumber) {
-        this.personalIdentificationNumber = personalIdentificationNumber;
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
     }
 
     public Set<Email> getEmails() {

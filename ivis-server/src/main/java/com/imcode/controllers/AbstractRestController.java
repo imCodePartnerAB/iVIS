@@ -79,12 +79,12 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
         this.service = service;
     }
 
-    public ErrorFactory getErrorFactory() {
-        return errorFactory;
-    }
-
-    public void setErrorFactory(ErrorFactory errorFactory) {
-        this.errorFactory = errorFactory;
-    }
+//    public ErrorFactory getErrorFactory() {
+//        return errorFactory;
+//    }
+//
+//    public void setErrorFactory(ErrorFactory errorFactory) {
+//        this.errorFactory = errorFactory;
+//    }
 
 }

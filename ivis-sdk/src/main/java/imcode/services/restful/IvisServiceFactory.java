@@ -1,8 +1,9 @@
 package imcode.services.restful;
 
-import com.imcode.services.GenericService;
-import com.imcode.services.SchoolService;
-import com.imcode.services.StatementService;
+import com.imcode.entities.Pupil;
+import com.imcode.entities.Statement;
+import com.imcode.entities.enums.StatementStatus;
+import com.imcode.services.*;
 import imcode.services.utils.IvisOAuth2Utils;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -43,6 +44,13 @@ public class IvisServiceFactory {
         statementService.fillServiseAdderess(apiUrl + "statements");
         map.put(StatementService.class, statementService);
 
+        OAuth2PupisService pupisService = new OAuth2PupisService(this);
+        pupisService.fillServiseAdderess(apiUrl + "pupils");
+        map.put(PupilService.class, pupisService);
+
+        OAuth2SchoolClassService schoolClassService = new OAuth2SchoolClassService(this);
+        schoolClassService.fillServiseAdderess(apiUrl + "classes");
+        map.put(SchoolClassService.class, schoolClassService);
 
         serviceMap = Collections.unmodifiableMap(map);
     }
@@ -57,6 +65,14 @@ public class IvisServiceFactory {
 
     public StatementService getStatementService() {
         return getService(StatementService.class);
+    }
+
+    public PupilService getPupilService() {
+        return getService(PupilService.class);
+    }
+
+    public SchoolClassService getSchoolClassService() {
+        return getService(SchoolClassService.class);
     }
 
 //    public OAuth2AccessToken getAccessToken() {
@@ -131,7 +147,8 @@ public class IvisServiceFactory {
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
         resource.setId("ivis");
         resource.setClientId("b4251265-409d-43b3-928d-a290228a2b59");
-        resource.setGrantType("authorization_code");
+//        resource.setGrantType("authorization_code");
+        resource.setGrantType("password");
         resource.setClientSecret("secret");
         resource.setAccessTokenUri("http://localhost:8080/ivis/oauth/token");
         resource.setScope(Arrays.asList("read"));
@@ -150,7 +167,7 @@ public class IvisServiceFactory {
 
         Set<String> scopes = new HashSet<String>();
         scopes.add("read");
-        DefaultOAuth2AccessToken accessToken = new DefaultOAuth2AccessToken("37a96f4f-3311-4055-b07d-1fb7e4dac9a7");
+        DefaultOAuth2AccessToken accessToken = new DefaultOAuth2AccessToken("acf95060-9303-4fbd-992a-c54157f16eab");
         accessToken.setTokenType("bearer");
         accessToken.setScope(scopes);
         accessToken.setRefreshToken(new DefaultExpiringOAuth2RefreshToken("fb99a06d-027d-4550-b969-f9bda5103e6d", ecxpirationDate));
@@ -170,12 +187,33 @@ public class IvisServiceFactory {
 //        ResponseEntity<String> responseEntity = null;
 
         try {
-            IvisFacade.Configuration config = new IvisFacade.Configuration.Builder().endPointUrl("http://localhost:8080").build();
+            IvisFacade.Configuration config = new IvisFacade.Configuration.Builder().endPointUrl("http://localhost:8080/ivis").build();
 //            config.endPointUrl
             IvisFacade facade = IvisFacade.instance(config);
             IvisServiceFactory serviceFactory = facade.getServiceFactory(resource, clientContext);
-            StatementService statementService = serviceFactory.getStatementService();
-            System.out.println(statementService.findAll());
+//            SchoolClassService service = serviceFactory.getSchoolClassService();
+            PupilService service = serviceFactory.getPupilService();
+            System.out.println(service.findByPersonalId("850717-5019"));
+//            System.out.println(service.findAll());
+//            StatementService statementService = serviceFactory.getStatementService();
+//            Statement statement = new Statement();
+//            statement.setStatus(StatementStatus.created);
+//            statement = statementService.save(statement);
+//            statement.setPupil(new Pupil());
+//            statementService.save(statement);
+
+//            System.out.println(statementService.findAll());
+//            System.out.println("save");
+//            Statement statement = new Statement();
+//            statement.setStatus(StatementStatus.created);
+//            statement = statementService.save(statement);
+//            System.out.println(statement);
+//            System.out.println("find one");
+//            System.out.println(statementService.find(statement.getId()));
+//            System.out.println("delete:" + statement.getId());
+//            statementService.delete(statement.getId());
+//            System.out.println(statementService.findAll());
+
 //            System.out.println(IvisOAuth2Utils.getOAuth2AuthirizationUrl(resource, "http://localhost"));
 //            AuthorizationCodeAccessTokenProvider tokenProvider = new AuthorizationCodeAccessTokenProvider();
 //            tokenProvider.obtainAuthorizationCode(resource, new DefaultAccessTokenRequest());

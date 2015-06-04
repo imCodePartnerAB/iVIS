@@ -1,18 +1,17 @@
 package com.imcode.misc;
 
-import com.imcode.entities.Role;
-import com.imcode.entities.Statement;
-import com.imcode.entities.User;
+import com.imcode.entities.*;
 import com.imcode.entities.enums.AuthorizedGrantType;
+import com.imcode.entities.enums.ServiceTypeEnum;
 import com.imcode.entities.enums.StatementStatus;
 import com.imcode.entities.oauth2.ClientRole;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
-import com.imcode.repositories.RoleRepository;
-import com.imcode.repositories.StatementRepository;
-import com.imcode.repositories.UserRepository;
+import com.imcode.repositories.*;
 import com.imcode.repositories.oauth2.ClientRoleRepository;
 import com.imcode.repositories.oauth2.ClietnDetailsRepository;
+import com.imcode.services.SchoolService;
+import com.imcode.services.jpa.SchoolServiceRepoImpl;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +39,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -74,8 +74,38 @@ public class Initializator {
     @Autowired
     private StatementRepository statementRepository;
 
-    @Value("${Hibernate.dialect}")
-    private String test;
+    @Autowired
+    private PersonRepository personRepository;
+
+    @Autowired
+    private PupilRepository pupilRepository;
+
+    @Autowired
+    private SchoolClassRepository schoolClassRepository;
+
+    @Autowired
+    private SchoolRepository schoolRepository;
+
+    @Autowired
+    private AcademicYearRepository academicYearRepository;
+//
+//    @Autowired
+//    private ;
+//
+//    @Autowired
+//    private ;
+//
+//    @Autowired
+//    private ;
+//
+//    @Autowired
+//    private ;
+//
+//    @Autowired
+//    private ;
+//
+//    @Autowired
+//    private ;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -88,6 +118,50 @@ public class Initializator {
         intializeOAuth2Jpa();
         initializeToken();
         initializeStatementJpa();
+//        initializePersonJpa();
+        initializePupilJpa();
+
+    }
+
+    private void initializePupilJpa() {
+        List<Pupil> PupilList = pupilRepository.findAll();
+
+        if (PupilList.size() == 0) {
+//            Person
+            Person person = new Person();
+            person.setId(1L);
+            person.setFirstName("Vitaliy");
+            person.setLastName("Sereda");
+            person.setPersonalId("850717-5019");
+            person = personRepository.save(person);
+
+
+
+//            School
+            School school = new School();
+            school.setName("School #1");
+            school.setServices(ServiceTypeEnum.AFTER_SCHOOL_CENTER, ServiceTypeEnum.ELEMENTARY_SCHOOL, ServiceTypeEnum.SECONDARY_SCHOOL);
+            school = schoolRepository.save(school);
+
+//            SchoolClass
+            SchoolClass schoolClass = new SchoolClass("A1-1", school, new Date(0, 0, 0, 8, 0), new Date(0, 0, 0, 15, 0));
+            schoolClass = schoolClassRepository.save(schoolClass);
+            SchoolClass schoolClass1 = new SchoolClass("A2-1", school, new Date(0, 0, 0, 12, 0), new Date(0, 0, 0, 18, 0));
+            schoolClass1 = schoolClassRepository.save(schoolClass1);
+
+            AcademicYear academicYear = new AcademicYear("2014-2015");
+            academicYear = academicYearRepository.save(academicYear);
+
+//            Pupil
+            Pupil pupil = new Pupil();
+            pupil.setPerson(person);
+            pupil.setSchoolClass(schoolClass);
+            pupil.setAcademicYear(academicYear);
+            pupil = pupilRepository.save(pupil);
+        }
+    }
+
+    private void initializePersonJpa() {
 
     }
 
@@ -157,14 +231,31 @@ public class Initializator {
             Role roleUser = roleRepository.save(new Role("ROLE_USER"));
             Role roleDeveloper = roleRepository.save(new Role("ROLE_DEVELOPER"));
 
+//            Create new persons
+            Person adminPerson = new Person("1111", "John", "Admin");
+            Person ivisPerson = new Person("2222", "Henry", "Ivis");
+            Person userPerson = new Person("3333", "Sergey", "User");
+            Person vitalyPerson = new Person("4444", "Vitaly", "Orlov");
+
 //            Create basic users
             logger.info("Creating basic 4 users...");
             users = new LinkedList<>();
+            User user = new User("admin", "pass", roleAdmin, roleUser, roleDeveloper);
+            user.setPerson(adminPerson);
+            users.add(user);
 
-            users.add(new User("admin", "pass", roleAdmin, roleUser, roleDeveloper));
-            users.add(new User("ivis", "111", roleUser, roleDeveloper));
-            users.add(new User("user", "111", roleUser));
-            users.add(new User("vitaly", "", roleDeveloper));
+            user = new User("ivis", "111", roleUser, roleDeveloper);
+            user.setPerson(ivisPerson);
+            users.add(user);
+
+            user = new User("user", "111", roleUser);
+            user.setPerson(userPerson);
+            users.add(user);
+
+            user = new User("vitaly", "", roleDeveloper);
+            user.setPerson(vitalyPerson);
+            users.add(user);
+
 
             userRepository.save(users);
 

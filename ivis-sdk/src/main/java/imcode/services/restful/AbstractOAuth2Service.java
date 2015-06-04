@@ -1,70 +1,177 @@
 package imcode.services.restful;
 
+import com.imcode.entities.AbstractIdEntity;
+import com.imcode.services.GenericService;
+import org.springframework.core.GenericTypeResolver;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.web.client.RestTemplate;
+
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by vitaly on 28.05.15.
  */
-public class AbstractOAuth2Service {
+public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, ID> {
     private String mainServiceAddres;
+
     private RestServiseRequest findAllRequest;
+
     private RestServiseRequest findRequest;
+
     private RestServiseRequest createRequest;
+
     private RestServiseRequest updateRequest;
+
     private RestServiseRequest existsRequest;
+
     private RestServiseRequest deleteRequest;
+
     private IvisServiceFactory factory;
 
-//    private OAuth2AccessToken accessToken;
-//
-//    private OAuth2ProtectedResourceDetails client;
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public AbstractOAuth2Service() {
     }
 
     public AbstractOAuth2Service(IvisServiceFactory factory, String mainServiceAddres) {
-//        this.client = client;
-//        this.accessToken = accessToken;
         this.factory = factory;
         fillServiseAdderess(mainServiceAddres);
     }
 
     public AbstractOAuth2Service(IvisServiceFactory factory) {
-//        this.setClient(ivisServiceFactory.getClient());
-//        this.setAccessToken(ivisServiceFactory.getAccessToken());
         this.factory = factory;
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private OAuth2ProtectedResourceDetails getClient() {
         return factory.getClient();
     }
+
     private OAuth2ClientContext getClientContext() {
         return factory.getClientContext();
     }
 
     protected OAuth2RestTemplate getRestTemplate() {
-//        OAuth2ClientContext clientContext = new DefaultOAuth2ClientContext(accessToken);
-
         return new OAuth2RestTemplate(getClient(), getClientContext());
     }
 
-//    public void setClient(OAuth2ProtectedResourceDetails client) {
-//        this.client = client;
-//    }
-//
-//    public OAuth2AccessToken getAccessToken() {
-//        return accessToken;
-//    }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//    public void setAccessToken(OAuth2AccessToken accessToken) {
-//        this.accessToken = accessToken;
-//    }
 
+    @Override
+    public T save(T entity) {
+        T result = null;
+        AbstractIdEntity idEntity = (AbstractIdEntity) entity;
+        RestTemplate restTemplate = getRestTemplate();
+        RestServiseRequest request = null;
+        Object[] uriVariables = null;
+
+        if (idEntity.getId() == null) {
+            request = getCreateRequest();
+            String uri = request.getAddress();
+            HttpMethod method = request.getMethod();
+            result = restTemplate.postForObject(uri, entity, getGeneticType("T"));
+        } else {
+            request = getUpdateRequest();
+            uriVariables = new Object[]{idEntity.getId()};
+            String uri = request.getAddress();
+            HttpMethod method = request.getMethod();
+            restTemplate.put(uri, entity, uriVariables);
+        }
+
+        return result;
+    }
+
+    @Override
+    public T find(ID id) {
+        T result = null;
+        RestTemplate restTemplate = getRestTemplate();
+        RestServiseRequest request = null;
+
+        request = getFindRequest();
+        Object[] uriVariables = {id};
+
+        String uri = request.getAddress();
+        HttpMethod method = request.getMethod();
+
+        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getGeneticType("T"), uriVariables);
+
+        if (responseEntity.getBody() != null) {
+            result = (T) responseEntity.getBody();
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean exist(ID id) {
+        boolean result = false;
+        RestTemplate restTemplate = getRestTemplate();
+        RestServiseRequest request = getExistsRequest();
+        String uri = request.getAddress();
+        HttpMethod method = request.getMethod();
+
+        Object[] uriVariables = {id};
+
+        ResponseEntity<Boolean> responseEntity = restTemplate.exchange(uri, method, null, Boolean.class, uriVariables);
+
+        if (responseEntity.getBody() != null) {
+            result = responseEntity.getBody();
+        }
+        return result;
+    }
+
+    @Override
+    public void delete(ID id) {
+        RestTemplate restTemplate = getRestTemplate();
+        RestServiseRequest request = getDeleteRequest();
+        String uri = request.getAddress();
+        HttpMethod method = request.getMethod();
+
+        Object[] uriVariables = {id};
+
+        restTemplate.exchange(uri, method, null, void.class, uriVariables);
+    }
+
+    @Override
+    public List<T> findAll() {
+        List<T> result = new LinkedList<>();
+        RestServiseRequest request = getFindAllRequest();
+        String uri = request.getAddress();
+        HttpMethod method = request.getMethod();
+
+        RestTemplate restTemplate = getRestTemplate();
+        ParameterizedTypeReference typeReference = getListTypeReference();
+        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, typeReference);
+
+        if (responseEntity.getBody() != null) {
+            return (List<T>) responseEntity.getBody();
+        }
+
+        return result;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private Class<T> getGeneticType(String variableName) {
+        Map<TypeVariable, Type> params = GenericTypeResolver.getTypeVariableMap(getClass());
+        for (Map.Entry<TypeVariable, Type> entry : params.entrySet()) {
+            if (entry.getKey().getName().equals(variableName))
+                return (Class<T>) entry.getValue();
+        }
+
+        return null;
+    }
+
+    abstract protected ParameterizedTypeReference getListTypeReference();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public String getMainServiceAddres() {
         return mainServiceAddres;
     }

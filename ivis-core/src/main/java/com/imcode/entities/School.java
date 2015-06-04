@@ -1,8 +1,13 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.enums.ServiceTypeEnum;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 @Entity
@@ -19,5 +24,10 @@ public class School extends AbstractNamedEntity  implements Serializable {
 
     public void setServices(Set<ServiceTypeEnum> services) {
         this.services = services;
+    }
+
+    @JsonIgnore
+    public void setServices(ServiceTypeEnum... services) {
+        this.services = new HashSet<>(Arrays.asList(services));
     }
 }

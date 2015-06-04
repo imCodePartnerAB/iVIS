@@ -1,5 +1,6 @@
 package com.imcode.services.jpa;
 
+import com.imcode.entities.Person;
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.repositories.UserRepository;
@@ -17,6 +18,17 @@ public class UserServiceRepoImpl extends AbstractService<User, Long, UserReposit
     @Override
     public User findByUsername(String username) {
         return getRepo().findByUsername(username);
+    }
+
+    @Override
+    public User findByPerson(Person person) {
+        return getRepo().findByPerson(person);
+    }
+
+    @Override
+    public User findByPersonId(Long personId) {
+        throw new UnsupportedOperationException();
+//        return null;
     }
 
     @Override

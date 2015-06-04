@@ -75,7 +75,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `dbo_user` WRITE;
 /*!40000 ALTER TABLE `dbo_user` DISABLE KEYS */;
-INSERT INTO `dbo_user` VALUES (1,'1986-08-13 00:00:00','Kiev','tifoha@gmail.com','Vitalii','Sereda','v.sereda','+380971396134','0001','123','12, Polupanova str.',1,2),(2,'1986-08-13 00:00:00','Kiev','student@gmail.com','Student','','student','+380971396134','0001','123','12, Polupanova str.',1,1),(3,'1986-08-13 00:00:00','Kiev','guardian@gmail.com','Guardian','','guardian','+380971396134','0001','123','12, Polupanova str.',1,1),(4,'1986-08-13 00:00:00','Kiev','admin@gmail.com','Administrator','','admin','+380971396134','0001','123','12, Polupanova str.',NULL,NULL);
+INSERT INTO `dbo_user` VALUES (1,'1986-08-13 00:00:00','Kiev','tifoha@gmail.com','Vitalii','Sereda','v.sereda','+380971396134','0001','123','12, Polupanova str.',1,2),(2,'1986-08-13 00:00:00','Kiev','pupil@gmail.com','Student','','pupil','+380971396134','0001','123','12, Polupanova str.',1,1),(3,'1986-08-13 00:00:00','Kiev','guardian@gmail.com','Guardian','','guardian','+380971396134','0001','123','12, Polupanova str.',1,1),(4,'1986-08-13 00:00:00','Kiev','admin@gmail.com','Administrator','','admin','+380971396134','0001','123','12, Polupanova str.',NULL,NULL);
 /*!40000 ALTER TABLE `dbo_user` ENABLE KEYS */;
 UNLOCK TABLES;
 

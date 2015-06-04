@@ -5,8 +5,9 @@ import com.imcode.entities.User;
 import com.imcode.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/users")
+//@RestController
+//@RequestMapping("/v1/{format}/pupils")
 public class UserRestControllerImpl extends AbstractRestController<User, Long, UserService> {
 }

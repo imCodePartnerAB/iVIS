@@ -30,27 +30,27 @@
 <%--//    System.out.println("sdf");--%>
 <%--%>--%>
 
-<imcms:variables/>
+<%--<imcms:variables/>--%>
 <%
 
-    // TODO: Add support for imCMS versions > 5
-
-    String documentationUrl = "http://doc.imcms.net/SNAPSHOT";
-
-    Perl5Util re = new Perl5Util();
-
-    if (re.match("/^(.*\\/)(\\d)(\\.\\d).*/", documentationUrl)) {
-        try {
-            int majorVersion = Integer.parseInt(re.group(2));
-            if (majorVersion > 5) {
-                majorVersion = 5;
-            }
-            documentationUrl = re.group(1) + majorVersion + re.group(3);
-        } catch (Exception ignore) {
-        }
-    }
-
-    request.setAttribute("documentationUrl", documentationUrl);
+//    // TODO: Add support for imCMS versions > 5
+//
+//    String documentationUrl = "http://doc.imcms.net/SNAPSHOT";
+//
+//    Perl5Util re = new Perl5Util();
+//
+//    if (re.match("/^(.*\\/)(\\d)(\\.\\d).*/", documentationUrl)) {
+//        try {
+//            int majorVersion = Integer.parseInt(re.group(2));
+//            if (majorVersion > 5) {
+//                majorVersion = 5;
+//            }
+//            documentationUrl = re.group(1) + majorVersion + re.group(3);
+//        } catch (Exception ignore) {
+//        }
+//    }
+//
+//    request.setAttribute("documentationUrl", documentationUrl);
 
     ApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
     AuthorizationCodeResourceDetails client = context.getBean(AuthorizationCodeResourceDetails.class);
@@ -69,7 +69,7 @@
     <script type="text/javascript">
         var isAuthorize = <%=IvisOAuth2Utils.getAccessToken(request) != null%>;
         var wnd;
-        function facebookAuth() {
+        function facebookAuth () {
             var authUrl = "<%=IvisOAuth2Utils.getOAuth2AuthirizationUrl(client, Imcms.getServerProperties().getProperty("AuthorizationCodeHandlerUri"))%>";
             var width = 600;
             var height = 300;
@@ -77,7 +77,7 @@
             var top = (screen.height / 2) - (height / 2);
             wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
         }
-        function authComplete() {
+        function authComplete(){
             wnd.close();
             location.reload();
         }
@@ -102,90 +102,59 @@
                     .version("v1").build());
             IvisServiceFactory factory = ivis.getServiceFactory(client, clientContext);
             StatementService service = factory.getStatementService();
-            List<Statement> statementList = null;
+            Statement statement = null;
             try {
-                statementList = service.findAll();
+                statement = service.find(Long.valueOf(request.getParameter("id")));
             } catch (UserRedirectRequiredException e) {
                 IvisOAuth2Utils.setAccessToken(session, null);
                 response.sendRedirect(Imcms.getServerProperties().getProperty("StatementsAddress"));
                 return;
             }
-            request.setAttribute("statements", statementList);
+            request.setAttribute("statement", statement);
         }
     }
 %>
-
-<div class="container">
-    <div class="content">
-        <div class="box">
-            <h1>Statements</h1>
-            <table cellpadding="0" cellspacing="0">
-                <thead>
-                <tr>
-                    <th class="ordered-by">Id</th>
-                    <th>SubmitDate</th>
-                    <th>ChangeDate</th>
-                    <th>Status</th>
-                    <th>&nbsp;</th>
-                </tr>
-                </thead>
-                <c:if test="${not empty statements}">
-                    <tbody>
-                    <c:forEach items="${statements}" var="app">
-                        <tr data-application-id="${app.id}">
-                            <td>${app.id}</td>
-                            <td>${app.submitDate}</td>
-                            <td>${app.changedDate}</td>
-                            <td>${app.status}</td>
-                            <td class="buttons">
-                                <a class="button positive"
-                                   href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/details.jsp?id=${app.id}">Details</a>
-
-                                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                                      method="post">
-                                    <button class="positive" type="submit">Approve</button>
-                                    <input type="hidden" name="status" value="approved"/>
-                                </form>
-                                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                                      method="post">
-                                    <button class="negative" type="submit">Decline</button>
-                                    <input type="hidden" name="status" value="declined"/>
-                                </form>
-                            </td>
+    <div class="container">
+        <div class="content">
+            <div class="box">
+                <h1>Statement</h1>
+                <c:if test="${not empty statement}">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <td>Id</td>
+                            <td>${statement.id}</td>
                         </tr>
-                    </c:forEach>
-                    </tbody>
+                        <tr>
+                            <td>Submit date</td>
+                            <td>${statement.submitDate}</td>
+                        </tr>
+                        <tr>
+                            <td>Change date</td>
+                            <td>${statement.changedDate}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>${statement.status}</td>
+                        </tr>
+                        <tr>
+                            <td>Submitted person</td>
+                            <td>${statement.submittedPerson}</td>
+                        </tr>
+                        <tr>
+                            <td>Pupil</td>
+                            <td>${statement.pupil}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="buttons">
+                        <a class="button neutral" href="<%=Imcms.getServerProperties().getProperty("StatementsAddress")%>">Back</a>
+                    </div>
+
                 </c:if>
-            </table>
-            <div class="buttons">
-                <a class="button positive"
-                   href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/import">Import</a>
             </div>
         </div>
     </div>
-
-</div>
-
-<%--<imcms:menu no='1' docId="1001" label='<br/><br/>Meny (punktlista)'>--%>
-<%--<ul>--%>
-<%--<imcms:menuloop>--%>
-<%--<imcms:menuitem>--%>
-<%--<li style="padding-bottom:5px; color:green;"><imcms:menuitemlink><c:out--%>
-<%--value="${menuitem.document.headline}"/></imcms:menuitemlink>--%>
-<%--<imcms:menuloop>--%>
-<%--<imcms:menuitem>--%>
-<%--<div style="padding-bottom:5px; color:green;">--%>
-<%--<imcms:menuitemlink><c:out--%>
-<%--value="${menuitem.document.headline}"/></imcms:menuitemlink>--%>
-<%--</div>--%>
-<%--</imcms:menuitem>--%>
-<%--</imcms:menuloop>--%>
-<%--</li>--%>
-<%--</imcms:menuitem>--%>
-<%--</imcms:menuloop>--%>
-<%--</ul>--%>
-<%--</imcms:menu>--%>
-<%--<imcms:admin/>--%>
 <%--<div class="col-sm-6">--%>
 <%--<div class="mb-md">--%>
 <%--<button id="addToTable" class="btn btn-primary" onclick="addApplication()">Add <i class="fa fa-plus"></i></button>--%>

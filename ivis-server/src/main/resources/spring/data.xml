@@ -22,7 +22,7 @@
     <!-- Настраивает управление транзакциями с помощью аннотации @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <jpa:repositories base-package="com.imcode.repositories"/>
+
 
 
 
@@ -37,9 +37,9 @@
     <beans:bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <beans:property name="locations">
             <beans:list>
-                <beans:value>/WEB-INF/server.properties</beans:value>
+                <!--<beans:value>/WEB-INF/server.properties</beans:value>-->
                 <!--<beans:value>classpath:server1.properties</beans:value>-->
-                <!--<beans:value>classpath:server.properties</beans:value>-->
+                <beans:value>classpath:server.properties</beans:value>
             </beans:list>
         </beans:property>
     </beans:bean>
@@ -61,6 +61,7 @@
         <beans:property name="packagesToScan">
             <beans:list>
                 <beans:value>com.imcode.entities</beans:value>
+                <beans:value>com.imcode.entities.oauth2</beans:value>
                 <beans:value>com.imcode.misc</beans:value>
             </beans:list>
         </beans:property>
@@ -77,9 +78,11 @@
         </beans:property>
     </beans:bean>
 
-    <beans:bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <beans:property name="entityManagerFactory" ref="myEmf"/>
-    </beans:bean>
+    <jpa:repositories base-package="com.imcode.repositories" entity-manager-factory-ref="myEmf"/>
+
+    <beans:bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"/>
+        <!--<beans:property name="entityManagerFactory" ref="myEmf"/>-->
+    <!--</beans:bean>-->
 
 
     <!--<beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl" init-method="initialize">-->

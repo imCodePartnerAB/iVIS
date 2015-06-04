@@ -1,5 +1,7 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
@@ -10,9 +12,10 @@ import javax.persistence.*;
 @Table(name = "dbo_pupil")
 public class Pupil extends AbstractIdEntity  implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pupilId")
+    @JoinColumn(name = "personId")
     private Person person;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "schoolClassId")
     private SchoolClass schoolClass;
@@ -21,7 +24,7 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
     @JoinColumn(name = "academicYearId")
     private AcademicYear academicYear;
 
-    @OneToMany(mappedBy = "pupil")
+    @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER)
     private Set<Truancy> truancies;
 
     public Person getPerson() {
@@ -54,5 +57,20 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
 
     public void setTruancies(Set<Truancy> truancies) {
         this.truancies = truancies;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Pupil{");
+        if (person != null) {
+            sb.append(person.getLastName())
+            .append(" ")
+            .append(person.getFirstName());
+
+        }
+        sb.append("(").append(academicYear.getName());
+        sb.append(":").append(schoolClass);
+        sb.append(")}");
+        return sb.toString();
     }
 }

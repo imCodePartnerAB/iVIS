@@ -12,9 +12,13 @@ import java.util.Date;
 @Entity
 @Table(name = "dbo_statement")
 public class Statement extends AbstractIdEntity implements Serializable{
-    @Column
-    public Long formId;
-//    public Person submittedPerson;
+//    @Column
+//    public Long formId;
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinColumn
+    public Person submittedPerson;
+
 //    public Person regardingPerson;
     @Temporal(TemporalType.TIMESTAMP)
     @Column
@@ -27,6 +31,11 @@ public class Statement extends AbstractIdEntity implements Serializable{
     @Enumerated(EnumType.STRING)
     @Column
     public StatementStatus status;
+
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinColumn
+    public Pupil pupil;
+
 //    public String decision;
 //    public String decisionMotivation;
 //    public Date decisionDate;
@@ -68,5 +77,21 @@ public class Statement extends AbstractIdEntity implements Serializable{
 
     public void setStatus(StatementStatus status) {
         this.status = status;
+    }
+
+    public Person getSubmittedPerson() {
+        return submittedPerson;
+    }
+
+    public void setSubmittedPerson(Person submittedPerson) {
+        this.submittedPerson = submittedPerson;
+    }
+
+    public Pupil getPupil() {
+        return pupil;
+    }
+
+    public void setPupil(Pupil pupil) {
+        this.pupil = pupil;
     }
 }

@@ -1,7 +1,11 @@
 package com.imcode;
 
+import com.imcode.entities.Pupil;
 import com.imcode.entities.enums.StatementStatus;
+import com.imcode.repositories.PupilRepository;
+import com.imcode.services.PersonService;
 import org.exolab.castor.xml.*;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -103,17 +107,17 @@ public class MainTest {
     }
 
     public static void main(String[] args) throws Exception {
-        XMLContext context = new XMLContext();
-//        context.addMapping();
-
-        String s = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" +
-                "<FlowInstance>\n" +
-                "              <FamilyID>37</FamilyID>\n" +
-                "              <Version>3</Version>\n" +
-                "              <FlowID>181</FlowID>\n" +
-                "</FlowInstance>";
-        Map<String, Object> map = convertNodesFromXml(s);
-        System.out.println(map);
+//        XMLContext context = new XMLContext();
+////        context.addMapping();
+//
+//        String s = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" +
+//                "<FlowInstance>\n" +
+//                "              <FamilyID>37</FamilyID>\n" +
+//                "              <Version>3</Version>\n" +
+//                "              <FlowID>181</FlowID>\n" +
+//                "</FlowInstance>";
+//        Map<String, Object> map = convertNodesFromXml(s);
+//        System.out.println(map);
 //        // Create a Reader to the file to unmarshal from
 //
 //        FileReader reader = new FileReader("/home/vitaly/SkypeFiles/0.xml");
@@ -159,10 +163,14 @@ public class MainTest {
 //////
 //////            }
 ////        } catch (Exception ignore) { }
-//        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-//        ctx.load("classpath:/spring/data.xml");
-//        ctx.refresh();
-//        PersonService personService = ctx.getBean(PersonService.class);
+        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+        ctx.load("classpath:/spring/data.xml");
+        ctx.refresh();
+
+        PersonService personService = ctx.getBean(PersonService.class);
+        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
+        Pupil pupil = pupilRepository.findByPersonalId("850717-5019");
+        System.out.println(pupil);
 //        AddressService addressService = ctx.getBean(AddressService.class);
 //        PhoneService phoneService = ctx.getBean(PhoneService.class);
 //        EmailService emailService = ctx.getBean(EmailService.class);

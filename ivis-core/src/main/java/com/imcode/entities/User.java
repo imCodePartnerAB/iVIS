@@ -21,7 +21,7 @@ import java.util.Set;
 public class User extends AbstractNamedEntity implements UserDetails, Serializable {
     public static final String DEFAULT_PASSWORD = "";
 
-    @NotNull(message = "{user.requiredPassword}")
+//    @NotNull(message = "{user.requiredPassword}")
 //    @Size(min = 3, max = 15)
     @Column(nullable = false, columnDefinition = DEFAULT_PASSWORD)
     private String password = DEFAULT_PASSWORD;
@@ -29,10 +29,12 @@ public class User extends AbstractNamedEntity implements UserDetails, Serializab
     @Transient
     private String confirmPassword = DEFAULT_PASSWORD;
 
-
-
     @Column
     private Boolean enabled = true;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "personId")
+    private Person person;
 
 //    @Column(name="firstName")
 //    private String firstName;
@@ -88,13 +90,21 @@ public class User extends AbstractNamedEntity implements UserDetails, Serializab
         Collections.addAll(this.roles, roles);
     }
 
-    public Long getId() {
-        return id;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPerson(Person person) {
+        this.person = person;
     }
+
+    //    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
 //    public String getLogin() {
 //        return login;
