@@ -36,38 +36,6 @@ public class User extends AbstractNamedEntity implements UserDetails, Serializab
     @JoinColumn(name = "personId")
     private Person person;
 
-//    @Column(name="firstName")
-//    private String firstName;
-//
-//    @Column(name="lastName")
-//    private String lastName;
-//
-//    @Column(name="bitrhday")
-//    private Date bitrhday;
-
-//    @Column(name="email")
-//    private String email;
-//
-//    @Column(name="phoneNumber")
-//    private String phoneNumber;
-//
-//    @Column(name="streetAddress")
-//    private String streetAddress;
-//
-//    @Column(name="postalCode")
-//    private String postalCode;
-//
-//    @Column(name="city")
-//    private String city;
-//
-//    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-//    @JoinColumn(name="school")
-//    private School school;
-//
-//    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-//    @JoinColumn(name="schoolClass")
-//    private SchoolClass schoolClass;
-
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_user_roles_cross",
             joinColumns = @JoinColumn(name = "userId"),
@@ -90,118 +58,6 @@ public class User extends AbstractNamedEntity implements UserDetails, Serializab
         Collections.addAll(this.roles, roles);
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    //    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-
-//    public String getLogin() {
-//        return login;
-//    }
-//
-//    public void setLogin(String login) {
-//        this.login = login;
-//    }
-//
-//    public String getPwd() {
-//        return pwd;
-//    }
-//
-//    public void setPwd(String pwd) {
-//        this.pwd = pwd;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public void setFirstName(String firstName) {
-//        this.firstName = firstName;
-//    }
-//
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public void setLastName(String lastName) {
-//        this.lastName = lastName;
-//    }
-//
-//    public Date getBitrhday() {
-//        return bitrhday;
-//    }
-//
-//    public void setBitrhday(Date bitrhday) {
-//        this.bitrhday = bitrhday;
-//    }
-//
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-//
-//    public String getPhoneNumber() {
-//        return phoneNumber;
-//    }
-//
-//    public void setPhoneNumber(String phoneNumber) {
-//        this.phoneNumber = phoneNumber;
-//    }
-//
-//    public String getStreetAddress() {
-//        return streetAddress;
-//    }
-//
-//    public void setStreetAddress(String streetAddress) {
-//        this.streetAddress = streetAddress;
-//    }
-//
-//    public String getPostalCode() {
-//        return postalCode;
-//    }
-//
-//    public void setPostalCode(String postalCode) {
-//        this.postalCode = postalCode;
-//    }
-//
-//    public String getCity() {
-//        return city;
-//    }
-//
-//    public void setCity(String city) {
-//        this.city = city;
-//    }
-//
-//    public School getSchool() {
-//        return school;
-//    }
-//
-//    public void setSchool(School school) {
-//        this.school = school;
-//    }
-//
-//    public SchoolClass getSchoolClass() {
-//        return schoolClass;
-//    }
-//
-//    public void setSchoolClass(SchoolClass schoolClass) {
-//        this.schoolClass = schoolClass;
-//    }
-
 
     @Override
     public String getUsername() {
@@ -217,6 +73,44 @@ public class User extends AbstractNamedEntity implements UserDetails, Serializab
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Override
+    public Set<Role> getAuthorities() {
+        return roles;
+    }
+
+    public void setAuthorities(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -230,36 +124,6 @@ public class User extends AbstractNamedEntity implements UserDetails, Serializab
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public Set<Role> getAuthorities() {
-        return roles;
-    }
-
-    public void setAuthorities(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     @Override

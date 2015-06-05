@@ -48,7 +48,7 @@ public class ClientDetailsServiceRepoImpl implements IvisClientDetailsService {
     @Override
     public void updateClientDetails(ClientDetails clientDetails) throws NoSuchClientException {
 
-        if (clientDetails.getClientId() != null && clietnDetailsRepository.exists(clientDetails.getClientId())) {
+        if (clientDetails.getClientId() != null && !clietnDetailsRepository.exists(clientDetails.getClientId())) {
             throw new NoSuchClientException("No client found with id = " + clientDetails.getClientId());
         }
 
@@ -68,7 +68,7 @@ public class ClientDetailsServiceRepoImpl implements IvisClientDetailsService {
 
     @Override
     public void removeClientDetails(String clientId) throws NoSuchClientException {
-        if (clientId != null && clietnDetailsRepository.exists(clientId)) {
+        if (clientId != null && !clietnDetailsRepository.exists(clientId)) {
             throw new NoSuchClientException("No client found with id = " + clientId);
         }
 

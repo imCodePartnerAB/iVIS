@@ -10,35 +10,16 @@ import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.repositories.*;
 import com.imcode.repositories.oauth2.ClientRoleRepository;
 import com.imcode.repositories.oauth2.ClietnDetailsRepository;
-import com.imcode.services.SchoolService;
-import com.imcode.services.jpa.SchoolServiceRepoImpl;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.ClientRegistrationService;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -313,8 +294,8 @@ public class Initializator {
             clientDetails.setResourceIds("ivis");
 //            clientDetails.setRegisteredRedirectUri("http://localhost:8083/web2/ivis/redirect");
             clientDetails.setOwner(userRepository.findByUsername("ivis"));
-            clientDetails.setAuthorities(clientRoleRepository.findAll());
-            clientDetails.setAuthorizedGrantTypes(AuthorizedGrantType.AUTHORIZATION_CODE);
+            clientDetails.setAuthoritiesOverload(clientRoleRepository.findAll());
+            clientDetails.setAuthorizedGrantTypes(AuthorizedGrantType.authorization_code);
             clientDetails.setAccessTokenValiditySeconds(60);
             clientDetails.setRefreshTokenValiditySeconds(600);
             clietnDetailsRepository.save(clientDetails);
@@ -327,13 +308,13 @@ public class Initializator {
             clientDetails.setResourceIds("ivis");
 //            clientDetails.setRegisteredRedirectUri("http://localhost:8083/web2/ivis/redirect");
             clientDetails.setOwner(userRepository.findByUsername("admin"));
-            clientDetails.setAuthorities(clientRoleRepository.findAll());
+            clientDetails.setAuthoritiesOverload(clientRoleRepository.findAll());
             clientDetails.setAuthorizedGrantTypes(
-                    AuthorizedGrantType.AUTHORIZATION_CODE,
-                    AuthorizedGrantType.CLIENT_CREDENTIALS,
-                    AuthorizedGrantType.IMPLICIT,
-                    AuthorizedGrantType.PASSWORD,
-                    AuthorizedGrantType.REFRESH_TOKEN);
+                    AuthorizedGrantType.authorization_code,
+                    AuthorizedGrantType.client_credentials,
+                    AuthorizedGrantType.implicit,
+                    AuthorizedGrantType.password,
+                    AuthorizedGrantType.refresh_token);
             clientDetails.setAccessTokenValiditySeconds(600);
             clientDetails.setRefreshTokenValiditySeconds(6000);
             clietnDetailsRepository.save(clientDetails);

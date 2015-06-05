@@ -4,6 +4,7 @@
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:context="http://www.springframework.org/schema/context"
              xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:util="http://www.springframework.org/schema/util"
              xmlns:c="http://www.springframework.org/schema/c"
              xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -23,7 +24,30 @@
     </beans:bean>
 
     <!-- Разрешаем использование аннотаций Spring MVC (то есть @Controller и.@Valid, MessageConverters) -->
-    <annotation-driven/>
+    <annotation-driven conversion-service="conversionService"/>
+    <beans:bean id="conversionService"
+                class="org.springframework.context.support.ConversionServiceFactoryBean">
+            <!--p:converters-ref="#{{'userConverter'}}">-->
+
+
+        <beans:property name="converters">
+            <beans:set>
+                <beans:ref bean="userConverter"/>
+                <beans:ref bean="clientRoleConverter"/>
+                <!--<beans:ref bean=""/>-->
+                <!--&lt;!&ndash;<beans:value>&ndash;&gt;-->
+                    <!--<beans:bean class="com.imcode.services.converters.UserConverter"/>-->
+                    <!--<beans:bean class="com.imcode.services.converters.ClientRoleConverter"/>-->
+                <!--&lt;!&ndash;</beans:value>&ndash;&gt;-->
+            </beans:set>
+        </beans:property>
+    </beans:bean>
+
+<!--<util:set>-->
+    <!--<beans:ref bean="userConverter"/>-->
+    <!--&lt;!&ndash;<beans:idref>userConverter</beans:idref>&ndash;&gt;-->
+<!--</util:set>-->
+
     <!-- Всю статику (изображения, css-файлы, javascript) положим в папку webapp/resources
         и замаппим их на урл вида /resources/** -->
     <resources mapping="/resources/**" location="/WEB-INF/web-resources/"/>
@@ -32,8 +56,8 @@
 
     <!-- Отображение видов на jsp-файлы, лежащие в папке /WEB-INF/views -->
     <!--<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-        <!--<beans:property name="prefix" value="/WEB-INF/views/"/>-->
-        <!--<beans:property name="suffix" value=".jsp"/>-->
+    <!--<beans:property name="prefix" value="/WEB-INF/views/"/>-->
+    <!--<beans:property name="suffix" value=".jsp"/>-->
     <!--</beans:bean>-->
     <!-- Apache tiles view Resolver-->
     <beans:bean id="tilesConfigurer"
@@ -48,7 +72,7 @@
     <beans:bean id="viewResolver"
                 class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <beans:property name="viewClass"
-                        value="org.springframework.web.servlet.view.tiles2.TilesView" />
+                        value="org.springframework.web.servlet.view.tiles2.TilesView"/>
     </beans:bean>
 
     <interceptors>
@@ -68,7 +92,7 @@
 
     <beans:bean class="org.springframework.ui.context.support.ResourceBundleThemeSource"
                 id="themeSource"
-                p:basenamePrefix="theme/" />
+                p:basenamePrefix="theme/"/>
 
     <beans:bean class="org.springframework.web.servlet.theme.CookieThemeResolver" id="themeResolver"
                 p:cookieName="theme"

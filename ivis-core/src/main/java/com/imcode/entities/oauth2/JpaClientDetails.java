@@ -55,7 +55,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @CollectionTable(name = "dbo_oauth_client_scope", joinColumns = @JoinColumn(name = "clientId"))
     @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
-    private Set<String> scope = Collections.emptySet();
+    private Set<String> scope = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dbo_oauth_client_resources",joinColumns = @JoinColumn(name = "clientId"))
@@ -94,7 +94,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @JoinTable(name = "dbo_oauth_client_roles_cross",
             joinColumns = @JoinColumn(name = "clientId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
-    private List<GrantedAuthority> authorities = Collections.emptyList();
+    private Set<ClientRole> authorities;
 
     @Column
     @org.codehaus.jackson.annotate.JsonProperty("access_token_validity")
@@ -120,7 +120,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     public JpaClientDetails(JpaClientDetails prototype) {
         setAccessTokenValiditySeconds(prototype.getAccessTokenValiditySeconds());
         setRefreshTokenValiditySeconds(prototype.getRefreshTokenValiditySeconds());
-        setAuthorities(prototype.getAuthorities());
+//        setAuthorities(prototype.getAuthorities());
         setAuthorizedGrantTypes(prototype.getAuthorizedGrantTypes());
 //        setClientId(prototype.getClientId());
         setClientSecret(prototype.getClientSecret());
@@ -166,17 +166,23 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
                     "authorization_code", "refresh_token"));
         }
 
-        if (StringUtils.hasText(authorities)) {
-            this.authorities = AuthorityUtils
-                    .commaSeparatedStringToAuthorityList(authorities);
-        }
+//        if (StringUtils.hasText(authorities)) {
+//            this.authorities = new HashSet<>(AuthorityUtils
+//                    .commaSeparatedStringToAuthorityList(authorities));
+//        }
 
         if (StringUtils.hasText(redirectUris)) {
             this.registeredRedirectUris = StringUtils
                     .commaDelimitedListToSet(redirectUris);
         }
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
     @Override
@@ -192,6 +198,12 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
         this.autoApproveScopes = new HashSet<String>(autoApproveScopes);
     }
 
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Set<String> getAutoApproveScopes() {
+        return autoApproveScopes;
+    }
+
     @Override
     public boolean isAutoApprove(String scope) {
         if (autoApproveScopes == null) {
@@ -203,12 +215,6 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
             }
         }
         return false;
-    }
-
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public Set<String> getAutoApproveScopes() {
-        return autoApproveScopes;
     }
 
     @org.codehaus.jackson.annotate.JsonIgnore
@@ -237,7 +243,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
         return scope;
     }
 
-    public void setScope(Collection<String> scope) {
+    public void setScope(Set<String> scope) {
         this.scope = scope == null ? Collections.<String> emptySet()
                 : new LinkedHashSet<String>(scope);
     }
@@ -248,7 +254,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
         return resourceIds;
     }
 
-    public void setResourceIds(Collection<String> resourceIds) {
+    public void setResourceIds(Set<String> resourceIds) {
         this.resourceIds = resourceIds == null ? Collections
                 .<String> emptySet() : new LinkedHashSet<String>(resourceIds);
     }
@@ -259,7 +265,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
         return authorizedGrantTypes;
     }
 
-    public void setAuthorizedGrantTypes(Collection<String> authorizedGrantTypes) {
+    public void setAuthorizedGrantTypes(Set<String> authorizedGrantTypes) {
         this.authorizedGrantTypes = new LinkedHashSet<String>(
                 authorizedGrantTypes);
     }
@@ -287,21 +293,38 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonProperty("authorities")
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private void setAuthoritiesAsStrings(Set<String> values) {
-        setAuthorities(AuthorityUtils.createAuthorityList(values
-                .toArray(new String[values.size()])));
+//        setAuthorities(new HashSet<>(AuthorityUtils.createAuthorityList(values
+//                .toArray(new String[values.size()]))));
     }
 
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
-    public Collection<GrantedAuthority> getAuthorities() {
+    public Set<GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        for (ClientRole authority :this.authorities) {
+            authorities.add(authority);
+        }
+
+        return  authorities;
+    }
+
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public void setAuthorities(Set<ClientRole> authorities) {
+        this.authorities = new HashSet<>(authorities);
+    }
+
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Set<ClientRole> getRoles() {
         return authorities;
     }
 
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
-    public void setAuthorities(
-            Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = new ArrayList<GrantedAuthority>(authorities);
+    public void setRoles(Set<ClientRole> authorities) {
+        this.authorities = new HashSet<>(authorities);
     }
 
     @org.codehaus.jackson.annotate.JsonIgnore
@@ -572,19 +595,19 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
 
 //    Setter utilities
     public void setScope(String... scope) {
-        setScope(Arrays.asList(scope));
+        setScope(new HashSet<String>(Arrays.asList(scope)));
     }
 
     public void setScope(String scope) {
-        setScope(Arrays.asList(scope));
+        setScope(new HashSet<String>(Arrays.asList(scope)));
     }
 
     public void setResourceIds(String... resourceIds) {
-        setResourceIds(Arrays.asList(resourceIds));
+        setResourceIds(new HashSet<String>(Arrays.asList(resourceIds)));
     }
 
     public void setResourceIds(String resourceId) {
-        setResourceIds(Arrays.asList(resourceId));
+        setResourceIds(new HashSet<String>(Arrays.asList(resourceId)));
     }
 
     public void setRegisteredRedirectUri(String... redirectUris) {
@@ -596,11 +619,15 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     }
 
     public void setAuthoritiesOverload(GrantedAuthority... authorities) {
-        setAuthorities(Arrays.asList(authorities));
+//        setAuthorities(new HashSet<>(Arrays.asList(authorities)));
+    }
+
+    public void setAuthoritiesOverload(List<? extends GrantedAuthority> authorities) {
+//        setAuthorities(new HashSet<>(authorities));
     }
 
     public void setAuthoritiesOverload(GrantedAuthority authority) {
-        setAuthorities(Arrays.asList(authority));
+//        setAuthorities(new HashSet<>(Arrays.asList(authority)));
     }
 
     public void setAuthorizedGrantTypes(AuthorizedGrantType... authorizedGrantTypes) {
@@ -614,7 +641,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     }
 
     public void setAuthorizedGrantTypes(AuthorizedGrantType authorizedGrantType) {
-        setAuthorizedGrantTypes(Arrays.asList(authorizedGrantType.toString()));
+        setAuthorizedGrantTypes(new HashSet<String>(Arrays.asList(authorizedGrantType.toString())));
     }
 
     @Override

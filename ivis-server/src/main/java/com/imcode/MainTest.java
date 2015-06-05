@@ -6,6 +6,7 @@ import com.imcode.repositories.PupilRepository;
 import com.imcode.services.PersonService;
 import org.exolab.castor.xml.*;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.data.convert.EntityConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -167,10 +168,10 @@ public class MainTest {
         ctx.load("classpath:/spring/data.xml");
         ctx.refresh();
 
-        PersonService personService = ctx.getBean(PersonService.class);
-        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
-        Pupil pupil = pupilRepository.findByPersonalId("850717-5019");
-        System.out.println(pupil);
+//        PersonService personService = ctx.getBean(PersonService.class);
+//        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
+//        Pupil pupil = pupilRepository.findByPersonalId("850717-5019");
+//        System.out.println(pupil);
 //        AddressService addressService = ctx.getBean(AddressService.class);
 //        PhoneService phoneService = ctx.getBean(PhoneService.class);
 //        EmailService emailService = ctx.getBean(EmailService.class);

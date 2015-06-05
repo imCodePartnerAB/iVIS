@@ -7,7 +7,6 @@
 <h1>EDIT</h1>
 
 <form:form modelAttribute="client" id="clientUpdateForm" method="post">
-
     <%--<c:if test="${not empty message}">--%>
     <%--<div id="message" class="${message.type}">${message.message}</div>--%>
     <%--</c:if>--%>
@@ -49,7 +48,7 @@
         <form:label path="scope">
             Scope*
         </form:label>
-        <form:checkboxes path="scope" items="${scopeList}" cssErrorClass="error" cssClass="check-box"/>
+        <form:checkboxes path="scope" items="${scopeList}" cssErrorClass="error" cssClass="check-box" />
         <form:errors path="scope" cssClass="error-description"/>
     </div>
     <div class="field">
@@ -69,12 +68,12 @@
         <form:errors path="registeredRedirectUri" cssClass="error-description"/>
     </div>
     <div class="checkbox">
-        <form:label path="authorities">
+        <form:label path="roles">
             Roles*
         </form:label>
-        <form:checkboxes path="authorities" items="${clientRoleList}" itemLabel="authority" cssErrorClass="error"
-                         cssClass="check-box" itemValue="name"/>
-        <form:errors path="authorities" cssClass="error-description"/>
+        <form:checkboxes path="roles" items="${clientRoleList}" itemLabel="name" cssErrorClass="error"
+                         cssClass="check-box" itemValue="id"/>
+        <form:errors path="roles" cssClass="error-description"/>
     </div>
     <div class="field">
     <form:label path="accessTokenValiditySeconds">

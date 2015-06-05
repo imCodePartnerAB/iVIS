@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +25,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @Controller
@@ -42,8 +44,6 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
     @Autowired
     private JpaClientDetailsValidator clientValidator;
-
-
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAll(WebRequest webRequest, Model model, Authentication principal) {
@@ -64,11 +64,11 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     }
 
 //    Updating exists client
-    @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.POST)
-    public String update(@PathVariable("id") String id,
-                         JpaClientDetails client,
+    @RequestMapping(value = "/{clientId}", params = "form", method = RequestMethod.POST)
+    public ModelAndView update(@PathVariable("clientId") String clientId,
+                         @ModelAttribute("client") @Valid JpaClientDetails client,
                          BindingResult bindingResult,
-                         Model uiModel,
+                         ModelAndView model,
                          WebRequest webRequest,
                          RedirectAttributes redirectAttributes,
                          Authentication principal) {
@@ -76,42 +76,38 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 //        clientValidator.validate(client, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            uiModel.addAttribute("message", new Message(MessageType.ERROR, "Client save fail"));
-            uiModel.addAttribute("client", client);
+            model.setViewName("clients/edit");
+            addListsInModel(model);
+            model.addObject("message", new Message(MessageType.ERROR, "Client save fail"));
+            model.addObject("client", client);
 
-            return "clients/edit";
+            return model;
         }
 
-        uiModel.asMap().clear();
+        model.clear();
         redirectAttributes.addFlashAttribute("message", new Message(MessageType.SUCCESS, "Client save success"));
-//        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-//        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
         JpaClientDetails persistentClient;
 
         if (webRequest.isUserInRole("ROLE_ADMIN")) {
-            persistentClient = clientDetailsService.findOne(id);
+            persistentClient = clientDetailsService.findOne(clientId);
         } else if (principal != null) {
             User user = (User) principal.getPrincipal();
-            persistentClient = clientDetailsService.findUserClientById(id, user);
+            persistentClient = clientDetailsService.findUserClientById(clientId, user);
         } else {
-            uiModel.addAttribute("message", new Message(MessageType.ERROR, "Client not found"));
-            uiModel.addAttribute("client", client);
-            return "clients/edit";
+            model.setViewName("clients/edit");
+            addListsInModel(model);
+            model.addObject("message", new Message(MessageType.ERROR, "Client not found"));
+            model.addObject("client", client);
+
+            return model;
         }
-        BeanUtils.copyProperties(client, persistentClient, "id");
+        BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
         clientDetailsService.updateClientDetails(persistentClient);
 
-//        appOld.setRefreshTokenValiditySeconds(client.getRefreshTokenValiditySeconds());
-//        appOld.setAccessTokenValiditySeconds(client.getAccessTokenValiditySeconds());
-//        appOld.setAuthorizedGrantTypes(client.getAuthorizedGrantTypes());
-//        appOld.setClientSecret(client.getClientSecret());
-//        appOld.setRegisteredRedirectUri(client.getRegisteredRedirectUri());
-//        appOld.setScope(client.getScope());
-////        application.setAuthorities(grantedAuthorities);
-////        application.setClientId(id);
-//        applicationService.update(id, appOld);
+        model.setViewName("redirect:/clients");
 
-        return "redirect:/clients";
+
+        return model;
     }
 
 
@@ -119,10 +115,7 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
     public ModelAndView updateForm(@PathVariable("id") String id, ModelAndView model, WebRequest webRequest, Authentication principal) {
         JpaClientDetails clientDetails;
-        model.addObject(userService.findAll());
-        model.addObject(clientRoleService.findAll());
-        model.addObject("scopeList", "read,write,execute".split(","));
-        model.addObject("grantTypes", Arrays.asList(AuthorizedGrantType.getRepresentations()));
+        addListsInModel(model);
 
         if (webRequest.isUserInRole("ROLE_ADMIN")) {
             clientDetails = clientDetailsService.findOne(id);
@@ -143,10 +136,7 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     //    Invoke create form
     @RequestMapping(params = "form", method = RequestMethod.GET)
     public ModelAndView createForm(ModelAndView model, Authentication authentication) {
-        model.addObject(userService.findAll());
-        model.addObject(clientRoleService.findAll());
-        model.addObject("scopeList", "read,write,execute".split(","));
-        model.addObject("grantTypes", Arrays.asList(AuthorizedGrantType.getRepresentations()));
+        addListsInModel(model);
         JpaClientDetails client = new JpaClientDetails();
         client.setOwner((User) authentication.getPrincipal());
         model.addObject("client", client);
@@ -155,14 +145,22 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
         return model;
     }
 
-//    Create new Client
+    private void addListsInModel(ModelAndView model) {
+        model.addObject(userService.findAll());
+        model.addObject(clientRoleService.findAll());
+        model.addObject("scopeList", "read,write,execute".split(","));
+        model.addObject("grantTypes", Arrays.asList(AuthorizedGrantType.getRepresentations()));
+    }
+
+    //    Create new Client
     @RequestMapping(method = RequestMethod.POST)
-    public String create(JpaClientDetails client,
+    public String create(@ModelAttribute("client") @Valid JpaClientDetails client,
                          BindingResult bindingResult,
                          Model uiModel,
                          RedirectAttributes redirectAttributes,
                          WebRequest webRequest,
                          Authentication principal) {
+
         if (bindingResult.hasErrors()) {
             uiModel.addAttribute("message", new Message(MessageType.ERROR, "Client save fail"));
             uiModel.addAttribute("client", client);
@@ -170,12 +168,6 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
             return "clients/edit";
         }
 
-//        client.setClientId(UUID.randomUUID().toString());
-//        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-//        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
-//        client.setAuthorities(grantedAuthorities);
-//        Collection<String> resourceIds = Arrays.asList("ivis");
-//        client.setResourceIds("ivis");
         uiModel.asMap().clear();
         redirectAttributes.addFlashAttribute("message", new Message(MessageType.SUCCESS, "Client save success"));
 

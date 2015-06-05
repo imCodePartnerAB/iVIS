@@ -141,12 +141,12 @@ public class UserController {
 
         //    UPDATE exists user
         @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-        public ModelAndView update (@ModelAttribute("user") @Valid User user,
-                BindingResult bindingResultUser,
-                @PathVariable("id") Long id,
-                ModelAndView model,
-                WebRequest webRequest,
-                Locale locale){
+        public ModelAndView update (@PathVariable("id") Long id,
+                                    @ModelAttribute("user") @Valid User user,
+                                    BindingResult bindingResultUser,
+                                    ModelAndView model,
+                                    WebRequest webRequest,
+                                    Locale locale){
 
             if (webRequest.isUserInRole("ROLE_ADMIN")) {
                 user.setConfirmPassword(user.getPassword());

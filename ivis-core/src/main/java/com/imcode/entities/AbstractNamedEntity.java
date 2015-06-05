@@ -19,6 +19,12 @@ public abstract class AbstractNamedEntity extends AbstractIdEntity implements Se
         this.name = name;
     }
 
+    public AbstractNamedEntity(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public String getName() {
         return name;
     }
