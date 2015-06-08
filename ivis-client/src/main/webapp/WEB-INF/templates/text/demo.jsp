@@ -19,8 +19,6 @@
 <imcms:variables/>
 <%
 
-    // TODO: Add support for imCMS versions > 5
-
     String documentationUrl = "http://doc.imcms.net/SNAPSHOT";
 
     Perl5Util re = new Perl5Util();
@@ -108,7 +106,7 @@
     }
 %>
             <c:if test="${not empty statements}">
-            <h1>Statements</h1>
+            <h1>Applications</h1>
             <table cellpadding="0" cellspacing="0">
                 <thead>
                 <tr>

@@ -35,7 +35,6 @@
         <!--&lt;!&ndash;<access-denied-handler ref="oauthAccessDeniedHandler" />&ndash;&gt;-->
     <!--</http>-->
 
-    <!-- todo override to the ivis entry point-->
     <http pattern="/oauth/token" create-session="never"
           authentication-manager-ref="clientAuthenticationManager"
           xmlns="http://www.springframework.org/schema/security">
@@ -48,13 +47,13 @@
         <!-- include this only if you need to authenticate clients via request parameters -->
         <custom-filter ref="clientCredentialsTokenEndpointFilter"
                        after="BASIC_AUTH_FILTER" />
-        <!--after="ANONYMOUS_FILTER" />-->
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
 
 
-    <!--<bean id="loginUrlAuthenticationEntryPoint" class="com.imcode.security.IvisLoginUrlAuthenticationEntryPoint"-->
-          <!--p:forwardedParams="#{{'display'}}" p:loginFormUrl="/login"/>-->
+    <!--Helps to redirect cpecified request parameters to login page-->
+    <bean id="loginUrlAuthenticationEntryPoint" class="com.imcode.security.IvisLoginUrlAuthenticationEntryPoint"
+          p:redirectParameterNames="#{{'display'}}" p:loginFormUrl="/login"/>
 
     <!-- The OAuth2 protected resources are separated out into their own block
         so we can deal with authorization and error handling separately. This isn't
@@ -98,7 +97,9 @@
     </http>
 
     <http access-denied-page="/login?authorization_error=true"
-          disable-url-rewriting="true" xmlns="http://www.springframework.org/schema/security">
+          disable-url-rewriting="true"
+          entry-point-ref="loginUrlAuthenticationEntryPoint"
+          xmlns="http://www.springframework.org/schema/security">
         <!--<intercept-url pattern="/oauth/**" access="ROLE_USER" />-->
         <!--<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <!--<intercept-url pattern="/oauth/authorize" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->

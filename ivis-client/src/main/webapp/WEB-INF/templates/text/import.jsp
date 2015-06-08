@@ -33,7 +33,6 @@
 <imcms:variables/>
 <%
 
-    // TODO: Add support for imCMS versions > 5
 
     String documentationUrl = "http://doc.imcms.net/SNAPSHOT";
 
@@ -71,6 +70,7 @@
 <div class="container">
     <div class="content">
         <div class="box">
+            <h1>Import</h1>
             <c:if test="${message != null}">
                 <div class="field">
                         ${message.message}

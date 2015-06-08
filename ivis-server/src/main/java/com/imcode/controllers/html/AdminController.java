@@ -146,9 +146,11 @@ public class AdminController {
 //    }
 
 	@RequestMapping("/login")
-	public ModelAndView login(WebRequest webRequest, ModelAndView model) {
+	public ModelAndView login(@RequestParam(value = "display", required = false) String display,
+							  WebRequest webRequest,
+							  ModelAndView model) {
 
-		boolean isPopup = isShowPopupLoginPage(webRequest);
+		boolean isPopup = display != null && "popup".equals(display);
 
 		if (isPopup) {
 			model.setViewName("security/login_popup");
@@ -157,22 +159,6 @@ public class AdminController {
 		}
 
 		return model;
-	}
-
-	private boolean isShowPopupLoginPage(WebRequest webRequest) {
-		boolean isPopup = false;
-		SavedRequest savedRequest = (SavedRequest) webRequest.getAttribute("SPRING_SECURITY_SAVED_REQUEST", RequestAttributes.SCOPE_GLOBAL_SESSION);
-
-		if (savedRequest != null) {
-			Map<String, String[]> params = savedRequest.getParameterMap();
-			String[] display = params.get("display");
-
-			if (display != null) {
-				isPopup = "popup".equalsIgnoreCase(display[0]);
-			}
-		}
-
-		return isPopup;
 	}
 
 	@RequestMapping({"/", "/home", "index"})
