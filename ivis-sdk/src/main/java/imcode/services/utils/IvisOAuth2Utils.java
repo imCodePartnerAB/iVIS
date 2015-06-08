@@ -74,10 +74,19 @@ public class IvisOAuth2Utils {
 
     public static String getOAuth2AuthirizationUrl(AuthorizationCodeResourceDetails client, String redirectUri) throws URISyntaxException {
 
+        return getOAuth2AuthirizationUrl(client, redirectUri, true);
+    }
+
+    public static String getOAuth2AuthirizationUrl(AuthorizationCodeResourceDetails client, String redirectUri, boolean isPopup) throws URISyntaxException {
+
         List<NameValuePair> parameters = new ArrayList<>();
         parameters.add(new BasicNameValuePair("response_type", "code"));
         parameters.add(new BasicNameValuePair("client_id", client.getClientId()));
         parameters.add(new BasicNameValuePair("redirect_uri", redirectUri));
+
+        if (isPopup) {
+            parameters.add(new BasicNameValuePair("display", "popup"));
+        }
 
         if (client.isScoped()) {
 

@@ -23,30 +23,27 @@
         </beans:property>
     </beans:bean>
 
-    <!-- Разрешаем использование аннотаций Spring MVC (то есть @Controller и.@Valid, MessageConverters) -->
-    <annotation-driven conversion-service="conversionService"/>
+    <!-- Custom conversion servise for String to entity conversion-->
     <beans:bean id="conversionService"
-                class="org.springframework.context.support.ConversionServiceFactoryBean">
-            <!--p:converters-ref="#{{'userConverter'}}">-->
+                class="org.springframework.context.support.ConversionServiceFactoryBean"/>
+
+    <!--DomainClassConverter to enable Spring MVC to resolve instances of repository managed domain classes from request parameters or path variables.-->
+    <beans:bean class="org.springframework.data.repository.support.DomainClassConverter"
+                c:conversionService-ref="conversionService"/>
+
+    <!-- Разрешаем использование аннотаций Spring MVC (то есть @Controller и.@Valid, MessageConverters) -->
+    <annotation-driven conversion-service="conversionService">
+    <!--<argument-resolvers>-->
+        <!--&lt;!&ndash;HandlerMethodArgumentResolver implementations to let Spring MVC resolve Pageable and Sort instances from request parameters.&ndash;&gt;-->
+        <!--<beans:bean id="sortResolver" class="org.springframework.data.web.SortHandlerMethodArgumentResolver" />-->
+        <!--<beans:bean id="pageableResolver" class="org.springframework.data.web.PageableHandlerMethodArgumentResolver"-->
+                <!--c:sortResolver-ref="sortResolver"/>-->
+    <!--</argument-resolvers>-->
+</annotation-driven>
 
 
-        <beans:property name="converters">
-            <beans:set>
-                <beans:ref bean="userConverter"/>
-                <beans:ref bean="clientRoleConverter"/>
-                <!--<beans:ref bean=""/>-->
-                <!--&lt;!&ndash;<beans:value>&ndash;&gt;-->
-                    <!--<beans:bean class="com.imcode.services.converters.UserConverter"/>-->
-                    <!--<beans:bean class="com.imcode.services.converters.ClientRoleConverter"/>-->
-                <!--&lt;!&ndash;</beans:value>&ndash;&gt;-->
-            </beans:set>
-        </beans:property>
-    </beans:bean>
 
-<!--<util:set>-->
-    <!--<beans:ref bean="userConverter"/>-->
-    <!--&lt;!&ndash;<beans:idref>userConverter</beans:idref>&ndash;&gt;-->
-<!--</util:set>-->
+
 
     <!-- Всю статику (изображения, css-файлы, javascript) положим в папку webapp/resources
         и замаппим их на урл вида /resources/** -->

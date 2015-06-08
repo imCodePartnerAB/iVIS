@@ -62,7 +62,7 @@
             Roles*
         </form:label>
         <form:checkboxes path="authorities" items="${roleList}" itemLabel="authority" cssErrorClass="error"
-                         cssClass="check-box" itemValue="name"/>
+                         cssClass="check-box" itemValue="id"/>
         <form:errors path="authorities" cssClass="error-description"/>
     </div>
     <div class="buttons">

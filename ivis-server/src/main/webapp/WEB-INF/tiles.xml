@@ -42,6 +42,19 @@
     <definition name="security/login" extends="simple">
         <put-attribute name="content" value="/WEB-INF/views/security/login.jsp"/>
     </definition>
+    <definition name="security/login_popup" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/views/security/loginPopup.jsp"/>
+    </definition>
+    <!--Admin/Oauth2-->
+    <definition name="access_confirmation" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/views/security/oauth2/accessConfirmation.jsp"/>
+    </definition>
+    <definition name="access_confirmation_popup" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/views/security/oauth2/accessConfirmationPopup.jsp"/>
+    </definition>
+    <definition name="oauth_error" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/views/security/oauth2/oauthError.jsp"/>
+    </definition>
     <!--Admin/SQL -->
     <definition name="sql/show" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/sql/show.jsp"/>

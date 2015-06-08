@@ -181,16 +181,6 @@ input, button {
   width: 350px;
 }
 
-.field textarea {
-  border: 1px solid #f0f0ff;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  padding: 7.5px 10px;
-  width: 700px;
-  height: 350px;
-}
-
 .field select {
   border: 1px solid #f0f0ff;
   border-radius: 3px;
@@ -212,11 +202,23 @@ input, button {
 }
 
 .checkbox {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .radio {
-  margin-top: 10px;
+  margin-top: 20px;
+}
+
+.radio .name {
+  display: inline-block;
+  width: 100px;
+}
+
+.notification {
+  background: #ffff96;
+  margin-top: 20px;
+  padding: 7.5px 10px;
+  width: 350px;
 }
 
 .buttons {
@@ -274,5 +276,23 @@ input, button {
 .login-form {
   margin: 0 auto 0;
   padding-top: 100px;
+  width: 372px;
+}
+
+.login-pop-up-form {
+  margin: 0 auto 0;
+  padding-top: 20px;
+  width: 372px;
+}
+
+.authorize-form {
+  margin: 0 auto 0;
+  padding-top: 100px;
+  width: 372px;
+}
+
+.authorize-pop-up-form {
+  margin: 0 auto 0;
+  padding-top: 20px;
   width: 372px;
 }

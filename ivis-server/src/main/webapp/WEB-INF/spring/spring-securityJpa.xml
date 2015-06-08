@@ -34,7 +34,8 @@
         <!--<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />-->
         <!--&lt;!&ndash;<access-denied-handler ref="oauthAccessDeniedHandler" />&ndash;&gt;-->
     <!--</http>-->
-    
+
+    <!-- todo override to the ivis entry point-->
     <http pattern="/oauth/token" create-session="never"
           authentication-manager-ref="clientAuthenticationManager"
           xmlns="http://www.springframework.org/schema/security">
@@ -50,6 +51,10 @@
         <!--after="ANONYMOUS_FILTER" />-->
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
+
+
+    <!--<bean id="loginUrlAuthenticationEntryPoint" class="com.imcode.security.IvisLoginUrlAuthenticationEntryPoint"-->
+          <!--p:forwardedParams="#{{'display'}}" p:loginFormUrl="/login"/>-->
 
     <!-- The OAuth2 protected resources are separated out into their own block
         so we can deal with authorization and error handling separately. This isn't

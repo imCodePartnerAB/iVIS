@@ -54,21 +54,20 @@ public class UserController {
 
     //    Show the UPDATE form
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
-    public ModelAndView updateForm(@PathVariable("id") Long id,
+    public ModelAndView updateForm(@PathVariable("id") User user,
                                    ModelAndView model,
                                    WebRequest webRequest,
                                    Locale locale) {
-
-        model.setViewName("users/edit");
-        User user = userService.find(id);
-        model.addObject(user);
-        model.addObject(roleService.findAll());
 
         if (user == null) {
             model.setViewName("clients/list");
             throw new NotFoundException();
 //            model.addObject(new Message(MessageType.ERROR, messageSource.getMessage("entity.notFoundById", new Object[]{User.class.getSimpleName(), id}, locale)));
         }
+
+        model.setViewName("users/edit");
+        model.addObject(user);
+        model.addObject(roleService.findAll());
 
         return model;
     }
@@ -141,7 +140,7 @@ public class UserController {
 
         //    UPDATE exists user
         @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-        public ModelAndView update (@PathVariable("id") Long id,
+        public ModelAndView update (@PathVariable("id") User persistUser,
                                     @ModelAttribute("user") @Valid User user,
                                     BindingResult bindingResultUser,
                                     ModelAndView model,
@@ -161,13 +160,13 @@ public class UserController {
                 return model;
             }
 
-            User persistUser = userService.find(id);
+//            User persistUser = userService.find(id);
 
             if (persistUser == null) {
                 throw new NotFoundException();
             }
 
-            String fieldExceptions = user.getPassword().isEmpty() ? "id,password,confirmPassword" : "id";
+            String[] fieldExceptions = user.getPassword().isEmpty() ? new String[]{"id", "password", "confirmPassword"} : new String[]{"id"};
 
             BeanUtils.copyProperties(user, persistUser, fieldExceptions);
             userService.save(persistUser);

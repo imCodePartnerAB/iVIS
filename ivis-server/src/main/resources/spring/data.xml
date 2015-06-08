@@ -80,7 +80,8 @@
 
     <jpa:repositories base-package="com.imcode.repositories" entity-manager-factory-ref="myEmf"/>
 
-    <beans:bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"/>
+    <beans:bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+                c:emf-ref="myEmf"/>
         <!--<beans:property name="entityManagerFactory" ref="myEmf"/>-->
     <!--</beans:bean>-->
 

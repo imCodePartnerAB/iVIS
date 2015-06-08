@@ -1,2 +1,3 @@
 
 process-webapp-sources:
+     [copy] Copying 1 file to /home/vitaly/IdeaProjects/iVIS/ivis-server/target/ivis-server/WEB-INF

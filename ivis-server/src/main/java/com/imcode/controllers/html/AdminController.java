@@ -30,14 +30,20 @@ import org.springframework.security.oauth2.provider.client.JdbcClientDetailsServ
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for resetting the token store for testing purposes.
@@ -140,8 +146,33 @@ public class AdminController {
 //    }
 
 	@RequestMapping("/login")
-	public String login() {
-		return "security/login";
+	public ModelAndView login(WebRequest webRequest, ModelAndView model) {
+
+		boolean isPopup = isShowPopupLoginPage(webRequest);
+
+		if (isPopup) {
+			model.setViewName("security/login_popup");
+		} else {
+			model.setViewName("security/login");
+		}
+
+		return model;
+	}
+
+	private boolean isShowPopupLoginPage(WebRequest webRequest) {
+		boolean isPopup = false;
+		SavedRequest savedRequest = (SavedRequest) webRequest.getAttribute("SPRING_SECURITY_SAVED_REQUEST", RequestAttributes.SCOPE_GLOBAL_SESSION);
+
+		if (savedRequest != null) {
+			Map<String, String[]> params = savedRequest.getParameterMap();
+			String[] display = params.get("display");
+
+			if (display != null) {
+				isPopup = "popup".equalsIgnoreCase(display[0]);
+			}
+		}
+
+		return isPopup;
 	}
 
 	@RequestMapping({"/", "/home", "index"})

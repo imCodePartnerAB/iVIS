@@ -35,24 +35,6 @@ public class UserValidator implements Validator {
 //                "user.requiredConfirmPassword", "Field name is required.");
         User user = (User)target;
 
-        Set<Role> roleSet = new HashSet<>();
-        Set<Role> roleNameSet = user.getAuthorities();
-        boolean hasErrors = false;
-        for (Role role :roleNameSet) {
-            Role persistRole = roleService.findByName(role.getName());
-
-            if (persistRole != null) {
-                roleSet.add(persistRole);
-            } else {
-                hasErrors = true;
-                errors.rejectValue("authorities", null, new String[]{role.getName()}, "Role {1} not found.");
-            }
-        }
-
-        if (!hasErrors) {
-            user.setAuthorities(roleSet);
-        }
-
         if(!(user.getPassword().equals(user.getConfirmPassword()))){
             errors.rejectValue("confirmPassword", "user.notmatchConfirmPassword");
         }
