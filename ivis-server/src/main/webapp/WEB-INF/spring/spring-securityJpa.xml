@@ -50,7 +50,6 @@
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
 
-
     <!--Helps to redirect cpecified request parameters to login page-->
     <bean id="loginUrlAuthenticationEntryPoint" class="com.imcode.security.IvisLoginUrlAuthenticationEntryPoint"
           p:redirectParameterNames="#{{'display'}}" p:loginFormUrl="/login"/>
@@ -182,6 +181,7 @@
         <constructor-arg name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />
     </bean>
 
+    <!--TODO Override JdbcTokenStore onto the JpaTokenStore-->
     <!--<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />-->
     <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore"
           c:dataSource-ref="dataSource"/>

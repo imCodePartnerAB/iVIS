@@ -1,25 +1,21 @@
 package imcode.services.restful;
 
-import com.imcode.entities.Pupil;
-import com.imcode.entities.Statement;
-import com.imcode.entities.enums.StatementStatus;
 import com.imcode.services.*;
-import imcode.services.utils.IvisOAuth2Utils;
+import imcode.services.IvisServiceFactory;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
 import org.springframework.security.oauth2.common.DefaultExpiringOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 import java.util.*;
 
 /**
  * Created by vitaly on 27.05.15.
  */
-public class IvisServiceFactory {
+@Deprecated
+public class DefaultIvisServiceFactory implements imcode.services.IvisServiceFactory {
     private final String apiUrl; //= "http://ivis.dev.imcode.com/api/v1/json/";
     //    private String ivisServiceAddress = apiUrl;
 //    private OAuth2AccessToken accessToken;
@@ -30,7 +26,7 @@ public class IvisServiceFactory {
     private Map<Class<? extends GenericService>, GenericService> serviceMap;
 
 
-    public IvisServiceFactory(String apiUrl, OAuth2ProtectedResourceDetails client, OAuth2ClientContext clientContext) {
+    public DefaultIvisServiceFactory(String apiUrl, OAuth2ProtectedResourceDetails client, OAuth2ClientContext clientContext) {
         this.client = client;
         this.clientContext = clientContext;
         this.apiUrl = apiUrl;
@@ -55,8 +51,15 @@ public class IvisServiceFactory {
         serviceMap = Collections.unmodifiableMap(map);
     }
 
-    public <T extends GenericService> T getService(Class<T> serviceClass) {
-        return (T) serviceMap.get(serviceClass);
+    public <S extends GenericService<T, ID>, T, ID> S getService(Class<S> serviceClass) {
+        S definedService = (S) serviceMap.get(serviceClass);
+
+//        if (definedService != null) {
+        return definedService;
+//        } else {
+//            GenericService abstractServise =
+//            return
+//        }
     }
 
     public SchoolService getSchoolService() {
@@ -127,7 +130,7 @@ public class IvisServiceFactory {
 //    }
 
     public static void main(String[] args) {
-//        IvisServiceFactory serviceFactory = new IvisServiceFactory();
+//        DefaultIvisServiceFactory serviceFactory = new DefaultIvisServiceFactory();
 //        SchoolService schoolService = serviceFactory.getService(SchoolService.class);
 
 //        OAuth2RestTemplate restTemplate = new OAuth2RestTemplate();
@@ -190,11 +193,13 @@ public class IvisServiceFactory {
             IvisFacade.Configuration config = new IvisFacade.Configuration.Builder().endPointUrl("http://localhost:8080/ivis").build();
 //            config.endPointUrl
             IvisFacade facade = IvisFacade.instance(config);
-            IvisServiceFactory serviceFactory = facade.getServiceFactory(resource, clientContext);
+//            DefaultIvisServiceFactory serviceFactory = facade.getServiceFactory(resource, clientContext);
+            IvisServiceFactory serviceFactory = new ProxyIvisServiceFactory("http://localhost:8080/ivis/api/v1/json", clientContext, resource);
 //            SchoolClassService service = serviceFactory.getSchoolClassService();
-            PupilService service = serviceFactory.getPupilService();
-            System.out.println(service.findByPersonalId("850717-5019"));
-//            System.out.println(service.findAll());
+//            PupilService service = serviceFactory.getPupilService();
+//            System.out.println(service.findByPersonalId("850717-5019"));
+            GenericService service = serviceFactory.getService(SchoolClassService.class);
+            System.out.println(service.findAll());
 //            StatementService statementService = serviceFactory.getStatementService();
 //            Statement statement = new Statement();
 //            statement.setStatus(StatementStatus.created);
@@ -224,7 +229,7 @@ public class IvisServiceFactory {
             e.printStackTrace();
         }
 
-//        IvisServiceFactory serviceFactory = IvisFacade.getServiceFactory(resource, accessToken);
+//        DefaultIvisServiceFactory serviceFactory = IvisFacade.getServiceFactory(resource, accessToken);
 ////        SchoolService schoolService = serviceFactory.getService(SchoolService.class);
 ////        List<School> schools = schoolService.findAll();
 ////        System.out.println(schools);

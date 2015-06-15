@@ -16,6 +16,16 @@ import java.util.Map;
 public class IvisLoginUrlAuthenticationEntryPoint extends LoginUrlAuthenticationEntryPoint {
     private List<String> redirectParameterNames = Collections.emptyList();
 
+
+//    /**
+//     * @param loginFormUrl URL where the login page can be found. Should either be
+//     *                     relative to the web-app context path (include a leading {@code /}) or an absolute
+//     *                     URL.
+//     */
+//    public IvisLoginUrlAuthenticationEntryPoint(String loginFormUrl) {
+//        super(loginFormUrl);
+//    }
+
     @Override
     protected String determineUrlToUseForThisRequest(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath(getLoginFormUrl());

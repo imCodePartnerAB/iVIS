@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "dbo_phone")
+//@Embeddable
 public class Phone extends AbstractIdEntity  implements Serializable {
     @Column
     private String number;
@@ -43,5 +44,10 @@ public class Phone extends AbstractIdEntity  implements Serializable {
 
     public void setCommunicationType(CommunicationTypeEnum communicationType) {
         this.communicationType = communicationType;
+    }
+
+    @Override
+    public String toString() {
+        return number;
     }
 }

@@ -2,6 +2,7 @@ package imcode.services.restful;
 
 import com.imcode.entities.AbstractIdEntity;
 import com.imcode.services.GenericService;
+import imcode.services.IvisServiceFactory;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -10,7 +11,8 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.web.client.RestTemplate;
-
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.LinkedList;
@@ -36,6 +38,40 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     private RestServiseRequest deleteRequest;
 
     private IvisServiceFactory factory;
+
+    public static class RestServiseRequest {
+        private static final HttpMethod DEFAULT_METHOD = HttpMethod.GET;
+        private String address;
+        private HttpMethod method = DEFAULT_METHOD;
+
+        public RestServiseRequest() {
+        }
+
+        public RestServiseRequest(String address) {
+            this.address = address;
+        }
+
+        public RestServiseRequest(String address, HttpMethod method) {
+            this.address = address;
+            this.method = method;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public HttpMethod getMethod() {
+            return method;
+        }
+
+        public void setMethod(HttpMethod method) {
+            this.method = method;
+        }
+    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public AbstractOAuth2Service() {
@@ -63,8 +99,8 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         return new OAuth2RestTemplate(getClient(), getClientContext());
     }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public T save(T entity) {
@@ -102,7 +138,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         String uri = request.getAddress();
         HttpMethod method = request.getMethod();
 
-        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getGeneticType("T"), uriVariables);
+        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getEntityClass(), uriVariables);
 
         if (responseEntity.getBody() != null) {
             result = (T) responseEntity.getBody();
@@ -169,9 +205,34 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
         return null;
     }
+    protected ParameterizedTypeReference getListTypeReference() {
+        Class entityClass = getEntityClass();
+        ParameterizedTypeReference typeReference = new ParameterizedTypeReference<List>() {
+            @Override
+            public Type getType() {
+                return ParameterizedTypeImpl.make(List.class, new Class[]{entityClass}, null);
+            }
+        };
 
-    abstract protected ParameterizedTypeReference getListTypeReference();
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        return typeReference;
+    }
+
+    protected Class getEntityClass() {
+        Type[] genericArguments = getGenericParameterTypes();
+        return (Class) genericArguments[0];
+    }
+
+    protected Class getIdClass() {
+        Type[] genericArguments = getGenericParameterTypes();
+        return (Class) genericArguments[1];
+    }
+
+    protected Type[] getGenericParameterTypes() {
+        ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+        return parameterizedType.getActualTypeArguments();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public String getMainServiceAddres() {
         return mainServiceAddres;
     }
@@ -239,37 +300,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     }
 
-    public static class RestServiseRequest {
-        private static final HttpMethod DEFAULT_METHOD = HttpMethod.GET;
-        private String address;
-        private HttpMethod method = DEFAULT_METHOD;
-
-        public RestServiseRequest() {
-        }
-
-        public RestServiseRequest(String address) {
-            this.address = address;
-        }
-
-        public RestServiseRequest(String address, HttpMethod method) {
-            this.address = address;
-            this.method = method;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public void setAddress(String address) {
-            this.address = address;
-        }
-
-        public HttpMethod getMethod() {
-            return method;
-        }
-
-        public void setMethod(HttpMethod method) {
-            this.method = method;
-        }
-    }
+//    protected String getDefaultServiseLocation() {
+//        this.
+//    }
 }

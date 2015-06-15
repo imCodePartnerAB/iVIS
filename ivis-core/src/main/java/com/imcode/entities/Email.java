@@ -44,4 +44,9 @@ public class Email extends AbstractIdEntity  implements Serializable {
     public void setCommunicationType(CommunicationTypeEnum communicationType) {
         this.communicationType = communicationType;
     }
+
+    @Override
+    public String toString() {
+        return address;
+    }
 }

@@ -20,8 +20,4 @@
 <%--</div>--%>
 <%--</form>--%>
 
-<html>
-<body>
-    <h1>New Car</h1>
-</body>
-</html>
+<h1>New Car</h1>

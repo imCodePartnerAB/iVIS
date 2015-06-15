@@ -8,8 +8,9 @@ import com.imcode.imcms.addon.ivisclient.controllers.form.Message;
 import com.imcode.imcms.addon.ivisclient.controllers.form.MessageType;
 import com.imcode.services.PupilService;
 import com.imcode.services.StatementService;
+import imcode.services.IvisServiceFactory;
+import imcode.services.restful.DefaultIvisServiceFactory;
 import imcode.services.restful.IvisFacade;
-import imcode.services.restful.IvisServiceFactory;
 import imcode.services.utils.IvisOAuth2Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,13 +31,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
@@ -71,6 +72,9 @@ public class IvisController {
     @Value("${ClientAddress}")
     private String clientAddress;
 
+    @Autowired
+    private IvisServiceFactory ivisServiceFactory;
+
 
     @RequestMapping(value = "/code")
     @ResponseBody
@@ -78,7 +82,8 @@ public class IvisController {
                           HttpServletRequest request,
                           HttpServletResponse response,
                           @RequestParam(value = "code", required = false) String code,
-                          @RequestParam(value = "redirect_uri", required = false) String redirectUri
+                          @RequestParam(value = "redirect_uri", required = false) String redirectUri,
+                          @RequestParam(value = "docId", required = false) String docId
     ) throws URISyntaxException, IOException {
 
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
@@ -93,6 +98,8 @@ public class IvisController {
         ResponseEntity<OAuth2AccessToken> result = restTemplate.postForEntity(client.getAccessTokenUri(), httpEntity, OAuth2AccessToken.class);
 
         IvisOAuth2Utils.setAccessToken(request, result.getBody());
+
+//        IvisOAuth2Utils.createServiceFactory(request.getSession(), client, serverAddress);
 //        response.sendRedirect(statementsAddress);
         response.sendRedirect(clientAddress + "/show.jsp");
 
@@ -116,7 +123,7 @@ public class IvisController {
                 .endPointUrl(serverAddress)
                 .responseType("json")
                 .version("v1").build());
-        IvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
+        DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
         StatementService service = factory.getStatementService();
 
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
@@ -159,7 +166,7 @@ public class IvisController {
                     .endPointUrl(serverAddress)
                     .responseType("json")
                     .version("v1").build());
-            IvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
+            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
             StatementService statementService = factory.getStatementService();
             PupilService pupilService = factory.getPupilService();
 
@@ -192,7 +199,23 @@ public class IvisController {
         return "xml/show";
     }
 
+    @RequestMapping(value = "/pupils", method = RequestMethod.POST)
+    @ResponseBody
+    public String updatePupil(@ModelAttribute("pupil") Pupil pupil,
+                              HttpServletRequest request,
+                              HttpServletResponse response) throws IOException {
+
+        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
+        pupilService.save(pupil);
+        String returnToUri = request.getHeader("referer");
+        response.sendRedirect(returnToUri);
+
+        return "OK";
+    }
+
+
     private static Statement pharseXml(InputStream inputStream) {
+
         StatmentHandler handler = new StatmentHandler();
 
         try {

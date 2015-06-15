@@ -2,7 +2,7 @@
                  com.imcode.services.StatementService" pageEncoding="UTF-8" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.restful.IvisFacade" %>
-<%@ page import="imcode.services.restful.IvisServiceFactory" %>
+<%@ page import="imcode.services.restful.DefaultIvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
 <%@ page import="org.apache.oro.text.perl.Perl5Util" %>
 <%@ page import="org.springframework.context.ApplicationContext" %>
@@ -12,6 +12,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
 <%@ page import="org.springframework.security.oauth2.client.OAuth2ClientContext" %>
+<%@ page import="imcode.services.IvisServiceFactory" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -57,24 +58,27 @@
 </script>
 <%
     } else {
-        OAuth2ClientContext clientContext = IvisOAuth2Utils.getClientContext(session);
+//        OAuth2ClientContext clientContext = IvisOAuth2Utils.getClientContext(session);
+//        OAuth2AccessToken accessToken = IvisOAuth2Utils.getAccessToken(request);
 
-        if (client != null) {
-            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
-                    .endPointUrl(Imcms.getServerProperties().getProperty("ServerAddress"))
-                    .responseType("json")
-                    .version("v1").build());
-            IvisServiceFactory factory = ivis.getServiceFactory(client, clientContext);
-            StatementService service = factory.getStatementService();
-            Statement statement = null;
-            try {
-                statement = service.find(Long.valueOf(request.getParameter("id")));
-            } catch (UserRedirectRequiredException e) {
-                IvisOAuth2Utils.setAccessToken(session, null);
-                response.sendRedirect(Imcms.getServerProperties().getProperty("StatementsAddress"));
-                return;
-            }
-            request.setAttribute("statement", statement);
+//        if (client != null) {
+//            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
+//                    .endPointUrl(Imcms.getServerProperties().getProperty("ServerAddress"))
+//                    .responseType("json")
+//                    .version("v1").build());
+//            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, clientContext);
+        if (IvisOAuth2Utils.isTokenGood(request)) {
+        IvisServiceFactory factory = IvisOAuth2Utils.getServiceFactory(request);
+        StatementService service = factory.getService(StatementService.class);
+        Statement statement = null;
+        try {
+            statement = service.find(Long.valueOf(request.getParameter("id")));
+        } catch (UserRedirectRequiredException e) {
+            IvisOAuth2Utils.setAccessToken(session, null);
+            response.sendRedirect(Imcms.getServerProperties().getProperty("StatementsAddress"));
+            return;
+        }
+        request.setAttribute("statement", statement);
         }
     }
 %>

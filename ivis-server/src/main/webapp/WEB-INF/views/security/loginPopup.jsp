@@ -17,7 +17,7 @@
 <div class="login-pop-up-form">
     <h1>${labelTitle}</h1>
 
-    <form action="<c:url value="${loginUrl}"/>" method="post">
+    <form action="${loginUrl}" method="post">
         <div class="field">
             <label>${labelUsername}</label>
             <input type="text" name="j_username"/>

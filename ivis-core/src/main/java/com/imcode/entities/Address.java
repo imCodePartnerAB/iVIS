@@ -14,7 +14,7 @@ public class Address extends AbstractIdEntity implements Serializable {
     private Integer postalCode;
 
     @Column
-    private Long municipality_code;
+    private String municipalityCode;
 
     @Column(length = 50)
     private String city;
@@ -40,12 +40,12 @@ public class Address extends AbstractIdEntity implements Serializable {
         this.postalCode = postalCode;
     }
 
-    public Long getMunicipality_code() {
-        return municipality_code;
+    public String getMunicipalityCode() {
+        return municipalityCode;
     }
 
-    public void setMunicipality_code(Long municipality_code) {
-        this.municipality_code = municipality_code;
+    public void setMunicipalityCode(String municipality_code) {
+        this.municipalityCode = municipality_code;
     }
 
     public String getCity() {
@@ -86,5 +86,19 @@ public class Address extends AbstractIdEntity implements Serializable {
 
     public void setAddressType(AddressTypeEnum addressType) {
         this.addressType = addressType;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder()
+                .append(addressType)
+                .append(postalCode)
+                .append(city)
+                .append('(')
+                .append(municipalityCode)
+                .append("), ")
+                .append(street);
+
+        return sb.toString();
     }
 }

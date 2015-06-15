@@ -10,6 +10,9 @@
         <module>ivis-server</module>
         <module>ivis-client</module>
     </modules>
+    <properties>
+        <spring-oauth2.version>2.0.5.RELEASE</spring-oauth2.version>
+    </properties>
     <packaging>pom</packaging>
     <name>iVIS</name>
     <dependencies>

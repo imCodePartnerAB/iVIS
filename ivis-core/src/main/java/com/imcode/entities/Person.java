@@ -1,7 +1,10 @@
 package com.imcode.entities;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.io.Serializable;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
 /**
  * Created by vitaly on 13.05.15.
@@ -18,23 +21,27 @@ public class Person extends AbstractIdEntity  implements Serializable {
     @Column
     private String lastName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_person_address_cross",
             joinColumns = @JoinColumn(name = "personId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "id"))
-    private Set<Address> addresses;
+    private List<Address> addresses;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_person_email_cross",
             joinColumns = @JoinColumn(name = "personId"),
             inverseJoinColumns = @JoinColumn(name = "emailId"))
-    private Set<Email> emails;
+    private List<Email> emails;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "dbo_person_phone_cross",
             joinColumns = @JoinColumn(name = "personId"),
             inverseJoinColumns = @JoinColumn(name = "phoneId"))
-    private Set<Phone> phones;
+    private List<Phone> phones;
+//    private Set<Phone> phones;
 
     public Person(){
     }
@@ -69,11 +76,11 @@ public class Person extends AbstractIdEntity  implements Serializable {
         this.lastName = lastName;
     }
 
-    public Set<Address> getAddresses() {
+    public List<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(Set<Address> addresses) {
+    public void setAddresses(List<Address> addresses) {
         this.addresses = addresses;
     }
 
@@ -85,20 +92,28 @@ public class Person extends AbstractIdEntity  implements Serializable {
         this.personalId = personalId;
     }
 
-    public Set<Email> getEmails() {
+    public List<Email> getEmails() {
         return emails;
     }
 
-    public void setEmails(Set<Email> emails) {
+    public void setEmails(List<Email> emails) {
         this.emails = emails;
     }
 
-    public Set<Phone> getPhones() {
-        return phones;
+//    public List<Phone> getPhoneList() {
+//        return new LinkedList<>(phones);
+//    }
+//
+//    public void setPhoneList(List<Phone> phones) {
+//        this.phones = new LinkedHashSet<>(phones);
+//    }
+
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
     }
 
-    public void setPhones(Set<Phone> phones) {
-        this.phones = phones;
+    public List<Phone> getPhones() {
+        return phones;
     }
 
     public static Person fromString(String firstNameLastName) {

@@ -9,15 +9,16 @@ import java.util.LinkedList;
 /**
  * Created by vitaly on 27.05.15.
  */
+@Deprecated
 public class OAuth2SchoolClassService extends AbstractOAuth2Service<SchoolClass, Long> implements SchoolClassService {
     public OAuth2SchoolClassService() {
     }
 
-    public OAuth2SchoolClassService(IvisServiceFactory factory, String mainServiceAddres) {
+    public OAuth2SchoolClassService(DefaultIvisServiceFactory factory, String mainServiceAddres) {
         super(factory, mainServiceAddres);
     }
 
-    public OAuth2SchoolClassService(IvisServiceFactory factory) {
+    public OAuth2SchoolClassService(DefaultIvisServiceFactory factory) {
         super(factory);
     }
 

@@ -32,10 +32,10 @@ public class SchoolClass extends AbstractNamedEntity implements Serializable {
     @JoinColumn(name = "school")
     private School school;
 
-    //    @JsonIgnore
-    @JsonManagedReference
-    @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
-    private Set<Pupil> pupils;
+//    //    @JsonIgnore
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
+//    private Set<Pupil> pupils;
 
 
     public SchoolClass() {
@@ -77,11 +77,11 @@ public class SchoolClass extends AbstractNamedEntity implements Serializable {
         this.school = school;
     }
 
-    public Set<Pupil> getPupils() {
-        return pupils;
-    }
-
-    public void setPupils(Set<Pupil> pupils) {
-        this.pupils = pupils;
-    }
+//    public Set<Pupil> getPupils() {
+//        return pupils;
+//    }
+//
+//    public void setPupils(Set<Pupil> pupils) {
+//        this.pupils = pupils;
+//    }
 }
