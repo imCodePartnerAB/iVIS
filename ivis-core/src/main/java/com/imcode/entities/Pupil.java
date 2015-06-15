@@ -5,6 +5,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 /**
@@ -31,7 +32,7 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "pupilId"),
             inverseJoinColumns = @JoinColumn(name = "guardianId"))
-    private Set<Guardian> guardians;
+    private List<Guardian> guardians;
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER)
     private Set<Truancy> truancies;
@@ -68,11 +69,11 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
         this.truancies = truancies;
     }
 
-    public Set<Guardian> getGuardians() {
+    public List<Guardian> getGuardians() {
         return guardians;
     }
 
-    public void setGuardians(Set<Guardian> guardians) {
+    public void setGuardians(List<Guardian> guardians) {
         this.guardians = guardians;
     }
 
@@ -85,7 +86,7 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
             .append(person.getFirstName());
 
         }
-        sb.append("(").append(academicYear.getName());
+        sb.append("(").append(academicYear);
         sb.append(":").append(schoolClass);
         sb.append(")}");
         return sb.toString();

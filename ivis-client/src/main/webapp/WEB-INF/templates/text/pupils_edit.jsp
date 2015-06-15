@@ -126,7 +126,7 @@
             <div id="addresses">
                 <c:forEach var="address" items="${pupil.person.addresses}" varStatus="status">
                     <div class="field" id="addresses${status.index}Field" data-index="${status.index}">
-                        <form:hidden path="person.addresses[${status.index}].id"/>
+                        <%--<form:hidden path="person.addresses[${status.index}].id"/>--%>
 
                         <form:select path="person.addresses[${status.index}].addressType"
                                      items="${addressTypeEnum}"/>
@@ -165,7 +165,7 @@
             <div id="phones">
                 <c:forEach var="phone" items="${pupil.person.phones}" varStatus="status">
                     <div class="field" id="phones${status.index}Field" data-index="${status.index}">
-                        <form:hidden path="person.phones[${status.index}].id"/>
+                        <%--<form:hidden path="person.phones[${status.index}].id"/>--%>
 
                             <%--<input type="hidden" name="person.phones[${status.index}].communicationType" value="${phone.communicationType}"/>--%>
                         <form:select path="person.phones[${status.index}].communicationType"
@@ -186,7 +186,7 @@
             <div id="emails">
                 <c:forEach var="email" items="${pupil.person.emails}" varStatus="status">
                     <div class="field" id="emails${status.index}Field" data-index="${status.index}">
-                        <form:hidden path="person.emails[${status.index}].id"/>
+                        <%--<form:hidden path="person.emails[${status.index}].id"/>--%>
 
                         <form:select path="person.emails[${status.index}].communicationType"
                                      items="${communicationTypeEnum}"/>
@@ -207,7 +207,118 @@
             </div>
         </div>
         <div id="guardiansTabPage" class="tab-page">
-            2
+            <c:forEach var="guardian" items="${pupil.guardians}" varStatus="status">
+                <c:set var="guardianItemId" value="guardians${status.index}"/>
+                <c:set var="guardianItemName" value="guardians[${status.index}]"/>
+                <h2>Guardian ${status.index + 1}</h2>
+                <form:hidden path="${guardianItemName}.id" cssErrorClass="error"/>
+
+                <form:hidden path="${guardianItemName}.person.id" cssErrorClass="error"/>
+
+                <div class="field">
+                    <form:label path="${guardianItemName}.person.personalId">Personal ID</form:label>
+                    <form:input path="${guardianItemName}.person.personalId" cssErrorClass="error"/>
+                    <form:errors path="${guardianItemName}.person.personalId" cssClass="error-description"/>
+                </div>
+
+                <div class="field">
+                    <form:label path="${guardianItemName}.person.lastName">Last name</form:label>
+                    <form:input path="${guardianItemName}.person.lastName" cssErrorClass="error"/>
+                    <form:errors path="${guardianItemName}.person.lastName" cssClass="error-description"/>
+                </div>
+
+                <div class="field">
+                    <form:label path="${guardianItemName}.person.firstName">
+                        First name
+                    </form:label>
+                    <form:input path="${guardianItemName}.person.firstName" cssErrorClass="error"/>
+                    <form:errors path="${guardianItemName}.person.firstName" cssClass="error-description"/>
+                </div>
+
+                <h2>Addresses:</h2>
+                <div id="${guardianItemId}addresses">
+                    <c:forEach var="address" items="${guardian.person.addresses}" varStatus="status">
+                        <div class="field" id="${guardianItemId}addresses${status.index}Field" data-index="${status.index}">
+                                <%--<form:hidden path="person.addresses[${status.index}].id"/>--%>
+
+                            <form:select path="${guardianItemName}.person.addresses[${status.index}].addressType"
+                                         items="${addressTypeEnum}"/>
+                            <%--<button class="negative" type="button"--%>
+                                    <%--onclick="ivis.ui.removeContainer('addresses${status.index}Field');">Remove--%>
+                            <%--</button>--%>
+                                <%--&lt;%&ndash;<input type="hidden" name="person.addresses[${status.index}].addressType" value="${address.addressType}"/>&ndash;%&gt;--%>
+
+                            <form:label path="${guardianItemName}.person.addresses[${status.index}].careOf">c/o</form:label>
+                            <form:input path="${guardianItemName}.person.addresses[${status.index}].careOf" cssErrorClass="error"/>
+                            <form:errors path="${guardianItemName}.person.addresses[${status.index}].careOf" cssClass="error-description"/>
+
+                            <form:label path="${guardianItemName}.person.addresses[${status.index}].street">Street</form:label>
+                            <form:input path="${guardianItemName}.person.addresses[${status.index}].street" cssErrorClass="error"/>
+                            <form:errors path="${guardianItemName}.person.addresses[${status.index}].street" cssClass="error-description"/>
+
+                            <form:label path="${guardianItemName}.person.addresses[${status.index}].postalCode">Postal code</form:label>
+                            <form:input path="${guardianItemName}.person.addresses[${status.index}].postalCode" cssErrorClass="error"/>
+                            <form:errors path="${guardianItemName}.person.addresses[${status.index}].postalCode" cssClass="error-description"/>
+
+                            <form:label path="${guardianItemName}.person.addresses[${status.index}].city">City</form:label>
+                            <form:input path="${guardianItemName}.person.addresses[${status.index}].city" cssErrorClass="error"/>
+                            <form:errors path="${guardianItemName}.person.addresses[${status.index}].city" cssClass="error-description"/>
+
+                            <form:label
+                                    path="${guardianItemName}.person.addresses[${status.index}].municipalityCode">Municipality code</form:label>
+                            <form:input path="${guardianItemName}.person.addresses[${status.index}].municipalityCode" cssErrorClass="error"/>
+                            <form:errors path="${guardianItemName}.person.addresses[${status.index}].municipalityCode"
+                                         cssClass="error-description"/>
+                        </div>
+                    </c:forEach>
+                    <%--<button class="positive" type="button" onclick="ivis.ui.addAddress();">Add</button>--%>
+                </div>
+
+                <h2>Contact information:</h2>
+                <div id="${guardianItemId}phones">
+                    <c:forEach var="phone" items="${guardian.person.phones}" varStatus="status">
+                        <div class="field" id="${guardianItemId}phones${status.index}Field" data-index="${status.index}">
+                                <%--<form:hidden path="person.phones[${status.index}].id"/>--%>
+
+                                <%--<input type="hidden" name="person.phones[${status.index}].communicationType" value="${phone.communicationType}"/>--%>
+                            <form:select path="${guardianItemName}.person.phones[${status.index}].communicationType"
+                                         items="${communicationTypeEnum}"/>
+                            <%--<button class="negative" type="button"--%>
+                                    <%--onclick="ivis.ui.removeContainer('phones${status.index}Field');">Remove--%>
+                            <%--</button>--%>
+                            <form:label path="${guardianItemName}.person.phones[${status.index}].number">Phone</form:label>
+                            <form:input path="${guardianItemName}.person.phones[${status.index}].number" cssErrorClass="error"/>
+                            <form:errors path="${guardianItemName}.person.phones[${status.index}].number" cssClass="error-description"/>
+                        </div>
+                    </c:forEach>
+                    <%--<button class="positive" type="button" onclick="ivis.ui.addPhone();">Add</button>--%>
+                </div>
+
+                <%--<h2>Emails:</h2>--%>
+
+                <div id="${guardianItemId}emails">
+                    <c:forEach var="email" items="${guardian.person.emails}" varStatus="status">
+                        <div class="field" id="${guardianItemId}emails${status.index}Field" data-index="${status.index}">
+                                <%--<form:hidden path="person.emails[${status.index}].id"/>--%>
+
+                            <form:select path="${guardianItemName}.person.emails[${status.index}].communicationType"
+                                         items="${communicationTypeEnum}"/>
+                            <%--<button class="negative" type="button"--%>
+                                    <%--onclick="ivis.ui.removeContainer('emails${status.index}Field');">Remove--%>
+                            <%--</button>--%>
+                            <form:label
+                                    path="${guardianItemName}.person.emails[${status.index}].address">Email</form:label>
+                            <form:input path="${guardianItemName}.person.emails[${status.index}].address" cssErrorClass="error"/>
+                            <form:errors path="${guardianItemName}.person.emails[${status.index}].address" cssClass="error-description"/>
+                        </div>
+                    </c:forEach>
+                    <%--<button class="positive" type="button" onclick="ivis.ui.addEmail();">Add</button>--%>
+                </div>
+                </c:forEach>
+            <div class="buttons">
+                <button class="positive" type="submit">Save</button>
+                <a class="button neutral" type="/pupils">Cancel</a>
+            </div>
         </div>
         <div id="schoolAndClassTabPage" class="tab-page">
             3

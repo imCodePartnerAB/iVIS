@@ -1,5 +1,6 @@
 package imcode.services.restful;
 
+import com.imcode.entities.Pupil;
 import com.imcode.services.*;
 import imcode.services.IvisServiceFactory;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -196,9 +197,10 @@ public class DefaultIvisServiceFactory implements imcode.services.IvisServiceFac
 //            DefaultIvisServiceFactory serviceFactory = facade.getServiceFactory(resource, clientContext);
             IvisServiceFactory serviceFactory = new ProxyIvisServiceFactory("http://localhost:8080/ivis/api/v1/json", clientContext, resource);
 //            SchoolClassService service = serviceFactory.getSchoolClassService();
-//            PupilService service = serviceFactory.getPupilService();
+            PupilService service = serviceFactory.getService(PupilService.class);
 //            System.out.println(service.findByPersonalId("850717-5019"));
-            GenericService service = serviceFactory.getService(SchoolClassService.class);
+//            GenericService service = serviceFactory.getService(SchoolClassService.class);
+            List<Pupil> pupilList = service.findAll();
             System.out.println(service.findAll());
 //            StatementService statementService = serviceFactory.getStatementService();
 //            Statement statement = new Statement();
@@ -227,6 +229,7 @@ public class DefaultIvisServiceFactory implements imcode.services.IvisServiceFac
 //            System.out.println(responseEntity.getBody());
         } catch (Exception e) {
             e.printStackTrace();
+
         }
 
 //        DefaultIvisServiceFactory serviceFactory = IvisFacade.getServiceFactory(resource, accessToken);

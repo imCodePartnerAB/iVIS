@@ -1,5 +1,6 @@
-package com.imcode.entities;
+package com.imcode.entities.embed;
 
+import com.imcode.entities.AbstractIdEntity;
 import com.imcode.entities.enums.AddressTypeEnum;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,9 +8,10 @@ import java.io.Serializable;
 /**
  * Created by vitaly on 13.05.15.
  */
-@Entity
-@Table(name = "dbo_address")
-public class Address extends AbstractIdEntity implements Serializable {
+//@Entity
+//@Table(name = "dbo_address")
+@Embeddable
+public class Address implements Serializable {
     @Column
     private Integer postalCode;
 

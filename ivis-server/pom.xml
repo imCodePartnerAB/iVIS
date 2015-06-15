@@ -24,8 +24,8 @@
         <tiles-version>2.2.2</tiles-version>
     </properties>
     <dependencies>
-        <!-- Form Validation using Annotations -->
 
+        <!-- Form Validation using Annotations -->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>

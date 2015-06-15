@@ -1,5 +1,8 @@
 package com.imcode.entities;
 
+import com.imcode.entities.embed.Address;
+import com.imcode.entities.embed.Email;
+import com.imcode.entities.embed.Phone;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -22,25 +25,32 @@ public class Person extends AbstractIdEntity  implements Serializable {
     private String lastName;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_person_address_cross",
-            joinColumns = @JoinColumn(name = "personId", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "id"))
+//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
+//    @JoinTable(name = "dbo_person_address_cross",
+//            joinColumns = @JoinColumn(name = "personId", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "id"))
+    @ElementCollection
+    @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
     private List<Address> addresses;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_person_email_cross",
-            joinColumns = @JoinColumn(name = "personId"),
-            inverseJoinColumns = @JoinColumn(name = "emailId"))
+//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
+//    @JoinTable(name = "dbo_person_email_cross",
+//            joinColumns = @JoinColumn(name = "personId"),
+//            inverseJoinColumns = @JoinColumn(name = "emailId"))
+    @ElementCollection
+    @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "ownerId"))
     private List<Email> emails;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(name = "dbo_person_phone_cross",
-            joinColumns = @JoinColumn(name = "personId"),
-            inverseJoinColumns = @JoinColumn(name = "phoneId"))
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+//    @JoinTable(name = "dbo_person_phone_cross",
+//            joinColumns = @JoinColumn(name = "personId"),
+//            inverseJoinColumns = @JoinColumn(name = "phoneId"))
+    @ElementCollection
+    @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "ownerId"))
     private List<Phone> phones;
+
 //    private Set<Phone> phones;
 
     public Person(){

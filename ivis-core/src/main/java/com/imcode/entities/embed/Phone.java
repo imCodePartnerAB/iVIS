@@ -1,4 +1,4 @@
-package com.imcode.entities;
+package com.imcode.entities.embed;
 
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import javax.persistence.*;
@@ -7,10 +7,11 @@ import java.io.Serializable;
 /**
  * Created by vitaly on 13.05.15.
  */
-@Entity
-@Table(name = "dbo_phone")
-//@Embeddable
-public class Phone extends AbstractIdEntity  implements Serializable {
+//@Entity
+//@Table(name = "dbo_phone")
+@Embeddable
+//public class Phone extends AbstractIdEntity  implements Serializable {
+public class Phone implements Serializable {
     @Column
     private String number;
 

@@ -20,12 +20,9 @@
         <!--<hibernate.version>3.6.9.Final</hibernate.version>-->
         <org.slf4j-version>1.7.5</org.slf4j-version>
         <tiles-version>2.2.2</tiles-version>
-        <!--<properties>-->
-            <spring-framework.version>4.1.5.RELEASE</spring-framework.version>
+            <!--<spring-framework.version>4.1.5.RELEASE</spring-framework.version>-->
             <spring-security.version>4.0.1.RELEASE</spring-security.version>
             <hibernate.version>4.3.10.Final</hibernate.version>
-        <!--</properties>-->
-        <asdf>${spring-framework.version}</asdf>
     </properties>
     <!--Spring OAuth2-->
     <dependencies>

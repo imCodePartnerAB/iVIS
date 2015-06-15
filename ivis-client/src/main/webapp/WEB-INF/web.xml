@@ -8,12 +8,6 @@
          metadata-complete="true">
 
     <context-param>
-        <description>Vaadin production mode</description>
-        <param-name>productionMode</param-name>
-        <param-value>false</param-value>
-    </context-param>
-
-    <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
     </context-param>
@@ -57,16 +51,6 @@
 
     <filter>
         <description>
-            Restricts access to the SysAdmin
-        </description>
-
-        <display-name>Über Admin Filter</display-name>
-        <filter-name>UberAdminFilter</filter-name>
-        <filter-class>com.imcode.imcms.admin.uber.UberAdminFilter</filter-class>
-    </filter>
-
-    <filter>
-        <description>
             Restricts access to mapped resources to users who are in the superadmin role.
             Currently API samples only.
         </description>
@@ -75,10 +59,10 @@
         <filter-class>com.imcode.imcms.servlet.SuperAdminFilter</filter-class>
     </filter>
 
-    <filter>
+    <!--<filter>
         <filter-name>ImageArchiveAccessFilter</filter-name>
         <filter-class>com.imcode.imcms.addon.imagearchive.util.AccessFilter</filter-class>
-    </filter>
+    </filter>-->
 
     <filter>
         <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
@@ -95,7 +79,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <filter-mapping>
+    <!--<filter-mapping>
         <filter-name>SuperAdminFilter</filter-name>
         <url-pattern>/imcms/docs/apisamples/*</url-pattern>
     </filter-mapping>
@@ -113,7 +97,7 @@
     <filter-mapping>
         <filter-name>UberAdminFilter</filter-name>
         <url-pattern>/imcms/admin/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 
     <!--<security-constraint>-->
     <!--<web-resource-collection>-->
@@ -134,119 +118,6 @@
     <!--<transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
     <!--</user-data-constraint>-->
     <!--</security-constraint>-->
-
-    <servlet>
-        <servlet-name>vaadin-uberadmin</servlet-name>
-        <servlet-class>
-            com.vaadin.server.VaadinServlet
-        </servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.imcode.imcms.admin.uber.UberAdminUI</param-value>
-        </init-param>
-    </servlet>
-
-    <servlet>
-        <servlet-name>vaadin-docadmin</servlet-name>
-        <servlet-class>
-            com.vaadin.server.VaadinServlet
-        </servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.imcode.imcms.admin.docadmin.DocEditorUI</param-value>
-        </init-param>
-
-        <init-param>
-            <description>Widget Set to Use</description>
-            <param-name>widgetset</param-name>
-            <param-value>com.imcode.imcms.AppWidgetSet</param-value>
-        </init-param>
-    </servlet>
-
-    <servlet>
-        <servlet-name>vaadin-docadmin-image</servlet-name>
-        <servlet-class>
-            com.vaadin.server.VaadinServlet
-        </servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.imcode.imcms.admin.docadmin.image.ImageEditorUI</param-value>
-        </init-param>
-
-        <init-param>
-            <description>Widget Set to Use</description>
-            <param-name>widgetset</param-name>
-            <param-value>com.imcode.imcms.AppWidgetSet</param-value>
-        </init-param>
-    </servlet>
-
-    <servlet>
-        <servlet-name>vaadin-docadmin-menu</servlet-name>
-        <servlet-class>
-            com.vaadin.server.VaadinServlet
-        </servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.imcode.imcms.admin.docadmin.menu.MenuEditorUI</param-value>
-        </init-param>
-
-        <init-param>
-            <description>Widget Set to Use</description>
-            <param-name>widgetset</param-name>
-            <param-value>com.imcode.imcms.AppWidgetSet</param-value>
-        </init-param>
-    </servlet>
-
-    <servlet>
-        <servlet-name>vaadin-docadmin-text</servlet-name>
-        <servlet-class>
-            com.vaadin.server.VaadinServlet
-        </servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.imcode.imcms.admin.docadmin.text.TextEditorUI</param-value>
-        </init-param>
-
-        <init-param>
-            <description>Widget Set to Use</description>
-            <param-name>widgetset</param-name>
-            <param-value>com.imcode.imcms.AppWidgetSet</param-value>
-        </init-param>
-    </servlet>
-
-    <servlet>
-        <servlet-name>vaadin-docadmin-loop</servlet-name>
-        <servlet-class>
-            com.vaadin.server.VaadinServlet
-        </servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.imcode.imcms.admin.docadmin.loop.LoopEditorUI</param-value>
-        </init-param>
-    </servlet>
-
-
-    <servlet>
-        <servlet-name>EditImageUI</servlet-name>
-        <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
-
-        <init-param>
-            <param-name>UI</param-name>
-            <param-value>com.imcode.imcms.admin.docadmin.image.EditImageUI</param-value>
-        </init-param>
-
-        <init-param>
-            <description>Widget Set to Use</description>
-            <param-name>widgetset</param-name>
-            <param-value>com.imcode.imcms.AppWidgetSet</param-value>
-        </init-param>
-    </servlet>
 
     <servlet>
         <servlet-name>web</servlet-name>
@@ -805,42 +676,6 @@
     <servlet-mapping>
         <servlet-name>com.imcode.imcms.servlet.RebuildImageCache</servlet-name>
         <url-pattern>/servlet/RebuildImageCache</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>vaadin-uberadmin</servlet-name>
-        <url-pattern>/imcms/admin/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>vaadin-docadmin-text</servlet-name>
-        <url-pattern>/imcms/docadmin/text/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>vaadin-docadmin-menu</servlet-name>
-        <url-pattern>/imcms/docadmin/menu/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>vaadin-docadmin-image</servlet-name>
-        <url-pattern>/imcms/docadmin/image/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>vaadin-docadmin-loop</servlet-name>
-        <url-pattern>/imcms/docadmin/loop/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>vaadin-docadmin</servlet-name>
-        <url-pattern>/imcms/docadmin/*</url-pattern>
-        <url-pattern>/VAADIN/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>EditImageUI</servlet-name>
-        <url-pattern>/EditImage/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
