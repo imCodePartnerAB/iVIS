@@ -194,6 +194,7 @@ public class IvisController {
     }
 
     @RequestMapping(value = "/xml", method = RequestMethod.GET)
+    @ResponseBody
     public String showImportApplicationForm() {
 
         return "xml/show";
@@ -214,7 +215,9 @@ public class IvisController {
     }
 
 
-    private static Statement pharseXml(InputStream inputStream) {
+
+
+   private static Statement pharseXml(InputStream inputStream) {
 
         StatmentHandler handler = new StatmentHandler();
 

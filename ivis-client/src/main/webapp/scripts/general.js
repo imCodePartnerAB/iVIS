@@ -26,7 +26,7 @@ IVis.Tabs.prototype =
             }
         );
 
-        $(".tabs > .tab").first().click();
+        $(".tabs > .tab").first().next().next().click();
     }
 };
 
@@ -44,6 +44,43 @@ IVis.UI.prototype =
         $("#" + containerId).remove();
     },
 
+    getNewItemIndex: function (tag) {
+        var value = 0;
+        $("#" + tag + " .field[data-index]").each(function (index, element) {
+            if (parseInt($(element).data("index")) > value)
+                value = parseInt($(element).data("index"));
+        });
+
+        return value + 1;
+    },
+
+    addPhone: function () {
+        var subContainerName = "phones";
+        var itemIndex = this.getNewItemIndex(subContainerName);
+        var conteinerName = "person." + subContainerName;
+        var conteinerId = subContainerName + itemIndex + "Field";
+
+        var container = $("<div>")
+            .addClass("field")
+            .attr("id", conteinerId)
+            .attr("data-index", itemIndex)
+            .insertBefore($("#" + subContainerName + " .positive"));
+
+        this.addSelect(container, itemIndex, conteinerName, "communicationType", communicationTypeEnum);
+
+        var $this = this;
+        $("<button>")
+            .addClass("negative")
+            .attr("type", "button")
+            .html("Remove")
+            .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
+            //.click(function () {
+            //    $this.removeContainer(conteinerId)
+            //})
+            .appendTo(container);
+
+        this.addField(container, itemIndex, conteinerName, "number", "Phone");
+    },
 
     addField: function (owner, itemId, itemPrefix, name, labelText) {
         if (labelText != null) {
@@ -85,42 +122,21 @@ IVis.UI.prototype =
 
     },
 
-    getNewItemIndex: function (tag) {
-        var value = 0;
-        $("#" + tag + " .field[data-index]").each(function (index, element) {
-            if (parseInt($(element).data("index")) > value)
-                value = parseInt($(element).data("index"));
-        });
+    onSchoolChange: function(value) {
+        $.getJSON("/client/api/content/rest/School/" + value,
+            function(result){
+                $("#schoolIdLabel").html(result.schoolId);
+                var schoolClasses = result.schoolClasses;
+                var schoolClassesSelect = $("#schoolClass\\.id");
+                schoolClassesSelect.html("");
 
-        return value + 1;
-    },
-
-    addPhone: function () {
-        var subContainerName = "phones";
-        var itemIndex = this.getNewItemIndex(subContainerName);
-        var conteinerName = "person." + subContainerName;
-        var conteinerId = subContainerName + itemIndex + "Field";
-
-        var container = $("<div>")
-            .addClass("field")
-            .attr("id", conteinerId)
-            .attr("data-index", itemIndex)
-            .insertBefore($("#" + subContainerName + " .positive"));
-
-        this.addSelect(container, itemIndex, conteinerName, "communicationType", communicationTypeEnum);
-
-        var $this = this;
-        $("<button>")
-            .addClass("negative")
-            .attr("type", "button")
-            .html("Remove")
-            .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
-            //.click(function () {
-            //    $this.removeContainer(conteinerId)
-            //})
-            .appendTo(container);
-
-        this.addField(container, itemIndex, conteinerName, "number", "Phone");
+                for(var i = 0; i < schoolClasses.length; i++) {
+                    $("<option>")
+                        .attr("value", schoolClasses[i].id)
+                        .html(schoolClasses[i].name)
+                        .appendTo(schoolClassesSelect);
+                }
+            });
     },
 
 addEmail: function () {

@@ -19,11 +19,17 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
     private Person person;
 
 //    @JsonBackReference
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "schoolClassId")
     private SchoolClass schoolClass;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "schoolId")
+    private School school;
+
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "academicYearId")
     private AcademicYear academicYear;
 
@@ -75,6 +81,14 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
 
     public void setGuardians(List<Guardian> guardians) {
         this.guardians = guardians;
+    }
+
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
     }
 
     @Override

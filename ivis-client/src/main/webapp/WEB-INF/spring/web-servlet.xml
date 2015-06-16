@@ -26,7 +26,27 @@
     <!-- Configure bean to convert JSON to POJO and vice versa -->
     <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
     </bean>
-    <mvc:annotation-driven content-negotiation-manager="cnManager"/>
+    <mvc:annotation-driven content-negotiation-manager="cnManager" conversion-service="conversionService"/>
+
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <ref bean="schoolClassConverter"/>
+                <ref bean="schoolConverter"/>
+                <ref bean="academicYearConverter"/>
+            </set>
+        </property>
+    </bean>
+    <!--<bean id="conversionService"-->
+          <!--class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+            <!-- -->
+    <!--< name="converters">-->
+        <!--&lt;!&ndash;<set>&ndash;&gt;-->
+            <!--&lt;!&ndash;<bean class="example.MyCustomConverter"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;</set>&ndash;&gt;-->
+    <!--&lt;!&ndash;</prop&ndash;&gt;-->
+
+        <!--<list></list>-->
 
     <bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
         <property name="favorPathExtension" value="false"/>

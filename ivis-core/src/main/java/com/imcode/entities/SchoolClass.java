@@ -30,6 +30,7 @@ public class SchoolClass extends AbstractNamedEntity implements Serializable {
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "school")
+//    @JsonBackReference
     private School school;
 
 //    //    @JsonIgnore
@@ -77,7 +78,12 @@ public class SchoolClass extends AbstractNamedEntity implements Serializable {
         this.school = school;
     }
 
-//    public Set<Pupil> getPupils() {
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    //    public Set<Pupil> getPupils() {
 //        return pupils;
 //    }
 //

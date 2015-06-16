@@ -49,7 +49,7 @@
             <th>Last name</th>
             <th>School</th>
             <th>Class</th>
-            <%--<th>&nbsp;</th>--%>
+            <th>&nbsp;</th>
         </tr>
         </thead>
 

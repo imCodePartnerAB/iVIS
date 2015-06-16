@@ -6,16 +6,19 @@
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
 <%@ page import="com.imcode.entities.enums.AddressTypeEnum" %>
 <%@ page import="com.imcode.entities.enums.CommunicationTypeEnum" %>
-<%@ page import="java.util.Arrays" %>
 <%@ page import="com.imcode.services.SchoolService" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.imcode.entities.School" %>
+<%@ page import="com.imcode.services.SchoolClassService" %>
+<%@ page import="com.imcode.entities.SchoolClass" %>
+<%@ page import="com.imcode.services.AcademicYearService" %>
+<%@ page import="java.util.*" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <imcms:variables/>
 <jsp:include page="ivis_header.jsp"/>
 <%
@@ -27,6 +30,16 @@
         SchoolService schoolService = factory.getService(SchoolService.class);
         List<School> schoolList = schoolService.findAll();
         request.setAttribute("schoolList", schoolList);
+
+//        SchoolClassService schoolClassService = factory.getService(SchoolClassService.class);
+//        List<SchoolClass> schoolClassList = schoolClassService.findAll();
+//        request.setAttribute("schoolClassList", schoolClassList);
+
+        AcademicYearService academicYearService = factory.getService(AcademicYearService.class);
+        request.setAttribute("academicYearList", academicYearService.findAll());
+
+//        Service  = factory.getService();
+//        request.setAttribute("List", .findAll());
 
         Long id = null;
 
@@ -46,6 +59,11 @@
             }
         }
         request.setAttribute("pupil", pupil);
+        Set<SchoolClass> schoolClassList = new HashSet<>();
+
+        try { schoolClassList = pupil.getSchool().getSchoolClasses(); } catch (Exception ignore) { }
+
+        request.setAttribute("schoolClassList", schoolClassList);
     }
 
     request.setAttribute("communicationTypeEnum", Arrays.asList(CommunicationTypeEnum.values()));
@@ -73,7 +91,7 @@
         </div>
     </div>
     <%--<form:form modelAttribute="pupil" action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/pupils" method="post">--%>
-    <form:form modelAttribute="pupil" action="http://localhost:8080/client/api/content/ivis/pupils" method="post">
+    <form:form modelAttribute="pupil" action="${clientAddress}/api/content/ivis/pupils" method="post">
         <div id="basicDataTabPage" class="tab-page">
             <form:hidden path="id" cssErrorClass="error"/>
             <form:hidden path="person.id" cssErrorClass="error"/>
@@ -324,10 +342,28 @@
             </div>
         </div>
         <div id="schoolAndClassTabPage" class="tab-page">
-            <%--<form:select path="schoolClass.school" items="${schoolList}"/>--%>
+            <div class="field">
+                <form:select path="school" items="${schoolList}" itemValue="id" itemLabel="name" onchange="ivis.ui.onSchoolChange(this.value);"/>
+                <label>School ID</label>
+                <label id="schoolIdLabel">${pupil.school.schoolId}</label>
+            </div>
+            <div class="field">
+                <form:select path="academicYear" items="${academicYearList}" itemLabel="name" itemValue="id"/>
+            </div>
+            <div class="field">
+                <form:select path="schoolClass" items="${schoolClassList}" itemLabel="name" itemValue="id"/>
+            </div>
+
+            <div class="buttons">
+                <button class="positive" type="submit">Save</button>
+                <a class="button neutral" type="/pupils">Cancel</a>
+            </div>
         </div>
         <div id="schoolTransportTabPage" class="tab-page">
-            4
+            <div class="buttons">
+                <button class="positive" type="submit">Save</button>
+                <a class="button neutral" type="/pupils">Cancel</a>
+            </div>
         </div>
         <div id="loggTabPage" class="tab-page">
             5

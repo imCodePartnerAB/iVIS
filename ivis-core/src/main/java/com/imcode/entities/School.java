@@ -1,6 +1,6 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import com.imcode.entities.enums.ServiceTypeEnum;
 
 import javax.persistence.*;
@@ -8,9 +8,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity
-@Table(name="dbo_school")
-public class School extends AbstractNamedEntity  implements Serializable {
+@Table(name = "dbo_school")
+public class School extends AbstractNamedEntity implements Serializable {
     @Column
     private String schoolId;
 
@@ -18,6 +19,10 @@ public class School extends AbstractNamedEntity  implements Serializable {
     @Enumerated(EnumType.STRING)
     @JoinTable(name = "dbo_school_service_cross")
     private Set<ServiceTypeEnum> services;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "school")
+//    @JsonManagedReference
+    private Set<SchoolClass> schoolClasses;
 
     public Set<ServiceTypeEnum> getServices() {
         return services;
@@ -38,5 +43,19 @@ public class School extends AbstractNamedEntity  implements Serializable {
 
     public void setSchoolId(String schoolId) {
         this.schoolId = schoolId;
+    }
+
+
+    public Set<SchoolClass> getSchoolClasses() {
+        return schoolClasses;
+    }
+
+    public void setSchoolClasses(Set<SchoolClass> schoolClasses) {
+        this.schoolClasses = schoolClasses;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
