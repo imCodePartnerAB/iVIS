@@ -14,6 +14,7 @@
 
     <display-name>imCMS</display-name>
 
+
     <!--
      imCMS setup:
         com.imcode.imcms.servlet.ImcmsLog4jConfigListener must be registered first prior to
@@ -118,6 +119,36 @@
     <!--<transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
     <!--</user-data-constraint>-->
     <!--</security-constraint>-->
+
+    <!--&lt;!&ndash; Jasper JSP configuration &ndash;&gt;-->
+    <!--<servlet>-->
+        <!--<servlet-name>jsp</servlet-name>-->
+        <!--<servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>-->
+        <!--<init-param>-->
+            <!--<param-name>fork</param-name>-->
+            <!--<param-value>false</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>xpoweredBy</param-name>-->
+            <!--<param-value>false</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>compilerSourceVM</param-name>-->
+            <!--<param-value>1.7</param-value>-->
+        <!--</init-param>-->
+        <!--<init-param>-->
+            <!--<param-name>compilerTargetVM</param-name>-->
+            <!--<param-value>1.7</param-value>-->
+        <!--</init-param>-->
+        <!--<load-on-startup>3</load-on-startup>-->
+    <!--</servlet>-->
+
+    <!--&lt;!&ndash; The mappings for the JSP servlet &ndash;&gt;-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>jsp</servlet-name>-->
+        <!--<url-pattern>*.jsp</url-pattern>-->
+        <!--<url-pattern>*.jspx</url-pattern>-->
+    <!--</servlet-mapping>-->
 
     <servlet>
         <servlet-name>web</servlet-name>

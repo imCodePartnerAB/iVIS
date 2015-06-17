@@ -59,7 +59,7 @@
             }
         }
         request.setAttribute("pupil", pupil);
-        Set<SchoolClass> schoolClassList = new HashSet<>();
+        Set<SchoolClass> schoolClassList = new HashSet<SchoolClass>();
 
         try { schoolClassList = pupil.getSchool().getSchoolClasses(); } catch (Exception ignore) { }
 

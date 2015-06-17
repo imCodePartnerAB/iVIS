@@ -50,6 +50,14 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tomcat</groupId>-->
+            <!--<artifactId>jasper</artifactId>-->
+            <!--<version>6.0.44</version>-->
+        <!--</dependency>-->
+
+
+        <!--Spring-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
