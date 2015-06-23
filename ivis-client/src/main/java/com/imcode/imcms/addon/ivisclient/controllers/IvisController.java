@@ -6,11 +6,10 @@ import com.imcode.entities.Statement;
 import com.imcode.entities.enums.StatementStatus;
 import com.imcode.imcms.addon.ivisclient.controllers.form.Message;
 import com.imcode.imcms.addon.ivisclient.controllers.form.MessageType;
+import com.imcode.services.PersonService;
 import com.imcode.services.PupilService;
 import com.imcode.services.StatementService;
 import imcode.services.IvisServiceFactory;
-import imcode.services.restful.DefaultIvisServiceFactory;
-import imcode.services.restful.IvisFacade;
 import imcode.services.utils.IvisOAuth2Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -59,7 +57,6 @@ public class IvisController {
 
 
     public static final String GRANT_TYPE = "authorization_code";
-    //    todo Заинжектить значение мз placeholder
     @Value("${AuthorizationCodeHandlerUri}")
     public String tokenHandler;// = Imcms.getServerProperties().getProperty("AuthorizationCodeHandlerUri");
 
@@ -114,22 +111,23 @@ public class IvisController {
         return s;
     }
 
-    @RequestMapping(value = "/{id}", params = {"status"}, method = RequestMethod.POST)
-    @ResponseBody
-    public String updateStatus(HttpServletRequest request,
+    @RequestMapping(value = "/{id}", params = {"status"}, method = RequestMethod.GET)
+    public void updateStatus(HttpServletRequest request,
                                HttpServletResponse response,
-                               @PathVariable("id") Long id, @RequestParam("status") StatementStatus status) throws IOException {
-        IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
-                .endPointUrl(serverAddress)
-                .responseType("json")
-                .version("v1").build());
-        DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
-        StatementService service = factory.getStatementService();
+                               @PathVariable("id") Statement statement, @RequestParam("status") StatementStatus status) throws IOException {
+//        IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
+//                .endPointUrl(serverAddress)
+//                .responseType("json")
+//                .version("v1").build());
+//        DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
+//        StatementService service = factory.getStatementService();
 
+        StatementService service = ivisServiceFactory.getService(StatementService.class);
+//
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
-                Statement statement = service.find(id);
-
+//                Statement statement = service.find(id);
+//
                 if (statement != null) {
                     statement.setStatus(status);
 
@@ -141,9 +139,9 @@ public class IvisController {
             }
         }
 
-        response.sendRedirect(statementsAddress);
+        response.sendRedirect(getRequestReferer(request));
 
-        return id + ":" + status.toString();
+//        return id + ":" + status.toString();
     }
 
     @RequestMapping(value = "/xml", method = RequestMethod.POST)
@@ -162,13 +160,13 @@ public class IvisController {
 
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
 
-            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
-                    .endPointUrl(serverAddress)
-                    .responseType("json")
-                    .version("v1").build());
-            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
-            StatementService statementService = factory.getStatementService();
-            PupilService pupilService = factory.getPupilService();
+//            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
+//                    .endPointUrl(serverAddress)
+//                    .responseType("json")
+//                    .version("v1").build());
+//            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
+            StatementService statementService = ivisServiceFactory.getService(StatementService.class);
+            PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
 
             try {
 //                statement = new Statement();
@@ -201,23 +199,35 @@ public class IvisController {
     }
 
     @RequestMapping(value = "/pupils", method = RequestMethod.POST)
-    @ResponseBody
-    public String updatePupil(@ModelAttribute("pupil") Pupil pupil,
+//    @ResponseBody
+    public void updatePupil(@ModelAttribute("pupil") Pupil pupil,
+//                              @PathVariable("pupilId") Pupil persistedPupil,
                               HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
-
-        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
-        pupilService.save(pupil);
-        String returnToUri = request.getHeader("referer");
+//todo разобраться с биндингом GUARDIANS
+//        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
+//        PersonService personService = ivisServiceFactory.getService(PersonService.class);
+//
+//        if (pupil.getPerson() != null) {
+//            personService.save(pupil.getPerson());
+//        }
+//
+//        if (pupil.getContactPerson() != null) {
+//            personService.save(pupil.getContactPerson());
+//        }
+//
+//        pupilService.save(pupil);
+        String returnToUri = getRequestReferer(request);
         response.sendRedirect(returnToUri);
 
-        return "OK";
+//        return "OK";
     }
 
+    private String getRequestReferer(HttpServletRequest request) {
+        return request.getHeader("referer");
+    }
 
-
-
-   private static Statement pharseXml(InputStream inputStream) {
+    private static Statement pharseXml(InputStream inputStream) {
 
         StatmentHandler handler = new StatmentHandler();
 

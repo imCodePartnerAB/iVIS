@@ -23,10 +23,20 @@ IVis.Tabs.prototype =
                 $(".tab-page").hide();
                 $(this).addClass("active");
                 $("#" + $(this).data("tabPageId")).show();
+                $.cookie("data-tab-page-id", $(this).data("tabPageId"), {path: '/'});
             }
         );
 
-        $(".tabs > .tab").first().next().next().click();
+        var tabId = $.cookie("data-tab-page-id");
+
+        if (tabId == null) {
+            $(".tabs > .tab").first()
+                //.next()
+                .click();
+        } else {
+            $(".tabs > .tab[data-tab-page-id='" + tabId + "']").click();
+        }
+
     }
 };
 
@@ -41,32 +51,65 @@ IVis.UI.prototype =
     },
 
     removeContainer: function (containerId) {
-        $("#" + containerId).remove();
+        $("#" + this.escapeDots(containerId)).remove();
+    },
+
+    escapeDots: function (str) {
+        return str.replace(/\./g, "\\.");
     },
 
     getNewItemIndex: function (tag) {
+        //var elementId = tag.replace(".", "\\.");
         var value = 0;
-        $("#" + tag + " .field[data-index]").each(function (index, element) {
-            if (parseInt($(element).data("index")) > value)
-                value = parseInt($(element).data("index"));
-        });
+        var elements = $("#" + this.escapeDots(tag) + " .field[data-index]");
 
-        return value + 1;
+        if (elements.length > 0) {
+            elements.each(function (index, element) {
+                if (parseInt($(element).data("index")) > value)
+                    value = parseInt($(element).data("index"));
+            });
+            return value + 1;
+        } else
+            return 0;
     },
 
-    addPhone: function () {
-        var subContainerName = "phones";
-        var itemIndex = this.getNewItemIndex(subContainerName);
-        var conteinerName = "person." + subContainerName;
-        var conteinerId = subContainerName + itemIndex + "Field";
-
+    //addPhone: function () {
+    //    var subContainerName = "phones";
+    //    var itemIndex = this.getNewItemIndex(subContainerName);
+    //    var conteinerName = "person." + subContainerName;
+    //    var conteinerId = subContainerName + itemIndex + "Field";
+    //
+    //    var container = $("<div>")
+    //        .addClass("field")
+    //        .attr("id", conteinerId)
+    //        .attr("data-index", itemIndex)
+    //        .insertBefore($("#" + subContainerName + " .positive"));
+    //
+    //    this.addSelect(container, itemIndex, conteinerName, "communicationType", communicationTypeEnum);
+    //
+    //    var $this = this;
+    //    $("<button>")
+    //        .addClass("negative")
+    //        .attr("type", "button")
+    //        .html("Remove")
+    //        .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
+    //        //.click(function () {
+    //        //    $this.removeContainer(conteinerId)
+    //        //})
+    //        .appendTo(container);
+    //
+    //    this.addField(container, itemIndex, conteinerName, "number", "Phone");
+    //}
+    addPhone: function (subConteinerId) {
+        var itemIndex = this.getNewItemIndex(subConteinerId);
+        var conteinerId = subConteinerId + itemIndex + "Field";
         var container = $("<div>")
             .addClass("field")
             .attr("id", conteinerId)
             .attr("data-index", itemIndex)
-            .insertBefore($("#" + subContainerName + " .positive"));
+            .insertBefore($("#" + this.escapeDots(subConteinerId) + " .positive"));
 
-        this.addSelect(container, itemIndex, conteinerName, "communicationType", communicationTypeEnum);
+        this.addSelect(container, itemIndex, subConteinerId, "communicationType", communicationTypeEnum);
 
         var $this = this;
         $("<button>")
@@ -74,12 +117,9 @@ IVis.UI.prototype =
             .attr("type", "button")
             .html("Remove")
             .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
-            //.click(function () {
-            //    $this.removeContainer(conteinerId)
-            //})
             .appendTo(container);
 
-        this.addField(container, itemIndex, conteinerName, "number", "Phone");
+        this.addField(container, itemIndex, subConteinerId, "number", "Phone");
     },
 
     addField: function (owner, itemId, itemPrefix, name, labelText) {
@@ -122,15 +162,15 @@ IVis.UI.prototype =
 
     },
 
-    onSchoolChange: function(value) {
+    onSchoolChange: function (value) {
         $.getJSON("/client/api/content/rest/School/" + value,
-            function(result){
+            function (result) {
                 $("#schoolIdLabel").html(result.schoolId);
                 var schoolClasses = result.schoolClasses;
-                var schoolClassesSelect = $("#schoolClass\\.id");
+                var schoolClassesSelect = $("#schoolClass");
                 schoolClassesSelect.html("");
 
-                for(var i = 0; i < schoolClasses.length; i++) {
+                for (var i = 0; i < schoolClasses.length; i++) {
                     $("<option>")
                         .attr("value", schoolClasses[i].id)
                         .html(schoolClasses[i].name)
@@ -139,19 +179,16 @@ IVis.UI.prototype =
             });
     },
 
-addEmail: function () {
-        var subContainerName = "emails";
-        var itemIndex = this.getNewItemIndex(subContainerName);
-        var conteinerName = "person." + subContainerName;
-        var conteinerId = subContainerName + itemIndex + "Field";
-
+    addEmail: function (subConteinerId) {
+        var itemIndex = this.getNewItemIndex(subConteinerId);
+        var conteinerId = subConteinerId + itemIndex + "Field";
         var container = $("<div>")
             .addClass("field")
             .attr("id", conteinerId)
             .attr("data-index", itemIndex)
-            .insertBefore($("#" + subContainerName + " .positive"));
+            .insertBefore($("#" + this.escapeDots(subConteinerId) + " .positive"));
 
-        this.addSelect(container, itemIndex, conteinerName, "communicationType", communicationTypeEnum);
+        this.addSelect(container, itemIndex, subConteinerId, "communicationType", communicationTypeEnum);
 
         var $this = this;
         $("<button>")
@@ -164,22 +201,19 @@ addEmail: function () {
             //})
             .appendTo(container);
 
-        this.addField(container, itemIndex, conteinerName, "address", "Email");
+        this.addField(container, itemIndex, subConteinerId, "address", "Email");
     },
 
-addAddress: function () {
-        var subContainerName = "addresses";
-        var itemIndex = this.getNewItemIndex(subContainerName);
-        var conteinerName = "person." + subContainerName;
-        var conteinerId = subContainerName + itemIndex + "Field";
-
+    addAddress: function (subConteinerId) {
+        var itemIndex = this.getNewItemIndex(subConteinerId);
+        var conteinerId = subConteinerId + itemIndex + "Field";
         var container = $("<div>")
             .addClass("field")
             .attr("id", conteinerId)
             .attr("data-index", itemIndex)
-            .insertBefore($("#" + subContainerName + " .positive"));
+            .insertBefore($("#" + this.escapeDots(subConteinerId) + " .positive"));
 
-        this.addSelect(container, itemIndex, conteinerName, "addressType", addressTypeEnum);
+        this.addSelect(container, itemIndex, subConteinerId, "addressType", addressTypeEnum);
 
         var $this = this;
         $("<button>")
@@ -192,11 +226,96 @@ addAddress: function () {
             //})
             .appendTo(container);
 
-        this.addField(container, itemIndex, conteinerName, "careOf", "c/o");
-        this.addField(container, itemIndex, conteinerName, "street", "Street");
-        this.addField(container, itemIndex, conteinerName, "postalCode", "Postal code");
-        this.addField(container, itemIndex, conteinerName, "city", "City");
-        this.addField(container, itemIndex, conteinerName, "municipalityCode", "Municipality code");
+        this.addField(container, itemIndex, subConteinerId, "careOf", "c/o");
+        this.addField(container, itemIndex, subConteinerId, "street", "Street");
+        this.addField(container, itemIndex, subConteinerId, "postalCode", "Postal code");
+        this.addField(container, itemIndex, subConteinerId, "city", "City");
+        this.addField(container, itemIndex, subConteinerId, "municipalityCode", "Municipality code");
+    },
+
+    clearSerchText: function (paramName) {
+        var url = this.getBaseUrl();
+        var urlParams = this.getUrlParams();
+        var first = true;
+        var i = 1;
+
+        for (var key in urlParams) {
+            if (key != paramName) {
+                if (first) {
+                    url = url + "?";
+                    first = false;
+                }
+                url = url + key + "=" + urlParams[key] + "&";
+            }
+
+            i++;
+        }
+
+        location.href = url;
+    },
+
+    getBaseUrl: function () {
+        return location.protocol + '//' + location.host + location.pathname;
+    },
+
+    getUrlParams: function () {
+        var urlParams = {};
+        var match,
+            pl = /\+/g,
+            search = /([^&=]+)=?([^&]*)/g,
+            decode = function (s) {
+                return decodeURIComponent(s.replace(pl, " "));
+            },
+            query = window.location.search.substring(1);
+
+        while (match = search.exec(query)) {
+            urlParams[decode(match[1])] = decode(match[2]);
+        }
+
+        return urlParams;
+    },
+
+    toggleDiv: function (elementId) {
+        var escapedElementId = this.escapeDots(elementId);
+        var element = $("#" + escapedElementId);
+
+        if (element.is(":visible")) {
+            element.slideUp("slow");
+        } else {
+            element.slideDown("slow");
+        }
+    },
+
+    disableDiv: function (checkboxId, divId, slide) {
+        slide != null || slide ? true : false;
+        var checkbox = $("#" + this.escapeDots(checkboxId));
+        var escapedElementId = this.escapeDots(divId);
+        var element = $("#" + escapedElementId);
+
+        if (checkbox[0].checked) {
+            element.attr("disable", null);
+            $("#" + escapedElementId + " :input").removeAttr('disabled');
+            if (slide) {
+                element.slideDown("slow");
+            }
+        } else {
+            element.attr("disable", "disable");
+            $("#" + escapedElementId + " :input").attr('disabled', true);
+            if (slide) {
+                element.slideUp("slow");
+            }
+        }
+    },
+
+    disableSoloGuardian: function (checkboxId, divId, parentDivId) {
+        var checkbox = $("#" + this.escapeDots(checkboxId));
+        var escapedDivtId = this.escapeDots(divId);
+        var escapedparentDivtId = this.escapeDots(parentDivId);
+        var checkboxes = $("#" + escapedparentDivtId + " :input[type=checkbox]");
+        checkboxes.not(checkbox).prop("checked", false);
+        var currentInputs = $("#" + escapedDivtId + " :input");
+        currentInputs.removeAttr('disabled');
+        $("#" + escapedparentDivtId + " :input").not(currentInputs).attr('disabled', true);
     }
 
 };

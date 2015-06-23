@@ -1,22 +1,33 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
 /**
  * Created by vitaly on 14.05.15.
  */
 @Entity
 @Table(name = "dbo_pupil")
-public class Pupil extends AbstractIdEntity  implements Serializable {
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
+//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")
     private Person person;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "contactPersonId")
+    private Person contactPerson;
+
+    @Temporal(TemporalType.DATE)
+    @Column
+    private Date classPlacementFrom;
+
+    @Temporal(TemporalType.DATE)
+    @Column
+    private Date classPlacementTo;
 
 //    @JsonBackReference
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
@@ -34,11 +45,12 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
     private AcademicYear academicYear;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER)//, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "pupilId"),
             inverseJoinColumns = @JoinColumn(name = "guardianId"))
-    private List<Guardian> guardians;
+    private Set<Guardian> guardians;
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER)
     private Set<Truancy> truancies;
@@ -76,11 +88,15 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
     }
 
     public List<Guardian> getGuardians() {
-        return guardians;
+        if (guardians != null)
+            return new LinkedList<>(guardians);
+        else
+            return null;
     }
 
     public void setGuardians(List<Guardian> guardians) {
-        this.guardians = guardians;
+        if (guardians != null)
+        this.guardians = new HashSet<>(guardians);
     }
 
     public School getSchool() {
@@ -91,18 +107,43 @@ public class Pupil extends AbstractIdEntity  implements Serializable {
         this.school = school;
     }
 
+    public Person getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(Person contactPerson) {
+        this.contactPerson = contactPerson;
+    }
+
+    public Date getClassPlacementFrom() {
+        return classPlacementFrom;
+    }
+
+    public void setClassPlacementFrom(Date classPlacementFrom) {
+        this.classPlacementFrom = classPlacementFrom;
+    }
+
+    public Date getClassPlacementTo() {
+        return classPlacementTo;
+    }
+
+    public void setClassPlacementTo(Date classPlacementTo) {
+        this.classPlacementTo = classPlacementTo;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Pupil{");
-        if (person != null) {
-            sb.append(person.getLastName())
-            .append(" ")
-            .append(person.getFirstName());
-
-        }
-        sb.append("(").append(academicYear);
-        sb.append(":").append(schoolClass);
-        sb.append(")}");
-        return sb.toString();
+//        final StringBuilder sb = new StringBuilder("Pupil{");
+//        if (person != null) {
+//            sb.append(person.getLastName())
+//            .append(" ")
+//            .append(person.getFirstName());
+//
+//        }
+//        sb.append("(").append(academicYear);
+//        sb.append(":").append(schoolClass);
+//        sb.append(")}");
+//        return sb.toString();
+        return person != null ? person.toString() : "";
     }
 }

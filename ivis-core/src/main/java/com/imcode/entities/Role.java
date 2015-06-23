@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "dbo_role")
 @AttributeOverrides(@AttributeOverride(name = "name", column = @Column(name = "authority", nullable = false, length = 100, unique = true)))
-public class Role extends AbstractNamedEntity implements GrantedAuthority, Serializable{
+public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority, Serializable{
 
     public Role() { }
 

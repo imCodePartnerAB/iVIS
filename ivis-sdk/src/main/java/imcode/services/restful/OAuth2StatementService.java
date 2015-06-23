@@ -2,6 +2,7 @@ package imcode.services.restful;
 
 import com.imcode.entities.Statement;
 import com.imcode.services.StatementService;
+import imcode.services.IvisServiceFactory;
 
 /**
  * Created by vitaly on 27.05.15.
@@ -11,11 +12,11 @@ public class OAuth2StatementService extends AbstractOAuth2Service<Statement, Lon
     public OAuth2StatementService() {
     }
 
-    public OAuth2StatementService(DefaultIvisServiceFactory factory, String mainServiceAddres) {
+    public OAuth2StatementService(IvisServiceFactory factory, String mainServiceAddres) {
         super(factory, mainServiceAddres);
     }
 
-    public OAuth2StatementService(DefaultIvisServiceFactory factory) {
+    public OAuth2StatementService(IvisServiceFactory factory) {
         super(factory);
     }
 }

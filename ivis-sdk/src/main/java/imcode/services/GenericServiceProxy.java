@@ -2,6 +2,7 @@ package imcode.services;
 
 import com.imcode.entities.AbstractIdEntity;
 import com.imcode.services.GenericService;
+import imcode.services.restful.AbstractOAuth2Service;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -21,9 +22,9 @@ public class GenericServiceProxy<T extends AbstractIdEntity, ID extends Serializ
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends AbstractIdEntity, ID extends Serializable> GenericService<T, ID> newInstance(GenericService<T, ID> service, Class<?>... interf) {
+    public static <T extends AbstractIdEntity, ID extends Serializable> GenericService<T, ID> newInstance(AbstractOAuth2Service<T, ID> service, Class<? extends GenericService> interf) {
 
-        return (GenericService<T, ID>) Proxy.newProxyInstance(service.getClass().getClassLoader(), interf, new GenericServiceProxy<>(service));
+        return (GenericService<T, ID>) Proxy.newProxyInstance(service.getClass().getClassLoader(), new Class[]{interf}, new GenericServiceProxy<>(service));
 
     }
 

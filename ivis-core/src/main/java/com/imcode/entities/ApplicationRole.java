@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "dbo_app_role")
-public class ApplicationRole extends AbstractNamedEntity implements GrantedAuthority, Serializable{
+public class ApplicationRole extends AbstractNamedEntity<Long> implements GrantedAuthority, Serializable{
 
     public ApplicationRole() { }
 

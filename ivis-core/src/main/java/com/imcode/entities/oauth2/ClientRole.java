@@ -11,9 +11,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "dbo_oauth_client_role")
 @AttributeOverrides(@AttributeOverride(name = "name", column = @Column(name = "authority", nullable = false, length = 100, unique = true)))
-public class ClientRole extends AbstractNamedEntity implements GrantedAuthority, Serializable{
-    public ClientRole() {
-    }
+public class ClientRole extends AbstractNamedEntity<Long> implements GrantedAuthority, Serializable{
+    public ClientRole() { }
 
     public ClientRole(String name) {
         super(name);

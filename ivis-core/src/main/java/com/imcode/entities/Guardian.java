@@ -9,7 +9,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "dbo_guardian")
-public class Guardian extends AbstractIdEntity  implements Serializable {
+public class Guardian extends AbstractIdEntity<Long>  implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "personId")
     private Person person;
@@ -24,6 +24,7 @@ public class Guardian extends AbstractIdEntity  implements Serializable {
 
     @Override
     public String toString() {
-        return person.toString();
+
+        return person != null ? person.toString() : "";
     }
 }

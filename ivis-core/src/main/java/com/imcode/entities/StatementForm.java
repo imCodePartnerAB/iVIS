@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "dbo_statement_form")
-public class StatementForm extends AbstractNamedEntity implements Serializable {
+public class StatementForm extends AbstractNamedEntity<Long> implements Serializable {
     @Column
     private String type;
 }

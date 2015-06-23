@@ -28,8 +28,8 @@
                 class="org.springframework.context.support.ConversionServiceFactoryBean"/>
 
     <!--DomainClassConverter to enable Spring MVC to resolve instances of repository managed domain classes from request parameters or path variables.-->
-    <beans:bean class="org.springframework.data.repository.support.DomainClassConverter"
-                c:conversionService-ref="conversionService"/>
+    <!--<beans:bean class="org.springframework.data.repository.support.DomainClassConverter" c:conversionService-ref="conversionService"/>-->
+    <beans:bean class="com.imcode.controllers.converters.IdToDomainClassConverter" c:conversionService-ref="conversionService"/>
 
     <!-- Разрешаем использование аннотаций Spring MVC (то есть @Controller и.@Valid, MessageConverters) -->
     <annotation-driven conversion-service="conversionService">

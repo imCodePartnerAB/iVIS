@@ -1,10 +1,9 @@
 <%@ page import="com.imcode.entities.Statement,
                  com.imcode.services.StatementService" pageEncoding="UTF-8" %>
 <%@ page import="imcode.server.Imcms" %>
-<%@ page import="imcode.services.restful.DefaultIvisServiceFactory" %>
+<%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
-<%@ page import="imcode.services.IvisServiceFactory" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

@@ -14,21 +14,37 @@ import java.io.Serializable;
  */
 @MappedSuperclass
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@Id")
-public abstract class AbstractIdEntity implements Serializable{
+public abstract class AbstractIdEntity<ID extends Serializable> implements Serializable{
     @Id
     @GeneratedValue
     @Column
-    protected Long id;
+    protected ID id;
 
     public AbstractIdEntity() {
     }
 
-    public Long getId() {
+    public ID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ID id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractIdEntity idEntity = (AbstractIdEntity) o;
+
+        return !(id != null ? !id.equals(idEntity.id) : idEntity.id != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

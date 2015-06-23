@@ -1,8 +1,8 @@
 package imcode.services.utils;
 
+import com.imcode.entities.Person;
 import imcode.services.IvisServiceFactory;
-//import imcode.services.restful.IvisServiceFactory;
-//import imcode.services.restful.IvisFacade;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -235,4 +235,18 @@ public class IvisOAuth2Utils {
             return responseType;
         }
     }
+
+    public static boolean personContainsString(Person person, String searchText) {
+        return person != null
+                && (StringUtils.containsIgnoreCase(person.getPersonalId(), searchText)
+                || StringUtils.containsIgnoreCase(person.getFirstName(), searchText)
+                || StringUtils.containsIgnoreCase(person.getLastName(), searchText));
+    }
+//    public static SentenceBuilder getSentenceBuilder() {
+//        return new StringBuilder(){};
+//    }
+//
+//    private static class SentenceBuilder extends StringBuilder {
+//
+//    }
 }

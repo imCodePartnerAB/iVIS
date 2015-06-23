@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by vitaly on 13.05.15.
  */
 @MappedSuperclass
-public abstract class AbstractNamedEntity extends AbstractIdEntity implements Serializable{
+public abstract class AbstractNamedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements Serializable{
     @Column
     protected String name;
 
@@ -19,7 +19,7 @@ public abstract class AbstractNamedEntity extends AbstractIdEntity implements Se
         this.name = name;
     }
 
-    public AbstractNamedEntity(Long id, String name) {
+    public AbstractNamedEntity(ID id, String name) {
         this.id = id;
         this.name = name;
     }

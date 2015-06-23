@@ -8,7 +8,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "dbo_truancy")
-public class Truancy extends AbstractIdEntity  implements Serializable {
+public class Truancy extends AbstractIdEntity<Long>  implements Serializable {
     @ManyToOne
     @JoinColumn(name = "pupilId")
     private Pupil pupil;

@@ -18,7 +18,7 @@ import java.util.Set;
 //@AttributeOverrides({
         @AttributeOverride(name="name", column = @Column(unique = true, length = 150, nullable = false))
 //})
-public class User extends AbstractNamedEntity implements UserDetails, Serializable {
+public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable {
     public static final String DEFAULT_PASSWORD = "";
 
 //    @NotNull(message = "{user.requiredPassword}")

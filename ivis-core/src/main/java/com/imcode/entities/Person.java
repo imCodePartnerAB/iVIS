@@ -5,6 +5,7 @@ import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -14,7 +15,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "dbo_person")
-public class Person extends AbstractIdEntity  implements Serializable {
+public class Person extends AbstractIdEntity<Long>  implements Serializable {
     @Column
     private String personalId;
 
@@ -147,11 +148,26 @@ public class Person extends AbstractIdEntity  implements Serializable {
 
     @Override
     public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", addresses=" + addresses +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        if (StringUtils.hasText(firstName))
+            addWord(sb, firstName);
+
+        if (StringUtils.hasText(lastName))
+            addWord(sb, lastName);
+
+
+        if (sb.length() == 0)
+            addWord(sb, personalId);;
+
+        return sb.toString();
+    }
+
+
+    private void addWord(StringBuilder sb, String word) {
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) != ' ') {
+            sb.append(' ');
+        }
+
+        sb.append(word);
     }
 }

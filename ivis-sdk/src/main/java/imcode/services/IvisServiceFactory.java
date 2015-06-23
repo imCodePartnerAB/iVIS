@@ -16,11 +16,18 @@ import java.util.*;
  */
 public interface IvisServiceFactory {
 
-//    <T extends GenericService> T getService(Class<T> serviceClass);
-
     OAuth2ProtectedResourceDetails getClient();
 
     <S extends GenericService<T, ID>, T, ID> S getService(Class<S> serviceClass);
 
     OAuth2ClientContext getClientContext();
+
+    boolean hasServiceFor(Class entity);
+
+    boolean hasService(Class<? extends GenericService> service);
+
+    ServiceInfo getServiceInfo(Class<? extends GenericService> service);
+
+    ServiceInfo getServiceInfoFor(Class entity);
+
 }

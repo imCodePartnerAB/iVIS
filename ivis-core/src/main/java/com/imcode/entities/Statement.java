@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "dbo_statement")
-public class Statement extends AbstractIdEntity implements Serializable{
+public class Statement extends AbstractIdEntity<Long> implements Serializable{
 //    @Column
 //    public Long formId;
 

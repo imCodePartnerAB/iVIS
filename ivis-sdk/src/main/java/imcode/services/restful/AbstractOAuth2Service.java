@@ -39,6 +39,11 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     private IvisServiceFactory factory;
 
+    private Class<T> entityClass;
+
+    private Class<ID> entityIdClass;
+
+
     public static class RestServiseRequest {
         private static final HttpMethod DEFAULT_METHOD = HttpMethod.GET;
         private String address;
@@ -77,16 +82,23 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     public AbstractOAuth2Service() {
     }
 
+    public AbstractOAuth2Service(IvisServiceFactory factory) {
+        this(factory, "", null, null);
+    }
+
     public AbstractOAuth2Service(IvisServiceFactory factory, String mainServiceAddres) {
+        this(factory, mainServiceAddres, null, null);
+    }
+
+    public AbstractOAuth2Service(IvisServiceFactory factory, String mainServiceAddres, Class<T> entityClass, Class<ID> entityIdClass) {
         this.factory = factory;
+        this.mainServiceAddres = mainServiceAddres;
+        this.entityClass = entityClass;
+        this.entityIdClass = entityIdClass;
         fillServiseAdderess(mainServiceAddres);
     }
 
-    public AbstractOAuth2Service(IvisServiceFactory factory) {
-        this.factory = factory;
-    }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private OAuth2ProtectedResourceDetails getClient() {
         return factory.getClient();
     }
@@ -218,11 +230,19 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     }
 
     protected Class getEntityClass() {
+        if (entityClass != null) {
+            return entityClass;
+        }
+
         Type[] genericArguments = getGenericParameterTypes();
         return (Class) genericArguments[0];
     }
 
     protected Class getIdClass() {
+        if (entityIdClass != null) {
+            return entityIdClass;
+        }
+
         Type[] genericArguments = getGenericParameterTypes();
         return (Class) genericArguments[1];
     }

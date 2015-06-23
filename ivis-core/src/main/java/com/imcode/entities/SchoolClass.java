@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.imcode.entities.embed.Diary;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
 
 /**
@@ -16,7 +16,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "dbo_school_class")
-public class SchoolClass extends AbstractNamedEntity implements Serializable {
+public class SchoolClass extends AbstractNamedEntity<Long> implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
@@ -30,13 +30,15 @@ public class SchoolClass extends AbstractNamedEntity implements Serializable {
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "school")
-//    @JsonBackReference
     private School school;
 
-//    //    @JsonIgnore
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
-//    private Set<Pupil> pupils;
+    @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
+    private Set<Pupil> pupils;
+
+    @ElementCollection
+    @CollectionTable(name = "dbo_school_class_diaries", joinColumns = @JoinColumn(name = "ownerId"))
+    @OrderBy("dayOfWeek")
+    private Set<Diary> diaries;
 
 
     public SchoolClass() {
@@ -76,6 +78,30 @@ public class SchoolClass extends AbstractNamedEntity implements Serializable {
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    public Set<Pupil> getPupils() {
+        return pupils;
+    }
+
+    public void setPupils(Set<Pupil> pupils) {
+        this.pupils = pupils;
+    }
+
+    public Set<Diary> getDiaries() {
+        return diaries;
+    }
+
+    public void setDiaries(Set<Diary> diaries) {
+        this.diaries = diaries;
+    }
+
+    public List<Diary> getDiaryList() {
+        return new LinkedList<>(diaries);
+    }
+
+    public void setDiaryList(List<Diary> diaries) {
+        this.diaries.addAll(diaries);
     }
 
     @Override

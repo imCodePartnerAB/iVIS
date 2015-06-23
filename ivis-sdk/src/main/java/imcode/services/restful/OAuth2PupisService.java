@@ -2,6 +2,7 @@ package imcode.services.restful;
 
 import com.imcode.entities.Pupil;
 import com.imcode.services.PupilService;
+import imcode.services.IvisServiceFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -14,11 +15,11 @@ public class OAuth2PupisService extends AbstractOAuth2Service<Pupil, Long> imple
     public OAuth2PupisService() {
     }
 
-    public OAuth2PupisService(DefaultIvisServiceFactory factory, String mainServiceAddres) {
+    public OAuth2PupisService(IvisServiceFactory factory, String mainServiceAddres) {
         super(factory, mainServiceAddres);
     }
 
-    public OAuth2PupisService(DefaultIvisServiceFactory factory) {
+    public OAuth2PupisService(IvisServiceFactory factory) {
         super(factory);
     }
 

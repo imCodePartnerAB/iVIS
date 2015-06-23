@@ -1,5 +1,6 @@
 package imcode.services.restful;
 
+import imcode.services.IvisServiceFactory;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Created by vitaly on 28.05.15.
  */
+@Deprecated
 public class IvisFacade {
     private volatile static IvisFacade singleton = null;
     private volatile Configuration configuration = new Configuration();
@@ -40,14 +42,15 @@ public class IvisFacade {
     protected IvisFacade() {
     }
 
-    public DefaultIvisServiceFactory getServiceFactory(OAuth2ProtectedResourceDetails client, OAuth2ClientContext clientContext) {
-        return new DefaultIvisServiceFactory(
-                String.format(
-                        "%s/api/%s/%s/",
-                        configuration.endPointUrl, configuration.version, configuration.responseType
-                ),
-                client, clientContext
-        );
+    public IvisServiceFactory getServiceFactory(OAuth2ProtectedResourceDetails client, OAuth2ClientContext clientContext) {
+//        return new DefaultIvisServiceFactory(
+//                String.format(
+//                        "%s/api/%s/%s/",
+//                        configuration.endPointUrl, configuration.version, configuration.responseType
+//                ),
+//                client, clientContext
+//        );
+        return null;
     }
 
     public static class Configuration {

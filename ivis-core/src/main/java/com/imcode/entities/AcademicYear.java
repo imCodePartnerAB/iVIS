@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "dbo_academic_year")
-public class AcademicYear extends AbstractNamedEntity implements Serializable {
+public class AcademicYear extends AbstractNamedEntity<Long> implements Serializable {
     public AcademicYear() {
     }
 

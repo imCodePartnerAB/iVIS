@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "dbo_after_school_center_section")
-public class AfterSchoolCenterSection extends AbstractNamedEntity implements Serializable {
+public class AfterSchoolCenterSection extends AbstractNamedEntity<Long> implements Serializable {
     public AfterSchoolCenterSection() {
     }
 

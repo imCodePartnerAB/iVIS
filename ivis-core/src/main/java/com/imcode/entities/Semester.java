@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "dbo_semester")
-public class Semester extends AbstractNamedEntity implements Serializable {
+public class Semester extends AbstractNamedEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "academicYearId")
     private AcademicYear academicYear;
