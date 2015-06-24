@@ -135,6 +135,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.databind-version}</version>
         </dependency>
+        <!-- Collections-->
+        <!--<dependency>-->
+            <!--<groupId>com.google.guava</groupId>-->
+            <!--<artifactId>guava-collections</artifactId>-->
+            <!--<version>r03</version>-->
+        <!--</dependency>-->
 
         <!-- Test -->
         <dependency>

@@ -38,7 +38,7 @@
 
         StatementService applicationService = factory.getService(StatementService.class);
         List<Statement> statements = applicationService.findAll();
-        List<Statement> applicationList = new LinkedList<>();
+        List<Statement> applicationList = new LinkedList<Statement>();
         request.setAttribute("applicationList", applicationList);
 //        Service  = factory.getService();
 //        request.setAttribute("List", .findAll());
