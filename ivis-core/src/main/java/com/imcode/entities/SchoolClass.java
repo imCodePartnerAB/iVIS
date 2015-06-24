@@ -9,6 +9,7 @@ import com.imcode.entities.embed.Diary;
 import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
+import javax.persistence.Entity;
 
 /**
  * Created by vitaly on 09.02.15.

@@ -1,11 +1,13 @@
 package com.imcode.imcms.addon.ivisclient.controllers;
 
+import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
 import com.imcode.entities.Statement;
 import com.imcode.entities.enums.StatementStatus;
 import com.imcode.imcms.addon.ivisclient.controllers.form.Message;
 import com.imcode.imcms.addon.ivisclient.controllers.form.MessageType;
+import com.imcode.services.GuardianService;
 import com.imcode.services.PersonService;
 import com.imcode.services.PupilService;
 import com.imcode.services.StatementService;
@@ -204,19 +206,26 @@ public class IvisController {
 //                              @PathVariable("pupilId") Pupil persistedPupil,
                               HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
-//todo разобраться с биндингом GUARDIANS
-//        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
-//        PersonService personService = ivisServiceFactory.getService(PersonService.class);
-//
-//        if (pupil.getPerson() != null) {
-//            personService.save(pupil.getPerson());
-//        }
-//
-//        if (pupil.getContactPerson() != null) {
-//            personService.save(pupil.getContactPerson());
-//        }
-//
-//        pupilService.save(pupil);
+        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
+        PersonService personService = ivisServiceFactory.getService(PersonService.class);
+        GuardianService guardianService = ivisServiceFactory.getService(GuardianService.class);
+
+        if (pupil.getPerson() != null) {
+            personService.save(pupil.getPerson());
+        }
+
+        if (pupil.getContactPerson() != null) {
+            personService.save(pupil.getContactPerson());
+        }
+
+        if (pupil.getGuardians() != null) {
+            for (Guardian guardian :pupil.getGuardians()) {
+                guardianService.save(guardian);
+            }
+
+        }
+
+        pupilService.save(pupil);
         String returnToUri = getRequestReferer(request);
         response.sendRedirect(returnToUri);
 

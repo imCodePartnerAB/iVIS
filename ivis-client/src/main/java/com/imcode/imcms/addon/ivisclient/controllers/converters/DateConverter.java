@@ -13,6 +13,7 @@ import java.util.Date;
  * Created by vitaly on 23.06.15.
  */
 @Component
+@Deprecated
 public class DateConverter implements Converter<String, Date>{
 
     @Value("${DatePattern}")

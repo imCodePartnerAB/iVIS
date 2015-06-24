@@ -1,11 +1,15 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
+import javax.persistence.Entity;
+
 /**
  * Created by vitaly on 14.05.15.
  */
@@ -21,10 +25,12 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
     @JoinColumn(name = "contactPersonId")
     private Person contactPerson;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementFrom;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementTo;
@@ -46,7 +52,7 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER)//, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+////    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "pupilId"),
             inverseJoinColumns = @JoinColumn(name = "guardianId"))
@@ -87,16 +93,29 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
         this.truancies = truancies;
     }
 
-    public List<Guardian> getGuardians() {
-        if (guardians != null)
-            return new LinkedList<>(guardians);
-        else
-            return null;
+    @JsonIgnore
+    public List<Guardian> getGuardianList() {
+        if (guardians != null) {
+            return new SetListAdapter<>((LinkedHashSet)guardians);
+        } else {
+            guardians = new LinkedHashSet<>();
+            return getGuardianList();
+        }
+
     }
 
-    public void setGuardians(List<Guardian> guardians) {
+    @JsonIgnore
+    public void setGuardianLIst(List<Guardian> guardians) {
         if (guardians != null)
-        this.guardians = new HashSet<>(guardians);
+        this.guardians = new LinkedHashSet<>(guardians);
+    }
+
+    public Set<Guardian> getGuardians() {
+        return guardians;
+    }
+
+    public void setGuardians(Set<Guardian> guardians) {
+        this.guardians = guardians;
     }
 
     public School getSchool() {

@@ -2,6 +2,7 @@ package com.imcode.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.io.Serializable;
 
 @Entity

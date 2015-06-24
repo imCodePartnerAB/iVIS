@@ -36,7 +36,7 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
-                <ref bean="dateConverter"/>
+                <ref bean="dateConverter2"/>
                 <!--<ref bean="schoolClassConverter"/>-->
                 <!--<ref bean="schoolConverter"/>-->
                 <!--<ref bean="academicYearConverter"/>-->

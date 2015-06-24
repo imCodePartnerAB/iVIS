@@ -1,7 +1,9 @@
 package imcode.services.restful;
 
 import com.imcode.entities.AbstractIdEntity;
+import com.imcode.entities.Pupil;
 import com.imcode.services.GenericService;
+import com.imcode.services.PupilService;
 import com.imcode.services.SchoolClassService;
 import imcode.services.GenericServiceProxy;
 import imcode.services.IvisServiceFactory;
@@ -417,13 +419,13 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
             System.out.println("sfas");
 //            serviceFactory.checkEntityClassList(serviceFactory.entityClassList);
 //            GenericService service = serviceFactory.getService(RoleService.class);
-            GenericService service = serviceFactory.getService(SchoolClassService.class);
+            GenericService service = serviceFactory.getService(PupilService.class);
 //            School school = (School) service.find(1L);
 ////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
-            List list = service.findAll();
+            Pupil entity = (Pupil) service.find(1);
 //            Object entity = service.find(0);
 //            System.out.println(entity);
-            System.out.println(list);
+            System.out.println(entity);
         } catch (Exception e) {
             e.printStackTrace();
 

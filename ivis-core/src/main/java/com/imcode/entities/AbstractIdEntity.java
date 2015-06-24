@@ -23,6 +23,11 @@ public abstract class AbstractIdEntity<ID extends Serializable> implements Seria
     public AbstractIdEntity() {
     }
 
+    public AbstractIdEntity(ID id) {
+        this.id = id;
+    }
+
+
     public ID getId() {
         return id;
     }

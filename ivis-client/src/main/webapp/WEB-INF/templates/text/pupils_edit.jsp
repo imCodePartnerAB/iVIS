@@ -229,8 +229,8 @@
         <div id="guardiansTabPage" class="tab-page">
             <div id="guardians">
                 <c:forEach var="guardian" items="${pupil.guardians}" varStatus="status">
-                    <c:set var="guardianItemId" value="guardians${status.index}"/>
-                    <c:set var="guardianItemName" value="guardians[${status.index}]"/>
+                    <c:set var="guardianItemId" value="guardianList${status.index}"/>
+                    <c:set var="guardianItemName" value="guardianList[${status.index}]"/>
                     <h2 onclick="ivis.ui.toggleDiv('${guardianItemId}')">Guardian ${status.index + 1}</h2>
 
                     <div id="${guardianItemId}">
@@ -239,6 +239,8 @@
                                    onchange="ivis.ui.disableSoloGuardian('${guardianItemId}.solo', '${guardianItemId}', 'guardians');">
                             <label for="${guardianItemId}.solo">Solo guardian</label>
                         </div>
+                        <%--<input name="guardianList[${status.index}]" value="${guardian.id}">--%>
+                        <%--================================================================================--%>
                         <input type="hidden" name="${guardianItemName}" value="${guardian.id}">
                         <div id="${guardianItemId}.personField">
                             <c:set var="personPath" value="guardians[${status.index}].person"/>
@@ -368,6 +370,137 @@
                                 </button>
                             </div>
                         </div>
+                        <%--================================================================================--%>
+
+                        <%--<input type="hidden" name="${guardianItemName}" value="${guardian.id}">--%>
+                        <%--<div id="${guardianItemId}.personField">--%>
+                            <%--<c:set var="personPath" value="guardians[${status.index}].person"/>--%>
+                            <%--<c:set var="person" value="${guardian.person}"/>--%>
+                            <%--<input id="person" type="hidden" name="${personPath}" value="${person.id}">--%>
+
+                            <%--<div class="field">--%>
+                                <%--<form:label path="${personPath}.personalId">Personal ID</form:label>--%>
+                                <%--<form:input path="${personPath}.personalId" cssErrorClass="error"/>--%>
+                                <%--<form:errors path="${personPath}.personalId" cssClass="error-description"/>--%>
+                            <%--</div>--%>
+                            <%--<div class="field">--%>
+                                <%--<form:label path="${personPath}.lastName">Last name</form:label>--%>
+                                <%--<form:input path="${personPath}.lastName" cssErrorClass="error"/>--%>
+                                <%--<form:errors path="${personPath}.lastName" cssClass="error-description"/>--%>
+                            <%--</div>--%>
+                            <%--<div class="field">--%>
+                                <%--<form:label path="${personPath}.firstName">--%>
+                                    <%--First name--%>
+                                <%--</form:label>--%>
+                                <%--<form:input path="${personPath}.firstName" cssErrorClass="error"/>--%>
+                                <%--<form:errors path="${personPath}.firstName" cssClass="error-description"/>--%>
+                            <%--</div>--%>
+
+                            <%--<h2>Addresses:</h2>--%>
+                            <%--<c:set var="containerId" value="${personPath}.addresses"/>--%>
+                            <%--<c:set var="containerIdReal" value="${guardianItemId}.person.addresses"/>--%>
+                            <%--<div id="${containerIdReal}">--%>
+                                <%--<c:forEach var="address" items="${person.addresses}" varStatus="status">--%>
+                                    <%--<c:set var="subContainerId" value="${containerIdReal}${status.index}Field"/>--%>
+                                    <%--<div class="field" id="${subContainerId}" data-index="${status.index}">--%>
+                                            <%--&lt;%&ndash;<form:hidden path="${personPath}.addresses[${status.index}].id"/>&ndash;%&gt;--%>
+
+                                        <%--<form:select path="${containerId}[${status.index}].addressType"--%>
+                                                     <%--items="${addressTypeEnum}"/>--%>
+                                        <%--<button class="negative" type="button"--%>
+                                                <%--onclick="ivis.ui.removeContainer('${subContainerId}');">Remove--%>
+                                        <%--</button>--%>
+                                            <%--&lt;%&ndash;<input type="hidden" name="${containerId}[${status.index}].addressType" value="${address.addressType}"/>&ndash;%&gt;--%>
+
+                                        <%--<form:label path="${containerId}[${status.index}].careOf">c/o</form:label>--%>
+                                        <%--<form:input path="${containerId}[${status.index}].careOf"--%>
+                                                    <%--cssErrorClass="error"/>--%>
+                                        <%--<form:errors path="${containerId}[${status.index}].careOf"--%>
+                                                     <%--cssClass="error-description"/>--%>
+
+                                        <%--<form:label path="${containerId}[${status.index}].street">Street</form:label>--%>
+                                        <%--<form:input path="${containerId}[${status.index}].street"--%>
+                                                    <%--cssErrorClass="error"/>--%>
+                                        <%--<form:errors path="${containerId}[${status.index}].street"--%>
+                                                     <%--cssClass="error-description"/>--%>
+
+                                        <%--<form:label--%>
+                                                <%--path="${containerId}[${status.index}].postalCode">Postal code</form:label>--%>
+                                        <%--<form:input path="${containerId}[${status.index}].postalCode"--%>
+                                                    <%--cssErrorClass="error"/>--%>
+                                        <%--<form:errors path="${containerId}[${status.index}].postalCode"--%>
+                                                     <%--cssClass="error-description"/>--%>
+
+                                        <%--<form:label path="${containerId}[${status.index}].city">City</form:label>--%>
+                                        <%--<form:input path="${containerId}[${status.index}].city" cssErrorClass="error"/>--%>
+                                        <%--<form:errors path="${containerId}[${status.index}].city"--%>
+                                                     <%--cssClass="error-description"/>--%>
+
+                                        <%--<form:label--%>
+                                                <%--path="${containerId}[${status.index}].municipalityCode">Municipality code</form:label>--%>
+                                        <%--<form:input path="${containerId}[${status.index}].municipalityCode"--%>
+                                                    <%--cssErrorClass="error"/>--%>
+                                        <%--<form:errors path="${containerId}[${status.index}].municipalityCode"--%>
+                                                     <%--cssClass="error-description"/>--%>
+                                    <%--</div>--%>
+                                <%--</c:forEach>--%>
+                                <%--<button class="positive" type="button" onclick="ivis.ui.addAddress('${containerIdReal}');">--%>
+                                    <%--Add--%>
+                                <%--</button>--%>
+                            <%--</div>--%>
+
+                            <%--<h2>Phones:</h2>--%>
+                            <%--<c:set var="containerId" value="${personPath}.phones"/>--%>
+                            <%--<c:set var="containerIdReal" value="${guardianItemId}.person.phones"/>--%>
+                            <%--<div id="${containerIdReal}">--%>
+                                <%--<c:forEach var="phone" items="${person.phones}" varStatus="status">--%>
+                                    <%--<c:set var="subContainerId" value="${containerIdReal}${status.index}Field"/>--%>
+                                    <%--<div class="field" id="${subContainerId}" data-index="${status.index}">--%>
+                                            <%--&lt;%&ndash;<form:hidden path="${personPath}.phones[${status.index}].id"/>&ndash;%&gt;--%>
+
+                                            <%--&lt;%&ndash;<input type="hidden" name="${personPath}.phones[${status.index}].communicationType" value="${phone.communicationType}"/>&ndash;%&gt;--%>
+                                        <%--<form:select path="${containerId}[${status.index}].communicationType"--%>
+                                                     <%--items="${communicationTypeEnum}"/>--%>
+                                        <%--<button class="negative" type="button"--%>
+                                                <%--onclick="ivis.ui.removeContainer('${subContainerId}');">Remove--%>
+                                        <%--</button>--%>
+                                        <%--<form:label path="${containerId}[${status.index}].number">Phone</form:label>--%>
+                                        <%--<form:input path="${containerId}[${status.index}].number"--%>
+                                                    <%--cssErrorClass="error"/>--%>
+                                        <%--<form:errors path="${containerId}[${status.index}].number"--%>
+                                                     <%--cssClass="error-description"/>--%>
+                                    <%--</div>--%>
+                                <%--</c:forEach>--%>
+                                <%--<button class="positive" type="button" onclick="ivis.ui.addPhone('${containerIdReal}');">Add--%>
+                                <%--</button>--%>
+                            <%--</div>--%>
+
+                            <%--<h2>Emails:</h2>--%>
+                            <%--<c:set var="containerId" value="${personPath}.emails"/>--%>
+                            <%--<c:set var="containerIdReal" value="${guardianItemId}.person.emails"/>--%>
+                            <%--<div id="${containerIdReal}">--%>
+                                <%--<c:forEach var="email" items="${person.emails}" varStatus="status">--%>
+                                    <%--<c:set var="subContainerId" value="${containerIdReal}${status.index}Field"/>--%>
+                                    <%--<div class="field" id="${subContainerId}" data-index="${status.index}">--%>
+                                            <%--&lt;%&ndash;<form:hidden path="person.${containerId}[${status.index}].id"/>&ndash;%&gt;--%>
+
+                                        <%--<form:select path="${containerId}[${status.index}].communicationType"--%>
+                                                     <%--items="${communicationTypeEnum}"/>--%>
+                                        <%--<button class="negative" type="button"--%>
+                                                <%--onclick="ivis.ui.removeContainer('${subContainerId}');">Remove--%>
+                                        <%--</button>--%>
+                                        <%--<form:label--%>
+                                                <%--path="${containerId}[${status.index}].address">Email</form:label>--%>
+                                        <%--<form:input path="${containerId}[${status.index}].address"--%>
+                                                    <%--cssErrorClass="error"/>--%>
+                                        <%--<form:errors path="${containerId}[${status.index}].address"--%>
+                                                     <%--cssClass="error-description"/>--%>
+                                    <%--</div>--%>
+                                <%--</c:forEach>--%>
+                                <%--<button class="positive" type="button" onclick="ivis.ui.addEmail('${containerIdReal}');">Add--%>
+                                <%--</button>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
                     </div>
                 </c:forEach>
             </div>
@@ -517,10 +650,14 @@
 
             <div class="field">
                 <form:label path="classPlacementFrom">Class placement from</form:label>
-                <form:input path="classPlacementFrom" cssErrorClass="error"/>
+                <fmt:formatDate value="${pupil.classPlacementFrom}" var="dateString" pattern="yyyy-MM-dd" />
+                <input id="classPlacementFrom" name="classPlacementFrom" type="date" value="${dateString}">
+                <%--<form:input path="classPlacementFrom" cssErrorClass="error" type="date"/>--%>
                 <form:errors path="classPlacementFrom" cssClass="error-description"/>
                 <form:label path="classPlacementTo">to</form:label>
-                <form:input path="classPlacementTo" cssErrorClass="error"/>
+                <%--<form:input path="classPlacementTo" cssErrorClass="error" type="date"/>--%>
+                <fmt:formatDate value="${pupil.classPlacementTo}" var="dateString" pattern="yyyy-MM-dd" />
+                <input id="classPlacementTo" name="classPlacementTo" type="date" value="${dateString}">
                 <form:errors path="classPlacementTo" cssClass="error-description"/>
             </div>
 

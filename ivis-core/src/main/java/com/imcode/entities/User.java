@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Entity;
 
 /**
  * Created by vitaly on 12.05.15.

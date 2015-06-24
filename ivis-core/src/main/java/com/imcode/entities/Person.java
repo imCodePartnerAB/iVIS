@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
+import javax.persistence.Entity;
+
 /**
  * Created by vitaly on 13.05.15.
  */

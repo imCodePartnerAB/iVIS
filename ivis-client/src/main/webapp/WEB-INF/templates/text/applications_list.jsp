@@ -21,6 +21,7 @@
     //    DefaultIvisServiceFactory factory = IvisOAuth2Utils.getServiceFactory(request);
 //
     if (IvisOAuth2Utils.isTokenGood(request)) {
+//        request.setAttribute("isAuthorized");
 //    if (factory != null) {
 //        StatementService service = factory.getStatementService();
         IvisServiceFactory factory = IvisOAuth2Utils.getServiceFactory(request);
@@ -69,7 +70,7 @@
         request.setAttribute("statements", statementList);
     }
 %>
-
+<c:if test="${isAuthorized}">
 <h1>Applications</h1>
 
 <form action="${clientAddress}" method="get">
@@ -150,5 +151,5 @@
     <a class="button positive"
        href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/import">Import</a>
 </div>
-
+</c:if>
 <jsp:include page="ivis_footer.jsp"/>

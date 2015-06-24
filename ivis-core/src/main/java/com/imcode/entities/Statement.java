@@ -5,6 +5,7 @@ import com.imcode.entities.enums.StatementStatus;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Entity;
 
 /**
  * Created by vitaly on 14.05.15.

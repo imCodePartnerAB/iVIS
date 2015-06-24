@@ -3,6 +3,7 @@ package com.imcode.entities;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
+import javax.persistence.Entity;
 /**
  * Created by vitaly on 14.05.15.
  */

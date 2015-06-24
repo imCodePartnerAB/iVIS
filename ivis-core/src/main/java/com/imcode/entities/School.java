@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.imcode.entities.enums.ServiceTypeEnum;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
