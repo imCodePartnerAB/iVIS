@@ -115,7 +115,7 @@
             <div id="pupil.personField">
                 <c:set var="personPath" value="person"/>
                 <c:set var="person" value="${pupil.person}"/>
-                <input id="person" type="hidden" name="${personPath}" value="${person.id}">
+                <input id="person" type="hidden" name="${personPath}.id" value="${person.id}">
 
                 <div class="field">
                     <form:label path="${personPath}.personalId">Personal ID</form:label>
@@ -227,10 +227,10 @@
             </div>
         </div>
         <div id="guardiansTabPage" class="tab-page">
-            <div id="guardians">
+            <div id="guardians" >
                 <c:forEach var="guardian" items="${pupil.guardians}" varStatus="status">
-                    <c:set var="guardianItemId" value="guardianList${status.index}"/>
-                    <c:set var="guardianItemName" value="guardianList[${status.index}]"/>
+                    <c:set var="guardianItemId" value="guardians${status.index}"/>
+                    <c:set var="guardianItemName" value="guardians[${status.index}]"/>
                     <h2 onclick="ivis.ui.toggleDiv('${guardianItemId}')">Guardian ${status.index + 1}</h2>
 
                     <div id="${guardianItemId}">
@@ -241,11 +241,12 @@
                         </div>
                         <%--<input name="guardianList[${status.index}]" value="${guardian.id}">--%>
                         <%--================================================================================--%>
-                        <input type="hidden" name="${guardianItemName}" value="${guardian.id}">
+                        <%--<input type="hidden" name="${guardianItemName}" value="${guardian.id}">--%>
+                        <input type="hidden" name="guardianList[${status.index}].id" value="${guardian.id}">
                         <div id="${guardianItemId}.personField">
                             <c:set var="personPath" value="guardians[${status.index}].person"/>
                             <c:set var="person" value="${guardian.person}"/>
-                            <input id="person" type="hidden" name="${personPath}" value="${person.id}">
+                            <input id="person.id" type="hidden" name="${personPath}.id" value="${person.id}">
 
                             <div class="field">
                                 <form:label path="${personPath}.personalId">Personal ID</form:label>
@@ -313,7 +314,7 @@
                                                      cssClass="error-description"/>
                                     </div>
                                 </c:forEach>
-                                <button class="positive" type="button" onclick="ivis.ui.addAddress('${containerIdReal}');">
+                                <button class="positive" type="button" onclick="ivis.ui.addAddress('${containerId}');">
                                     Add
                                 </button>
                             </div>
@@ -340,7 +341,7 @@
                                                      cssClass="error-description"/>
                                     </div>
                                 </c:forEach>
-                                <button class="positive" type="button" onclick="ivis.ui.addPhone('${containerIdReal}');">Add
+                                <button class="positive" type="button" onclick="ivis.ui.addPhone('${containerId}');">Add
                                 </button>
                             </div>
 
@@ -366,7 +367,7 @@
                                                      cssClass="error-description"/>
                                     </div>
                                 </c:forEach>
-                                <button class="positive" type="button" onclick="ivis.ui.addEmail('${containerIdReal}');">Add
+                                <button class="positive" type="button" onclick="ivis.ui.addEmail('${containerId}');">Add
                                 </button>
                             </div>
                         </div>
@@ -507,14 +508,14 @@
             <c:set var="hasContactPerson" value="${not empty pupil.contactPerson}"/>
             <div class="checkbox">
                 <input id="hasContactPerson" type="checkbox" ${hasContactPerson ? 'checked': ''}
-                       onchange="ivis.ui.disableDiv('hasContactPerson', 'pupil.contactPersonField');">
+                       onchange="ivis.ui.disableContactPerson('hasContactPerson', 'pupil.contactPersonField');">
                 <label for="hasContactPerson">Contact person</label>
             </div>
             <div id="pupil.contactPersonField">
                 <c:if test="${hasContactPerson}">
                     <c:set var="personPath" value="contactPerson"/>
                     <c:set var="person" value="${pupil.contactPerson}"/>
-                    <input id="person" type="hidden" name="${personPath}" value="${person.id}">
+                    <input id="person" type="hidden" name="${personPath}.id" value="${person.id}">
 
                     <div class="field">
                         <form:label path="${personPath}.personalId">Personal ID</form:label>
@@ -651,7 +652,8 @@
             <div class="field">
                 <form:label path="classPlacementFrom">Class placement from</form:label>
                 <fmt:formatDate value="${pupil.classPlacementFrom}" var="dateString" pattern="yyyy-MM-dd" />
-                <input id="classPlacementFrom" name="classPlacementFrom" type="date" value="${dateString}">
+                <input id="classPlacementFrom" name="classPlacementFrom" type="date" value="">
+                <%--<input id="classPlacementFrom" name="classPlacementFrom" type="date" value="${dateString}">--%>
                 <%--<form:input path="classPlacementFrom" cssErrorClass="error" type="date"/>--%>
                 <form:errors path="classPlacementFrom" cssClass="error-description"/>
                 <form:label path="classPlacementTo">to</form:label>

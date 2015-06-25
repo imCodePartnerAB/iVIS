@@ -220,7 +220,12 @@ public class IvisController {
 
         if (pupil.getGuardians() != null) {
             for (Guardian guardian :pupil.getGuardians()) {
-                guardianService.save(guardian);
+                if (guardian != null) {
+//                    if (guardian.getPerson() != null) {
+//                        personService.save(guardian.getPerson());
+//                    }
+                    guardianService.save(guardian);
+                }
             }
 
         }

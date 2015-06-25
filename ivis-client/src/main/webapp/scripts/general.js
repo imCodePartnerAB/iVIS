@@ -58,10 +58,14 @@ IVis.UI.prototype =
         return str.replace(/\./g, "\\.");
     },
 
+    escapeBrackets: function (str) {
+        return str.replace(/[\[\]]/g, "");
+    },
+
     getNewItemIndex: function (tag) {
         //var elementId = tag.replace(".", "\\.");
         var value = 0;
-        var elements = $("#" + this.escapeDots(tag) + " .field[data-index]");
+        var elements = $("#" + this.escapeDots(this.escapeBrackets(tag)) + " .field[data-index]");
 
         if (elements.length > 0) {
             elements.each(function (index, element) {
@@ -102,12 +106,12 @@ IVis.UI.prototype =
     //}
     addPhone: function (subConteinerId) {
         var itemIndex = this.getNewItemIndex(subConteinerId);
-        var conteinerId = subConteinerId + itemIndex + "Field";
+        var conteinerId = this.escapeBrackets(subConteinerId) + itemIndex + "Field";
         var container = $("<div>")
             .addClass("field")
             .attr("id", conteinerId)
             .attr("data-index", itemIndex)
-            .insertBefore($("#" + this.escapeDots(subConteinerId) + " .positive"));
+            .insertBefore($("#" + this.escapeDots(this.escapeBrackets(subConteinerId)) + " .positive"));
 
         this.addSelect(container, itemIndex, subConteinerId, "communicationType", communicationTypeEnum);
 
@@ -122,31 +126,87 @@ IVis.UI.prototype =
         this.addField(container, itemIndex, subConteinerId, "number", "Phone");
     },
 
+    addEmail: function (subConteinerId) {
+        var itemIndex = this.getNewItemIndex(subConteinerId);
+        var conteinerId = this.escapeBrackets(subConteinerId) + itemIndex + "Field";
+        var container = $("<div>")
+            .addClass("field")
+            .attr("id", conteinerId)
+            .attr("data-index", itemIndex)
+            .insertBefore($("#" + this.escapeDots(this.escapeBrackets(subConteinerId)) + " .positive"));
+
+        this.addSelect(container, itemIndex, subConteinerId, "communicationType", communicationTypeEnum);
+
+        var $this = this;
+        $("<button>")
+            .addClass("negative")
+            .attr("type", "button")
+            .html("Remove")
+            .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
+            //.click(function () {
+            //    $this.removeContainer(conteinerId)
+            //})
+            .appendTo(container);
+
+        this.addField(container, itemIndex, subConteinerId, "address", "Email");
+    },
+
+    addAddress: function (subConteinerId) {
+        var itemIndex = this.getNewItemIndex(subConteinerId);
+        var conteinerId = this.escapeBrackets(subConteinerId) + itemIndex + "Field";
+        var container = $("<div>")
+            .addClass("field")
+            .attr("id", conteinerId)
+            .attr("data-index", itemIndex)
+            .insertBefore($("#" + this.escapeDots(this.escapeBrackets(subConteinerId)) + " .positive"));
+
+        this.addSelect(container, itemIndex, subConteinerId, "addressType", addressTypeEnum);
+
+        var $this = this;
+        $("<button>")
+            .addClass("negative")
+            .attr("type", "button")
+            .html("Remove")
+            .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
+            //.click(function () {
+            //    $this.removeContainer(conteinerId)
+            //})
+            .appendTo(container);
+
+        this.addField(container, itemIndex, subConteinerId, "careOf", "c/o");
+        this.addField(container, itemIndex, subConteinerId, "street", "Street");
+        this.addField(container, itemIndex, subConteinerId, "postalCode", "Postal code");
+        this.addField(container, itemIndex, subConteinerId, "city", "City");
+        this.addField(container, itemIndex, subConteinerId, "municipalityCode", "Municipality code");
+    },
+
     addField: function (owner, itemId, itemPrefix, name, labelText) {
+        var itemIdPrefix = this.escapeBrackets(itemPrefix);
         if (labelText != null) {
             $("<label>")
-                .attr("for", itemPrefix + itemId + "." + name)
+                .attr("for", itemIdPrefix + itemId + "." + name)
                 .html(labelText)
                 .appendTo(owner);
         }
 
         $("<input>")
-            .attr("id", itemPrefix + itemId + "." + name)
+            .attr("id", itemIdPrefix + itemId + "." + name)
             .attr("name", itemPrefix + "[" + itemId + "]." + name)
             .attr("type", "text")
             .appendTo(owner);
     },
 
     addSelect: function (owner, itemId, itemPrefix, name, items, labelText) {
+        var itemIdPrefix = this.escapeBrackets(itemPrefix);
         if (labelText != null) {
             $("<label>")
-                .attr("for", itemPrefix + itemId + "." + name)
+                .attr("for", itemIdPrefix + itemId + "." + name)
                 .html(labelText)
                 .appendTo(owner);
         }
 
         var select = $("<select>")
-            .attr("id", itemPrefix + itemId + "." + name)
+            .attr("id", itemIdPrefix + itemId + "." + name)
             .attr("name", itemPrefix + "[" + itemId + "]." + name)
             .appendTo(owner);
 
@@ -177,60 +237,6 @@ IVis.UI.prototype =
                         .appendTo(schoolClassesSelect);
                 }
             });
-    },
-
-    addEmail: function (subConteinerId) {
-        var itemIndex = this.getNewItemIndex(subConteinerId);
-        var conteinerId = subConteinerId + itemIndex + "Field";
-        var container = $("<div>")
-            .addClass("field")
-            .attr("id", conteinerId)
-            .attr("data-index", itemIndex)
-            .insertBefore($("#" + this.escapeDots(subConteinerId) + " .positive"));
-
-        this.addSelect(container, itemIndex, subConteinerId, "communicationType", communicationTypeEnum);
-
-        var $this = this;
-        $("<button>")
-            .addClass("negative")
-            .attr("type", "button")
-            .html("Remove")
-            .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
-            //.click(function () {
-            //    $this.removeContainer(conteinerId)
-            //})
-            .appendTo(container);
-
-        this.addField(container, itemIndex, subConteinerId, "address", "Email");
-    },
-
-    addAddress: function (subConteinerId) {
-        var itemIndex = this.getNewItemIndex(subConteinerId);
-        var conteinerId = subConteinerId + itemIndex + "Field";
-        var container = $("<div>")
-            .addClass("field")
-            .attr("id", conteinerId)
-            .attr("data-index", itemIndex)
-            .insertBefore($("#" + this.escapeDots(subConteinerId) + " .positive"));
-
-        this.addSelect(container, itemIndex, subConteinerId, "addressType", addressTypeEnum);
-
-        var $this = this;
-        $("<button>")
-            .addClass("negative")
-            .attr("type", "button")
-            .html("Remove")
-            .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
-            //.click(function () {
-            //    $this.removeContainer(conteinerId)
-            //})
-            .appendTo(container);
-
-        this.addField(container, itemIndex, subConteinerId, "careOf", "c/o");
-        this.addField(container, itemIndex, subConteinerId, "street", "Street");
-        this.addField(container, itemIndex, subConteinerId, "postalCode", "Postal code");
-        this.addField(container, itemIndex, subConteinerId, "city", "City");
-        this.addField(container, itemIndex, subConteinerId, "municipalityCode", "Municipality code");
     },
 
     clearSerchText: function (paramName) {
@@ -286,7 +292,7 @@ IVis.UI.prototype =
         }
     },
 
-    disableDiv: function (checkboxId, divId, slide) {
+    disableContactPerson: function (checkboxId, divId, slide) {
         slide != null || slide ? true : false;
         var checkbox = $("#" + this.escapeDots(checkboxId));
         var escapedElementId = this.escapeDots(divId);
@@ -297,6 +303,9 @@ IVis.UI.prototype =
             $("#" + escapedElementId + " :input").removeAttr('disabled');
             if (slide) {
                 element.slideDown("slow");
+            }
+            if(element.html() == null) {
+                alert("contactPerson is empty!")
             }
         } else {
             element.attr("disable", "disable");

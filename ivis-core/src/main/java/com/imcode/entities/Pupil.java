@@ -25,12 +25,12 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
     @JoinColumn(name = "contactPersonId")
     private Person contactPerson;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementFrom;
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementTo;

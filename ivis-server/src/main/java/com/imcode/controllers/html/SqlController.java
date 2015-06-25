@@ -43,11 +43,27 @@ public class SqlController {
             if (sql.isEmpty()) continue;
 
             try {
-                if ("select".equalsIgnoreCase(sql.substring(0, 6))) {
+                String begin = sql.substring(0, 9).toLowerCase().trim();
+                if (begin.startsWith("create")
+                        || begin.startsWith("alter")
+                        || begin.startsWith("drop")
+                        || begin.startsWith("insert")
+                        || begin.startsWith("update")
+                        || begin.startsWith("delete")
+                        || begin.startsWith("use")
+                        || begin.startsWith("grant")
+                        || begin.startsWith("revoke")
+                        || begin.startsWith("deny")
+                        || begin.startsWith("commit")
+                        || begin.startsWith("rollback")
+                        || begin.startsWith("savepoint")
+//                        || begin.startsWith("")
+                        ) {
+
+                    rowCount = jdbcTemplate.update(sql);
+                } else {
                     result = jdbcTemplate.queryForList(sql);
                     rowCount = result.size();
-                } else {
-                    rowCount = jdbcTemplate.update(sql);
                 }
             } catch (Exception e) {
                 errorMessage = e.getMessage();

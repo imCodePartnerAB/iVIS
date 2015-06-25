@@ -34,6 +34,7 @@
         <!--<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />-->
         <!--&lt;!&ndash;<access-denied-handler ref="oauthAccessDeniedHandler" />&ndash;&gt;-->
     <!--</http>-->
+    <http pattern="/favicon.ico" security="none" xmlns="http://www.springframework.org/schema/security"/>
 
     <http pattern="/oauth/token" create-session="never"
           authentication-manager-ref="clientAuthenticationManager"
@@ -102,6 +103,7 @@
         <!--<intercept-url pattern="/oauth/**" access="ROLE_USER" />-->
         <!--<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <!--<intercept-url pattern="/oauth/authorize" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />

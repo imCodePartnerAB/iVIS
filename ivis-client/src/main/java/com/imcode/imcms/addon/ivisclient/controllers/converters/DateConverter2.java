@@ -59,14 +59,22 @@ public class DateConverter2 implements ConditionalGenericConverter {
     }
 
     public Date setAsText(String value) {
+        if (value == null || StringUtils.isBlank(value)) {
+            return null;
+        }
+
         try {
             return new SimpleDateFormat(datePattern).parse(value);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             throw new IllegalArgumentException("Can't convert string \"" + value + "\" to Date.");
         }
     }
 
     public String getAsText(Date value) {
+        if (value == null) {
+            return null;
+        }
+
         return new SimpleDateFormat(datePattern).format(value);
     }
 //    @Override
