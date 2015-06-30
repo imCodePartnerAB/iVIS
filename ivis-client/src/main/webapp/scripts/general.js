@@ -1,3 +1,4 @@
+var clientAddress;
 var ivis = null;
 
 function initialize() {
@@ -196,6 +197,48 @@ IVis.UI.prototype =
             .appendTo(owner);
     },
 
+    addSingleField: function (owner, value, name, labelText) {
+        var itemId = this.escapeBrackets(name);
+        var container = $("<div>")
+            .addClass("field")
+            .appendTo(owner);
+
+        if (labelText != null) {
+            $("<label>")
+                .attr("for", itemId)
+                .html(labelText)
+                .appendTo(container);
+        }
+
+        $("<input>")
+            .attr("id", itemId)
+            .attr("name", name)
+            .attr("type", "text")
+            .attr("value", value)
+            .appendTo(container);
+    },
+
+    //addSingleCheckbox: function (owner, value, name, labelText) {
+    //    var itemId = this.escapeBrackets(name);
+    //    var container = $("<div>")
+    //        .addClass("checkbox")
+    //        .appendTo(owner);
+    //
+    //    if (labelText != null) {
+    //        $("<label>")
+    //            .attr("for", itemId)
+    //            .html(labelText)
+    //            .appendTo(container);
+    //    }
+    //
+    //    $("<input>")
+    //        .attr("id", itemId)
+    //        .attr("name", name)
+    //        .attr("type", "checkbox")
+    //        .attr("value", value)
+    //        .appendTo(container);
+    //},
+
     addSelect: function (owner, itemId, itemPrefix, name, items, labelText) {
         var itemIdPrefix = this.escapeBrackets(itemPrefix);
         if (labelText != null) {
@@ -215,6 +258,32 @@ IVis.UI.prototype =
                 .attr("value", items[i].name)
                 .html(items[i].description)
                 .appendTo(select);
+        }
+    },
+
+    addSingleSelect: function (owner, value, name, items, labelText) {
+        var itemId = this.escapeBrackets(name);
+        if (labelText != null) {
+            $("<label>")
+                .attr("for", itemId)
+                .html(labelText)
+                .appendTo(owner);
+        }
+
+        var select = $("<select>")
+            .attr("id", itemId)
+            .attr("name", name)
+            .appendTo(owner);
+
+        for (var i = 0; i < items.length; i++) {
+            var item = $("<option>")
+                .attr("value", items[i].name)
+                .html(items[i].description)
+                .appendTo(select);
+
+            if(value == items[i].name) {
+                item.attr("selected", "selected");
+            }
         }
     },
 
@@ -304,8 +373,8 @@ IVis.UI.prototype =
             if (slide) {
                 element.slideDown("slow");
             }
-            if(element.html() == null) {
-                alert("contactPerson is empty!")
+            if(element.html().trim() == "") {
+                ivisOAuth(clientAddress + '/persons_list.jsp');
             }
         } else {
             element.attr("disable", "disable");
@@ -325,7 +394,194 @@ IVis.UI.prototype =
         var currentInputs = $("#" + escapedDivtId + " :input");
         currentInputs.removeAttr('disabled');
         $("#" + escapedparentDivtId + " :input").not(currentInputs).attr('disabled', true);
+    },
+
+    selectRow: function(id) {
+        $("tr").removeClass("selected");
+        $("tr[data-application-id='" + id + "']").addClass("selected");
+    },
+
+    selectItem: function(itemName) {
+        var row = $("tr.selected");
+        if(row.length == 0) {
+            return;
+        }
+
+        window.opener.onSelectedItem(itemName, row.data("applicationId"));
+        window.close();
+    },
+
+    displayPersonInfo: function(person, owner, itemNamePrefix, context){
+        var itemIdPrefix = this.escapeBrackets(itemNamePrefix);
+        $("<input>").attr("id", itemIdPrefix + ".id")
+            .attr("name", itemNamePrefix + ".id")
+            .attr("type", "hidden")
+            .attr("value", person.id)
+            .appendTo(owner);
+
+        context.addSingleField(owner, person.personalId, itemNamePrefix + ".personalId", "Personal Id");
+        context.addSingleField(owner, person.firstName, itemNamePrefix + ".firstName", "First name");
+        context.addSingleField(owner, person.lastName, itemNamePrefix + ".lastName", "Last name");
+
+        var subConteinerId = itemIdPrefix + ".addresses";
+        var subConteinerName = itemNamePrefix + ".addresses";
+
+        $("<H2>").html("Addresses:").appendTo(owner);
+        //var container0 = $("<div>").attr("id", itemNamePrefix + ".addreses").appendTo(owner);
+        var collectionCcontainer = $("<div>").attr("id", subConteinerId).appendTo(owner);
+        var collection = person.addresses;
+        for(i = 0; i < collection.length; i++) {
+            var conteinerId = context.escapeBrackets(subConteinerId) + i + "Field";
+            var container = $("<div>")
+                .addClass("field")
+                .attr("id", conteinerId)
+                .attr("data-index", i)
+                .appendTo(collectionCcontainer);
+
+            context.addSingleSelect(container, collection[i].addressType, subConteinerName + "[" + i + "].addressType", addressTypeEnum);
+
+            $("<button>")
+                .addClass("negative")
+                .attr("type", "button")
+                .html("Remove")
+                .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
+                .appendTo(container);
+
+            context.addSingleField(container, collection[i].careOf, subConteinerName + "[" + i + "].careOf", "c/o");
+            context.addSingleField(container, collection[i].street, subConteinerName + "[" + i + "].street", "Street");
+            context.addSingleField(container, collection[i].postalCode, subConteinerName + "[" + i + "].postalCode", "Postal code");
+            context.addSingleField(container, collection[i].city, subConteinerName + "[" + i + "].city", "City");
+            context.addSingleField(container, collection[i].municipalityCode, subConteinerName + "[" + i + "].municipalityCode", "Municipality code");
+
+        }
+        $("<button>")
+            .addClass("positive")
+            .attr("type", "button")
+            .html("Add")
+            .attr("onClick", "ivis.ui.addAddress('" + subConteinerName + "');")
+            .appendTo(collectionCcontainer);
+
+
+        //    Phones:
+        var subConteinerId = itemIdPrefix + ".phones";
+        var subConteinerName = itemNamePrefix + ".phones";
+
+        $("<H2>").html("Phones:").appendTo(owner);
+        var collectionCcontainer = $("<div>").attr("id", subConteinerId).appendTo(owner);
+        var collection = person.phones;
+        for(i = 0; i < collection.length; i++) {
+            var conteinerId = context.escapeBrackets(subConteinerId) + i + "Field";
+            var container = $("<div>")
+                .addClass("field")
+                .attr("id", conteinerId)
+                .attr("data-index", i)
+                .appendTo(collectionCcontainer);
+
+            context.addSingleSelect(container, collection[i].communicationType, subConteinerName + "[" + i + "].communicationType", communicationTypeEnum);
+
+            $("<button>")
+                .addClass("negative")
+                .attr("type", "button")
+                .html("Remove")
+                .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
+                .appendTo(container);
+
+            context.addSingleField(container, collection[i].number, subConteinerName + "[" + i +"].number", "Phone");
+        }
+        $("<button>")
+            .addClass("positive")
+            .attr("type", "button")
+            .html("Add")
+            .attr("onClick", "ivis.ui.addPhone('" + subConteinerName + "');")
+            .appendTo(collectionCcontainer);
+
+        //    Emails:
+        var subConteinerId = itemIdPrefix + ".emails";
+        var subConteinerName = itemNamePrefix + ".emails";
+
+        $("<H2>").html("Emails:").appendTo(owner);
+        var collectionCcontainer = $("<div>").attr("id", subConteinerId).appendTo(owner);
+        var collection = person.emails;
+        for(i = 0; i < collection.length; i++) {
+            var conteinerId = context.escapeBrackets(subConteinerId) + i + "Field";
+            var container = $("<div>")
+                .addClass("field")
+                .attr("id", conteinerId)
+                .attr("data-index", i)
+                .appendTo(collectionCcontainer);
+
+            context.addSingleSelect(container, collection[i].communicationType, subConteinerName + "[" + i + "].communicationType", communicationTypeEnum);
+
+            $("<button>")
+                .addClass("negative")
+                .attr("type", "button")
+                .html("Remove")
+                .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
+                .appendTo(container);
+
+            context.addSingleField(container, collection[i].address, subConteinerName + "[" + i +"].address", "Email");
+        }
+        $("<button>")
+            .addClass("positive")
+            .attr("type", "button")
+            .html("Add")
+            .attr("onClick", "ivis.ui.addEmail('" + subConteinerName + "');")
+            .appendTo(collectionCcontainer);
+    },
+
+    fillContactPerson: function(id) {
+        var $this = this;
+        var owner = $("#pupil\\.contactPersonField");
+        var itemPrefix = "contactPerson";
+        $.getJSON("/client/api/content/rest/Person/" + id,
+            function (result) {
+                $this.displayPersonInfo(result, owner, itemPrefix, $this);
+            });
+    },
+
+    addGuardian: function(id) {
+        var $this = this;
+        //var owner = $("#guardians0\\.personField");
+        //var itemPrefix = "guardians0.person";
+        $.getJSON("/client/api/content/rest/Guardian/" + id,
+            function (result) {
+                var mainContainer = $("#guardians");
+                var index = $this.getNewItemIndex("guardians");
+                var containerId = "guardians" + index;
+                var containerName = "guardians[" + index + "]";
+                $("<H2>").html("Guardian " + (index + 1)).appendTo(mainContainer).attr("onClick", "ivis.ui.toggleDiv('" + containerId + "');");
+                var container = $("<div>")
+                    .attr("id", containerId)
+                    .attr("data-index", index)
+                    .appendTo(mainContainer);
+
+                var checkbox = $("<div>")
+                    .addClass("checkbox")
+                    .appendTo(container);
+
+                $("<input>")
+                    .attr("id", containerId + ".solo")
+                    .attr("type", "checkbox")
+                    .appendTo(checkbox);
+
+                $("<label>")
+                    .attr("for", containerId + ".solo")
+                    .html("Solo guardian")
+                    .appendTo(checkbox);
+                $("<input>").attr("id", "guardianList" + index + ".id")
+                    .attr("name", "guardianList[" + index + "].id")
+                    .attr("type", "hidden")
+                    .attr("value", result.id)
+                    .appendTo(container);
+
+                var owner = $("<div>")
+                    .attr("id", containerId + ".personField")
+                    .appendTo(container);
+
+                $this.displayPersonInfo(result.person, owner, containerName + ".person", $this);
+            });
     }
+
 
 };
 
@@ -338,7 +594,26 @@ function ivisOAuth(authUrl) {
     var top = (screen.height / 2) - (height / 2);
     wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
 }
+
+//function openGuardian() {
+//    var width = 600;
+//    var height = 350;
+//    var left = (screen.width / 2) - (width / 2);
+//    var top = (screen.height / 2) - (height / 2);
+//    wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
+//}
+
 function authComplete() {
     wnd.close();
     location.reload();
+}
+
+function onSelectedItem(itemName, id) {
+    if(itemName == "person") {
+        ivis.ui.fillContactPerson(id);
+    }else {
+        ivis.ui.addGuardian(id);
+        //alert(itemName + ": " + id);
+
+    }
 }

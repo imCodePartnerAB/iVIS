@@ -22,23 +22,29 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        String fileName = "/home/vitaly/SkypeFiles/795.xml";
+//        String fileName = "/home/vitaly/SkypeFiles/795.xml";
+//
+//    try {
+//
+//        SAXParserFactory factory = SAXParserFactory.newInstance();
+//        SAXParser saxParser = factory.newSAXParser();
+//
+//        StatmentHandler handler = getStatementHandler();
+//
+//        saxParser.parse(fileName, handler);
+//
+//        System.out.println(handler.getStatement());
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//    }
+        int n = 98;
+        for (int i = n; i > 0; i--) {
+//            System.out.println(n%i);
+            if (n % i == 0)
+                System.out.println(i);
+        }
 
-    try {
-
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        SAXParser saxParser = factory.newSAXParser();
-
-        StatmentHandler handler = getStatementHandler();
-
-        saxParser.parse(fileName, handler);
-
-        System.out.println(handler.getStatement());
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-
-}
 //    public static void main(String[] args) {
 //        String fileName = "/home/vitaly/SkypeFiles/0.xml";
 ////        AuthorizationCodeResourceDetails

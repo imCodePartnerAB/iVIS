@@ -13,6 +13,7 @@
                 initialize();
             }
     );
+    clientAddress = "${clientAddress}";
 </script>
 </body>
 </html>
