@@ -25,8 +25,8 @@
     <context:annotation-config/>
 
     <!-- Configure bean to convert JSON to POJO and vice versa -->
-    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-    </bean>
+    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+
     <mvc:annotation-driven content-negotiation-manager="cnManager" conversion-service="conversionService"/>
 
     <bean class="com.imcode.imcms.addon.ivisclient.controllers.converters.IvisDomainClassConverter"

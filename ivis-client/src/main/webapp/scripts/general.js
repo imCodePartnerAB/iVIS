@@ -63,10 +63,11 @@ IVis.UI.prototype =
         return str.replace(/[\[\]]/g, "");
     },
 
-    getNewItemIndex: function (tag) {
+    getNewItemIndex: function (tag, recursivelly) {
         //var elementId = tag.replace(".", "\\.");
+        //recursivelly = recursivelly != null ? recursivelly : true;
         var value = 0;
-        var elements = $("#" + this.escapeDots(this.escapeBrackets(tag)) + " .field[data-index]");
+        var elements = $("#" + this.escapeDots(this.escapeBrackets(tag)) + " > [data-index]");
 
         if (elements.length > 0) {
             elements.each(function (index, element) {
@@ -88,7 +89,7 @@ IVis.UI.prototype =
     //        .addClass("field")
     //        .attr("id", conteinerId)
     //        .attr("data-index", itemIndex)
-    //        .insertBefore($("#" + subContainerName + " .positive"));
+    //        .insertBefore($("#addGuardianButton .positive"));
     //
     //    this.addSelect(container, itemIndex, conteinerName, "communicationType", communicationTypeEnum);
     //
@@ -393,7 +394,12 @@ IVis.UI.prototype =
         checkboxes.not(checkbox).prop("checked", false);
         var currentInputs = $("#" + escapedDivtId + " :input");
         currentInputs.removeAttr('disabled');
-        $("#" + escapedparentDivtId + " :input").not(currentInputs).attr('disabled', true);
+
+        if(checkbox[0].checked) {
+            $("#" + escapedparentDivtId + " :input").not(currentInputs).not(checkboxes).attr('disabled', true);
+        }else {
+            $("#" + escapedparentDivtId + " :input").removeAttr('disabled');
+        }
     },
 
     selectRow: function(id) {
@@ -533,7 +539,7 @@ IVis.UI.prototype =
         var $this = this;
         var owner = $("#pupil\\.contactPersonField");
         var itemPrefix = "contactPerson";
-        $.getJSON("/client/api/content/rest/Person/" + id,
+        $.getJSON(clientAddress + "/api/content/rest/Person/" + id,
             function (result) {
                 $this.displayPersonInfo(result, owner, itemPrefix, $this);
             });
@@ -543,40 +549,53 @@ IVis.UI.prototype =
         var $this = this;
         //var owner = $("#guardians0\\.personField");
         //var itemPrefix = "guardians0.person";
-        $.getJSON("/client/api/content/rest/Guardian/" + id,
+        $.getJSON(clientAddress + "/api/content/rest/Guardian/" + id,
             function (result) {
                 var mainContainer = $("#guardians");
                 var index = $this.getNewItemIndex("guardians");
                 var containerId = "guardians" + index;
                 var containerName = "guardians[" + index + "]";
-                $("<H2>").html("Guardian " + (index + 1)).appendTo(mainContainer).attr("onClick", "ivis.ui.toggleDiv('" + containerId + "');");
+                $("<H2>")
+                    .html("Guardian " + (index + 1))
+                    //.appendTo(mainContainer)
+                    .attr("onClick", "ivis.ui.toggleDiv('" + containerId + "');")
+                    .insertBefore($("#addGuardianButton"));
+
                 var container = $("<div>")
                     .attr("id", containerId)
                     .attr("data-index", index)
-                    .appendTo(mainContainer);
+                    //.appendTo(mainContainer);
+                    .insertBefore($("#addGuardianButton"));
 
                 var checkbox = $("<div>")
                     .addClass("checkbox")
                     .appendTo(container);
+                    //.insertBefore($("#addGuardianButton .positive"));
 
                 $("<input>")
                     .attr("id", containerId + ".solo")
                     .attr("type", "checkbox")
                     .appendTo(checkbox);
 
+
                 $("<label>")
                     .attr("for", containerId + ".solo")
                     .html("Solo guardian")
                     .appendTo(checkbox);
+                    //.insertBefore($("#addGuardianButton .positive"));
+
                 $("<input>").attr("id", "guardianList" + index + ".id")
                     .attr("name", "guardianList[" + index + "].id")
                     .attr("type", "hidden")
                     .attr("value", result.id)
                     .appendTo(container);
+                    //.insertBefore($("#addGuardianButton .positive"));
 
                 var owner = $("<div>")
                     .attr("id", containerId + ".personField")
                     .appendTo(container);
+                    //.insertBefore($("#addGuardianButton .positive"));
+
 
                 $this.displayPersonInfo(result.person, owner, containerName + ".person", $this);
             });

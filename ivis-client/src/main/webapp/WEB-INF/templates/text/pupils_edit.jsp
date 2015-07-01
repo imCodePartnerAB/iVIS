@@ -373,7 +373,7 @@
                         </div>
                     </div>
                 </c:forEach>
-                <div class="buttons">
+                <div class="buttons"id="addGuardianButton" >
                     <button class="positive" type="button" onclick="ivisOAuth('${clientAddress}/guardians_list.jsp');">Add guardian</button>
                 </div>
             </div>
