@@ -125,7 +125,8 @@ IVis.UI.prototype =
             .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
             .appendTo(container);
 
-        this.addField(container, itemIndex, subConteinerId, "number", "Phone");
+        this.addField(container, itemIndex, subConteinerId, "number", "Phone")
+            .attr("data-rule-pattern", "\\s*((\\+([\\s-]*\\d[\\s-]*){2}|([\\s-]*\\d[\\s-]*)?)?((\\(([\\s-]*\\d[\\s-]*){3}\\))|([\\s-]*\\d[\\s-]*){3}))?([\\s-]*\\d[\\s-]*){7}");
     },
 
     addEmail: function (subConteinerId) {
@@ -150,7 +151,8 @@ IVis.UI.prototype =
             //})
             .appendTo(container);
 
-        this.addField(container, itemIndex, subConteinerId, "address", "Email");
+        this.addField(container, itemIndex, subConteinerId, "address", "Email")
+            .attr("data-rule-email", "true");
     },
 
     addAddress: function (subConteinerId) {
@@ -177,7 +179,8 @@ IVis.UI.prototype =
 
         this.addField(container, itemIndex, subConteinerId, "careOf", "c/o");
         this.addField(container, itemIndex, subConteinerId, "street", "Street");
-        this.addField(container, itemIndex, subConteinerId, "postalCode", "Postal code");
+        this.addField(container, itemIndex, subConteinerId, "postalCode", "Postal code")
+            .attr("data-rule-digits", "true" )
         this.addField(container, itemIndex, subConteinerId, "city", "City");
         this.addField(container, itemIndex, subConteinerId, "municipalityCode", "Municipality code");
     },
@@ -191,7 +194,7 @@ IVis.UI.prototype =
                 .appendTo(owner);
         }
 
-        $("<input>")
+        return $("<input>")
             .attr("id", itemIdPrefix + itemId + "." + name)
             .attr("name", itemPrefix + "[" + itemId + "]." + name)
             .attr("type", "text")
@@ -211,7 +214,7 @@ IVis.UI.prototype =
                 .appendTo(container);
         }
 
-        $("<input>")
+        return $("<input>")
             .attr("id", itemId)
             .attr("name", name)
             .attr("type", "text")
@@ -455,7 +458,8 @@ IVis.UI.prototype =
 
             context.addSingleField(container, collection[i].careOf, subConteinerName + "[" + i + "].careOf", "c/o");
             context.addSingleField(container, collection[i].street, subConteinerName + "[" + i + "].street", "Street");
-            context.addSingleField(container, collection[i].postalCode, subConteinerName + "[" + i + "].postalCode", "Postal code");
+            context.addSingleField(container, collection[i].postalCode, subConteinerName + "[" + i + "].postalCode", "Postal code")
+                .attr("data-rule-digits", "true" );
             context.addSingleField(container, collection[i].city, subConteinerName + "[" + i + "].city", "City");
             context.addSingleField(container, collection[i].municipalityCode, subConteinerName + "[" + i + "].municipalityCode", "Municipality code");
 
@@ -492,7 +496,8 @@ IVis.UI.prototype =
                 .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
                 .appendTo(container);
 
-            context.addSingleField(container, collection[i].number, subConteinerName + "[" + i +"].number", "Phone");
+            context.addSingleField(container, collection[i].number, subConteinerName + "[" + i +"].number", "Phone")
+                .attr("data-rule-pattern", "\\s*((\\+([\\s-]*\\d[\\s-]*){2}|([\\s-]*\\d[\\s-]*)?)?((\\(([\\s-]*\\d[\\s-]*){3}\\))|([\\s-]*\\d[\\s-]*){3}))?([\\s-]*\\d[\\s-]*){7}");
         }
         $("<button>")
             .addClass("positive")
@@ -525,7 +530,8 @@ IVis.UI.prototype =
                 .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
                 .appendTo(container);
 
-            context.addSingleField(container, collection[i].address, subConteinerName + "[" + i +"].address", "Email");
+            context.addSingleField(container, collection[i].address, subConteinerName + "[" + i +"].address", "Email")
+                .attr("data-rule-email", "true");
         }
         $("<button>")
             .addClass("positive")

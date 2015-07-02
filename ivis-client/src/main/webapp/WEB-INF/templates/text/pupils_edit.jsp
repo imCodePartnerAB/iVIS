@@ -104,7 +104,7 @@
         </div>
     </div>
     <%--<form:form modelAttribute="pupil" action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/pupils" method="post">--%>
-    <form:form modelAttribute="pupil" action="${clientAddress}/api/content/ivis/pupils" method="post">
+    <form:form modelAttribute="pupil" action="${clientAddress}/api/content/ivis/pupils" method="post" id="pupil-form">
         <div id="basicDataTabPage" class="tab-page">
             <form:hidden path="id" cssErrorClass="error"/>
                 <%--<div class="field">--%>
@@ -119,19 +119,19 @@
 
                 <div class="field">
                     <form:label path="${personPath}.personalId">Personal ID</form:label>
-                    <form:input path="${personPath}.personalId" cssErrorClass="error"/>
+                    <form:input data-rule-maxlength="255" path="${personPath}.personalId" cssErrorClass="error"/>
                     <form:errors path="${personPath}.personalId" cssClass="error-description"/>
                 </div>
                 <div class="field">
                     <form:label path="${personPath}.lastName">Last name</form:label>
-                    <form:input path="${personPath}.lastName" cssErrorClass="error"/>
+                    <form:input data-rule-maxlength="255" path="${personPath}.lastName" cssErrorClass="error"/>
                     <form:errors path="${personPath}.lastName" cssClass="error-description"/>
                 </div>
                 <div class="field">
                     <form:label path="${personPath}.firstName">
                         First name
                     </form:label>
-                    <form:input path="${personPath}.firstName" cssErrorClass="error"/>
+                    <form:input data-rule-maxlength="255" path="${personPath}.firstName" cssErrorClass="error"/>
                     <form:errors path="${personPath}.firstName" cssClass="error-description"/>
                 </div>
 
@@ -151,25 +151,25 @@
                                 <%--<input type="hidden" name="${containerId}[${status.index}].addressType" value="${address.addressType}"/>--%>
 
                             <form:label path="${containerId}[${status.index}].careOf">c/o</form:label>
-                            <form:input path="${containerId}[${status.index}].careOf" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf" cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].careOf" cssClass="error-description"/>
 
                             <form:label path="${containerId}[${status.index}].street">Street</form:label>
-                            <form:input path="${containerId}[${status.index}].street" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street" cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].street" cssClass="error-description"/>
 
                             <form:label path="${containerId}[${status.index}].postalCode">Postal code</form:label>
-                            <form:input path="${containerId}[${status.index}].postalCode" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" data-rule-digits="true" path="${containerId}[${status.index}].postalCode" cssErrorClass="error" data-rule-postalcodeIT="true"/>
                             <form:errors path="${containerId}[${status.index}].postalCode"
                                          cssClass="error-description"/>
 
                             <form:label path="${containerId}[${status.index}].city">City</form:label>
-                            <form:input path="${containerId}[${status.index}].city" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city" cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].city" cssClass="error-description"/>
 
                             <form:label
                                     path="${containerId}[${status.index}].municipalityCode">Municipality code</form:label>
-                            <form:input path="${containerId}[${status.index}].municipalityCode" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].municipalityCode" cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].municipalityCode"
                                          cssClass="error-description"/>
                         </div>
@@ -192,7 +192,7 @@
                                     onclick="ivis.ui.removeContainer('${subContainerId}');">Remove
                             </button>
                             <form:label path="${containerId}[${status.index}].number">Phone</form:label>
-                            <form:input path="${containerId}[${status.index}].number" cssErrorClass="error"/>
+                            <form:input path="${containerId}[${status.index}].number" cssErrorClass="error" data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
                             <form:errors path="${containerId}[${status.index}].number" cssClass="error-description"/>
                         </div>
                     </c:forEach>
@@ -214,7 +214,7 @@
                             </button>
                             <form:label
                                     path="${containerId}[${status.index}].address">Email</form:label>
-                            <form:input path="${containerId}[${status.index}].address" cssErrorClass="error"/>
+                            <form:input data-rule-email="true" path="${containerId}[${status.index}].address" cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].address" cssClass="error-description"/>
                         </div>
                     </c:forEach>
@@ -250,19 +250,19 @@
 
                             <div class="field">
                                 <form:label path="${personPath}.personalId">Personal ID</form:label>
-                                <form:input path="${personPath}.personalId" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${personPath}.personalId" cssErrorClass="error"/>
                                 <form:errors path="${personPath}.personalId" cssClass="error-description"/>
                             </div>
                             <div class="field">
                                 <form:label path="${personPath}.lastName">Last name</form:label>
-                                <form:input path="${personPath}.lastName" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${personPath}.lastName" cssErrorClass="error"/>
                                 <form:errors path="${personPath}.lastName" cssClass="error-description"/>
                             </div>
                             <div class="field">
                                 <form:label path="${personPath}.firstName">
                                     First name
                                 </form:label>
-                                <form:input path="${personPath}.firstName" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${personPath}.firstName" cssErrorClass="error"/>
                                 <form:errors path="${personPath}.firstName" cssClass="error-description"/>
                             </div>
 
@@ -283,32 +283,32 @@
                                             <%--<input type="hidden" name="${containerId}[${status.index}].addressType" value="${address.addressType}"/>--%>
 
                                         <form:label path="${containerId}[${status.index}].careOf">c/o</form:label>
-                                        <form:input path="${containerId}[${status.index}].careOf"
+                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].careOf"
                                                      cssClass="error-description"/>
 
                                         <form:label path="${containerId}[${status.index}].street">Street</form:label>
-                                        <form:input path="${containerId}[${status.index}].street"
+                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].street"
                                                      cssClass="error-description"/>
 
                                         <form:label
                                                 path="${containerId}[${status.index}].postalCode">Postal code</form:label>
-                                        <form:input path="${containerId}[${status.index}].postalCode"
+                                        <form:input data-rule-maxlength="255" data-rule-digits="true"  path="${containerId}[${status.index}].postalCode"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].postalCode"
                                                      cssClass="error-description"/>
 
                                         <form:label path="${containerId}[${status.index}].city">City</form:label>
-                                        <form:input path="${containerId}[${status.index}].city" cssErrorClass="error"/>
+                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city" cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].city"
                                                      cssClass="error-description"/>
 
                                         <form:label
                                                 path="${containerId}[${status.index}].municipalityCode">Municipality code</form:label>
-                                        <form:input path="${containerId}[${status.index}].municipalityCode"
+                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].municipalityCode"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].municipalityCode"
                                                      cssClass="error-description"/>
@@ -336,7 +336,7 @@
                                         </button>
                                         <form:label path="${containerId}[${status.index}].number">Phone</form:label>
                                         <form:input path="${containerId}[${status.index}].number"
-                                                    cssErrorClass="error"/>
+                                                    cssErrorClass="error"  data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
                                         <form:errors path="${containerId}[${status.index}].number"
                                                      cssClass="error-description"/>
                                     </div>
@@ -361,7 +361,7 @@
                                         </button>
                                         <form:label
                                                 path="${containerId}[${status.index}].address">Email</form:label>
-                                        <form:input path="${containerId}[${status.index}].address"
+                                        <form:input data-rule-email="true" path="${containerId}[${status.index}].address"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].address"
                                                      cssClass="error-description"/>
@@ -391,19 +391,19 @@
 
                     <div class="field">
                         <form:label path="${personPath}.personalId">Personal ID</form:label>
-                        <form:input path="${personPath}.personalId" cssErrorClass="error"/>
+                        <form:input data-rule-maxlength="255" path="${personPath}.personalId" cssErrorClass="error"/>
                         <form:errors path="${personPath}.personalId" cssClass="error-description"/>
                     </div>
                     <div class="field">
                         <form:label path="${personPath}.lastName">Last name</form:label>
-                        <form:input path="${personPath}.lastName" cssErrorClass="error"/>
+                        <form:input data-rule-maxlength="255" path="${personPath}.lastName" cssErrorClass="error"/>
                         <form:errors path="${personPath}.lastName" cssClass="error-description"/>
                     </div>
                     <div class="field">
                         <form:label path="${personPath}.firstName">
                             First name
                         </form:label>
-                        <form:input path="${personPath}.firstName" cssErrorClass="error"/>
+                        <form:input data-rule-maxlength="255" path="${personPath}.firstName" cssErrorClass="error"/>
                         <form:errors path="${personPath}.firstName" cssClass="error-description"/>
                     </div>
 
@@ -423,27 +423,27 @@
                                     <%--<input type="hidden" name="${containerId}[${status.index}].addressType" value="${address.addressType}"/>--%>
 
                                 <form:label path="${containerId}[${status.index}].careOf">c/o</form:label>
-                                <form:input path="${containerId}[${status.index}].careOf" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf" cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].careOf"
                                              cssClass="error-description"/>
 
                                 <form:label path="${containerId}[${status.index}].street">Street</form:label>
-                                <form:input path="${containerId}[${status.index}].street" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street" cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].street"
                                              cssClass="error-description"/>
 
                                 <form:label path="${containerId}[${status.index}].postalCode">Postal code</form:label>
-                                <form:input path="${containerId}[${status.index}].postalCode" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255"  data-rule-digits="true" path="${containerId}[${status.index}].postalCode" cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].postalCode"
                                              cssClass="error-description"/>
 
                                 <form:label path="${containerId}[${status.index}].city">City</form:label>
-                                <form:input path="${containerId}[${status.index}].city" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city" cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].city" cssClass="error-description"/>
 
                                 <form:label
                                         path="${containerId}[${status.index}].municipalityCode">Municipality code</form:label>
-                                <form:input path="${containerId}[${status.index}].municipalityCode"
+                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].municipalityCode"
                                             cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].municipalityCode"
                                              cssClass="error-description"/>
@@ -468,7 +468,7 @@
                                         onclick="ivis.ui.removeContainer('${subContainerId}');">Remove
                                 </button>
                                 <form:label path="${containerId}[${status.index}].number">Phone</form:label>
-                                <form:input path="${containerId}[${status.index}].number" cssErrorClass="error"/>
+                                <form:input path="${containerId}[${status.index}].number" cssErrorClass="error"  data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
                                 <form:errors path="${containerId}[${status.index}].number"
                                              cssClass="error-description"/>
                             </div>
@@ -492,7 +492,7 @@
                                 </button>
                                 <form:label
                                         path="${containerId}[${status.index}].address">Email</form:label>
-                                <form:input path="${containerId}[${status.index}].address" cssErrorClass="error"/>
+                                <form:input data-rule-email="true" path="${containerId}[${status.index}].address" cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].address"
                                              cssClass="error-description"/>
                             </div>
@@ -573,7 +573,6 @@
                         <th>SubmitDate</th>
                         <th>ChangeDate</th>
                         <th>Status</th>
-                            <%--<th>Student</th>--%>
                         <th>Handled by</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -586,32 +585,16 @@
                             <td>${app.submitDate}</td>
                             <td>${app.changedDate}</td>
                             <td>${app.status}</td>
-                                <%--<td>${app.pupil}</td>--%>
                             <td>${app.submittedPerson}</td>
                             <td class="buttons">
                                 <a class="button positive"
                                    href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/details.jsp?id=${app.id}">Details</a>
-
-                                    <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                                    <%--method="post">--%>
-                                    <%--<button class="positive" type="submit">Approve</button>--%>
-                                    <%--<input type="hidden" name="status" value="approved"/>--%>
-                                    <%--</form>--%>
-                                    <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                                    <%--method="post">--%>
-                                    <%--<button class="negative" type="submit">Decline</button>--%>
-                                    <%--<input type="hidden" name="status" value="declined"/>--%>
-                                    <%--</form>--%>
                             </td>
                         </tr>
                     </c:forEach>
                     </tbody>
 
                 </table>
-                <%--<div class="buttons">--%>
-                <%--<a class="button positive"--%>
-                <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/import">Import</a>--%>
-                <%--</div>--%>
             </c:if>
             <div class="buttons">
                 <button class="positive" type="submit">Save</button>
@@ -649,5 +632,9 @@
           out.print("\"}, ");
         }
         %>];
+    $(document).ready(function () {
+//        alert("asdfasdf");
+        $('#pupil-form').validate();
+    });
 </script>
 <jsp:include page="ivis_footer.jsp"/>
