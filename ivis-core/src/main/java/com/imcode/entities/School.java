@@ -25,6 +25,9 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
 //    @JsonManagedReference
     private Set<SchoolClass> schoolClasses;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "school")
+    private Set<AfterSchoolCenterSection> afterSchoolCenterSections;
+
     public Set<ServiceTypeEnum> getServices() {
         return services;
     }
@@ -53,6 +56,14 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
 
     public void setSchoolClasses(Set<SchoolClass> schoolClasses) {
         this.schoolClasses = schoolClasses;
+    }
+
+    public Set<AfterSchoolCenterSection> getAfterSchoolCenterSections() {
+        return afterSchoolCenterSections;
+    }
+
+    public void setAfterSchoolCenterSections(Set<AfterSchoolCenterSection> afterSchoolCenterSections) {
+        this.afterSchoolCenterSections = afterSchoolCenterSections;
     }
 
     @Override

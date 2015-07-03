@@ -61,6 +61,15 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
     @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER)
     private Set<Truancy> truancies;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "afterSchoolCenterSectionId")
+    private AfterSchoolCenterSection afterSchoolCenterSection;
+
+    @ElementCollection
+    @CollectionTable(name = "dbo_pupil_after_school_center_schema",
+            joinColumns = @JoinColumn(name = "ownerId"), uniqueConstraints = @UniqueConstraint(columnNames = {"ownerId", "afrerSchoolSectionId", "dayOfWeek"}))
+    private List<AfterSchoolCenterSchema> schoolCenterSchema;
+
     public Person getPerson() {
         return person;
     }
@@ -101,7 +110,6 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
             guardians = new LinkedHashSet<>();
             return getGuardianList();
         }
-
     }
 
     @JsonIgnore
@@ -109,6 +117,24 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
         if (guardians != null)
         this.guardians = new LinkedHashSet<>(guardians);
     }
+
+
+//    @JsonIgnore
+//    public List<AfterSchoolCenterSchema> getSchoolCenterSchemaList() {
+//        if (schoolCenterSchema != null) {
+//            return new SetListAdapter<>((LinkedHashSet)schoolCenterSchema);
+//        } else {
+//            schoolCenterSchema = new LinkedHashSet<>();
+//            return getSchoolCenterSchemaList();
+//        }
+//    }
+//
+//    @JsonIgnore
+//    public void setSchoolCenterSchemaLIst(List<AfterSchoolCenterSchema> schoolCenterSchema) {
+//        if (schoolCenterSchema != null)
+//            this.schoolCenterSchema = new LinkedHashSet<>(schoolCenterSchema);
+//    }
+
 
     public Set<Guardian> getGuardians() {
         return guardians;
@@ -148,6 +174,22 @@ public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
 
     public void setClassPlacementTo(Date classPlacementTo) {
         this.classPlacementTo = classPlacementTo;
+    }
+
+    public List<AfterSchoolCenterSchema> getSchoolCenterSchema() {
+        return schoolCenterSchema;
+    }
+
+    public void setSchoolCenterSchema(List<AfterSchoolCenterSchema> schoolCenterSchema) {
+        this.schoolCenterSchema = schoolCenterSchema;
+    }
+
+    public AfterSchoolCenterSection getAfterSchoolCenterSection() {
+        return afterSchoolCenterSection;
+    }
+
+    public void setAfterSchoolCenterSection(AfterSchoolCenterSection afterSchoolCenterSection) {
+        this.afterSchoolCenterSection = afterSchoolCenterSection;
     }
 
     @Override

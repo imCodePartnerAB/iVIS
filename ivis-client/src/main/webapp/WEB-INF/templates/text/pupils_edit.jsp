@@ -1,15 +1,15 @@
-<%@ page import="com.imcode.entities.Pupil" pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
 <%@ page import="com.imcode.entities.enums.AddressTypeEnum" %>
 <%@ page import="com.imcode.entities.enums.CommunicationTypeEnum" %>
-<%@ page import="com.imcode.entities.School" %>
-<%@ page import="com.imcode.entities.SchoolClass" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.imcode.services.*" %>
-<%@ page import="com.imcode.entities.Statement" %>
+<%@ page import="com.imcode.entities.*" %>
+<%@ page import="java.time.DayOfWeek" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -69,20 +69,47 @@
 
 
         request.setAttribute("pupil", pupil);
-        Set<SchoolClass> schoolClassList = new HashSet<SchoolClass>();
+        Set<SchoolClass> schoolClassSet = new HashSet<SchoolClass>();
 
         try {
-            schoolClassList = pupil.getSchool().getSchoolClasses();
+            schoolClassSet = pupil.getSchool().getSchoolClasses();
         } catch (Exception ignore) {
         }
 
-        request.setAttribute("schoolClassList", schoolClassList);
+        Set<AfterSchoolCenterSection> afterSchoolCenterSectionSet = new HashSet<AfterSchoolCenterSection>();
+        Set<AfterSchoolCenterSchema> afterSchoolCenterSchema = new LinkedHashSet<AfterSchoolCenterSchema>(5);
+        boolean hasAfterSchoolCenter = false;
+
+        try {
+            afterSchoolCenterSectionSet = pupil.getSchool().getAfterSchoolCenterSections();
+            List<AfterSchoolCenterSchema> pupilSchoolCenterSchema = pupil.getSchoolCenterSchema();
+
+            for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+                AfterSchoolCenterSchema schema = new AfterSchoolCenterSchema(null, dayOfWeek);
+
+                for (AfterSchoolCenterSchema centerSchema : pupilSchoolCenterSchema) {
+                    if (dayOfWeek.equals(centerSchema.getDayOfWeek())) {
+                        schema = centerSchema;
+                        break;
+                    }
+                }
+
+                afterSchoolCenterSchema.add(schema);
+                hasAfterSchoolCenter = hasAfterSchoolCenter || schema.isUseAfterSchool() || schema.isUseBeforeSchool();
+            }
+
+
+        } catch (Exception ignore) { }
+
+        request.setAttribute("afterSchoolCenterSectionSet", afterSchoolCenterSectionSet);
+        request.setAttribute("afterSchoolCenterSchema", afterSchoolCenterSchema);
+        request.setAttribute("hasAfterSchoolCenter", hasAfterSchoolCenter);
     }
 
     request.setAttribute("communicationTypeEnum", Arrays.asList(CommunicationTypeEnum.values()));
     request.setAttribute("addressTypeEnum", AddressTypeEnum.values());
-
 %>
+
 <c:if test="${not empty pupil}">
     <h1>Pupil - ${pupil.person.firstName} ${pupil.person.lastName}</h1>
 
@@ -151,25 +178,31 @@
                                 <%--<input type="hidden" name="${containerId}[${status.index}].addressType" value="${address.addressType}"/>--%>
 
                             <form:label path="${containerId}[${status.index}].careOf">c/o</form:label>
-                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf"
+                                        cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].careOf" cssClass="error-description"/>
 
                             <form:label path="${containerId}[${status.index}].street">Street</form:label>
-                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street"
+                                        cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].street" cssClass="error-description"/>
 
                             <form:label path="${containerId}[${status.index}].postalCode">Postal code</form:label>
-                            <form:input data-rule-maxlength="255" data-rule-digits="true" path="${containerId}[${status.index}].postalCode" cssErrorClass="error" data-rule-postalcodeIT="true"/>
+                            <form:input data-rule-maxlength="255" data-rule-digits="true"
+                                        path="${containerId}[${status.index}].postalCode" cssErrorClass="error"
+                                        data-rule-postalcodeIT="true"/>
                             <form:errors path="${containerId}[${status.index}].postalCode"
                                          cssClass="error-description"/>
 
                             <form:label path="${containerId}[${status.index}].city">City</form:label>
-                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city"
+                                        cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].city" cssClass="error-description"/>
 
                             <form:label
                                     path="${containerId}[${status.index}].municipalityCode">Municipality code</form:label>
-                            <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].municipalityCode" cssErrorClass="error"/>
+                            <form:input data-rule-maxlength="255"
+                                        path="${containerId}[${status.index}].municipalityCode" cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].municipalityCode"
                                          cssClass="error-description"/>
                         </div>
@@ -192,7 +225,8 @@
                                     onclick="ivis.ui.removeContainer('${subContainerId}');">Remove
                             </button>
                             <form:label path="${containerId}[${status.index}].number">Phone</form:label>
-                            <form:input path="${containerId}[${status.index}].number" cssErrorClass="error" data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
+                            <form:input path="${containerId}[${status.index}].number" cssErrorClass="error"
+                                        data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
                             <form:errors path="${containerId}[${status.index}].number" cssClass="error-description"/>
                         </div>
                     </c:forEach>
@@ -214,7 +248,8 @@
                             </button>
                             <form:label
                                     path="${containerId}[${status.index}].address">Email</form:label>
-                            <form:input data-rule-email="true" path="${containerId}[${status.index}].address" cssErrorClass="error"/>
+                            <form:input data-rule-email="true" path="${containerId}[${status.index}].address"
+                                        cssErrorClass="error"/>
                             <form:errors path="${containerId}[${status.index}].address" cssClass="error-description"/>
                         </div>
                     </c:forEach>
@@ -227,7 +262,7 @@
             </div>
         </div>
         <div id="guardiansTabPage" class="tab-page">
-            <div id="guardians" >
+            <div id="guardians">
                 <c:forEach var="guardian" items="${pupil.guardians}" varStatus="status">
                     <c:set var="guardianItemId" value="guardians${status.index}"/>
                     <c:set var="guardianItemName" value="guardians[${status.index}]"/>
@@ -235,14 +270,16 @@
 
                     <div id="${guardianItemId}" data-index="${status.index}">
                         <div class="checkbox">
-                            <input id="${guardianItemId}.solo" type="checkbox" ${pupil.guardians.size() == 1 ? 'checked': ''}
+                            <input id="${guardianItemId}.solo"
+                                   type="checkbox" ${pupil.guardians.size() == 1 ? 'checked': ''}
                                    onchange="ivis.ui.disableSoloGuardian('${guardianItemId}.solo', '${guardianItemId}', 'guardians');">
                             <label for="${guardianItemId}.solo">Solo guardian</label>
                         </div>
-                        <%--<input name="guardianList[${status.index}]" value="${guardian.id}">--%>
-                        <%--================================================================================--%>
-                        <%--<input type="hidden" name="${guardianItemName}" value="${guardian.id}">--%>
+                            <%--<input name="guardianList[${status.index}]" value="${guardian.id}">--%>
+                            <%--================================================================================--%>
+                            <%--<input type="hidden" name="${guardianItemName}" value="${guardian.id}">--%>
                         <input type="hidden" name="guardianList[${status.index}].id" value="${guardian.id}">
+
                         <div id="${guardianItemId}.personField">
                             <c:set var="personPath" value="guardians[${status.index}].person"/>
                             <c:set var="person" value="${guardian.person}"/>
@@ -250,19 +287,22 @@
 
                             <div class="field">
                                 <form:label path="${personPath}.personalId">Personal ID</form:label>
-                                <form:input data-rule-maxlength="255" path="${personPath}.personalId" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${personPath}.personalId"
+                                            cssErrorClass="error"/>
                                 <form:errors path="${personPath}.personalId" cssClass="error-description"/>
                             </div>
                             <div class="field">
                                 <form:label path="${personPath}.lastName">Last name</form:label>
-                                <form:input data-rule-maxlength="255" path="${personPath}.lastName" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${personPath}.lastName"
+                                            cssErrorClass="error"/>
                                 <form:errors path="${personPath}.lastName" cssClass="error-description"/>
                             </div>
                             <div class="field">
                                 <form:label path="${personPath}.firstName">
                                     First name
                                 </form:label>
-                                <form:input data-rule-maxlength="255" path="${personPath}.firstName" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${personPath}.firstName"
+                                            cssErrorClass="error"/>
                                 <form:errors path="${personPath}.firstName" cssClass="error-description"/>
                             </div>
 
@@ -283,32 +323,37 @@
                                             <%--<input type="hidden" name="${containerId}[${status.index}].addressType" value="${address.addressType}"/>--%>
 
                                         <form:label path="${containerId}[${status.index}].careOf">c/o</form:label>
-                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf"
+                                        <form:input data-rule-maxlength="255"
+                                                    path="${containerId}[${status.index}].careOf"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].careOf"
                                                      cssClass="error-description"/>
 
                                         <form:label path="${containerId}[${status.index}].street">Street</form:label>
-                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street"
+                                        <form:input data-rule-maxlength="255"
+                                                    path="${containerId}[${status.index}].street"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].street"
                                                      cssClass="error-description"/>
 
                                         <form:label
                                                 path="${containerId}[${status.index}].postalCode">Postal code</form:label>
-                                        <form:input data-rule-maxlength="255" data-rule-digits="true"  path="${containerId}[${status.index}].postalCode"
+                                        <form:input data-rule-maxlength="255" data-rule-digits="true"
+                                                    path="${containerId}[${status.index}].postalCode"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].postalCode"
                                                      cssClass="error-description"/>
 
                                         <form:label path="${containerId}[${status.index}].city">City</form:label>
-                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city" cssErrorClass="error"/>
+                                        <form:input data-rule-maxlength="255"
+                                                    path="${containerId}[${status.index}].city" cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].city"
                                                      cssClass="error-description"/>
 
                                         <form:label
                                                 path="${containerId}[${status.index}].municipalityCode">Municipality code</form:label>
-                                        <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].municipalityCode"
+                                        <form:input data-rule-maxlength="255"
+                                                    path="${containerId}[${status.index}].municipalityCode"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].municipalityCode"
                                                      cssClass="error-description"/>
@@ -336,7 +381,8 @@
                                         </button>
                                         <form:label path="${containerId}[${status.index}].number">Phone</form:label>
                                         <form:input path="${containerId}[${status.index}].number"
-                                                    cssErrorClass="error"  data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
+                                                    cssErrorClass="error"
+                                                    data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
                                         <form:errors path="${containerId}[${status.index}].number"
                                                      cssClass="error-description"/>
                                     </div>
@@ -361,7 +407,8 @@
                                         </button>
                                         <form:label
                                                 path="${containerId}[${status.index}].address">Email</form:label>
-                                        <form:input data-rule-email="true" path="${containerId}[${status.index}].address"
+                                        <form:input data-rule-email="true"
+                                                    path="${containerId}[${status.index}].address"
                                                     cssErrorClass="error"/>
                                         <form:errors path="${containerId}[${status.index}].address"
                                                      cssClass="error-description"/>
@@ -373,8 +420,10 @@
                         </div>
                     </div>
                 </c:forEach>
-                <div class="buttons"id="addGuardianButton" >
-                    <button class="positive" type="button" onclick="ivisOAuth('${clientAddress}/guardians_list.jsp');">Add guardian</button>
+                <div class="buttons" id="addGuardianButton">
+                    <button class="positive" type="button" onclick="ivisOAuth('${clientAddress}/guardians_list.jsp');">
+                        Add guardian
+                    </button>
                 </div>
             </div>
             <c:set var="hasContactPerson" value="${not empty pupil.contactPerson}"/>
@@ -423,27 +472,32 @@
                                     <%--<input type="hidden" name="${containerId}[${status.index}].addressType" value="${address.addressType}"/>--%>
 
                                 <form:label path="${containerId}[${status.index}].careOf">c/o</form:label>
-                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].careOf"
+                                            cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].careOf"
                                              cssClass="error-description"/>
 
                                 <form:label path="${containerId}[${status.index}].street">Street</form:label>
-                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].street"
+                                            cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].street"
                                              cssClass="error-description"/>
 
                                 <form:label path="${containerId}[${status.index}].postalCode">Postal code</form:label>
-                                <form:input data-rule-maxlength="255"  data-rule-digits="true" path="${containerId}[${status.index}].postalCode" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" data-rule-digits="true"
+                                            path="${containerId}[${status.index}].postalCode" cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].postalCode"
                                              cssClass="error-description"/>
 
                                 <form:label path="${containerId}[${status.index}].city">City</form:label>
-                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city" cssErrorClass="error"/>
+                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].city"
+                                            cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].city" cssClass="error-description"/>
 
                                 <form:label
                                         path="${containerId}[${status.index}].municipalityCode">Municipality code</form:label>
-                                <form:input data-rule-maxlength="255" path="${containerId}[${status.index}].municipalityCode"
+                                <form:input data-rule-maxlength="255"
+                                            path="${containerId}[${status.index}].municipalityCode"
                                             cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].municipalityCode"
                                              cssClass="error-description"/>
@@ -468,7 +522,8 @@
                                         onclick="ivis.ui.removeContainer('${subContainerId}');">Remove
                                 </button>
                                 <form:label path="${containerId}[${status.index}].number">Phone</form:label>
-                                <form:input path="${containerId}[${status.index}].number" cssErrorClass="error"  data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
+                                <form:input path="${containerId}[${status.index}].number" cssErrorClass="error"
+                                            data-rule-pattern="\s*((\+([\s-]*\d[\s-]*){2}|([\s-]*\d[\s-]*)?)?((\(([\s-]*\d[\s-]*){3}\))|([\s-]*\d[\s-]*){3}))?([\s-]*\d[\s-]*){7}"/>
                                 <form:errors path="${containerId}[${status.index}].number"
                                              cssClass="error-description"/>
                             </div>
@@ -492,7 +547,8 @@
                                 </button>
                                 <form:label
                                         path="${containerId}[${status.index}].address">Email</form:label>
-                                <form:input data-rule-email="true" path="${containerId}[${status.index}].address" cssErrorClass="error"/>
+                                <form:input data-rule-email="true" path="${containerId}[${status.index}].address"
+                                            cssErrorClass="error"/>
                                 <form:errors path="${containerId}[${status.index}].address"
                                              cssClass="error-description"/>
                             </div>
@@ -523,14 +579,14 @@
 
             <div class="field">
                 <form:label path="classPlacementFrom">Class placement from</form:label>
-                <fmt:formatDate value="${pupil.classPlacementFrom}" var="dateString" pattern="yyyy-MM-dd" />
+                <fmt:formatDate value="${pupil.classPlacementFrom}" var="dateString" pattern="yyyy-MM-dd"/>
                 <input id="classPlacementFrom" name="classPlacementFrom" type="date" value="">
-                <%--<input id="classPlacementFrom" name="classPlacementFrom" type="date" value="${dateString}">--%>
-                <%--<form:input path="classPlacementFrom" cssErrorClass="error" type="date"/>--%>
+                    <%--<input id="classPlacementFrom" name="classPlacementFrom" type="date" value="${dateString}">--%>
+                    <%--<form:input path="classPlacementFrom" cssErrorClass="error" type="date"/>--%>
                 <form:errors path="classPlacementFrom" cssClass="error-description"/>
                 <form:label path="classPlacementTo">to</form:label>
-                <%--<form:input path="classPlacementTo" cssErrorClass="error" type="date"/>--%>
-                <fmt:formatDate value="${pupil.classPlacementTo}" var="dateString" pattern="yyyy-MM-dd" />
+                    <%--<form:input path="classPlacementTo" cssErrorClass="error" type="date"/>--%>
+                <fmt:formatDate value="${pupil.classPlacementTo}" var="dateString" pattern="yyyy-MM-dd"/>
                 <input id="classPlacementTo" name="classPlacementTo" type="date" value="${dateString}">
                 <form:errors path="classPlacementTo" cssClass="error-description"/>
             </div>
@@ -547,16 +603,61 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="diary" items="${pupil.schoolClass.diaries}">
+                    <c:forEach var="afterSchoolSchema" items="${pupil.schoolClass.diaries}">
                         <tr>
-                            <td>${diary.dayOfWeek}</td>
-                            <td><fmt:formatDate value="${diary.startTime}" type="time" pattern="HH:mm"/></td>
-                            <td><fmt:formatDate value="${diary.endTime}" type="both" pattern="HH:mm"/></td>
+                            <td>${afterSchoolSchema.dayOfWeek}</td>
+                            <td><fmt:formatDate value="${afterSchoolSchema.startTime}" type="time"
+                                                pattern="HH:mm"/></td>
+                            <td><fmt:formatDate value="${afterSchoolSchema.endTime}" type="both" pattern="HH:mm"/></td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
             </c:if>
+                <%--AFTER SCHOOL CENTER--%>
+            <div id="afterSchoolCenterContainer">
+                <div class="checkbox">
+                    <%--<c:set var="hasAfterSchoolCenter" value="${not empty pupil.afterSchoolCenterSection}"/>--%>
+                    <input id="hasAfterSchoolCenter" type="checkbox" ${hasAfterSchoolCenter ? 'checked': ''} onclick="ivis.ui.toggleDiv('afterSchoolCenterDetails');">
+                        <%--onchange="ivis.ui.disableContactPerson('hasContactPerson', 'pupil.contactPersonField');">--%>
+                    <label for="hasAfterSchoolCenter">After school center</label>
+                </div>
+                <div id="afterSchoolCenterDetails">
+                    <div class="field">
+                        <form:label
+                                path="afterSchoolCenterSection">Name</form:label>
+                        <form:select path="afterSchoolCenterSection" items="${afterSchoolCenterSectionSet}"
+                                     itemLabel="name" itemValue="id"/>
+                    </div>
+                    <table cellpadding="0" cellspacing="0" class="field">
+                        <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>Before</th>
+                            <th>After</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="afterSchoolSchema" items="${afterSchoolCenterSchema}" varStatus="status">
+                            <tr>
+                                <td>
+                                        ${afterSchoolSchema.dayOfWeek}
+                                    <input type="hidden" name="schoolCenterSchema[${status.index}].dayOfWeek"
+                                           value="${afterSchoolSchema.dayOfWeek}">
+                                </td>
+                                <td><input type="checkbox"
+                                           name="schoolCenterSchema[${status.index}].useBeforeSchool" ${afterSchoolSchema.isUseBeforeSchool() ? "checked": ""}>
+                                </td>
+                                <td><input type="checkbox"
+                                           name="schoolCenterSchema[${status.index}].useAfterSchool" ${afterSchoolSchema.isUseAfterSchool() ? "checked": ""}>
+                                </td>
+                                    <%--<td>${afterSchoolSchema.isUseAfterSchool()}</td>--%>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <div class="buttons">
                 <button class="positive" type="submit">Save</button>
@@ -632,9 +733,26 @@
           out.print("\"}, ");
         }
         %>];
+    var dayOfWeekEnum = [<%
+        values = DayOfWeek.values();
+
+        for(int i = 0; i < values.length; i++) {
+          Enum typeEnum = values[i];
+          out.print("{name:\"");
+          out.print(typeEnum.name());
+          out.print("\", description:\"");
+          out.print(StringUtils.capitalize(typeEnum.name()));
+          out.print("\"}, ");
+        }
+        %>];
     $(document).ready(function () {
-//        alert("asdfasdf");
+        initialize();
         $('#pupil-form').validate();
+        if(!${hasAfterSchoolCenter}) { ivis.ui.toggleDiv("afterSchoolCenterDetails");}
     });
+
+
 </script>
+<%--<c:if test="${hasAf}"--%>
+
 <jsp:include page="ivis_footer.jsp"/>

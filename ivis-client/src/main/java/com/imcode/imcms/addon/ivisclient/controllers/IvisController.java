@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
@@ -74,6 +75,11 @@ public class IvisController {
     @Autowired
     private IvisServiceFactory ivisServiceFactory;
 
+
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder, HttpServletRequest servletRequest, WebRequest webRequest) {
+        System.out.println("sdfas");
+    }
 
     @RequestMapping(value = "/code")
     @ResponseBody

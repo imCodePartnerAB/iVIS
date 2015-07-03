@@ -79,33 +79,6 @@ IVis.UI.prototype =
             return 0;
     },
 
-    //addPhone: function () {
-    //    var subContainerName = "phones";
-    //    var itemIndex = this.getNewItemIndex(subContainerName);
-    //    var conteinerName = "person." + subContainerName;
-    //    var conteinerId = subContainerName + itemIndex + "Field";
-    //
-    //    var container = $("<div>")
-    //        .addClass("field")
-    //        .attr("id", conteinerId)
-    //        .attr("data-index", itemIndex)
-    //        .insertBefore($("#addGuardianButton .positive"));
-    //
-    //    this.addSelect(container, itemIndex, conteinerName, "communicationType", communicationTypeEnum);
-    //
-    //    var $this = this;
-    //    $("<button>")
-    //        .addClass("negative")
-    //        .attr("type", "button")
-    //        .html("Remove")
-    //        .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
-    //        //.click(function () {
-    //        //    $this.removeContainer(conteinerId)
-    //        //})
-    //        .appendTo(container);
-    //
-    //    this.addField(container, itemIndex, conteinerName, "number", "Phone");
-    //}
     addPhone: function (subConteinerId) {
         var itemIndex = this.getNewItemIndex(subConteinerId);
         var conteinerId = this.escapeBrackets(subConteinerId) + itemIndex + "Field";
@@ -308,6 +281,17 @@ IVis.UI.prototype =
                         .attr("value", schoolClasses[i].id)
                         .html(schoolClasses[i].name)
                         .appendTo(schoolClassesSelect);
+                }
+
+                var afterSchoolCenterSections = result.afterSchoolCenterSections;
+                var afterSchoolCenterSection = $("#afterSchoolCenterSection");
+                afterSchoolCenterSection.html("");
+
+                for (var i = 0; i < afterSchoolCenterSections.length; i++) {
+                    $("<option>")
+                        .attr("value", afterSchoolCenterSections[i].id)
+                        .html(afterSchoolCenterSections[i].name)
+                        .appendTo(afterSchoolCenterSection);
                 }
             });
     },

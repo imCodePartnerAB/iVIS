@@ -3,52 +3,52 @@ package com.imcode.entities;
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import javax.persistence.*;
-import javax.persistence.Entity;
 
 /**
  * Created by vitaly on 14.05.15.
  */
-@Entity
-@Table(name = "dbo_after_school_center_schema")
-public class AfterSchoolCenterSchema extends AbstractIdEntity<Long> implements Serializable {
+//@Entity
+//@Table(name = "dbo_after_school_center_schema")
+@Embeddable
+public class AfterSchoolCenterSchema implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sectionPersonId")
-    private SectionPerson sectionPerson;
+    @JoinColumn(name = "afrerSchoolSectionId")
+    private AfterSchoolCenterSection afrerSchoolSection;
 
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
     @Column
-    private Boolean useBeforeSchool;
+    private Boolean useBeforeSchool = false;
 
     @Column
-    private Boolean useAfterSchool;
+    private Boolean useAfterSchool = false;
 
 
     public AfterSchoolCenterSchema() {
     }
 
-    public AfterSchoolCenterSchema(SectionPerson sectionPerson, DayOfWeek dayOfWeek, Boolean useBeforeSchool, Boolean useAfterSchool) {
-        this.sectionPerson = sectionPerson;
+    public AfterSchoolCenterSchema(AfterSchoolCenterSection AfrerSchoolSection, DayOfWeek dayOfWeek, Boolean useBeforeSchool, Boolean useAfterSchool) {
+        this.afrerSchoolSection = AfrerSchoolSection;
         this.dayOfWeek = dayOfWeek;
         this.useBeforeSchool = useBeforeSchool;
         this.useAfterSchool = useAfterSchool;
     }
 
     //AfterSchoolOnly
-    public AfterSchoolCenterSchema(SectionPerson sectionPerson, DayOfWeek dayOfWeek) {
-        this.sectionPerson = sectionPerson;
+    public AfterSchoolCenterSchema(AfterSchoolCenterSection AfrerSchoolSection, DayOfWeek dayOfWeek) {
+        this.afrerSchoolSection = AfrerSchoolSection;
         this.dayOfWeek = dayOfWeek;
-        this.useAfterSchool = true;
-        this.useBeforeSchool = false;
+//        this.useAfterSchool = true;
+//        this.useBeforeSchool = false;
     }
 
-    public SectionPerson getSectionPerson() {
-        return sectionPerson;
+    public AfterSchoolCenterSection getAfrerSchoolSection() {
+        return afrerSchoolSection;
     }
 
-    public void setSectionPerson(SectionPerson sectionPerson) {
-        this.sectionPerson = sectionPerson;
+    public void setAfrerSchoolSection(AfterSchoolCenterSection afterSchoolSection) {
+        this.afrerSchoolSection = afterSchoolSection;
     }
 
     public DayOfWeek getDayOfWeek() {
@@ -73,5 +73,25 @@ public class AfterSchoolCenterSchema extends AbstractIdEntity<Long> implements S
 
     public void setUseAfterSchool(Boolean useAfterSchool) {
         this.useAfterSchool = useAfterSchool;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AfterSchoolCenterSchema that = (AfterSchoolCenterSchema) o;
+
+        if (afrerSchoolSection != null ? !afrerSchoolSection.equals(that.afrerSchoolSection) : that.afrerSchoolSection != null)
+            return false;
+        return dayOfWeek == that.dayOfWeek;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = afrerSchoolSection != null ? afrerSchoolSection.hashCode() : 0;
+        result = 31 * result + (dayOfWeek != null ? dayOfWeek.hashCode() : 0);
+        return result;
     }
 }

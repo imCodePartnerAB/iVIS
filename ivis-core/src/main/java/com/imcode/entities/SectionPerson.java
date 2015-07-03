@@ -8,8 +8,9 @@ import javax.persistence.Entity;
 /**
  * Created by vitaly on 14.05.15.
  */
-@Entity
-@Table(name = "dbo_section_person")
+//@Entity
+//@Table(name = "dbo_section_person")
+    @Deprecated
 public class SectionPerson extends AbstractIdEntity<Long>  implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")
