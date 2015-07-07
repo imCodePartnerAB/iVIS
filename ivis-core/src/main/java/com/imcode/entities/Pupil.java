@@ -1,9 +1,10 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.imcode.entities.embed.AfterSchoolCenterSchema;
+import com.imcode.utils.SetListAdapter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.*;

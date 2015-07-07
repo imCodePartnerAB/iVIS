@@ -269,7 +269,7 @@ IVis.UI.prototype =
     },
 
     onSchoolChange: function (value) {
-        $.getJSON("/client/api/content/rest/School/" + value,
+        $.getJSON(clientAddress + "/api/content/rest/School/" + value,
             function (result) {
                 $("#schoolIdLabel").html(result.schoolId);
                 var schoolClasses = result.schoolClasses;

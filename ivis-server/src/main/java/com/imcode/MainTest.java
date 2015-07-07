@@ -167,6 +167,8 @@ public class MainTest {
         GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
         ctx.load("classpath:/spring/data.xml");
         ctx.refresh();
+        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
+        System.out.println(pupilRepository.findAll());
 
 //        PersonService personService = ctx.getBean(PersonService.class);
 //        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);

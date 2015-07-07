@@ -40,9 +40,9 @@ public class DefaultIvisServiceFactory{}
 //        schoolService.fillServiseAdderess(apiUrl + "schools");
 //        map.put(SchoolService.class, schoolService);
 //
-//        OAuth2StatementService statementService = new OAuth2StatementService(this);
+//        OAuth2ApplicationService statementService = new OAuth2ApplicationService(this);
 //        statementService.fillServiseAdderess(apiUrl + "statements");
-//        map.put(StatementService.class, statementService);
+//        map.put(ApplicationService.class, statementService);
 //
 //        OAuth2PupisService pupisService = new OAuth2PupisService(this);
 //        pupisService.fillServiseAdderess(apiUrl + "pupils");
@@ -70,8 +70,8 @@ public class DefaultIvisServiceFactory{}
 //        return getService(SchoolService.class);
 //    }
 //
-//    public StatementService getStatementService() {
-//        return getService(StatementService.class);
+//    public ApplicationService getStatementService() {
+//        return getService(ApplicationService.class);
 //    }
 //
 //    public PupilService getPupilService() {
@@ -195,7 +195,7 @@ public class DefaultIvisServiceFactory{}
 //
 ////        Oauth2 rest template
 ////        OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource, clientContext);
-////        ResponseEntity<Statement[]> responseEntity = null;
+////        ResponseEntity<Application[]> responseEntity = null;
 ////        ResponseEntity<String> responseEntity = null;
 //
 ////        try {
@@ -213,8 +213,8 @@ public class DefaultIvisServiceFactory{}
 ////            School school = (School) service.find(1L);
 ////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
 ////            System.out.println(service.findAll());
-//////            StatementService statementService = serviceFactory.getStatementService();
-//////            Statement statement = new Statement();
+//////            ApplicationService statementService = serviceFactory.getStatementService();
+//////            Application statement = new Application();
 //////            statement.setStatus(StatementStatus.created);
 //////            statement = statementService.save(statement);
 //////            statement.setPupil(new Pupil());
@@ -222,7 +222,7 @@ public class DefaultIvisServiceFactory{}
 ////
 //////            System.out.println(statementService.findAll());
 //////            System.out.println("save");
-//////            Statement statement = new Statement();
+//////            Application statement = new Application();
 //////            statement.setStatus(StatementStatus.created);
 //////            statement = statementService.save(statement);
 //////            System.out.println(statement);
@@ -236,7 +236,7 @@ public class DefaultIvisServiceFactory{}
 //////            AuthorizationCodeAccessTokenProvider tokenProvider = new AuthorizationCodeAccessTokenProvider();
 //////            tokenProvider.obtainAuthorizationCode(resource, new DefaultAccessTokenRequest());
 //////            responseEntity = restTemplate.getForEntity("http://localhost:8080/ivis/api/v1/json/statements", String.class);
-//////            responseEntity = restTemplate.getForEntity("http://localhost:8080/ivis/api/v1/json/statements", Statement[].class);
+//////            responseEntity = restTemplate.getForEntity("http://localhost:8080/ivis/api/v1/json/statements", Application[].class);
 //////            System.out.println(responseEntity.getBody());
 ////        } catch (Exception e) {
 ////            e.printStackTrace();
@@ -247,8 +247,8 @@ public class DefaultIvisServiceFactory{}
 ////////        SchoolService schoolService = serviceFactory.getService(SchoolService.class);
 ////////        List<School> schools = schoolService.findAll();
 ////////        System.out.println(schools);
-//////        StatementService statementService = serviceFactory.getService(StatementService.class);
-//////        List<Statement> statements = statementService.findAll();
+//////        ApplicationService statementService = serviceFactory.getService(ApplicationService.class);
+//////        List<Application> statements = statementService.findAll();
 //////        System.out.println(statements);
 ////
 //

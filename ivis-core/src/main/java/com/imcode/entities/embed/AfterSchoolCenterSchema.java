@@ -1,4 +1,6 @@
-package com.imcode.entities;
+package com.imcode.entities.embed;
+
+import com.imcode.entities.AfterSchoolCenterSection;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;

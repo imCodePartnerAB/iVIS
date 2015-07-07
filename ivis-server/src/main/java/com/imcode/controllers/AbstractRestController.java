@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.AbstractJsonpResponseBodyAdvice;
 
 import java.io.Serializable;
 import java.util.List;
@@ -68,6 +69,7 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
     public void delete(@PathVariable("id") ID id, WebRequest webRequest) {
         service.delete(id);
     }
+
 
     // Getters & Setters
     //------------------------------------------------------------------------------------------------------------------

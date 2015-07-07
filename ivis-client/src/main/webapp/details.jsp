@@ -1,5 +1,5 @@
-<%@ page import="com.imcode.entities.Statement,
-                 com.imcode.services.StatementService" pageEncoding="UTF-8" %>
+<%@ page import="com.imcode.entities.Application,
+                 com.imcode.services.ApplicationService" pageEncoding="UTF-8" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
@@ -63,8 +63,8 @@
 //            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, clientContext);
         if (IvisOAuth2Utils.isTokenGood(request)) {
         IvisServiceFactory factory = IvisOAuth2Utils.getServiceFactory(request);
-        StatementService service = factory.getService(StatementService.class);
-        Statement statement = null;
+        ApplicationService service = factory.getService(ApplicationService.class);
+        Application statement = null;
         try {
             statement = service.find(Long.valueOf(request.getParameter("id")));
         } catch (UserRedirectRequiredException e) {

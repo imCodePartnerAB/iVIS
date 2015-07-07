@@ -2,11 +2,9 @@ package com.imcode.controllers.restful;
 
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Person;
-import com.imcode.entities.School;
-import com.imcode.entities.Statement;
+import com.imcode.entities.Application;
 import com.imcode.entities.User;
-import com.imcode.services.SchoolService;
-import com.imcode.services.StatementService;
+import com.imcode.services.ApplicationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 @RestController
-@RequestMapping("/v1/{format}/statements")
-public class StatementRestControllerImpl extends AbstractRestController<Statement, Long, StatementService> {
+@RequestMapping("/v1/{format}/applications")
+public class ApplicationRestControllerImpl extends AbstractRestController<Application, Long, ApplicationService> {
 
     @Override
-    public Object create(@RequestBody Statement entity, WebRequest webRequest) {
+    public Object create(@RequestBody Application entity, WebRequest webRequest) {
         Person person = null;
 
         try {

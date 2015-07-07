@@ -1,7 +1,7 @@
 <%@ page import="com.imcode.entities.Person,
-                 com.imcode.entities.Statement" pageEncoding="UTF-8" %>
+                 com.imcode.entities.Application" pageEncoding="UTF-8" %>
 <%@ page import="com.imcode.entities.enums.StatementStatus" %>
-<%@ page import="com.imcode.services.StatementService" %>
+<%@ page import="com.imcode.services.ApplicationService" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
@@ -23,10 +23,10 @@
     if (IvisOAuth2Utils.isTokenGood(request)) {
 //        request.setAttribute("isAuthorized");
 //    if (factory != null) {
-//        StatementService service = factory.getStatementService();
+//        ApplicationService service = factory.getStatementService();
         IvisServiceFactory factory = IvisOAuth2Utils.getServiceFactory(request);
-        StatementService service = factory.getService(StatementService.class);
-//    List<Statement> statements = null;
+        ApplicationService service = factory.getService(ApplicationService.class);
+//    List<Application> statements = null;
 //    try {
 //        statements = service.findAll();
 ////    } catch (UserRedirectRequiredException e) {
@@ -42,12 +42,12 @@
             statusFilter = StatementStatus.valueOf(request.getParameter("statusFilter"));
         } catch (Exception ignore) { }
 
-        List<Statement> statementList = null;
+        List<Application> applicationList = null;
         try {
-            List<Statement> statements = service.findAll();
-            statementList = new LinkedList<Statement>();
+            List<Application> applications = service.findAll();
+            applicationList = new LinkedList<Application>();
 
-            for (Statement statement :statements) {
+            for (Application statement : applications) {
                 if (statusFilter != null && statement.getStatus() != statusFilter)
                     continue;
 
@@ -58,7 +58,7 @@
                         continue;
                 }
 
-                statementList.add(statement);
+                applicationList.add(statement);
             }
 
 
@@ -67,7 +67,7 @@
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
             return;
         }
-        request.setAttribute("statements", statementList);
+        request.setAttribute("statements", applicationList);
     }
 %>
 <c:if test="${isAuthorized}">
@@ -129,7 +129,7 @@
                 <td>${app.submittedPerson}</td>
                 <td class="buttons">
                     <a class="button positive"
-                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/details.jsp?id=${app.id}">Details</a>
+                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Details</a>
 
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">

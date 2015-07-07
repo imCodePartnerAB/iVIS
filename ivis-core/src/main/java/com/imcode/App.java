@@ -1,12 +1,8 @@
 package com.imcode;
 
-import com.imcode.entities.AfterSchoolCenterSchema;
-import com.imcode.entities.AfterSchoolCenterSection;
-import com.imcode.entities.Role;
-import org.springframework.security.oauth2.common.util.SerializationUtils;
+import com.imcode.entities.embed.AfterSchoolCenterSchema;
 
 import java.time.DayOfWeek;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 

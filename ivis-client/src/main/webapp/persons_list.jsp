@@ -1,7 +1,7 @@
 <%@ page import="com.imcode.entities.Person,
-                 com.imcode.entities.Statement" pageEncoding="UTF-8" %>
+                 com.imcode.entities.Application" pageEncoding="UTF-8" %>
 <%@ page import="com.imcode.entities.enums.StatementStatus" %>
-<%@ page import="com.imcode.services.StatementService" %>
+<%@ page import="com.imcode.services.ApplicationService" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>

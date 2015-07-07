@@ -1,16 +1,16 @@
 package com.imcode.imcms.addon.ivisclient.controllers;
 
+import com.imcode.entities.Application;
 import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
-import com.imcode.entities.Statement;
 import com.imcode.entities.enums.StatementStatus;
 import com.imcode.imcms.addon.ivisclient.controllers.form.Message;
 import com.imcode.imcms.addon.ivisclient.controllers.form.MessageType;
+import com.imcode.services.ApplicationService;
 import com.imcode.services.GuardianService;
 import com.imcode.services.PersonService;
 import com.imcode.services.PupilService;
-import com.imcode.services.StatementService;
 import imcode.services.IvisServiceFactory;
 import imcode.services.utils.IvisOAuth2Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,24 +122,24 @@ public class IvisController {
     @RequestMapping(value = "/{id}", params = {"status"}, method = RequestMethod.GET)
     public void updateStatus(HttpServletRequest request,
                                HttpServletResponse response,
-                               @PathVariable("id") Statement statement, @RequestParam("status") StatementStatus status) throws IOException {
+                               @PathVariable("id") Application application, @RequestParam("status") StatementStatus status) throws IOException {
 //        IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
 //                .endPointUrl(serverAddress)
 //                .responseType("json")
 //                .version("v1").build());
 //        DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
-//        StatementService service = factory.getStatementService();
+//        ApplicationService service = factory.getStatementService();
 
-        StatementService service = ivisServiceFactory.getService(StatementService.class);
+        ApplicationService service = ivisServiceFactory.getService(ApplicationService.class);
 //
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
-//                Statement statement = service.find(id);
+//                Application application = service.find(id);
 //
-                if (statement != null) {
-                    statement.setStatus(status);
+                if (application != null) {
+                    application.setStatus(status);
 
-                    service.save(statement);
+                    service.save(application);
 
                 }
             } catch (UserRedirectRequiredException e) {
@@ -160,9 +160,9 @@ public class IvisController {
                                     Model model) throws IOException, URISyntaxException {
 
         InputStream inputStream = file.getInputStream();
-        Statement statement = pharseXml(inputStream);
+        Application application = pharseXml(inputStream);
 
-        if (statement == null) {
+        if (application == null) {
             throw new RuntimeException("Unknown xml format");
         }
 
@@ -173,17 +173,17 @@ public class IvisController {
 //                    .responseType("json")
 //                    .version("v1").build());
 //            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
-            StatementService statementService = ivisServiceFactory.getService(StatementService.class);
+            ApplicationService applicationService = ivisServiceFactory.getService(ApplicationService.class);
             PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
 
             try {
-//                statement = new Statement();
-//                statement.setStatus(StatementStatus.created);
-                if (statement.getPupil() != null) {
-                    Pupil pupil = pupilService.findByPersonalId(statement.getPupil().getPerson().getPersonalId());
-                    statement.setPupil(pupil);
+//                application = new Application();
+//                application.setStatus(StatementStatus.created);
+                if (application.getPupil() != null) {
+                    Pupil pupil = pupilService.findByPersonalId(application.getPupil().getPerson().getPersonalId());
+                    application.setPupil(pupil);
                 }
-                statementService.save(statement);
+                applicationService.save(application);
                 model.asMap().clear();
                 model.addAttribute("message", new Message(MessageType.SUCCESS, "SUCCESS"));
             } catch (Exception e) {
@@ -242,12 +242,49 @@ public class IvisController {
 
 //        return "OK";
     }
+    @RequestMapping(value = "/applications", method = RequestMethod.POST)
+//    @ResponseBody
+    public void updateApplication(@ModelAttribute("app") Application application,
+                              HttpServletRequest request,
+                              HttpServletResponse response) throws IOException {
+
+//        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
+//        PersonService personService = ivisServiceFactory.getService(PersonService.class);
+//        GuardianService guardianService = ivisServiceFactory.getService(GuardianService.class);
+        ApplicationService applicationService = ivisServiceFactory.getService(ApplicationService.class);
+
+//        if (application.getPerson() != null) {
+//            personService.save(application.getPerson());
+//        }
+//
+//        if (application.getContactPerson() != null) {
+//            personService.save(application.getContactPerson());
+//        }
+//
+//        if (application.getGuardians() != null) {
+//            for (Guardian guardian : application.getGuardians()) {
+//                if (guardian != null) {
+////                    if (guardian.getPerson() != null) {
+////                        personService.save(guardian.getPerson());
+////                    }
+//                    guardianService.save(guardian);
+//                }
+//            }
+//
+//        }
+
+        applicationService.save(application);
+        String returnToUri = getRequestReferer(request);
+        response.sendRedirect(returnToUri);
+
+//        return "OK";
+    }
 
     private String getRequestReferer(HttpServletRequest request) {
         return request.getHeader("referer");
     }
 
-    private static Statement pharseXml(InputStream inputStream) {
+    private static Application pharseXml(InputStream inputStream) {
 
         StatmentHandler handler = new StatmentHandler();
 
@@ -263,11 +300,11 @@ public class IvisController {
             return null;
         }
 
-        return handler.getStatement();
+        return handler.getApplication();
     }
 
    private static class StatmentHandler extends DefaultHandler {
-        private Statement statement;
+        private Application application;
         private LinkedList<String> nodes = new LinkedList<>();
         private String fullElementName;
         private String elementName;
@@ -275,12 +312,12 @@ public class IvisController {
 
         @Override
         public void startDocument() throws SAXException {
-            if (statement != null) {
-                throw new SAXException("This statement handler " + this + " is allredy used, please create a new one.");
+            if (application != null) {
+                throw new SAXException("This application handler " + this + " is allredy used, please create a new one.");
             }
 
-            statement = new Statement();
-            statement.setStatus(StatementStatus.created);
+            application = new Application();
+            application.setStatus(StatementStatus.created);
         }
 
         @Override
@@ -298,7 +335,7 @@ public class IvisController {
                 Person person = new Person(value, null, null);
                 Pupil pupil = new Pupil();
                 pupil.setPerson(person);
-                statement.setPupil(pupil);
+                application.setPupil(pupil);
             }
         }
 
@@ -307,8 +344,8 @@ public class IvisController {
             nodes.removeLast();
         }
 
-        public Statement getStatement() {
-            return statement;
+        public Application getApplication() {
+            return application;
         }
     }
 }

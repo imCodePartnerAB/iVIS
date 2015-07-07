@@ -1,9 +1,10 @@
 package com.imcode.entities;
 
+import com.imcode.entities.embed.AfterSchoolCenterSchema;
+
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
-import javax.persistence.Entity;
 
 /**
  * Created by vitaly on 14.05.15.

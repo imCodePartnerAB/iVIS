@@ -53,7 +53,7 @@ public class Initializator {
     private RoleRepository roleRepository;
 
     @Autowired
-    private StatementRepository statementRepository;
+    private ApplicationRepository applicationRepository;
 
     @Autowired
     private PersonRepository personRepository;
@@ -147,16 +147,16 @@ public class Initializator {
     }
 
     private void initializeStatementJpa() {
-        List<Statement> statementList = statementRepository.findAll();
+        List<Application> applicationList = applicationRepository.findAll();
 
-        if (statementList.size() == 0) {
+        if (applicationList.size() == 0) {
             Random random = new Random();
 
             for (int i = 0; i < 5; i++) {
-                Statement statement = new Statement();
-                statement.setId(Long.valueOf(i));
-                statement.setStatus(StatementStatus.values()[random.nextInt(StatementStatus.values().length)]);
-                statementRepository.save(statement);
+                Application application = new Application();
+                application.setId(Long.valueOf(i));
+                application.setStatus(StatementStatus.values()[random.nextInt(StatementStatus.values().length)]);
+                applicationRepository.save(application);
             }
         }
     }

@@ -10,6 +10,7 @@
 <%@ page import="com.imcode.entities.*" %>
 <%@ page import="java.time.DayOfWeek" %>
 <%@ page import="org.apache.commons.lang3.StringUtils" %>
+<%@ page import="com.imcode.entities.embed.AfterSchoolCenterSchema" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -36,9 +37,9 @@
         AcademicYearService academicYearService = factory.getService(AcademicYearService.class);
         request.setAttribute("academicYearList", academicYearService.findAll());
 
-        StatementService applicationService = factory.getService(StatementService.class);
-        List<Statement> statements = applicationService.findAll();
-        List<Statement> applicationList = new LinkedList<Statement>();
+        ApplicationService applicationService = factory.getService(ApplicationService.class);
+        List<Application> applications = applicationService.findAll();
+        List<Application> applicationList = new LinkedList<Application>();
         request.setAttribute("applicationList", applicationList);
 //        Service  = factory.getService();
 //        request.setAttribute("List", .findAll());
@@ -61,7 +62,7 @@
             }
         }
 
-        for (Statement statement : statements) {
+        for (Application statement : applications) {
             if (pupil.equals(statement.getPupil())) {
                 applicationList.add(statement);
             }

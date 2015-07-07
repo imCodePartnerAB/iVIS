@@ -1,4 +1,4 @@
-package com.imcode.entities;
+package com.imcode.utils;
 
 
 import java.util.*;
@@ -189,39 +189,39 @@ public class SetListAdapter<T> implements List<T>{
         throw new UnsupportedOperationException();
     }
 
-    public static void main(String[] args) {
-        LinkedHashSet set = new LinkedHashSet();
-        Entity e0 = new Entity(0);
-        Entity e1 = new Entity(1);
-        Entity e2 = new Entity(2);
-        Entity e3 = new Entity(4);
-        set.add(e0);
-        set.add(e1);
-        set.add(e2);
-        set.add(e3);
-        SetListAdapter<Entity> listAdapter = new SetListAdapter(set);
-        listAdapter.add(new Entity(5));
-        listAdapter.add(e2);
-        e2.setId(20);
-        Entity e = listAdapter.get(5);
-        e.setId(200);
-        listAdapter.add(null);
-        listAdapter.add(null);
-        System.out.println(listAdapter.indexMap);
-        System.out.println(set);
-        System.out.println("----------------------------------------------");
-        listAdapter.set(5, new Entity(6));
-        System.out.println(listAdapter.indexMap);
-        System.out.println(set);
-
-    }
-}
-
-class Entity extends AbstractIdEntity<Integer> {
-    public Entity() {
-    }
-
-    public Entity(Integer integer) {
-        super(integer);
-    }
+//    public static void main(String[] args) {
+//        LinkedHashSet set = new LinkedHashSet();
+//        Entity e0 = new Entity(0);
+//        Entity e1 = new Entity(1);
+//        Entity e2 = new Entity(2);
+//        Entity e3 = new Entity(4);
+//        set.add(e0);
+//        set.add(e1);
+//        set.add(e2);
+//        set.add(e3);
+//        SetListAdapter<Entity> listAdapter = new SetListAdapter(set);
+//        listAdapter.add(new Entity(5));
+//        listAdapter.add(e2);
+//        e2.setId(20);
+//        Entity e = listAdapter.get(5);
+//        e.setId(200);
+//        listAdapter.add(null);
+//        listAdapter.add(null);
+//        System.out.println(listAdapter.indexMap);
+//        System.out.println(set);
+//        System.out.println("----------------------------------------------");
+//        listAdapter.set(5, new Entity(6));
+//        System.out.println(listAdapter.indexMap);
+//        System.out.println(set);
+//
+//    }
+//}
+//
+//class Entity extends AbstractIdEntity<Integer> {
+//    public Entity() {
+//    }
+//
+//    public Entity(Integer integer) {
+//        super(integer);
+//    }
 }

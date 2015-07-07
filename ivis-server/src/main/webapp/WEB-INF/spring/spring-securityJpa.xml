@@ -35,6 +35,7 @@
         <!--&lt;!&ndash;<access-denied-handler ref="oauthAccessDeniedHandler" />&ndash;&gt;-->
     <!--</http>-->
     <http pattern="/favicon.ico" security="none" xmlns="http://www.springframework.org/schema/security"/>
+    <http pattern="/mock/**" security="none" xmlns="http://www.springframework.org/schema/security"/>
 
     <http pattern="/oauth/token" create-session="never"
           authentication-manager-ref="clientAuthenticationManager"

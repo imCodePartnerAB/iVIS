@@ -1,37 +1,31 @@
 package com.imcode.controllers.html;
 
-import com.imcode.controllers.html.form.Message;
-import com.imcode.controllers.html.form.MessageType;
-import com.imcode.entities.School;
-import com.imcode.entities.Statement;
-import com.imcode.entities.enums.StatementStatus;
-import com.imcode.misc.errors.*;
-import com.imcode.misc.errors.Error;
-import com.imcode.services.SchoolClassService;
-import com.imcode.services.SchoolService;
-import com.imcode.services.StatementService;
+import com.imcode.services.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.util.Map;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Created by vitaly on 05.03.15.
  */
 @Controller
+@RequestMapping("mock")
 public class MockControler {
-    @Autowired
-    private StatementService statementService;
+
+    @RequestMapping(value = "jsonp",params = "callback")
+    @ResponseBody
+    public String jsonpTest(@RequestParam("callback") String functionName) {
+        return functionName + "(" +
+                                    "[" +
+                                        "{\"firstName\": \"Vitaly\", \"lastName\": \"Sereda\"}, " +
+                                        "{\"firstName\": \"Andrey\", \"lastName\": \"Demidov\"}" +
+                                    "]" +
+                                ");";
+    }
+//    @Autowired
+//    private ApplicationService applicationService;
 
 //    @Autowired
 //    SchoolClassService classService;
@@ -49,9 +43,9 @@ public class MockControler {
 //
 //
 //        try {
-//            Statement statement = new Statement();
+//            Application statement = new Application();
 //            statement.setStatus(StatementStatus.created);
-//            statementService.save(statement);
+//            applicationService.save(statement);
 //            model.asMap().clear();
 //            model.addAttribute("message", new Message(MessageType.SUCCESS, "SUCCESS"));
 //        } catch (Exception e) {

@@ -457,9 +457,9 @@
 
                                 <taskdef name="mergeproperties" classname="com.imcode.ant.tasks.PropertiesMerge"/>
                                 <mergeproperties
-                                        srcFile="target/${project.build.finalName}/WEB-INF/server.properties"
+                                        srcFile="target/${project.build.finalName}/WEB-INF/classes/server.properties"
                                         mergeFile="${basedir}/local.server.properties"
-                                        destFile="target/${project.build.finalName}/WEB-INF/server.properties"/>
+                                        destFile="target/${project.build.finalName}/WEB-INF/classes/server.properties"/>
                                 <if>
                                     <available file="target/classes/server.properties"/>
                                     <then>

@@ -2,14 +2,12 @@ package com.imcode.imcms.addon.ivisclient;
 
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
-import com.imcode.entities.Statement;
+import com.imcode.entities.Application;
 import com.imcode.entities.enums.StatementStatus;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.util.LinkedList;
 
 /**
@@ -33,7 +31,7 @@ public class Main {
 //
 //        saxParser.parse(fileName, handler);
 //
-//        System.out.println(handler.getStatement());
+//        System.out.println(handler.getApplication());
 //    } catch (Exception e) {
 //        e.printStackTrace();
 //    }
@@ -115,7 +113,7 @@ public class Main {
 }
 
 class StatmentHandler extends DefaultHandler {
-    private Statement statement;
+    private Application application;
     private LinkedList<String> nodes = new LinkedList<>();
     private String fullElementName;
     private String elementName;
@@ -123,12 +121,12 @@ class StatmentHandler extends DefaultHandler {
 
     @Override
     public void startDocument() throws SAXException {
-        if (statement != null) {
-            throw new SAXException("This statement handler " + this + " is allredy used, please create a new one.");
+        if (application != null) {
+            throw new SAXException("This application handler " + this + " is allredy used, please create a new one.");
         }
 
-        statement = new Statement();
-        statement.setStatus(StatementStatus.created);
+        application = new Application();
+        application.setStatus(StatementStatus.created);
     }
 
     @Override
@@ -146,7 +144,7 @@ class StatmentHandler extends DefaultHandler {
             Person person = new Person(value, null, null);
             Pupil pupil = new Pupil();
             pupil.setPerson(person);
-            statement.setPupil(pupil);
+            application.setPupil(pupil);
         }
     }
 
@@ -155,7 +153,7 @@ class StatmentHandler extends DefaultHandler {
         nodes.removeLast();
     }
 
-    public Statement getStatement() {
-        return statement;
+    public Application getApplication() {
+        return application;
     }
 }
