@@ -27,6 +27,14 @@
     </target>
 
     <target name="tomcat-package" depends="package">
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/lib"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/classes"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/spring"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/i18n"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/views"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/web-resources"/>
+        <delete file="${tomcat.webapps.dir}/WEB-INF/*.*"/>
+
         <!--<delete dir="${tomcat.webapps.dir}/WEB-INF/lib"/>-->
         <delete dir="${tomcat.webapps.dir}/*"/>
         <copy todir="${tomcat.webapps.dir}">
