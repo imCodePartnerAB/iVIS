@@ -1,8 +1,9 @@
 package com.imcode.entities;
 
+import com.imcode.entities.superclasses.AbstractIdEntity;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 import javax.persistence.Entity;
 
 /**
@@ -10,7 +11,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_guardian")
-public class Guardian extends AbstractIdEntity<Long>  implements Serializable {
+public class Guardian extends AbstractIdEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "personId")
     private Person person;

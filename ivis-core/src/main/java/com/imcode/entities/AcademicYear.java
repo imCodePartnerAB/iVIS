@@ -1,8 +1,12 @@
 package com.imcode.entities;
 
+import com.imcode.entities.superclasses.AbstractNamedEntity;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by vitaly on 13.05.15.

@@ -2,6 +2,7 @@ package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.*;
 import com.imcode.entities.enums.ServiceTypeEnum;
+import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
 import javax.persistence.Entity;

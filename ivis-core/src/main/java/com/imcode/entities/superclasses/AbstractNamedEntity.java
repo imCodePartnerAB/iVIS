@@ -1,4 +1,6 @@
-package com.imcode.entities;
+package com.imcode.entities.superclasses;
+
+import com.imcode.entities.interfaces.JpaNamedEntity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -8,8 +10,8 @@ import java.io.Serializable;
  * Created by vitaly on 13.05.15.
  */
 @MappedSuperclass
-public abstract class AbstractNamedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements Serializable{
-    @Column
+public abstract class AbstractNamedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements JpaNamedEntity<ID>, Serializable{
+    @Column(length = 200, columnDefinition = "")
     protected String name;
 
     public AbstractNamedEntity() {

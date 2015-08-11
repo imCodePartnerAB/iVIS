@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.imcode.entities.embed.AfterSchoolCenterSchema;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 //@Entity
 //@Table(name = "dbo_section_person")
     @Deprecated
-public class SectionPerson extends AbstractIdEntity<Long>  implements Serializable {
+public class SectionPerson extends AbstractIdEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")
     private Person person;

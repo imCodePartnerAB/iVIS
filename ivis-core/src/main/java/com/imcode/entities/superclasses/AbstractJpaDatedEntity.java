@@ -1,6 +1,6 @@
-package com.imcode.entities;
+package com.imcode.entities.superclasses;
 
-import com.imcode.entities.interfaces.DatedEntity;
+import com.imcode.entities.interfaces.JpaDatedEntity;
 import com.imcode.entities.listners.DatedEntityListner;
 
 import javax.persistence.*;
@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @MappedSuperclass
 @EntityListeners({DatedEntityListner.class})
-public abstract class AbstractDatedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements Serializable, DatedEntity {
+public abstract class AbstractJpaDatedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements Serializable, JpaDatedEntity<ID> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
     protected Date createDate;
@@ -21,7 +21,7 @@ public abstract class AbstractDatedEntity<ID extends Serializable> extends Abstr
     @Column(insertable = false)
     protected Date updateDate;
 
-    public AbstractDatedEntity() {
+    public AbstractJpaDatedEntity() {
     }
 
     @Override

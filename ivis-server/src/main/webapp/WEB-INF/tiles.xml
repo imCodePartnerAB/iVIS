@@ -3,8 +3,11 @@
         "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
         "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
+    <definition name="main.side" template="/WEB-INF/views/layouts/side.jsp" preparer="menuPreparer">
+    </definition>
+
     <definition name="default" template="/WEB-INF/views/layouts/default.jsp">
-        <put-attribute name="side" value="/WEB-INF/views/layouts/side.jsp"/>
+        <put-attribute name="side" value="main.side"/>
         <put-attribute name="content" value=""/>
     </definition>
 
@@ -21,6 +24,10 @@
     </definition>
 
     <!--Clietns-->
+    <definition name="domain/list/*" extends="default" preparer="entityListPreparer">
+        <put-attribute name="content" value="/WEB-INF/views/domain/list.jsp"/>
+    </definition>
+
     <definition name="clients/list" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/clients/list.jsp"/>
     </definition>

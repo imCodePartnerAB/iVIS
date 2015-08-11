@@ -1,13 +1,9 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.imcode.entities.enums.ServiceTypeEnum;
+import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "dbo_school_transport")

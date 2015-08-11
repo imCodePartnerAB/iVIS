@@ -11,22 +11,17 @@ import org.springframework.web.client.RestTemplate;
  * Created by vitaly on 03.06.15.
  */
 
-public class OAuth2PupisService extends AbstractOAuth2Service<Pupil, Long> implements PupilService{
-    public OAuth2PupisService() {
+public class OAuth2PupilService extends AbstractOAuth2Service<Pupil, Long> implements PupilService{
+    public OAuth2PupilService() {
     }
 
-    public OAuth2PupisService(IvisServiceFactory factory, String mainServiceAddres) {
+    public OAuth2PupilService(IvisServiceFactory factory, String mainServiceAddres) {
         super(factory, mainServiceAddres);
     }
 
-    public OAuth2PupisService(IvisServiceFactory factory) {
+    public OAuth2PupilService(IvisServiceFactory factory) {
         super(factory);
     }
-
-//    @Override
-//    protected ParameterizedTypeReference getListTypeReference() {
-//        return new ParameterizedTypeReference<List<Pupil>>() {};
-//    }
 
     @Override
     public Pupil findByPersonalId(String personalId) {

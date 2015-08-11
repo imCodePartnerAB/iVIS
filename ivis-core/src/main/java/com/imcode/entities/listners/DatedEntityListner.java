@@ -1,6 +1,6 @@
 package com.imcode.entities.listners;
 
-import com.imcode.entities.interfaces.DatedEntity;
+import com.imcode.entities.interfaces.JpaDatedEntity;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -12,18 +12,18 @@ import java.util.Date;
 public class DatedEntityListner {
     @PrePersist
     public void prePersist(Object entity) {
-        if (entity instanceof DatedEntity) {
-            DatedEntity datedEntity = (DatedEntity) entity;
-            datedEntity.setCreateDate(new Date());
-            datedEntity.setUpdateDate(new Date());
+        if (entity instanceof JpaDatedEntity) {
+            JpaDatedEntity jpaDatedEntity = (JpaDatedEntity) entity;
+            jpaDatedEntity.setCreateDate(new Date());
+            jpaDatedEntity.setUpdateDate(new Date());
         }
     }
 
     @PreUpdate
     public void PreUpdate(Object entity) {
-        if (entity instanceof DatedEntity) {
-            DatedEntity datedEntity = (DatedEntity) entity;
-            datedEntity.setUpdateDate(new Date());
+        if (entity instanceof JpaDatedEntity) {
+            JpaDatedEntity jpaDatedEntity = (JpaDatedEntity) entity;
+            jpaDatedEntity.setUpdateDate(new Date());
         }
     }
 }

@@ -1,9 +1,9 @@
 package com.imcode.entities;
 
+import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;

@@ -76,10 +76,10 @@ public class IvisController {
     private IvisServiceFactory ivisServiceFactory;
 
 
-    @InitBinder
-    public void initBinder(WebDataBinder dataBinder, HttpServletRequest servletRequest, WebRequest webRequest) {
-        System.out.println("sdfas");
-    }
+//    @InitBinder
+//    public void initBinder(WebDataBinder dataBinder, HttpServletRequest servletRequest, WebRequest webRequest) {
+////        System.out.println("sdfas");
+//    }
 
     @RequestMapping(value = "/code")
     @ResponseBody

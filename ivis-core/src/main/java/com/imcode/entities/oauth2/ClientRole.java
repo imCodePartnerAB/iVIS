@@ -1,6 +1,6 @@
 package com.imcode.entities.oauth2;
 
-import com.imcode.entities.AbstractNamedEntity;
+import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.io.Serializable;

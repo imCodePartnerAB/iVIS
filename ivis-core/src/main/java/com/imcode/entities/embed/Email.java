@@ -1,6 +1,5 @@
 package com.imcode.entities.embed;
 
-import com.imcode.entities.AbstractIdEntity;
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import javax.persistence.*;
 import java.io.Serializable;

@@ -1,9 +1,9 @@
 package com.imcode.entities;
 
 import com.imcode.entities.embed.Address;
-import com.imcode.entities.embed.AfterSchoolCenterSchema;
 import com.imcode.entities.embed.SchoolTransportSchema;
 import com.imcode.entities.enums.StatementStatus;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;

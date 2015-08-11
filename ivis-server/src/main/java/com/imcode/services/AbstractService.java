@@ -16,10 +16,10 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
 
     @Autowired
     @Qualifier("messages")
-    private MessageSource messageSource;
+    protected MessageSource messageSource;
 
     @Autowired
-    private REPOSITORY_TYPE repo;
+    protected REPOSITORY_TYPE repo;
 
     @Override
     @Transactional

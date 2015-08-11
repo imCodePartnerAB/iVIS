@@ -1,6 +1,6 @@
 package com.imcode.imcms.addon.ivisclient.controllers;
 
-import com.imcode.entities.AbstractIdEntity;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
 import imcode.services.IvisServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;

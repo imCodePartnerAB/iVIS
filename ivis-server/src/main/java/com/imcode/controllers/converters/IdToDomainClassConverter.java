@@ -12,6 +12,7 @@ import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.*;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.Collections;
 import java.util.Set;
@@ -23,7 +24,8 @@ public class IdToDomainClassConverter<T extends ConversionService & ConverterReg
 
         private final T conversionService;
         private ToEntityConverter toEntityConverter;
-    private Repositories repositories;
+        private ToIdConverter toIdConverter;
+        private Repositories repositories;
 
 
     /**
@@ -47,9 +49,25 @@ public class IdToDomainClassConverter<T extends ConversionService & ConverterReg
         this.toEntityConverter = new ToEntityConverter(this.repositories, this.conversionService);
         this.conversionService.addConverter(this.toEntityConverter);
 
-//        this.toIdConverter = new ToIdConverter();
-//        this.conversionService.addConverter(this.toIdConverter);
+        this.toIdConverter = new ToIdConverter();
+        this.conversionService.addConverter(this.toIdConverter);
 
+    }
+
+    public boolean isTypesEqual(TypeDescriptor sourceType, TypeDescriptor targetType) {
+        if (sourceType.equals(targetType)) {
+            return true;
+        }
+
+        if (sourceType.getType() == null && sourceType.getType() == targetType.getType()) {
+            return true;
+        }
+
+        if (sourceType.getType() != null && sourceType.getType().equals(targetType.getType())) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -92,7 +110,8 @@ public class IdToDomainClassConverter<T extends ConversionService & ConverterReg
                 return null;
             }
 
-            if (sourceType.equals(targetType)) {
+//            if (sourceType.equals(targetType)) {
+            if (isTypesEqual(sourceType, targetType)) {
                 return source;
             }
 
@@ -115,7 +134,10 @@ public class IdToDomainClassConverter<T extends ConversionService & ConverterReg
                 return false;
             }
 
-            if (sourceType.equals(targetType)) {
+//            if (sourceType.equals(targetType)) {
+//                return true;
+//            }
+            if (isTypesEqual(sourceType, targetType)) {
                 return true;
             }
 
@@ -138,60 +160,61 @@ public class IdToDomainClassConverter<T extends ConversionService & ConverterReg
      * @author Oliver Gierke
      * @since 1.10
      */
-//    private class ToIdConverter implements ConditionalGenericConverter {
-//
-//        /*
-//         * (non-Javadoc)
-//         * @see org.springframework.core.convert.converter.GenericConverter#getConvertibleTypes()
-//         */
-//        @Override
-//        public Set<ConvertiblePair> getConvertibleTypes() {
-//            return Collections.singleton(new ConvertiblePair(Object.class, Object.class));
-//        }
-//
-//        /*
-//         * (non-Javadoc)
-//         * @see org.springframework.core.convert.converter.GenericConverter#convert(java.lang.Object, org.springframework.core.convert.TypeDescriptor, org.springframework.core.convert.TypeDescriptor)
-//         */
-//        @Override
-//        public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-//
-//            if (source == null || !StringUtils.hasText(source.toString())) {
-//                return null;
-//            }
-//
+    private class ToIdConverter implements ConditionalGenericConverter {
+
+        /*
+         * (non-Javadoc)
+         * @see org.springframework.core.convert.converter.GenericConverter#getConvertibleTypes()
+         */
+        @Override
+        public Set<ConvertiblePair> getConvertibleTypes() {
+            return Collections.singleton(new ConvertiblePair(Object.class, Object.class));
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see org.springframework.core.convert.converter.GenericConverter#convert(java.lang.Object, org.springframework.core.convert.TypeDescriptor, org.springframework.core.convert.TypeDescriptor)
+         */
+        @Override
+        public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+
+            if (source == null || !StringUtils.hasText(source.toString())) {
+                return null;
+            }
+
 //            if (sourceType.equals(targetType)) {
-//                return source;
-//            }
-//
-//            Class<?> domainType = sourceType.getType();
-//
-//            EntityInformation<Object, ?> entityInformation = repositories.getEntityInformationFor(domainType);
-//
-//            return conversionService.convert(entityInformation.getId(source), targetType.getType());
-//        }
-//
-//        /*
-//         * (non-Javadoc)
-//         * @see org.springframework.core.convert.converter.ConditionalConverter#matches(org.springframework.core.convert.TypeDescriptor, org.springframework.core.convert.TypeDescriptor)
-//         */
-//        @Override
-//        public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
-//
-//            if (!repositories.hasRepositoryFor(sourceType.getType())) {
-//                return false;
-//            }
-//
-//            if (sourceType.equals(targetType)) {
-//                return true;
-//            }
-//
-//            Class<?> rawIdType = repositories.getRepositoryInformationFor(sourceType.getType()).getIdType();
-//
-//            return targetType.equals(TypeDescriptor.valueOf(rawIdType))
-//                    || conversionService.canConvert(rawIdType, targetType.getType());
-//        }
-//    }
+            if (isTypesEqual(sourceType, targetType)) {
+                return source;
+            }
+
+            Class<?> domainType = sourceType.getType();
+
+            EntityInformation<Object, ?> entityInformation = repositories.getEntityInformationFor(domainType);
+
+            return conversionService.convert(entityInformation.getId(source), targetType.getType());
+        }
+
+        /*
+         * (non-Javadoc)
+         * @see org.springframework.core.convert.converter.ConditionalConverter#matches(org.springframework.core.convert.TypeDescriptor, org.springframework.core.convert.TypeDescriptor)
+         */
+        @Override
+        public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
+
+            if (!repositories.hasRepositoryFor(sourceType.getType())) {
+                return false;
+            }
+
+            if (sourceType.equals(targetType)) {
+                return true;
+            }
+
+            Class<?> rawIdType = repositories.getRepositoryInformationFor(sourceType.getType()).getIdType();
+
+            return targetType.equals(TypeDescriptor.valueOf(rawIdType))
+                    || conversionService.canConvert(rawIdType, targetType.getType());
+        }
+    }
 
     @SuppressWarnings("serial")
     private static final class ConversionMatchAbbreviationException extends RuntimeException {

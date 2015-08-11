@@ -11,6 +11,7 @@
 <%@ page import="com.imcode.entities.embed.SchoolTransportSchema" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.time.DayOfWeek" %>
+<%@ page import="com.imcode.entities.enums.StatementStatus" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -88,6 +89,8 @@
         request.setAttribute("academicYearList", academicYearList);
         request.setAttribute("schoolTransportList", schoolTransportList);
         request.setAttribute("reasoneList", reasoneList);
+        pageContext.setAttribute("statusList", StatementStatus.values());
+
     }
 %>
 <c:if test="${not empty app}">
@@ -199,6 +202,14 @@
         </div>
 
         <div id="decisionTabPage" class="tab-page">
+            <div class="field" id="statusSelect">
+                <form:label path="status">Status</form:label>
+                <form:select path="status">
+                    <form:option value="">-----</form:option>
+                    <form:options items="${statusList}"/>
+                </form:select>
+                <form:errors path="reasone" cssClass="error-description"/>
+            </div>
         </div>
         <div id="loggTabPage" class="tab-page">
         </div>
@@ -234,10 +245,13 @@
     <%--out.print("\"}, ");--%>
     <%--}--%>
     <%--%>];--%>
-    $(document).ready(function () {
-//        alert("asdfasdf");
+//    $(document).ready(function () {
+////        alert("asdfasdf");
+//        $('#application-form').validate();
+//    });
+    var onOpen = function () {
         $('#application-form').validate();
-    });
+    };
 </script>
 <%--<c:if test="${not empty statement}">--%>
 <%--<table cellpadding="0" cellspacing="0">--%>

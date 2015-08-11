@@ -2,6 +2,7 @@ package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.embed.AfterSchoolCenterSchema;
+import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
 import com.imcode.utils.SetListAdapter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -16,7 +17,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_pupil")
-public class Pupil extends AbstractDatedEntity<Long>  implements Serializable {
+public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable {
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")

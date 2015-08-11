@@ -1,5 +1,6 @@
 var clientAddress;
 var ivis = null;
+var onOpen = null;
 
 function initialize() {
     ivis = IVis;
@@ -29,13 +30,14 @@ IVis.Tabs.prototype =
         );
 
         var tabId = $.cookie("data-tab-page-id");
+        currentTab = $(".tabs > .tab[data-tab-page-id='" + tabId + "']");
 
-        if (tabId == null) {
+        if (currentTab.length == 0) {
             $(".tabs > .tab").first()
                 //.next()
                 .click();
         } else {
-            $(".tabs > .tab[data-tab-page-id='" + tabId + "']").click();
+            currentTab.click();
         }
 
     }
@@ -589,7 +591,12 @@ IVis.UI.prototype =
 
                 $this.displayPersonInfo(result.person, owner, containerName + ".person", $this);
             });
-    }
+    },
+
+    //enableFormValidation: function(formName) {
+    //    $('#' + formName).validate();
+    //}
+
 
 
 };
@@ -626,3 +633,4 @@ function onSelectedItem(itemName, id) {
 
     }
 }
+

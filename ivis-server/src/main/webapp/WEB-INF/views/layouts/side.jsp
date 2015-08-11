@@ -20,10 +20,16 @@
 <div id="menu">
     <div class="title">${labelMainMenu}</div>
     <div class="main-menu">
-        <a class="main-menu-item" href="${clientsUrl}">${labelClients}</a>
-        <a class="main-menu-item" href="${usersUrl}">${labelUsers}</a>
+        <%--<a class="main-menu-item" href="${clientsUrl}">${labelClients}</a>--%>
+        <%--<a class="main-menu-item" href="${usersUrl}">${labelUsers}</a>--%>
         <%--<a class="main-menu-item" href="${sqlUrl}">SQL</a>--%>
         <a class="main-menu-item" href="${xmlUrl}">Application import</a>
+
+        <tiles:importAttribute name="menuMap"/>
+        <c:forEach var="item" items="${menuMap}">
+            <spring:url value="${item.getValue()}" var="entityUrl"/>
+            <a class="main-menu-item" href="${entityUrl}">${item.getKey()}</a>
+        </c:forEach>
     </div>
     <div class="user-ph">
         <div class="user">

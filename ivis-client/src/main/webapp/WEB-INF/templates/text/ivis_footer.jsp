@@ -11,6 +11,8 @@
     $(document).ready(
             function () {
                 initialize();
+                if(onOpen != null)
+                    onOpen.call();
             }
     );
     clientAddress = "${clientAddress}";

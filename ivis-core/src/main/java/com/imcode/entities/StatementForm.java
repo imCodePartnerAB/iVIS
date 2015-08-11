@@ -1,5 +1,7 @@
 package com.imcode.entities;
 
+import com.imcode.entities.superclasses.AbstractNamedEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;

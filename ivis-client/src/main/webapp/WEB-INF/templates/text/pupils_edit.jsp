@@ -746,13 +746,10 @@
           out.print("\"}, ");
         }
         %>];
-    $(document).ready(function () {
-        initialize();
+    var onOpen = function () {
         $('#pupil-form').validate();
         if(!${hasAfterSchoolCenter}) { ivis.ui.toggleDiv("afterSchoolCenterDetails");}
-    });
-
-
+    };
 </script>
 <%--<c:if test="${hasAf}"--%>
 

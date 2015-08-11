@@ -7,7 +7,7 @@ package com.imcode.imcms.addon.ivisclient.controllers.converters;
 import java.util.Collections;
 import java.util.Set;
 
-import com.imcode.entities.AbstractIdEntity;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
 import imcode.services.IvisServiceFactory;
 import imcode.services.restful.ServiceInfo;
@@ -18,8 +18,6 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.core.EntityInformation;
-import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;

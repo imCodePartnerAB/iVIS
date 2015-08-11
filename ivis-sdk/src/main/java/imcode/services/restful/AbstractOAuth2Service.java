@@ -1,7 +1,8 @@
 package imcode.services.restful;
 
-import com.imcode.entities.AbstractIdEntity;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
+import com.imcode.services.NamedEntityService;
 import imcode.services.IvisServiceFactory;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,7 +23,7 @@ import java.util.Map;
 /**
  * Created by vitaly on 28.05.15.
  */
-public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, ID> {
+public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, ID>, NamedEntityService<T> {
     private String mainServiceAddres;
 
     private RestServiseRequest findAllRequest;
@@ -126,7 +127,8 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
             request = getCreateRequest();
             String uri = request.getAddress();
             HttpMethod method = request.getMethod();
-            result = restTemplate.postForObject(uri, entity, getGeneticType("T"));
+//            result = restTemplate.postForObject(uri, entity, getGeneticType("T"));
+            result = (T) restTemplate.postForObject(uri, entity, getEntityClass());
         } else {
             request = getUpdateRequest();
             uriVariables = new Object[]{idEntity.getId()};
@@ -174,6 +176,25 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         if (responseEntity.getBody() != null) {
             result = responseEntity.getBody();
         }
+        return result;
+    }
+
+    @Override
+    public List<T> findByName(String name) {
+        List<T> result = new LinkedList<>();
+        RestServiseRequest request = getFindAllRequest();
+        String uri = request.getAddress() + "?name={id}";
+        Object[] uriVariables = {name};
+        HttpMethod method = request.getMethod();
+
+        RestTemplate restTemplate = getRestTemplate();
+        ParameterizedTypeReference typeReference = getListTypeReference();
+        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, typeReference, uriVariables);
+
+        if (responseEntity.getBody() != null) {
+            return (List<T>) responseEntity.getBody();
+        }
+
         return result;
     }
 

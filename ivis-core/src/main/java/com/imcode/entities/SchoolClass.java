@@ -1,10 +1,8 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.imcode.entities.embed.Diary;
+import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import java.io.Serializable;
 import java.util.*;

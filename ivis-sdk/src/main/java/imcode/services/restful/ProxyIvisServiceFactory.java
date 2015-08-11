@@ -1,10 +1,11 @@
 package imcode.services.restful;
 
-import com.imcode.entities.AbstractIdEntity;
+import com.imcode.entities.School;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.entities.Pupil;
 import com.imcode.services.GenericService;
 import com.imcode.services.PupilService;
-import com.imcode.services.SchoolClassService;
+import com.imcode.services.SchoolService;
 import imcode.services.GenericServiceProxy;
 import imcode.services.IvisServiceFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -373,6 +374,37 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
         return (Class<ID>) parameter;
     }
 
+    public List<Class<? extends AbstractIdEntity>> getEntityClassList() {
+        return entityClassList;
+    }
+
+    public void setEntityClassList(List<Class<? extends AbstractIdEntity>> entityClassList) {
+        this.entityClassList = entityClassList;
+    }
+
+    public List<AbstractOAuth2Service> getFavoriteServiceList() {
+        return favoriteServiceList;
+    }
+
+    public void setFavoriteServiceList(List<AbstractOAuth2Service> favoriteServiceList) {
+        this.favoriteServiceList = favoriteServiceList;
+    }
+
+    public String getEntityPackage() {
+        return entityPackage;
+    }
+
+    public void setEntityPackage(String entityPackage) {
+        this.entityPackage = entityPackage;
+    }
+
+    public String getServicePackage() {
+        return servicePackage;
+    }
+
+    public void setServicePackage(String servicePackage) {
+        this.servicePackage = servicePackage;
+    }
 
     public static void main(String[] args) {
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
@@ -419,28 +451,20 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
             System.out.println("sfas");
 //            serviceFactory.checkEntityClassList(serviceFactory.entityClassList);
 //            GenericService service = serviceFactory.getService(RoleService.class);
-            GenericService service = serviceFactory.getService(PupilService.class);
-//            School school = (School) service.find(1L);
+            SchoolService service = serviceFactory.getService(SchoolService.class);
+            List<School> schoolList = service.findByName("School #1");
 ////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
-            Pupil entity = (Pupil) service.find(1);
+//            Pupil entity = (Pupil) service.find(1);
+
 //            Object entity = service.find(0);
 //            System.out.println(entity);
-            System.out.println(entity);
+            System.out.println(schoolList);
         } catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 }
-
-//class ServiceMap {
-//    private Map<GenericService, GenericService> serviceMap = new HashMap<>();
-//    private Map<Object, GenericService> entityServiceMap = new HashMap<>();
-//
-//    public void put(GenericService service) {
-//
-//    }
-//}
 
 
 

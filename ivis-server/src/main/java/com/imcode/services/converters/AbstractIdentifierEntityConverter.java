@@ -1,6 +1,6 @@
 package com.imcode.services.converters;
 
-import com.imcode.entities.AbstractIdEntity;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;

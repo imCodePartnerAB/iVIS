@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import javax.persistence.Entity;

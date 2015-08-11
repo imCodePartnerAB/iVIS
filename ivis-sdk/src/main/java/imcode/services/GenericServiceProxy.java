@@ -1,6 +1,6 @@
 package imcode.services;
 
-import com.imcode.entities.AbstractIdEntity;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
 import imcode.services.restful.AbstractOAuth2Service;
 

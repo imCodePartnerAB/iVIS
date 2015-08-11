@@ -1,5 +1,7 @@
 package com.imcode.entities;
 
+import com.imcode.entities.superclasses.AbstractNamedEntity;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -31,5 +33,9 @@ public class AfterSchoolCenterSection extends AbstractNamedEntity<Long> implemen
 
     public void setSchool(School school) {
         this.school = school;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("\"" + new AfterSchoolCenterSection().getClassDescription() + "\"");
     }
 }

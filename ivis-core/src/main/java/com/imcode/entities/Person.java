@@ -3,6 +3,7 @@ package com.imcode.entities;
 import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.util.StringUtils;
@@ -17,7 +18,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_person")
-public class Person extends AbstractIdEntity<Long>  implements Serializable {
+public class Person extends AbstractIdEntity<Long> implements Serializable {
     @Column
     private String personalId;
 

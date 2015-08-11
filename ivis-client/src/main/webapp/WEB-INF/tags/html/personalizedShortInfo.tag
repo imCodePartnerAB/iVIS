@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ attribute name="value" required="true" type="com.imcode.entities.AbstractIdEntity" rtexprvalue="true" %>
+<%@ attribute name="value" required="true" type="com.imcode.entities.superclasses.AbstractIdEntity" rtexprvalue="true" %>
 <%@ attribute name="path" required="true" rtexprvalue="true" %>
 <%@ attribute name="editUrl" required="true" rtexprvalue="true" %>
 <%@ attribute name="label" required="false" rtexprvalue="true" %>

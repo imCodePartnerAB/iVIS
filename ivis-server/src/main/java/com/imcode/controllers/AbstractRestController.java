@@ -2,6 +2,7 @@ package com.imcode.controllers;
 
 import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
+import com.imcode.services.NamedEntityService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -68,6 +69,18 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") ID id, WebRequest webRequest) {
         service.delete(id);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"name"})
+//    @ResponseBody
+    public Object getAll(WebRequest webRequest, Model model, @RequestParam("name") String name) {
+
+        if (!(service instanceof NamedEntityService)) {
+            throw new UnsupportedOperationException("findByName metod not supported!");
+        }
+
+        List<T> result = ((NamedEntityService) service).findByName(name);
+        return result;
     }
 
 

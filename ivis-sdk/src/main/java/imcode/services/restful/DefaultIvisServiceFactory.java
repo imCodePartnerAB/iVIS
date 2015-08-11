@@ -44,7 +44,7 @@ public class DefaultIvisServiceFactory{}
 //        statementService.fillServiseAdderess(apiUrl + "statements");
 //        map.put(ApplicationService.class, statementService);
 //
-//        OAuth2PupisService pupisService = new OAuth2PupisService(this);
+//        OAuth2PupilService pupisService = new OAuth2PupilService(this);
 //        pupisService.fillServiseAdderess(apiUrl + "pupils");
 //        map.put(PupilService.class, pupisService);
 //
