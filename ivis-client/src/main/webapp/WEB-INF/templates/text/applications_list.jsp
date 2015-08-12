@@ -9,6 +9,8 @@
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
 <%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Collections" %>
+<%@ page import="java.util.Comparator" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -60,7 +62,12 @@
 
                 applicationList.add(statement);
             }
-
+            Collections.sort(applicationList, new Comparator<Application>() {
+                @Override
+                public int compare(Application o1, Application o2) {
+                    return -Long.compare(o1.getId(), o2.getId());
+                }
+            });
 
         } catch (UserRedirectRequiredException e) {
             IvisOAuth2Utils.setAccessToken(session, null);
