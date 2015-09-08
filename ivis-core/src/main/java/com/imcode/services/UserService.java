@@ -12,5 +12,9 @@ public interface UserService extends GenericService<User, Long>, UserDetailsServ
 
     User findByPersonId(Long personId);
 
+    default User findByPersonalId(String personalId){return null;}
+
+    default User getCurrentUser() { return null; }
+
 //    public boolean checkAutorisation(String login, String pwd);
 }

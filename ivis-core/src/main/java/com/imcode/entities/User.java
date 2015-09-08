@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,9 +26,11 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 //    @NotNull(message = "{user.requiredPassword}")
 //    @Size(min = 3, max = 15)
     @Column(nullable = false, columnDefinition = DEFAULT_PASSWORD)
+    @JsonIgnore
     private String password = DEFAULT_PASSWORD;
 
     @Transient
+    @JsonIgnore
     private String confirmPassword = DEFAULT_PASSWORD;
 
     @Column
@@ -61,10 +64,12 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return name;
     }
 
+    @JsonIgnore
     public void setUsername(String username) {
         this.name = username;
     }
@@ -88,10 +93,12 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     }
 
     @Override
+//    @JsonIgnore
     public Set<Role> getAuthorities() {
         return roles;
     }
 
+//    @JsonIgnore
     public void setAuthorities(Set<Role> roles) {
         this.roles = roles;
     }
@@ -104,27 +111,40 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         this.person = person;
     }
 
+    @JsonIgnore
     public String getConfirmPassword() {
         return confirmPassword;
     }
 
+    @JsonIgnore
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -148,6 +168,7 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     }
 
     //Setter utility
+    @JsonIgnore
     public void setAuthorities(Role role) {
         this.roles = new HashSet<>(Arrays.asList(role));
     }
