@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,7 +21,7 @@ import javax.persistence.Entity;
 //@AttributeOverrides({
         @AttributeOverride(name="name", column = @Column(unique = true, length = 150, nullable = false))
 //})
-public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable {
+public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable, JpaPersonalizedEntity<Long> {
     public static final String DEFAULT_PASSWORD = "";
 
 //    @NotNull(message = "{user.requiredPassword}")

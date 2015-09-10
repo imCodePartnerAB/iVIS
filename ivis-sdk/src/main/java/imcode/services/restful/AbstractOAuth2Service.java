@@ -180,6 +180,24 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     }
 
     @Override
+    public T findFirstByName(String name) {
+        T result = null;
+        RestServiseRequest request = getFindAllRequest();
+        String uri = request.getAddress() + "?name={id}&first=true";
+        Object[] uriVariables = {name};
+        HttpMethod method = request.getMethod();
+        RestTemplate restTemplate = getRestTemplate();
+
+        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getEntityClass(), uriVariables);
+
+        if (responseEntity.getBody() != null) {
+            result = (T) responseEntity.getBody();
+        }
+
+        return result;
+    }
+
+    @Override
     public List<T> findByName(String name) {
         List<T> result = new LinkedList<>();
         RestServiseRequest request = getFindAllRequest();

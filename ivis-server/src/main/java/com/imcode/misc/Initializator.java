@@ -29,6 +29,7 @@ import java.util.Random;
 /**
  * Created by vitaly on 23.03.15.
  */
+@SuppressWarnings({"deprecation"})
 @Service
 public class Initializator {
     @Autowired

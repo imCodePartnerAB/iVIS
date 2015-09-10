@@ -251,6 +251,12 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
         throw new RuntimeException("No such service!");
     }
 
+    @Override
+    public <S extends GenericService<T, ID>, T, ID> S getServiceFor(Class<T> entityClass) {
+        Class serviceInterface =  getServiceInterface(entityClass);
+        return (S) getService(serviceInterface);
+    }
+
     private <T, ID> GenericService<T, ID> getAbstractOAuth2ServiceImplementation(final Class entityClass, final Class idClass) {
         try {
             Constructor constructor = abstractOAuth2ServiceClass.getConstructor(IvisServiceFactory.class, String.class, Class.class, Class.class);

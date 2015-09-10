@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/{format}/pupils")
 public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long, PupilService> {
 
-    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    Pupil getByPersonalId(@RequestParam("personalId") String personId) {
-        Pupil pupil = getService().findByPersonalId(personId);
-        return pupil;
-    }
+//    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
+//    Pupil getByPersonalId(@RequestParam("personalId") String personId) {
+//        Pupil pupil = getService().findByPersonalId(personId);
+//        return pupil;
+//    }
 
 }

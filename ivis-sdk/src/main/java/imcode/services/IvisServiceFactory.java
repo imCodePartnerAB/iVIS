@@ -20,6 +20,8 @@ public interface IvisServiceFactory {
 
     <S extends GenericService<T, ID>, T, ID> S getService(Class<S> serviceClass);
 
+    <S extends GenericService<T, ID>, T, ID> S getServiceFor(Class<T> entityClass);
+
     OAuth2ClientContext getClientContext();
 
     boolean hasServiceFor(Class entity);

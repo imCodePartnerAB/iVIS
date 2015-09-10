@@ -3,6 +3,7 @@ package com.imcode.controllers;
 import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedEntityService;
+import com.imcode.services.PersonalizedService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -71,18 +72,44 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
         service.delete(id);
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET, params = {"name"})
 //    @ResponseBody
-    public Object getAll(WebRequest webRequest, Model model, @RequestParam("name") String name) {
+    public Object getAll(WebRequest webRequest, Model model,
+                         @RequestParam("name") String name,
+                         @RequestParam(value = "first", required = false) Boolean firstOnly) {
 
-        if (!(service instanceof NamedEntityService)) {
-            throw new UnsupportedOperationException("findByName metod not supported!");
+        if (service instanceof NamedEntityService) {
+            NamedEntityService<T> namedService = (NamedEntityService<T>) service;
+
+            if (firstOnly == null || !firstOnly) {
+                return namedService.findByName(name);
+            } else {
+                return namedService.findFirstByName(name);
+            }
         }
 
-        List<T> result = ((NamedEntityService) service).findByName(name);
-        return result;
+        throw new UnsupportedOperationException("findByName metod not supported!");
+
     }
 
+    @SuppressWarnings("unchecked")
+    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
+    public Object getByPersonalId(@RequestParam("personalId") String personId,
+                                  @RequestParam(value = "first", required = false) Boolean firstOnly) {
+
+        if (service instanceof PersonalizedService) {
+            PersonalizedService<T> personalizedService = (PersonalizedService<T>) service;
+
+            if (firstOnly == null || !firstOnly) {
+                return personalizedService.findByPersonalId(personId);
+            } else {
+                return personalizedService.findFirstByPersonalId(personId);
+            }
+        }
+
+        throw new UnsupportedOperationException("findByName metod not supported!");
+    }
 
     // Getters & Setters
     //------------------------------------------------------------------------------------------------------------------

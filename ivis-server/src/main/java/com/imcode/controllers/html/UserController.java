@@ -78,7 +78,7 @@ public class UserController {
         model.setViewName("users/edit");
         model.addObject(roleService.findAll());
         User user = new User();
-        Role roleUser = roleService.findByName("ROLE_USER");
+        Role roleUser = roleService.findFirstByName("ROLE_USER");
         model.addObject(user);
 
         if (roleUser != null) {

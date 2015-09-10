@@ -6,10 +6,17 @@ import com.imcode.services.AbstractService;
 import com.imcode.services.PersonService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PersonServiceRepoImpl extends AbstractService<Person, Long, PersonRepository> implements PersonService {
     @Override
-    public Person findByPersonalId(String personalId) {
+    public Person findFirstByPersonalId(String personalId) {
+        return getRepo().findFirstByPersonalId(personalId);
+    }
+
+    @Override
+    public List<Person> findByPersonalId(String personalId) {
         return getRepo().findByPersonalId(personalId);
     }
 

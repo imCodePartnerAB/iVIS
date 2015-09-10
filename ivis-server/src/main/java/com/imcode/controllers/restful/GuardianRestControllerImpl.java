@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/{format}/guardians")
 public class GuardianRestControllerImpl extends AbstractRestController<Guardian, Long, GuardianService> {
 
-    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    Guardian getByPersonalId(@RequestParam("personalId") String personId) {
-        Guardian Guardian = getService().findByPersonalId(personId);
-        return Guardian;
-    }
+//    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
+//    Guardian getByPersonalId(@RequestParam("personalId") String personId) {
+//        Guardian Guardian = getService().findByPersonalId(personId);
+//        return Guardian;
+//    }
 
 }

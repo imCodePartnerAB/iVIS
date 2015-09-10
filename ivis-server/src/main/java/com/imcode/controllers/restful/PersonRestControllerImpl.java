@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/{format}/persons")
 public class PersonRestControllerImpl extends AbstractRestController<Person, Long, PersonService> {
-    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    Person getByPersonalId(@RequestParam("personalId") String personId) {
-        Person person = getService().findByPersonalId(personId);
-        return person;
-    }
+//    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
+//    Person getPersonByPersonalId(@RequestParam("personalId") String personId,
+//                           @RequestParam(value = "first", required = false) Boolean firstOnly) {
+//        Person person = getService().findFirstByPersonalId(personId);
+//        return person;
+//    }
 
 
 }

@@ -10,8 +10,21 @@ import java.util.List;
  */
 public class AbstractNamedEntityService<T, ID extends Serializable, REPOSITORY_TYPE extends JpaRepository<T, ID>> extends AbstractService<T, ID, REPOSITORY_TYPE> implements NamedEntityService<T> {
     @Override
+    public T findFirstByName(String name) {
+        if (repo instanceof NamedEntityService) {
+            NamedEntityService<T> namedRepo = (NamedEntityService<T>) repo;
+            return namedRepo.findFirstByName(name);
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<T> findByName(String name) {
-        NamedEntityService<T> namedEntityRepository = (NamedEntityService<T>) repo;
-        return ((NamedEntityService<T>) repo).findByName(name);
+        if (repo instanceof NamedEntityService) {
+            NamedEntityService<T> namedRepo = (NamedEntityService) repo;
+            return  namedRepo.findByName(name);
+        }
+
+        throw new UnsupportedOperationException();
     }
 }
