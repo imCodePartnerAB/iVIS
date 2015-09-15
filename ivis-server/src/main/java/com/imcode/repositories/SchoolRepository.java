@@ -2,11 +2,9 @@ package com.imcode.repositories;
 
 
 import com.imcode.entities.School;
-import com.imcode.services.NamedEntityService;
+import com.imcode.services.NamedService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface SchoolRepository extends JpaRepository<School, Long>, NamedEntityService<School> {
+public interface SchoolRepository extends JpaRepository<School, Long>, NamedService<School> {
 //    List<School> findByName(String name);
 }

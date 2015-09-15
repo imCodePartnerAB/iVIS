@@ -11,8 +11,8 @@ import java.util.List;
 public class AbstractPersonalizedEntityService<T extends JpaPersonalizedEntity<Long>, REPOSITORY_TYPE extends PersonalizedRepository<T>> extends AbstractService<T, Long, REPOSITORY_TYPE> implements PersonalizedService<T> {
     @Override
     public T findFirstByPersonalId(String personalId) {
-//        if (repo instanceof NamedEntityService) {
-//            NamedEntityService<T> namedRepo = (NamedEntityService<T>) repo;
+//        if (repo instanceof NamedService) {
+//            NamedService<T> namedRepo = (NamedService<T>) repo;
             return repo.findFirstByPersonalId(personalId);
 //        }
 //        throw new UnsupportedOperationException();
@@ -20,8 +20,8 @@ public class AbstractPersonalizedEntityService<T extends JpaPersonalizedEntity<L
 
     @Override
     public List<T> findByPersonalId(String personalId) {
-//        if (repo instanceof NamedEntityService) {
-//            NamedEntityService<T> namedRepo = (NamedEntityService) repo;
+//        if (repo instanceof NamedService) {
+//            NamedService<T> namedRepo = (NamedService) repo;
             return  repo.findByPersonalId(personalId);
 //        }
 //

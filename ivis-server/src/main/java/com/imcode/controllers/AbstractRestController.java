@@ -2,16 +2,14 @@ package com.imcode.controllers;
 
 import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
-import com.imcode.services.NamedEntityService;
+import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.AbstractJsonpResponseBodyAdvice;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,14 +30,12 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
 
     // Getting entity by id
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    @ResponseBody
     public Object get(@PathVariable("id") ID id, WebRequest webRequest) {
         return service.find(id);
     }
 
     //Getting list of entities
     @RequestMapping(method = RequestMethod.GET)
-//    @ResponseBody
     public Object getAll(WebRequest webRequest, Model model) {
         List<T> result = service.findAll();
         return result;
@@ -54,7 +50,6 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
 
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-//    @ResponseBody
     public Object update(@PathVariable("id") ID id, @RequestBody(required = false) T entity, WebRequest webRequest) {
         T existsEntity = getService().find(id);
 
@@ -74,13 +69,12 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
 
     @SuppressWarnings("unchecked")
     @RequestMapping(method = RequestMethod.GET, params = {"name"})
-//    @ResponseBody
-    public Object getAll(WebRequest webRequest, Model model,
+    public Object getByName(WebRequest webRequest, Model model,
                          @RequestParam("name") String name,
                          @RequestParam(value = "first", required = false) Boolean firstOnly) {
 
-        if (service instanceof NamedEntityService) {
-            NamedEntityService<T> namedService = (NamedEntityService<T>) service;
+        if (service instanceof NamedService) {
+            NamedService<T> namedService = (NamedService<T>) service;
 
             if (firstOnly == null || !firstOnly) {
                 return namedService.findByName(name);

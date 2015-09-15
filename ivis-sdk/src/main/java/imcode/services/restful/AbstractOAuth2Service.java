@@ -2,7 +2,8 @@ package imcode.services.restful;
 
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
-import com.imcode.services.NamedEntityService;
+import com.imcode.services.NamedService;
+import com.imcode.services.PersonalizedService;
 import imcode.services.IvisServiceFactory;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,7 +24,7 @@ import java.util.Map;
 /**
  * Created by vitaly on 28.05.15.
  */
-public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, ID>, NamedEntityService<T> {
+public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, ID>, NamedService<T>, PersonalizedService<T> {
     private String mainServiceAddres;
 
     private RestServiseRequest findAllRequest;
@@ -203,6 +204,43 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         RestServiseRequest request = getFindAllRequest();
         String uri = request.getAddress() + "?name={id}";
         Object[] uriVariables = {name};
+        HttpMethod method = request.getMethod();
+
+        RestTemplate restTemplate = getRestTemplate();
+        ParameterizedTypeReference typeReference = getListTypeReference();
+        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, typeReference, uriVariables);
+
+        if (responseEntity.getBody() != null) {
+            return (List<T>) responseEntity.getBody();
+        }
+
+        return result;
+    }
+
+    @Override
+    public T findFirstByPersonalId(String personalId) {
+        T result = null;
+        RestServiseRequest request = getFindAllRequest();
+        String uri = request.getAddress() + "?personalId={id}&first=true";
+        Object[] uriVariables = {personalId};
+        HttpMethod method = request.getMethod();
+        RestTemplate restTemplate = getRestTemplate();
+
+        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getEntityClass(), uriVariables);
+
+        if (responseEntity.getBody() != null) {
+            result = (T) responseEntity.getBody();
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<T> findByPersonalId(String personalId) {
+        List<T> result = new LinkedList<>();
+        RestServiseRequest request = getFindAllRequest();
+        String uri = request.getAddress() + "?personalId={id}";
+        Object[] uriVariables = {personalId};
         HttpMethod method = request.getMethod();
 
         RestTemplate restTemplate = getRestTemplate();
