@@ -1,6 +1,5 @@
 <%@ page import="com.imcode.entities.Person,
                  com.imcode.entities.Application" pageEncoding="UTF-8" %>
-<%@ page import="com.imcode.entities.enums.StatementStatus" %>
 <%@ page import="com.imcode.services.ApplicationService" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
@@ -11,6 +10,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.Comparator" %>
+<%@ page import="com.imcode.entities.embed.Decision" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -19,7 +19,7 @@
 <jsp:include page="ivis_header.jsp"/>
 
 <%
-    request.setAttribute("statementStatusEnum", StatementStatus.values());
+    request.setAttribute("statementStatusEnum", Decision.Status.values());
     //    DefaultIvisServiceFactory factory = IvisOAuth2Utils.getServiceFactory(request);
 //
     if (IvisOAuth2Utils.isTokenGood(request)) {
@@ -39,9 +39,9 @@
 //    }
 //    request.setAttribute("statements", statement);
         String searchText = request.getParameter("searchText");
-        StatementStatus statusFilter = null;
+        Decision.Status statusFilter = null;
         try {
-            statusFilter = StatementStatus.valueOf(request.getParameter("statusFilter"));
+            statusFilter = Decision.Status.valueOf(request.getParameter("statusFilter"));
         } catch (Exception ignore) { }
 
         List<Application> applicationList = null;
@@ -53,12 +53,12 @@
                 if (statusFilter != null && statement.getStatus() != statusFilter)
                     continue;
 
-                if (searchText != null && StringUtils.isNoneEmpty(searchText)) {
-                    Person pupilPerson = statement.getPupil() != null ? statement.getPupil().getPerson():null;
-                    Person submittedPerson = statement.getSubmittedPerson();
-                    if (!IvisOAuth2Utils.personContainsString(pupilPerson, searchText) && !IvisOAuth2Utils.personContainsString(submittedPerson, searchText))
-                        continue;
-                }
+//                if (searchText != null && StringUtils.isNoneEmpty(searchText)) {
+//                    Person pupilPerson = statement.getPupil() != null ? statement.getPupil().getPerson():null;
+//                    Person submittedPerson = statement.getSubmittedPerson();
+//                    if (!IvisOAuth2Utils.personContainsString(pupilPerson, searchText) && !IvisOAuth2Utils.personContainsString(submittedPerson, searchText))
+//                        continue;
+//                }
 
                 applicationList.add(statement);
             }
@@ -95,13 +95,13 @@
                 String statusFilter = request.getParameter("statusFilter");
                 out.println("<option value=\"null\" " + ("null".equalsIgnoreCase(statusFilter)? "selected\"":"") + ">All</option>");
 
-                for (StatementStatus statementStatus :StatementStatus.values()) {
+                for (Decision.Status statementStatus :Decision.Status.values()) {
                     out.println("<option value=\"" + statementStatus + "\" " + (statementStatus.toString().equalsIgnoreCase(statusFilter) ? "selected" : "") + ">" + StringUtils.capitalize(statementStatus.toString()) + "</option>");
                 }
 
             %>
             <%--<option value="null" <c:if test="${not empty param.statusFilter and param.statusFilter ne 'null'}">selected</c:if>>All</option>--%>
-                <%--<c:set var="enums" value="<%=StatementStatus.values()%>"/>--%>
+                <%--<c:set var="enums" value="<%=Decision.Status.values()%>"/>--%>
             <%--<c:forEach var="enum" items="${enums}" varStatus="starus">--%>
                 <%--<option value="${starus.current}" <c:if test="${not empty param.statusFilter and param.statusFilter eq starus.current}">selected</c:if>>${starus.current}</option>--%>
             <%--</c:forEach>--%>
@@ -115,11 +115,13 @@
     <thead>
     <tr>
         <th class="ordered-by">Id</th>
-        <th>SubmitDate</th>
-        <th>ChangeDate</th>
+        <th>CreateDate</th>
+        <th>UpdateDate</th>
         <th>Status</th>
-        <th>Student</th>
+        <th>registrationNumber</th>
         <th>Handled by</th>
+        <th>Submited by</th>
+        <th>Reguarded by</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
@@ -129,11 +131,13 @@
         <c:forEach items="${statements}" var="app">
             <tr data-application-id="${app.id}">
                 <td>${app.id}</td>
-                <td>${app.submitDate}</td>
-                <td>${app.changedDate}</td>
+                <td>${app.createDate}</td>
+                <td>${app.updateDate}</td>
                 <td>${app.status}</td>
-                <td>${app.pupil}</td>
-                <td>${app.submittedPerson}</td>
+                <td>${app.registrationNumber}</td>
+                <td>${app.handledUser}</td>
+                <td>${app.submittedUser}</td>
+                <td>${app.regardingUser}</td>
                 <td class="buttons">
                     <a class="button positive"
                        href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Details</a>
@@ -141,12 +145,12 @@
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">
                         <button class="positive" type="submit">Approve</button>
-                        <input type="hidden" name="status" value="approved"/>
+                        <input type="hidden" name="status" value="APPROVE"/>
                     </form>
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">
                         <button class="negative" type="submit">Decline</button>
-                        <input type="hidden" name="status" value="declined"/>
+                        <input type="hidden" name="status" value="DENI"/>
                     </form>
                 </td>
             </tr>

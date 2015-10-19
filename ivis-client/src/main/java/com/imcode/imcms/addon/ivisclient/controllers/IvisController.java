@@ -4,6 +4,7 @@ import com.imcode.entities.Application;
 import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
+import com.imcode.entities.embed.Decision;
 import com.imcode.entities.enums.StatementStatus;
 import com.imcode.imcms.addon.ivisclient.controllers.form.Message;
 import com.imcode.imcms.addon.ivisclient.controllers.form.MessageType;
@@ -122,7 +123,7 @@ public class IvisController {
     @RequestMapping(value = "/{id}", params = {"status"}, method = RequestMethod.GET)
     public void updateStatus(HttpServletRequest request,
                                HttpServletResponse response,
-                               @PathVariable("id") Application application, @RequestParam("status") StatementStatus status) throws IOException {
+                               @PathVariable("id") Application application, @RequestParam("status") Decision.Status status) throws IOException {
 //        IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
 //                .endPointUrl(serverAddress)
 //                .responseType("json")
@@ -136,8 +137,8 @@ public class IvisController {
             try {
 //                Application application = service.find(id);
 //
-                if (application != null) {
-                    application.setStatus(status);
+                if (application != null && application.getDecision() != null) {
+                    application.getDecision().setStatus(status);
 
                     service.save(application);
 
@@ -152,6 +153,7 @@ public class IvisController {
 //        return id + ":" + status.toString();
     }
 
+    @Deprecated
     @RequestMapping(value = "/xml", method = RequestMethod.POST)
     public void importApplication(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -159,42 +161,42 @@ public class IvisController {
 //                                    @RequestParam("body") String body,
                                     Model model) throws IOException, URISyntaxException {
 
-        InputStream inputStream = file.getInputStream();
-        Application application = pharseXml(inputStream);
-
-        if (application == null) {
-            throw new RuntimeException("Unknown xml format");
-        }
-
-        if (IvisOAuth2Utils.getAccessToken(request) != null) {
-
-//            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
-//                    .endPointUrl(serverAddress)
-//                    .responseType("json")
-//                    .version("v1").build());
-//            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
-            ApplicationService applicationService = ivisServiceFactory.getService(ApplicationService.class);
-            PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
-
-            try {
-//                application = new Application();
-//                application.setStatus(StatementStatus.created);
-                if (application.getPupil() != null) {
-                    Pupil pupil = pupilService.findByPersonalId(application.getPupil().getPerson().getPersonalId());
-                    application.setPupil(pupil);
-                }
-                applicationService.save(application);
-                model.asMap().clear();
-                model.addAttribute("message", new Message(MessageType.SUCCESS, "SUCCESS"));
-            } catch (Exception e) {
-                model.addAttribute("message", new Message(MessageType.ERROR, "ERROR"));
-            }
-        } else {
-            response.sendRedirect(IvisOAuth2Utils.getOAuth2AuthirizationUrl((AuthorizationCodeResourceDetails) client, tokenHandler));
-            return;
-        }
-
-        response.sendRedirect(clientAddress + "/servlet/AdminDoc?meta_id=1005");
+//        InputStream inputStream = file.getInputStream();
+//        Application application = pharseXml(inputStream);
+//
+//        if (application == null) {
+//            throw new RuntimeException("Unknown xml format");
+//        }
+//
+//        if (IvisOAuth2Utils.getAccessToken(request) != null) {
+//
+////            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
+////                    .endPointUrl(serverAddress)
+////                    .responseType("json")
+////                    .version("v1").build());
+////            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
+//            ApplicationService applicationService = ivisServiceFactory.getService(ApplicationService.class);
+//            PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
+//
+//            try {
+////                application = new Application();
+////                application.setStatus(StatementStatus.created);
+//                if (application.getPupil() != null) {
+//                    Pupil pupil = pupilService.findByPersonalId(application.getPupil().getPerson().getPersonalId());
+//                    application.setPupil(pupil);
+//                }
+//                applicationService.save(application);
+//                model.asMap().clear();
+//                model.addAttribute("message", new Message(MessageType.SUCCESS, "SUCCESS"));
+//            } catch (Exception e) {
+//                model.addAttribute("message", new Message(MessageType.ERROR, "ERROR"));
+//            }
+//        } else {
+//            response.sendRedirect(IvisOAuth2Utils.getOAuth2AuthirizationUrl((AuthorizationCodeResourceDetails) client, tokenHandler));
+//            return;
+//        }
+//
+//        response.sendRedirect(clientAddress + "/servlet/AdminDoc?meta_id=1005");
 //        servlet/AdminDoc?meta_id=1005
 //        return "xml/show";
     }
@@ -284,68 +286,70 @@ public class IvisController {
         return request.getHeader("referer");
     }
 
+    @Deprecated
     private static Application pharseXml(InputStream inputStream) {
 
-        StatmentHandler handler = new StatmentHandler();
-
-        try {
-
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser = factory.newSAXParser();
-
-            saxParser.parse(inputStream, handler);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return handler.getApplication();
+//        StatmentHandler handler = new StatmentHandler();
+//
+//        try {
+//
+//            SAXParserFactory factory = SAXParserFactory.newInstance();
+//            SAXParser saxParser = factory.newSAXParser();
+//
+//            saxParser.parse(inputStream, handler);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//        return handler.getApplication();
+        return null;
     }
 
-   private static class StatmentHandler extends DefaultHandler {
-        private Application application;
-        private LinkedList<String> nodes = new LinkedList<>();
-        private String fullElementName;
-        private String elementName;
-
-
-        @Override
-        public void startDocument() throws SAXException {
-            if (application != null) {
-                throw new SAXException("This application handler " + this + " is allredy used, please create a new one.");
-            }
-
-            application = new Application();
-            application.setStatus(StatementStatus.created);
-        }
-
-        @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            nodes.add(qName);
-        }
-
-        @Override
-        public void characters(char[] ch, int start, int length) throws SAXException {
-            String currentNode = nodes.getLast();
-            String value = new String(ch, start, length);
-            System.out.println(ch);
-
-            if (nodes.contains("student") && "Personnummer".equalsIgnoreCase(currentNode)) {
-                Person person = new Person(value, null, null);
-                Pupil pupil = new Pupil();
-                pupil.setPerson(person);
-                application.setPupil(pupil);
-            }
-        }
-
-        @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
-            nodes.removeLast();
-        }
-
-        public Application getApplication() {
-            return application;
-        }
-    }
+//   private static class StatmentHandler extends DefaultHandler {
+//        private Application application;
+//        private LinkedList<String> nodes = new LinkedList<>();
+//        private String fullElementName;
+//        private String elementName;
+//
+//
+//        @Override
+//        public void startDocument() throws SAXException {
+//            if (application != null) {
+//                throw new SAXException("This application handler " + this + " is allredy used, please create a new one.");
+//            }
+//
+//            application = new Application();
+//            application.setStatus(StatementStatus.created);
+//        }
+//
+//        @Override
+//        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+//            nodes.add(qName);
+//        }
+//
+//        @Override
+//        public void characters(char[] ch, int start, int length) throws SAXException {
+//            String currentNode = nodes.getLast();
+//            String value = new String(ch, start, length);
+//            System.out.println(ch);
+//
+//            if (nodes.contains("student") && "Personnummer".equalsIgnoreCase(currentNode)) {
+//                Person person = new Person(value, null, null);
+//                Pupil pupil = new Pupil();
+//                pupil.setPerson(person);
+//                application.setPupil(pupil);
+//            }
+//        }
+//
+//        @Override
+//        public void endElement(String uri, String localName, String qName) throws SAXException {
+//            nodes.removeLast();
+//        }
+//
+//        public Application getApplication() {
+//            return application;
+//        }
+//    }
 }

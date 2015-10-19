@@ -24,6 +24,9 @@ public class Address implements Serializable {
     private String street;
 
     @Column
+    private String street2;
+
+    @Column
     private String propertyDescription;
 
     @Column
@@ -65,6 +68,14 @@ public class Address implements Serializable {
         this.street = street;
     }
 
+    public String getStreet2() {
+        return street2;
+    }
+
+    public void setStreet2(String street2) {
+        this.street2 = street2;
+    }
+
     public String getPropertyDescription() {
         return propertyDescription;
     }
@@ -101,5 +112,39 @@ public class Address implements Serializable {
                 .append(street);
 
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Address address = (Address) o;
+
+        if (postalCode != null ? !postalCode.equals(address.postalCode) : address.postalCode != null) return false;
+        if (municipalityCode != null ? !municipalityCode.equals(address.municipalityCode) : address.municipalityCode != null)
+            return false;
+        if (city != null ? !city.equals(address.city) : address.city != null) return false;
+        if (street != null ? !street.equals(address.street) : address.street != null) return false;
+        if (street2 != null ? !street2.equals(address.street2) : address.street2 != null) return false;
+        if (propertyDescription != null ? !propertyDescription.equals(address.propertyDescription) : address.propertyDescription != null)
+            return false;
+        if (careOf != null ? !careOf.equals(address.careOf) : address.careOf != null) return false;
+        return addressType == address.addressType;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = postalCode != null ? postalCode.hashCode() : 0;
+        result = 31 * result + (municipalityCode != null ? municipalityCode.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (street != null ? street.hashCode() : 0);
+        result = 31 * result + (street2 != null ? street2.hashCode() : 0);
+        result = 31 * result + (propertyDescription != null ? propertyDescription.hashCode() : 0);
+        result = 31 * result + (careOf != null ? careOf.hashCode() : 0);
+        result = 31 * result + (addressType != null ? addressType.hashCode() : 0);
+
+        return result;
     }
 }

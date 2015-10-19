@@ -99,8 +99,8 @@ public class Initializator {
         intializeSecurityJpa();
         intializeOAuth2Jpa();
         initializeToken();
-        initializeStatementJpa();
-//        initializePersonJpa();
+//        initializeStatementJpa();
+////        initializePersonJpa();
         initializePupilJpa();
 
     }
@@ -156,7 +156,7 @@ public class Initializator {
             for (int i = 0; i < 5; i++) {
                 Application application = new Application();
                 application.setId(Long.valueOf(i));
-                application.setStatus(StatementStatus.values()[random.nextInt(StatementStatus.values().length)]);
+//                application.setStatus(StatementStatus.values()[random.nextInt(StatementStatus.values().length)]);
                 applicationRepository.save(application);
             }
         }

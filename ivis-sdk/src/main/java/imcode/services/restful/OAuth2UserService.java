@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 /**
  * Created by vitaly on 03.06.15.
  */
@@ -46,21 +48,21 @@ public class OAuth2UserService extends AbstractOAuth2Service<User, Long> impleme
 
     @Override
     public User findByUsername(String username) {
-        throw new UnsupportedOperationException();
+        return findFirstByName(username);
     }
 
-    @Override
-    public User findByPerson(Person person) {
-        throw new UnsupportedOperationException();
-    }
+//    @Override
+//    public User findByPerson(Person person) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    @Override
+//    public User findByPersonId(Long personId) {
+//        throw new UnsupportedOperationException();
+//    }
 
     @Override
-    public User findByPersonId(Long personId) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public User findByPersonalId(String personalId) {
+    public List<User> findByPersonalId(String personalId) {
         throw new UnsupportedOperationException();
 //        User result = null;
 //        RestTemplate restTemplate = getRestTemplate();

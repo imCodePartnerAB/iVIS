@@ -47,6 +47,25 @@ public class Email implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Email email = (Email) o;
+
+        if (address != null ? !address.equals(email.address) : email.address != null) return false;
+        return communicationType == email.communicationType;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = address != null ? address.hashCode() : 0;
+        result = 31 * result + (communicationType != null ? communicationType.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return address;
     }

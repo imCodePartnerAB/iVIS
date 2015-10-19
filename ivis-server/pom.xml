@@ -17,7 +17,7 @@
         <!--<spring-security.version>4.0.1.RELEASE</spring-security.version>-->
         <!--<hibernate.version>4.3.10.Final</hibernate.version>-->
         <!--<spring-framework.version>4.0.3.RELEASE</spring-framework.version>-->
-        <hibernate.version>3.6.9.Final</hibernate.version>
+        <hibernate.version>4.3.10.Final</hibernate.version>
         <org.aspectj-version>1.7.4</org.aspectj-version>
         <org.slf4j-version>1.7.5</org.slf4j-version>
         <build.webapp.dir>${project.build.directory}/${project.artifactId}</build.webapp.dir>

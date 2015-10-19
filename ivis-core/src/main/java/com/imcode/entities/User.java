@@ -150,22 +150,23 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        sb.append("id=").append(id);
-        sb.append(", login='").append(name).append('\'');
-        sb.append(", pwd='").append(password).append('\'');
-//        sb.append(", firstName='").append(firstName).append('\'');
-//        sb.append(", lastName='").append(lastName).append('\'');
-//        sb.append(", bitrhday=").append(bitrhday);
-//        sb.append(", email='").append(email).append('\'');
-//        sb.append(", phoneNumber='").append(phoneNumber).append('\'');
-//        sb.append(", streetAddress='").append(streetAddress).append('\'');
-//        sb.append(", postalCode='").append(postalCode).append('\'');
-//        sb.append(", city='").append(city).append('\'');
-//        sb.append(", school=").append(school);
-//        sb.append(", schoolClass=").append(schoolClass);
-        sb.append('}');
-        return sb.toString();
+        return name == null ? Long.toString(id) : name;
+//        final StringBuilder sb = new StringBuilder("User{");
+//        sb.append("id=").append(id);
+//        sb.append(", login='").append(name).append('\'');
+//        sb.append(", pwd='").append(password).append('\'');
+////        sb.append(", firstName='").append(firstName).append('\'');
+////        sb.append(", lastName='").append(lastName).append('\'');
+////        sb.append(", bitrhday=").append(bitrhday);
+////        sb.append(", email='").append(email).append('\'');
+////        sb.append(", phoneNumber='").append(phoneNumber).append('\'');
+////        sb.append(", streetAddress='").append(streetAddress).append('\'');
+////        sb.append(", postalCode='").append(postalCode).append('\'');
+////        sb.append(", city='").append(city).append('\'');
+////        sb.append(", school=").append(school);
+////        sb.append(", schoolClass=").append(schoolClass);
+//        sb.append('}');
+//        return sb.toString();
     }
 
     //Setter utility

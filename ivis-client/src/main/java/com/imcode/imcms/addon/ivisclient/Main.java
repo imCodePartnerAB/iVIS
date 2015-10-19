@@ -126,7 +126,7 @@ class StatmentHandler extends DefaultHandler {
         }
 
         application = new Application();
-        application.setStatus(StatementStatus.created);
+//        application.setStatus(StatementStatus.created);
     }
 
     @Override
@@ -144,7 +144,7 @@ class StatmentHandler extends DefaultHandler {
             Person person = new Person(value, null, null);
             Pupil pupil = new Pupil();
             pupil.setPerson(person);
-            application.setPupil(pupil);
+//            application.setPupil(pupil);
         }
     }
 
