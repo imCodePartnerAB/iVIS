@@ -154,6 +154,27 @@ table tr:hover td.buttons button, table tr:hover td.buttons .button {
   visibility: visible;
 }
 
+dl {
+  line-height: 40px;
+  margin: 20px 0 0;
+  width: 100%;
+}
+
+dl dt {
+  background: #f0f0ff;
+  border-bottom: 3px solid #dcdcf0;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  margin: 0;
+  padding: 0 20px;
+}
+
+dl dd {
+  margin: 0;
+  padding: 0 20px;
+}
+
 form {
   margin: 0;
   padding: 0;
