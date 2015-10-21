@@ -15,9 +15,9 @@
         <!--<spring-framework.version>4.1.5.RELEASE</spring-framework.version>-->
         <spring-security.version>3.2.5.RELEASE</spring-security.version>
         <!--<spring-security.version>4.0.1.RELEASE</spring-security.version>-->
-        <!--<hibernate.version>4.3.10.Final</hibernate.version>-->
         <!--<spring-framework.version>4.0.3.RELEASE</spring-framework.version>-->
         <hibernate.version>4.3.10.Final</hibernate.version>
+        <!--<hibernate.version>3.6.10.Final</hibernate.version>-->
         <org.aspectj-version>1.7.4</org.aspectj-version>
         <org.slf4j-version>1.7.5</org.slf4j-version>
         <build.webapp.dir>${project.build.directory}/${project.artifactId}</build.webapp.dir>
@@ -181,7 +181,7 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.0.Final</version>
         </dependency>
 
