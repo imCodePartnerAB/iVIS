@@ -30,8 +30,8 @@ public enum AddressTypeEnum {
         throw new IllegalArgumentException();
     }
 
-    @Override
-    public String toString() {
-        return representation;
-    }
+//    @Override
+//    public String toString() {
+//        return representation;
+//    }
 }

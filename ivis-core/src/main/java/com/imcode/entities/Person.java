@@ -1,8 +1,10 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
+import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -33,9 +35,18 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
 //    @JoinTable(name = "dbo_person_address_cross",
 //            joinColumns = @JoinColumn(name = "personId", referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "id"))
+
+
     @ElementCollection
     @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
-    private List<Address> addresses;
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name="addressTypeKey")
+    private Map<AddressTypeEnum, Address> addresses;
+
+
+//    @ElementCollection
+//    @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
+//    private Map<AddressTypeEnum, Address> addresses;
 
     @LazyCollection(LazyCollectionOption.FALSE)
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
@@ -90,12 +101,56 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
         this.lastName = lastName;
     }
 
-    public List<Address> getAddresses() {
+    public Map<AddressTypeEnum, Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Map<AddressTypeEnum, Address> addresses) {
+        if (!(addresses instanceof EnumMap)) {
+             addresses = new EnumMap<>(addresses);
+
+        }
+
         this.addresses = addresses;
+    }
+
+    @JsonIgnore
+    public Address getRegistredAddress() {
+        return getAddress(AddressTypeEnum.REGISTERED);
+    }
+
+    @JsonIgnore
+    public Address getResidentalAddress() {
+        return getAddress(AddressTypeEnum.RESIDENTIAL);
+    }
+
+    @JsonIgnore
+    public Address getBoarderdAddress() {
+        return getAddress(AddressTypeEnum.BOARDER);
+    }
+
+
+    @JsonIgnore
+    public Address getAddress(AddressTypeEnum addressType) {
+        Objects.requireNonNull(addressType);
+
+        if (addresses == null) {
+            return null;
+        }
+
+        return addresses.get(addressType);
+    }
+
+    @JsonIgnore
+    public void setAddress(Address address) {
+        Objects.requireNonNull(address);
+        Objects.requireNonNull(address.getAddressType());
+
+        if (addresses == null) {
+            addresses = new EnumMap<>(AddressTypeEnum.class);
+        }
+
+        addresses.put(address.getAddressType(), address);
     }
 
     public String getPersonalId() {
