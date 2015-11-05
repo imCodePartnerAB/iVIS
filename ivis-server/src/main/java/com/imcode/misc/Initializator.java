@@ -214,10 +214,10 @@ public class Initializator {
             Role roleDeveloper = roleRepository.save(new Role("ROLE_DEVELOPER"));
 
 //            Create new persons
-            Person adminPerson = new Person("1111", "John", "Admin");
-            Person ivisPerson = new Person("2222", "Henry", "Ivis");
-            Person userPerson = new Person("3333", "Sergey", "User");
-            Person vitalyPerson = new Person("4444", "Vitaly", "Orlov");
+            Person adminPerson = personRepository.save(new Person("1111", "John", "Admin"));
+            Person ivisPerson = personRepository.save(new Person("2222", "Henry", "Ivis"));
+            Person userPerson = personRepository.save(new Person("3333", "Sergey", "User"));
+            Person vitalyPerson = personRepository.save(new Person("4444", "Vitaly", "Orlov"));
 
 //            Create basic users
             logger.info("Creating basic 4 users...");

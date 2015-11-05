@@ -16,7 +16,8 @@ import java.util.*;
 public class JpaAccessToken implements Serializable, OAuth2AccessToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", length = 36)
     private String value;
 
     @Temporal(TemporalType.TIMESTAMP)

@@ -5,6 +5,7 @@ import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
 import com.imcode.entities.enums.AddressTypeEnum;
+import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -36,11 +37,10 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
 //            joinColumns = @JoinColumn(name = "personId", referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "addressId", referencedColumnName = "id"))
 
-
     @ElementCollection
     @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name="addressTypeKey")
+    @MapKeyColumn(name = "typeKey", length = 50)
     private Map<AddressTypeEnum, Address> addresses;
 
 
@@ -48,27 +48,40 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
 //    @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
 //    private Map<AddressTypeEnum, Address> addresses;
 
+    //    @LazyCollection(LazyCollectionOption.FALSE)
+////    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
+////    @JoinTable(name = "dbo_person_email_cross",
+////            joinColumns = @JoinColumn(name = "personId"),
+////            inverseJoinColumns = @JoinColumn(name = "emailId"))
+//    @ElementCollection
+//    @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "ownerId"))
+//    private List<Email> emails;
     @LazyCollection(LazyCollectionOption.FALSE)
-//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})//(fetch = FetchType.EAGER)
-//    @JoinTable(name = "dbo_person_email_cross",
-//            joinColumns = @JoinColumn(name = "personId"),
-//            inverseJoinColumns = @JoinColumn(name = "emailId"))
     @ElementCollection
     @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "ownerId"))
-    private List<Email> emails;
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "typeKey", length = 50)
+    private Map<CommunicationTypeEnum, Email> emails;
 
+    //    @LazyCollection(LazyCollectionOption.FALSE)
+////    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+////    @JoinTable(name = "dbo_person_phone_cross",
+////            joinColumns = @JoinColumn(name = "personId"),
+////            inverseJoinColumns = @JoinColumn(name = "phoneId"))
+//    @ElementCollection
+//    @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "ownerId"))
+//    private List<Phone> phones;
     @LazyCollection(LazyCollectionOption.FALSE)
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-//    @JoinTable(name = "dbo_person_phone_cross",
-//            joinColumns = @JoinColumn(name = "personId"),
-//            inverseJoinColumns = @JoinColumn(name = "phoneId"))
     @ElementCollection
     @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "ownerId"))
-    private List<Phone> phones;
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "typeKey", length = 50)
+    private Map<CommunicationTypeEnum, Phone> phones;
+//    private List<Phone> phones;
 
 //    private Set<Phone> phones;
 
-    public Person(){
+    public Person() {
     }
 
     public Person(String pid, String firstName, String lastName) {
@@ -106,43 +119,7 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
     }
 
     public void setAddresses(Map<AddressTypeEnum, Address> addresses) {
-        if (!(addresses instanceof EnumMap)) {
-            if (addresses == null || addresses.isEmpty()) {
-                addresses = new EnumMap<>(AddressTypeEnum.class);
-            } else {
-                addresses = new EnumMap<>(addresses);
-            }
-
-        }
-
-        this.addresses = addresses;
-    }
-
-    @JsonIgnore
-    public Address getRegistredAddress() {
-        return getAddress(AddressTypeEnum.REGISTERED);
-    }
-
-    @JsonIgnore
-    public Address getResidentalAddress() {
-        return getAddress(AddressTypeEnum.RESIDENTIAL);
-    }
-
-    @JsonIgnore
-    public Address getBoarderdAddress() {
-        return getAddress(AddressTypeEnum.BOARDER);
-    }
-
-
-    @JsonIgnore
-    public Address getAddress(AddressTypeEnum addressType) {
-        Objects.requireNonNull(addressType);
-
-        if (addresses == null) {
-            return null;
-        }
-
-        return addresses.get(addressType);
+        this.addresses = convertToEnumMap(addresses, AddressTypeEnum.class);
     }
 
     @JsonIgnore
@@ -157,6 +134,33 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
         addresses.put(address.getAddressType(), address);
     }
 
+    @JsonIgnore
+    public Address getAddress(AddressTypeEnum addressType) {
+        Objects.requireNonNull(addressType);
+
+        if (addresses == null) {
+            return null;
+        }
+
+        return addresses.get(addressType);
+    }
+
+    @JsonIgnore
+    public Address getRegistredAddress() {
+        return getAddress(AddressTypeEnum.REGISTERED);
+    }
+
+
+    @JsonIgnore
+    public Address getResidentalAddress() {
+        return getAddress(AddressTypeEnum.RESIDENTIAL);
+    }
+
+    @JsonIgnore
+    public Address getBoarderdAddress() {
+        return getAddress(AddressTypeEnum.BOARDER);
+    }
+
     public String getPersonalId() {
         return personalId;
     }
@@ -165,12 +169,12 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
         this.personalId = personalId;
     }
 
-    public List<Email> getEmails() {
+    public Map<CommunicationTypeEnum, Email> getEmails() {
         return emails;
     }
 
-    public void setEmails(List<Email> emails) {
-        this.emails = emails;
+    public void setEmails(Map<CommunicationTypeEnum, Email> emails) {
+        this.emails = convertToEnumMap(emails, CommunicationTypeEnum.class);
     }
 
 //    public List<Phone> getPhoneList() {
@@ -181,12 +185,26 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
 //        this.phones = new LinkedHashSet<>(phones);
 //    }
 
-    public void setPhones(List<Phone> phones) {
-        this.phones = phones;
+    public Map<CommunicationTypeEnum, Phone> getPhones() {
+        return phones;
     }
 
-    public List<Phone> getPhones() {
-        return phones;
+    public void setPhones(Map<CommunicationTypeEnum, Phone> phones) {
+        this.phones = convertToEnumMap(phones, CommunicationTypeEnum.class);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <K extends Enum<K>, V> EnumMap<K, V> convertToEnumMap(Map<K, V> newValue, Class<K> type) {
+        if (!(newValue instanceof EnumMap)) {
+            if (newValue == null || newValue.isEmpty()) {
+                return new EnumMap<>(type);
+            } else {
+                return new EnumMap<>(newValue);
+            }
+
+        }
+
+        return  (EnumMap<K, V>) newValue;
     }
 
     public static Person fromString(String firstNameLastName) {
@@ -219,7 +237,8 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
 
 
         if (sb.length() == 0)
-            addWord(sb, personalId);;
+            addWord(sb, personalId);
+        ;
 
         return sb.toString();
     }
