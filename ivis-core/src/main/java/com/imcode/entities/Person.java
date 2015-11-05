@@ -107,7 +107,11 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
 
     public void setAddresses(Map<AddressTypeEnum, Address> addresses) {
         if (!(addresses instanceof EnumMap)) {
-             addresses = new EnumMap<>(addresses);
+            if (addresses == null || addresses.isEmpty()) {
+                addresses = new EnumMap<>(AddressTypeEnum.class);
+            } else {
+                addresses = new EnumMap<>(addresses);
+            }
 
         }
 
