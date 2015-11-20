@@ -4,36 +4,38 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<spring:message code="label.user.list" var="labelUserList"/>
-<spring:url value="/users/?form" var="addUrl"/>
-<spring:url value="/users" var="listUrl"/>
-<h1>${labelUserList}</h1>
+<spring:message code="label.school.list" var="labelListName"/>
+
+<c:set value="/schools" var="mainPath"/>
+<spring:url value="${mainPath}" var="mainUrl"/>
+<spring:url value="${mainPath}/?form" var="addUrl"/>
+<h1>${labelListName}</h1>
 
 <table cellpadding="0" cellspacing="0">
     <thead>
     <tr>
         <th>Id</th>
         <th class="ordered-by">Name</th>
-        <th>Roles</th>
-        <th>Enabled</th>
+        <th>School ID</th>
+        <th>Services</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
-    <c:if test="${not empty userList}">
-        <tbody><c:forEach items="${userList}" var="embeded">
+    <c:if test="${not empty entityList}">
+        <tbody><c:forEach items="${entityList}" var="embeded">
             <tr data-object-id="${embeded.id}">
                 <td>${embeded.id}</td>
                 <td>${embeded.name}</td>
+                <td>${embeded.schoolId}</td>
                 <td>
-                    <c:forEach items="${embeded.authorities}" var="role" varStatus="status">
-                        ${role.name}
+                    <c:forEach items="${embeded.services}" var="service" varStatus="status">
+                        ${service}
                         <c:if test="${!status.last}">, </c:if>
                     </c:forEach>
                 </td>
-                <td>${embeded.enabled}</td>
                 <td class="buttons">
-                    <a class="button positive" href="users/${embeded.id}?form">Edit</a>
-                    <button class="negative" type="button" onclick="deleteElement('${listUrl}',${embeded.id})">Remove</button>
+                    <a class="button positive" href="${mainUrl}/${embeded.id}?form">Edit</a>
+                    <button class="negative" type="button" onclick="deleteElement('${mainUrl}',${embeded.id})">Remove</button>
                 </td>
             </tr>
         </c:forEach></tbody>

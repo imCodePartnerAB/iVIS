@@ -289,7 +289,8 @@ public class Initializator {
 
             clientDetails = new JpaClientDetails();
             clientDetails.setName("ivis");
-//            clientDetails.setClientId("ee4b69d1-e375-4612-a22f-812a5ecacd35");
+
+//            clientDetails.setClientId("b4251265-409d-43b3-928d-a290228a2b59");
             clientDetails.setClientSecret("secret");
             clientDetails.setScope("read", "write", "execute");
             clientDetails.setResourceIds("ivis");
@@ -300,10 +301,12 @@ public class Initializator {
             clientDetails.setAccessTokenValiditySeconds(60);
             clientDetails.setRefreshTokenValiditySeconds(600);
             clietnDetailsRepository.save(clientDetails);
+//            clientDetails.setClientId("ee4b69d1-e375-4612-a22f-812a5ecacd35");
+//            clietnDetailsRepository.save(clientDetails);
 
             clientDetails = new JpaClientDetails();
             clientDetails.setName("admin");
-//            clientDetails.setClientId("477263aa-2193-49ca-ac2e-1a2f043c48a7");
+//            clientDetails.setClientId("b4251265-409d-43b3-928d-a290228a2b59");
             clientDetails.setClientSecret("secret");
             clientDetails.setScope("read", "write", "execute");
             clientDetails.setResourceIds("ivis");
@@ -319,6 +322,9 @@ public class Initializator {
             clientDetails.setAccessTokenValiditySeconds(600);
             clientDetails.setRefreshTokenValiditySeconds(6000);
             clietnDetailsRepository.save(clientDetails);
+//            clientDetails.setClientId("b4251265-409d-43b3-928d-a290228a2b59");
+//            clietnDetailsRepository.save(clientDetails);
+
             logger.info("Creating ClientDetails successful");
         }
     }

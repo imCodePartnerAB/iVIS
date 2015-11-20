@@ -45,6 +45,25 @@
         <put-attribute name="content" value="/WEB-INF/views/users/edit.jsp"/>
     </definition>
 
+
+    <!--Schools-->
+    <definition name="schools/list" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/schools/list.jsp"/>
+    </definition>
+
+    <definition name="schools/edit" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/schools/edit.jsp"/>
+    </definition>
+
+    <!--Pupils-->
+    <definition name="pupils/list" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/pupils/list.jsp"/>
+    </definition>
+
+    <definition name="pupils/edit" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/pupils/edit.jsp"/>
+    </definition>
+
 <!--Admin/Security-->
     <definition name="security/login" extends="simple">
         <put-attribute name="content" value="/WEB-INF/views/security/login.jsp"/>

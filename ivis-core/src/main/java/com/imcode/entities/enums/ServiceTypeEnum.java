@@ -9,6 +9,10 @@ public enum ServiceTypeEnum {
     SPECIAL_SCHOOL("Special school"),
     AFTER_SCHOOL_CENTER("After school center");
 
+    public String getRepresentation() {
+        return representation;
+    }
+
     private String representation;
 
     ServiceTypeEnum(String representation) {

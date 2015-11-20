@@ -34,4 +34,8 @@ public enum AddressTypeEnum {
 //    public String toString() {
 //        return representation;
 //    }
+
+    public static void main(String[] args) {
+        System.out.println(AddressTypeEnum.valueOf("RESIDENTIAL"));
+    }
 }

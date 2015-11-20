@@ -5,7 +5,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <spring:url value="/users" var="backUrl"/>
 
-<h1>EDIT</h1>
+<h1>Edit User</h1>
 <form:form modelAttribute="user" id="userUpdateForm" method="post">
     <%--<c:if test="${not empty message}">--%>
     <%--<div id="message" class="${message.type}">${message.message}</div>--%>
