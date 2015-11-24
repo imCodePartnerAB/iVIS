@@ -101,7 +101,7 @@
 
     <h2>Skapas</h2><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/>
     <h2>Senast ändrad</h2><fmt:formatDate value="${app.updateDate}" pattern="yyy-MM-dd HH:mm:ss"/>
-    <h2>Status</h2>${app.status}
+    <h2>Status</h2>${app.status.description}
     <h2>Handläggs av</h2>${app.handledUser}
 
     <div class="tabs">
