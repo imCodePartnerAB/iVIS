@@ -93,10 +93,10 @@
         <select name="statusFilter">
             <%
                 String statusFilter = request.getParameter("statusFilter");
-                out.println("<option value=\"null\" " + ("null".equalsIgnoreCase(statusFilter)? "selected\"":"") + ">All</option>");
+                out.println("<option value=\"null\" " + ("null".equalsIgnoreCase(statusFilter)? "selected\"":"") + ">Allt</option>");
 
                 for (Decision.Status statementStatus :Decision.Status.values()) {
-                    out.println("<option value=\"" + statementStatus + "\" " + (statementStatus.toString().equalsIgnoreCase(statusFilter) ? "selected" : "") + ">" + StringUtils.capitalize(statementStatus.toString()) + "</option>");
+                    out.println("<option value=\"" + statementStatus + "\" " + (statementStatus.toString().equalsIgnoreCase(statusFilter) ? "selected" : "") + ">" + StringUtils.capitalize(statementStatus.getDescription()) + "</option>");
                 }
 
             %>
