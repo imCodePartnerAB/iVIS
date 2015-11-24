@@ -14,7 +14,7 @@
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <imcms:variables/>
 <jsp:include page="ivis_header.jsp"/>
 
@@ -78,18 +78,18 @@
     }
 %>
 <c:if test="${isAuthorized}">
-<h1>Applications</h1>
+<h1>Ansökningar</h1>
 
 <form action="${clientAddress}" method="get">
     <div class="field">
-        <label>Search</label>
+        <label>Sök</label>
         <input type="text" name="searchText" value="${param.searchText}"/>
-        <button class="positive" type="submit">Search</button>
-        <button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>
+        <button class="positive" type="submit">Sök</button>
+        <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>--%>
     </div>
 
     <div class="field">
-        <label>Filter on status</label>
+        <label>Filtrera</label>
         <select name="statusFilter">
             <%
                 String statusFilter = request.getParameter("statusFilter");
@@ -106,8 +106,8 @@
                 <%--<option value="${starus.current}" <c:if test="${not empty param.statusFilter and param.statusFilter eq starus.current}">selected</c:if>>${starus.current}</option>--%>
             <%--</c:forEach>--%>
         </select>
-        <button class="positive" type="submit">Filter</button>
-        <button class="negative" type="button" onclick="ivis.ui.clearSerchText('statusFilter');">Clear filter</button>
+        <button class="positive" type="submit">Filtrera</button>
+        <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('statusFilter');">Clear filter</button>--%>
     </div>
 </form>
 
@@ -115,13 +115,11 @@
     <thead>
     <tr>
         <th class="ordered-by">Id</th>
-        <th>CreateDate</th>
-        <th>UpdateDate</th>
+        <th>Skapad</th>
+        <th>Uppdaterad</th>
         <th>Status</th>
-        <th>registrationNumber</th>
-        <th>Handled by</th>
-        <th>Submited by</th>
-        <th>Reguarded by</th>
+        <th>Reg</th>
+        <th>Av</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
@@ -131,27 +129,27 @@
         <c:forEach items="${statements}" var="app">
             <tr data-application-id="${app.id}">
                 <td>${app.id}</td>
-                <td>${app.createDate}</td>
-                <td>${app.updateDate}</td>
-                <td>${app.status}</td>
+                <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
+                <td>${dateString}</td>
+                <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
+                <td>${dateString}</td>
+                <td>${app.status.description}</td>
                 <td>${app.registrationNumber}</td>
-                <td>${app.handledUser}</td>
                 <td>${app.submittedUser}</td>
-                <td>${app.regardingUser}</td>
                 <td class="buttons">
                     <a class="button positive"
-                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Details</a>
+                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Visa</a>
 
-                    <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                          method="get">
-                        <button class="positive" type="submit">Approve</button>
-                        <input type="hidden" name="status" value="APPROVE"/>
-                    </form>
-                    <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                          method="get">
-                        <button class="negative" type="submit">Decline</button>
-                        <input type="hidden" name="status" value="DENI"/>
-                    </form>
+                    <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                          <%--method="get">--%>
+                        <%--<button class="positive" type="submit">Approve</button>--%>
+                        <%--<input type="hidden" name="status" value="APPROVE"/>--%>
+                    <%--</form>--%>
+                    <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                          <%--method="get">--%>
+                        <%--<button class="negative" type="submit">Decline</button>--%>
+                        <%--<input type="hidden" name="status" value="DENI"/>--%>
+                    <%--</form>--%>
                 </td>
             </tr>
         </c:forEach>

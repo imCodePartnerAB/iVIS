@@ -44,14 +44,14 @@
     }
 %>
 
-<h1>Pupils</h1>
+<h1>Elever</h1>
 <form action="${clientAddress}/pupils" method="get">
     <div class="field">
-        <label>Search</label>
+        <label>Sök</label>
         <input type="text" name="searchText" value="${param.searchText}"/>
         <%--<div class="buttons">--%>
-        <button class="positive" type="submit">Search</button>
-        <button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>
+        <button class="positive" type="submit">Sök</button>
+        <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>--%>
         <%--</div>--%>
     </div>
 </form>
@@ -59,11 +59,11 @@
 <table cellpadding="0" cellspacing="0">
     <thead>
     <tr>
-        <th class="ordered-by">Personal ID</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>School</th>
-        <th>Class</th>
+        <th class="ordered-by">Person-nr</th>
+        <th>Förnamn</th>
+        <th>Efternamn</th>
+        <th>Skola</th>
+        <th>Klass</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
@@ -77,8 +77,7 @@
                 <td>${app.school}</td>
                 <td>${app.schoolClass}</td>
                 <td class="buttons">
-                    <a class="button positive"
-                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/pupils/edit?id=${app.id}">Edit</a>
+                    <%--<a class="button positive" href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/pupils/edit?id=${app.id}">Edit</a>--%>
 
                         <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                         <%--method="post">--%>

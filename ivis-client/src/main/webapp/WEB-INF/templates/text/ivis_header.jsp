@@ -59,8 +59,8 @@
                 iVIS
             </div>
             <div class="main-menu">
-                <a class="main-menu-item" href="${clientAddress}">Applications</a>
-                <a class="main-menu-item" href="${clientAddress}/pupils">Pupils</a>
+                <a class="main-menu-item" href="${clientAddress}">Ansökningar</a>
+                <a class="main-menu-item" href="${clientAddress}/pupils">Elever</a>
             </div>
         </div>
     </div>

@@ -8,14 +8,17 @@ public enum CommunicationTypeEnum {
     WORK("Work"),
     HOME("Home");
 
-    private String representation;
+    private String description;
 
-    CommunicationTypeEnum(String representation) {
-        this.representation = representation;
+    CommunicationTypeEnum(String description) {
+        this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return representation;
+    public String getDescription() {
+        return description;
     }
+//    @Override
+//    public String toString() {
+//        return description;
+//    }
 }

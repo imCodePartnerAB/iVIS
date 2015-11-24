@@ -96,19 +96,20 @@
 %>
 <c:if test="${not empty app}">
     <%--<h1>Application</h1>--%>
-    <h1>School transport - issue ${app.id}</h1>
+    <%--<h1>School transport - issue ${app.id}</h1>--%>
+    <h1>Ansökan om skolskjuts</h1>
 
-    <h2>Created</h2><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/>
-    <h2>Last change</h2><fmt:formatDate value="${app.updateDate}" pattern="yyy-MM-dd HH:mm:ss"/>
+    <h2>Skapas</h2><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/>
+    <h2>Senast ändrad</h2><fmt:formatDate value="${app.updateDate}" pattern="yyy-MM-dd HH:mm:ss"/>
     <h2>Status</h2>${app.status}
-    <h2>Handled by</h2>${app.handledUser}
+    <h2>Handläggs av</h2>${app.handledUser}
 
     <div class="tabs">
         <div class="tab" data-tab-page-id="applicationTabPage">
-            Application
+            Ansökan
         </div>
         <div class="tab" data-tab-page-id="decisionTabPage">
-            Decision
+            Beslut
         </div>
         <div class="tab" data-tab-page-id="loggTabPage">
             Logg
@@ -123,9 +124,11 @@
                 <dt>
                         ${question.text}
                 </dt>
-                <dd>
-                        ${question.value}
-                </dd>
+                <c:if test="${question.value != 'true'}">
+                    <dd>
+                            ${question.value}
+                    </dd>
+                </c:if>
             </dl>
         </c:forEach>
 
@@ -216,9 +219,12 @@
     <div id="decisionTabPage" class="tab-page">
         <div class="field" id="statusSelect">
             <dl>
-                <dt>Status</dt><dd>${app.decision.status}</dd>
-                <dt>Date</dt><dd>${app.decision.date}</dd>
-                <dt>Comment</dt><dd>${app.decision.comment}</dd>
+                <dt>Status</dt>
+                <dd>${app.decision.status}</dd>
+                <dt>Date</dt>
+                <dd>${app.decision.date}</dd>
+                <dt>Comment</dt>
+                <dd>${app.decision.comment}</dd>
             </dl>
                 <%--<form:label path="status">Status</form:label>--%>
                 <%--<form:select path="status">--%>
@@ -226,6 +232,19 @@
                 <%--<form:options items="${statusList}"/>--%>
                 <%--</form:select>--%>
                 <%--<form:errors path="reasone" cssClass="error-description"/>--%>
+            <div class="buttons">
+                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                      method="get">
+                    <button class="positive" type="submit">Godk</button>
+                    <input type="hidden" name="status" value="APPROVE"/>
+                </form>
+                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                      method="get">
+                    <button class="negative" type="submit">Pågår</button>
+                    <input type="hidden" name="status" value="DENI"/>
+                </form>
+            </div>
+
         </div>
     </div>
     <div id="loggTabPage" class="tab-page">

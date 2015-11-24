@@ -11,7 +11,17 @@ import java.util.Date;
  */
 @Embeddable
 public class Decision {
-    public static enum Status {APPROVE, DENI, SUBMIT}
+    public enum Status {APPROVE("Godk"), DENI("Pågår"), SUBMIT("Avslag");
+        private final String description;
+
+        Status(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
 
     @Column
     @Enumerated(EnumType.STRING)
