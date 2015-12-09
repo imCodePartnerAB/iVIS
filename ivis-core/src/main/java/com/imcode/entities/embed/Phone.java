@@ -1,6 +1,8 @@
 package com.imcode.entities.embed;
 
 import com.imcode.entities.enums.CommunicationTypeEnum;
+import com.imcode.entities.superclasses.AbstractAddressValue;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,44 +13,51 @@ import java.io.Serializable;
 //@Table(name = "dbo_phone")
 @Embeddable
 //public class Phone extends AbstractIdEntity  implements Serializable {
-public class Phone implements Serializable {
-    @Column
-    private String number;
+public class Phone extends AbstractAddressValue<CommunicationTypeEnum> implements Serializable {
+//    @Column
+//    private String number;
+//
+//    @Enumerated(EnumType.STRING)
+//    private CommunicationTypeEnum communicationType;
 
-    @Enumerated(EnumType.STRING)
-    private CommunicationTypeEnum communicationType;
+    public static Phone of(CommunicationTypeEnum type) {
+        return new Phone(type, null);
+    }
+
+    public static Phone of(CommunicationTypeEnum type, String value) {
+        return new Phone(type, value);
+    }
 
     public Phone() {
+        super(CommunicationTypeEnum.HOME, null);
     }
 
-    public Phone(String number, CommunicationTypeEnum communicationType) {
-        this.number = number;
-        this.communicationType = communicationType;
+    protected Phone(CommunicationTypeEnum type, String value) {
+        super(type, value);
     }
 
-    public Phone(String number) {
-        this.number = number;
-        this.communicationType = CommunicationTypeEnum.MOBILE;
-    }
-
+    @Deprecated
     public String getNumber() {
-        return number;
+        return value;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    @Deprecated
+    public void setNumber(String value) {
+        this.value = value;
     }
 
+    @Deprecated
     public CommunicationTypeEnum getCommunicationType() {
-        return communicationType;
+        return type;
     }
 
-    public void setCommunicationType(CommunicationTypeEnum communicationType) {
-        this.communicationType = communicationType;
+    @Deprecated
+    public void setCommunicationType(CommunicationTypeEnum type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
-        return number;
+        return value;
     }
 }

@@ -119,14 +119,14 @@
     <%--<form:form modelAttribute="app" action="${clientAddress}/api/content/ivis/applications" method="post"--%>
     <%--id="application-form">--%>
     <div id="applicationTabPage" class="tab-page">
-        <c:forEach items="${app.applicationForm.questions}" var="question" varStatus="status">
+        <c:forEach items="${app.applicationForm.questions}" var="question" varStatus="fileOptionStatus">
             <dl>
                 <dt>
-                        ${question.text}
+                    ${question.text}
                 </dt>
                 <c:if test="${question.value != 'true'}">
                     <dd>
-                            ${question.value}
+                        ${question.value}
                     </dd>
                 </c:if>
             </dl>

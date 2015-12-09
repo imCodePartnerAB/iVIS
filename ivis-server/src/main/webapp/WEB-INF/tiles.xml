@@ -85,6 +85,19 @@
     <definition name="sql/show" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/sql/show.jsp"/>
     </definition>
+    <!--Admin/csv-->
+    <!--<definition name="csv/load" extends="default">-->
+        <!--<put-attribute name="content" value="/WEB-INF/views/csv/load.jsp"/>-->
+    <!--</definition>-->
+    <definition name="csv/file_upload_step1" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/csv/file_upload_step1.jsp"/>
+    </definition>
+    <definition name="csv/file_upload_step2" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/csv/file_upload_step2.jsp"/>
+    </definition>
+    <definition name="csv/file_upload_step3" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/csv/file_upload_step3.jsp"/>
+    </definition>
     <!--&lt;!&ndash;Admin/XML &ndash;&gt;-->
     <!--<definition name="xml/show" extends="default">-->
         <!--<put-attribute name="content" value="/WEB-INF/views/xml/show.jsp"/>-->

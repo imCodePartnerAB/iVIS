@@ -28,9 +28,9 @@
                 <td>${embeded.name}</td>
                 <td>${embeded.schoolId}</td>
                 <td>
-                    <c:forEach items="${embeded.services}" var="service" varStatus="status">
+                    <c:forEach items="${embeded.services}" var="service" varStatus="fileOptionStatus">
                         ${service}
-                        <c:if test="${!status.last}">, </c:if>
+                        <c:if test="${!fileOptionStatus.last}">, </c:if>
                     </c:forEach>
                 </td>
                 <td class="buttons">

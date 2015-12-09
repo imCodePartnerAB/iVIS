@@ -23,6 +23,9 @@
         </beans:property>
     </beans:bean>
 
+    <!-- Multipart filt resolver for uploading files-->
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
     <!-- Custom conversion servise for String to entity conversion-->
     <beans:bean id="conversionService"
                 class="org.springframework.context.support.ConversionServiceFactoryBean"/>

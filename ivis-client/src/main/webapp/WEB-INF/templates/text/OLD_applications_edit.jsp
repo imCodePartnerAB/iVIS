@@ -150,12 +150,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${schoolTransportSchema}" var="schema" varStatus="status">
+                    <c:forEach items="${schoolTransportSchema}" var="schema" varStatus="fileOptionStatus">
                         <td>
-                            <input type="hidden" name="schoolTransportSchema[${status.index}].dayOfWeek"
+                            <input type="hidden" name="schoolTransportSchema[${fileOptionStatus.index}].dayOfWeek"
                                    value="${schema.dayOfWeek}">
                             <input type="checkbox"
-                                   name="schoolTransportSchema[${status.index}].to" ${schema.isTo() ? "checked": ""}>
+                                   name="schoolTransportSchema[${fileOptionStatus.index}].to" ${schema.isTo() ? "checked": ""}>
 
                         </td>
                     </c:forEach>
@@ -171,12 +171,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${schoolTransportSchema}" var="schema" varStatus="status">
+                    <c:forEach items="${schoolTransportSchema}" var="schema" varStatus="fileOptionStatus">
                         <td>
-                            <input type="hidden" name="schoolTransportSchema[${status.index}].dayOfWeek"
+                            <input type="hidden" name="schoolTransportSchema[${fileOptionStatus.index}].dayOfWeek"
                                    value="${schema.dayOfWeek}">
                             <input type="checkbox"
-                                   name="schoolTransportSchema[${status.index}].from" ${schema.isFrom() ? "checked": ""}>
+                                   name="schoolTransportSchema[${fileOptionStatus.index}].from" ${schema.isFrom() ? "checked": ""}>
 
                         </td>
                     </c:forEach>

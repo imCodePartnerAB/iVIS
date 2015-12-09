@@ -1,6 +1,8 @@
 package com.imcode.entities.embed;
 
 import com.imcode.entities.enums.AddressTypeEnum;
+import com.imcode.entities.superclasses.AbstractAddressValue;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,7 +12,7 @@ import java.io.Serializable;
 //@Entity
 //@Table(name = "dbo_address")
 @Embeddable
-public class Address implements Serializable {
+public class Address extends AbstractAddressValue<AddressTypeEnum> implements Serializable {
     @Column
     private Integer postalCode;
 
@@ -26,15 +28,26 @@ public class Address implements Serializable {
     @Column
     private String street2;
 
-    @Column
-    private String propertyDescription;
+//    @Column
+//    private String propertyDescription;
 
     @Column
     private String careOf;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private AddressTypeEnum addressType;
+//    @Column
+//    @Enumerated(EnumType.STRING)
+//    private AddressTypeEnum addressType;
+
+    public static Address ofType(AddressTypeEnum type) {
+        Address address = new Address();
+        address.setAddressType(type);
+
+        return address;
+    }
+
+    public Address() {
+        super(AddressTypeEnum.REGISTERED, null);
+    }
 
     public Integer getPostalCode() {
         return postalCode;
@@ -76,13 +89,13 @@ public class Address implements Serializable {
         this.street2 = street2;
     }
 
-    public String getPropertyDescription() {
-        return propertyDescription;
-    }
-
-    public void setPropertyDescription(String propertyDescription) {
-        this.propertyDescription = propertyDescription;
-    }
+//    public String getPropertyDescription() {
+//        return propertyDescription;
+//    }
+//
+//    public void setPropertyDescription(String propertyDescription) {
+//        this.propertyDescription = propertyDescription;
+//    }
 
     public String getCareOf() {
         return careOf;
@@ -92,18 +105,30 @@ public class Address implements Serializable {
         this.careOf = careOf;
     }
 
+    @Deprecated
     public AddressTypeEnum getAddressType() {
-        return addressType;
+        return type;
     }
 
+    @Deprecated
     public void setAddressType(AddressTypeEnum addressType) {
-        this.addressType = addressType;
+        this.type = addressType;
+    }
+
+    @Override
+    public String getValue() {
+        return toString();
+    }
+
+    @Override
+    public void setValue(String address) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder()
-                .append(addressType)
+                .append(type)
                 .append(postalCode)
                 .append(city)
                 .append('(')
@@ -127,10 +152,8 @@ public class Address implements Serializable {
         if (city != null ? !city.equals(address.city) : address.city != null) return false;
         if (street != null ? !street.equals(address.street) : address.street != null) return false;
         if (street2 != null ? !street2.equals(address.street2) : address.street2 != null) return false;
-        if (propertyDescription != null ? !propertyDescription.equals(address.propertyDescription) : address.propertyDescription != null)
-            return false;
         if (careOf != null ? !careOf.equals(address.careOf) : address.careOf != null) return false;
-        return addressType == address.addressType;
+        return type == address.type;
 
     }
 
@@ -141,9 +164,8 @@ public class Address implements Serializable {
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (street != null ? street.hashCode() : 0);
         result = 31 * result + (street2 != null ? street2.hashCode() : 0);
-        result = 31 * result + (propertyDescription != null ? propertyDescription.hashCode() : 0);
         result = 31 * result + (careOf != null ? careOf.hashCode() : 0);
-        result = 31 * result + (addressType != null ? addressType.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
 
         return result;
     }

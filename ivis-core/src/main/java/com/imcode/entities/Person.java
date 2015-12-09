@@ -2,8 +2,8 @@ package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.embed.Address;
-import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
+import com.imcode.entities.embed.Email;
 import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.superclasses.AbstractIdEntity;
@@ -177,6 +177,30 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
         this.emails = convertToEnumMap(emails, CommunicationTypeEnum.class);
     }
 
+
+    @JsonIgnore
+    public void setEmail(Email email) {
+        Objects.requireNonNull(email);
+        Objects.requireNonNull(email.getType());
+
+        if (emails == null) {
+            emails = new EnumMap<>(CommunicationTypeEnum.class);
+        }
+
+        emails.put(email.getType(), email);
+    }
+
+    @JsonIgnore
+    public Email getEmail(CommunicationTypeEnum type) {
+        Objects.requireNonNull(type);
+
+        if (emails == null) {
+            return null;
+        }
+
+        return emails.get(type);
+    }
+
 //    public List<Phone> getPhoneList() {
 //        return new LinkedList<>(phones);
 //    }
@@ -192,6 +216,43 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
     public void setPhones(Map<CommunicationTypeEnum, Phone> phones) {
         this.phones = convertToEnumMap(phones, CommunicationTypeEnum.class);
     }
+
+    @JsonIgnore
+    public void setPhone(Phone phone) {
+        Objects.requireNonNull(phone);
+        Objects.requireNonNull(phone.getType());
+
+        if (phones == null) {
+            phones = new EnumMap<>(CommunicationTypeEnum.class);
+        }
+
+        phones.put(phone.getType(), phone);
+    }
+
+    @JsonIgnore
+    public Phone getPhone(CommunicationTypeEnum type) {
+        Objects.requireNonNull(type);
+
+        if (emails == null) {
+            return null;
+        }
+
+        return phones.get(type);
+    }
+
+
+    @JsonIgnore
+    public Phone getAddress(CommunicationTypeEnum type) {
+        Objects.requireNonNull(type);
+
+        if (phones == null) {
+            return null;
+        }
+
+        return phones.get(type);
+    }
+
+
 
     @SuppressWarnings("unchecked")
     private <K extends Enum<K>, V> EnumMap<K, V> convertToEnumMap(Map<K, V> newValue, Class<K> type) {

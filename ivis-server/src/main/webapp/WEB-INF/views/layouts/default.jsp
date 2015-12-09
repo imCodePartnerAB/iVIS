@@ -7,7 +7,7 @@
 <%--<%@ taglib uri="" prefix=""%>--%>
 <spring:theme code="styleSheet" var="app_css"/>
 <spring:url value="/${app_css}" var="app_css_url"/>
-<spring:url value="resources/js/forms.js" var="jsFormsUrl"/>
+<spring:url value="/resources/js/forms.js" var="jsFormsUrl"/>
 <%--<spring:url value="/resources/js/jquery-1.7.1.js" var="jqueryUrl"/>--%>
 <spring:message var="labelApplicationName" code="label.application.name"/>
 <html>
@@ -16,7 +16,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=8"/>
     <link rel="stylesheet" type="text/css" media="screen" href="${app_css_url}"/>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="<c:url value="${jsFormsUrl}" />"></script>
+    <script type="text/javascript" src=${jsFormsUrl} />"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <title>${labelApplicationName}</title>
 </head>
