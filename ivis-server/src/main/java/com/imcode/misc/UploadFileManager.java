@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +17,7 @@ import java.util.Map;
 /**
  * Created by vitaly on 08.12.15.
  */
-public class UploadFileManager {
+public class UploadFileManager  implements Serializable {
     private final Principal user;
     private final Path tempFilePath;
     private final Map<String, Path> files = new HashMap<>();

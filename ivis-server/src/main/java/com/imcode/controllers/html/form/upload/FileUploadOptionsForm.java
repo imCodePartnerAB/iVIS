@@ -6,9 +6,10 @@ package com.imcode.controllers.html.form.upload;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class FileUploadOptionsForm {
+public class FileUploadOptionsForm implements Serializable{
 
     private List<FileOption> fileOptionList;
 

@@ -14,32 +14,37 @@ import com.imcode.services.GuardianService;
 import com.imcode.services.PersonService;
 import com.imcode.services.csv.CsvFieldSetMapper;
 import com.imcode.services.csv.GuardianFieldSetMapper;
+import com.imcode.utils.StaticUtils;
 import com.sun.net.httpserver.HttpPrincipal;
 import org.apache.commons.lang3.ClassUtils;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.job.SimpleJob;
-import org.springframework.batch.core.step.job.JobStep;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.*;
 import java.util.function.Supplier;
@@ -121,50 +126,16 @@ public class CsvLoaderController {
     public String step3(
             @ModelAttribute("fileUploadOptionsForm") FileUploadOptionsForm optionsForm,
             Model map,
-            HttpServletRequest request) {
+            HttpSession session) {
 
         List<Guardian> result = new ArrayList<>();
         System.out.println("hello");
-        UploadFileManager uploadFileManager = (UploadFileManager) request.getSession().getAttribute(UPLOAD_FILE_MANAGER);
+        UploadFileManager uploadFileManager = (UploadFileManager) session.getAttribute(UPLOAD_FILE_MANAGER);
 
         for (FileOption fileOption : optionsForm.getFileOptionList()) {
             Path file = uploadFileManager.getFile(fileOption.getFileId());
 
-            if (file == null || Files.notExists(file)) {
-                throw new RuntimeException("file not found");
-            }
-
-            FileSystemResource resource = new FileSystemResource(file.toFile());
-            FlatFileItemReader<Guardian> itemReader = new FlatFileItemReader<>();
-            itemReader.setResource(resource);
-
-            DefaultLineMapper<Guardian> lineMapper = new DefaultLineMapper<>();
-            final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
-            tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
-            lineMapper.setLineTokenizer(tokenizer);
-            FieldSetMapper<Guardian> fieldMapper = getMapper(Guardian.class, fileOption);
-            lineMapper.setFieldSetMapper(fieldMapper);
-
-            itemReader.setLineMapper(lineMapper);
-            itemReader.setLinesToSkip(fileOption.getSkipRows());
-            itemReader.open(new ExecutionContext());
-
-            Guardian g = null;
-            try {
-                while ((g = itemReader.read()) != null) {
-                    result.add(g);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            PersonalizedItemWriter<Guardian> itemWriter = new PersonalizedItemWriter<>(applicationContext.getBean(GuardianService.class), applicationContext.getBean(PersonService.class));
-
-            try {
-                itemWriter.write(result);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            result = parseFile(fileOption, file);
 
 
         }
@@ -174,6 +145,48 @@ public class CsvLoaderController {
 //        guardianFieldSetMapper.setFileOption(optionsForm.getFileOptionList().get(0));
 
         return "csv/file_upload_step3";
+    }
+
+    private List<Guardian> parseFile(FileOption fileOption, Path file) {
+        List<Guardian> result = new ArrayList<>();
+
+        if (file == null || Files.notExists(file)) {
+            throw new RuntimeException("file not found");
+        }
+
+        FileSystemResource resource = new FileSystemResource(file.toFile());
+        FlatFileItemReader<Guardian> itemReader = new FlatFileItemReader<>();
+        itemReader.setResource(resource);
+
+        DefaultLineMapper<Guardian> lineMapper = new DefaultLineMapper<>();
+        final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+        tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
+        lineMapper.setLineTokenizer(tokenizer);
+        FieldSetMapper<Guardian> fieldMapper = getMapper(Guardian.class, fileOption);
+        lineMapper.setFieldSetMapper(fieldMapper);
+
+        itemReader.setLineMapper(lineMapper);
+        itemReader.setLinesToSkip(fileOption.getSkipRows());
+        itemReader.open(new ExecutionContext());
+
+        Guardian g = null;
+        try {
+            while ((g = itemReader.read()) != null) {
+                result.add(g);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        PersonalizedItemWriter<Guardian> itemWriter = new PersonalizedItemWriter<>(applicationContext.getBean(GuardianService.class), applicationContext.getBean(PersonService.class));
+
+        try {
+            itemWriter.write(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     public static Set<String> getBeanFields(Class<?> clazz) {
@@ -246,10 +259,59 @@ public class CsvLoaderController {
     }
 
     public static void main(String[] args) {
-//        Set<String> properties = getBeanFieldsRecursively(Pupil.class);
-//        System.out.println(properties);
+//        ApplicationContext ctx = StaticUtils.getApplicationContext();
+//        CsvLoaderController controller = new CsvLoaderController();
+//        controller.setApplicationContext(ctx);
+//        FileUploadOptionsForm fileUploadOptionsForm = StaticUtils.loadObjectFromFile("/home/vitaly/programs/apache-tomcat-8.0.21/bin/upload/Admin/optionForm");
+//        FileOption fileOption = fileUploadOptionsForm.getFileOptionList().get(0);
+//        final Path file = Paths.get("/home/vitaly/SkypeFiles/Guardians.csv");
+//
+//        FileSystemResource resource = new FileSystemResource(file.toFile());
+//        FlatFileItemReader<Guardian> itemReader = new FlatFileItemReader<>();
+//        itemReader.setResource(resource);
+//
+//        DefaultLineMapper<Guardian> lineMapper = new DefaultLineMapper<>();
+//        DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+//        tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
+//        lineMapper.setLineTokenizer(tokenizer);
+//        FieldSetMapper<Guardian> fieldMapper = new GuardianBinder();
+//        lineMapper.setFieldSetMapper(fieldMapper);
+//
+//        itemReader.setLineMapper(lineMapper);
+//        itemReader.setLinesToSkip(fileOption.getSkipRows());
+//        itemReader.open(new ExecutionContext());
+//        List<Guardian> result = new ArrayList<>();
+//
+//        Guardian g = null;
+//        try {
+//            while ((g = itemReader.read()) != null) {
+//                result.add(g);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+////        DataBinder binder = new
+//        List<Guardian> guardians = controller.parseFile(fileOption, file);
+////        Set<String> properties = getBeanFieldsRecursively(Pupil.class);
+////        System.out.println(properties);
     }
 
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    public Map<Class<?>, Supplier<FieldSetMapper>> getFieldSetMappers() {
+        return fieldSetMappers;
+    }
+
+    public void setFieldSetMappers(Map<Class<?>, Supplier<FieldSetMapper>> fieldSetMappers) {
+        this.fieldSetMappers = fieldSetMappers;
+    }
 }
 
 class PersonalizedItemWriter<T extends JpaPersonalizedEntity> implements ItemWriter<T> {
@@ -271,5 +333,17 @@ class PersonalizedItemWriter<T extends JpaPersonalizedEntity> implements ItemWri
 //            }
             entityService.save(item);
         }
+    }
+}
+
+class GuardianBinder implements FieldSetMapper<Guardian> {
+
+    @Override
+    public Guardian mapFieldSet(FieldSet fieldSet) throws BindException {
+        Guardian target = new Guardian();
+        DataBinder binder = new DataBinder(target);
+        PropertyValues pvs = new MutablePropertyValues(fieldSet.getProperties());
+        binder.bind(pvs);
+        return target;
     }
 }

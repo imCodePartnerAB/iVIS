@@ -94,14 +94,14 @@ public class Initializator {
 //    @Autowired
 //    private Aut userDetailsManager;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
-        intializeSecurityJpa();
-        intializeOAuth2Jpa();
-        initializeToken();
-//        initializeStatementJpa();
-////        initializePersonJpa();
-        initializePupilJpa();
+//        intializeSecurityJpa();
+//        intializeOAuth2Jpa();
+//        initializeToken();
+////        initializeStatementJpa();
+//////        initializePersonJpa();
+//        initializePupilJpa();
 
     }
 

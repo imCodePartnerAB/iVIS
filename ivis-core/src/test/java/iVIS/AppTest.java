@@ -3,6 +3,8 @@ package iVIS;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 /**
  * Unit test for simple App.
@@ -35,4 +37,5 @@ public class AppTest
     {
         assertTrue( true );
     }
+
 }
