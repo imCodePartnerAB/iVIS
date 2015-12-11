@@ -7,6 +7,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 
@@ -18,14 +19,14 @@ import javax.persistence.Entity;
 public class Guardian extends AbstractIdEntity<Long> implements Serializable, JpaPersonalizedEntity<Long> {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "personId")
-    private Person person;
+    private Person person = new Person();
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "guardianId"),
             inverseJoinColumns = @JoinColumn(name = "pupilId"))
-    private Set<Pupil> pupils;
+    private Set<Pupil> pupils = new LinkedHashSet<>();
 
 
     public Person getPerson() {

@@ -20,26 +20,23 @@ import javax.persistence.Entity;
 @Entity
 @Table(name = "dbo_pupil")
 public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable, JpaPersonalizedEntity<Long> {
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+//    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")
-    private Person person;
+    private Person person = new Person();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contactPersonId")
     private Person contactPerson;
 
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementFrom;
 
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementTo;
 
-//    @JsonBackReference
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "schoolClassId")
@@ -56,7 +53,6 @@ public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable,
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER)//, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-////    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "pupilId"),
             inverseJoinColumns = @JoinColumn(name = "guardianId"))
@@ -121,24 +117,6 @@ public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable,
         if (guardians != null)
         this.guardians = new LinkedHashSet<>(guardians);
     }
-
-
-//    @JsonIgnore
-//    public List<AfterSchoolCenterSchema> getSchoolCenterSchemaList() {
-//        if (schoolCenterSchema != null) {
-//            return new SetListAdapter<>((LinkedHashSet)schoolCenterSchema);
-//        } else {
-//            schoolCenterSchema = new LinkedHashSet<>();
-//            return getSchoolCenterSchemaList();
-//        }
-//    }
-//
-//    @JsonIgnore
-//    public void setSchoolCenterSchemaLIst(List<AfterSchoolCenterSchema> schoolCenterSchema) {
-//        if (schoolCenterSchema != null)
-//            this.schoolCenterSchema = new LinkedHashSet<>(schoolCenterSchema);
-//    }
-
 
     public Set<Guardian> getGuardians() {
         return guardians;

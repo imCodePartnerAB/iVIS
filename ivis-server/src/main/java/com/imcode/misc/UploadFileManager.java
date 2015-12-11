@@ -3,6 +3,7 @@ package com.imcode.misc;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,14 +17,21 @@ import java.util.Map;
 /**
  * Created by vitaly on 08.12.15.
  */
+
+//todo make it thread safe
 public class UploadFileManager {
-    private final Principal user;
+//    private final Principal user;
     private final Path tempFilePath;
     private final Map<String, Path> files = new HashMap<>();
 
+    public UploadFileManager() {
+        this(null);
+    }
+
     public UploadFileManager(Principal user) {
-        this.user = user;
-        tempFilePath = Paths.get("upload/" + user.getName());
+        String userPathName = user == null ? "Anonimus" : user.getName();
+
+        tempFilePath = Paths.get("upload/" + userPathName);
         if (!Files.exists(tempFilePath)) {
             try {
                 Files.createDirectories(tempFilePath);
@@ -67,7 +75,19 @@ public class UploadFileManager {
     }
 
     public Path getFile(String id) {
-        return files.get(id);
+        Path path = files.get(id);
+
+        if (path == null) {
+            path = tempFilePath.resolve(id);
+            files.put(id, path);
+        }
+
+        if (Files.notExists(path)) {
+            files.remove(id);
+            return null;
+        }
+
+        return path;
     }
 
     public void delete(String id) {

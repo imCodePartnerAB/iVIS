@@ -27,6 +27,7 @@ public class FileOption {
     private List<String> columnNameList = new ArrayList<>();
     private boolean firstRowSkip = false;
     private Integer keyColumn;
+    private List<?> result = new ArrayList<>();
 
 
     public FileOption() {
@@ -143,5 +144,13 @@ public class FileOption {
 
     public void setKeyColumn(Integer keyColumn) {
         this.keyColumn = keyColumn;
+    }
+
+    public List<?> getResult() {
+        return result;
+    }
+
+    public void setResult(List<?> result) {
+        this.result = result;
     }
 }

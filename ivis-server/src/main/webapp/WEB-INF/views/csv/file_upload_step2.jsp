@@ -13,6 +13,7 @@
         <c:set var="fieldNamePrefix" value="fileOptionList[${fileOptionStatus.index}]"/>
         <div id="fileContainer${fileOptionStatus.index}">
             <h2>${fileOption.originalFileName}</h2>
+            <form:hidden path="${fieldNamePrefix}.originalFileName"/>
             <form:hidden path="${fieldNamePrefix}.fileId"/>
                 <%--<td>--%>
             <div class="field">
