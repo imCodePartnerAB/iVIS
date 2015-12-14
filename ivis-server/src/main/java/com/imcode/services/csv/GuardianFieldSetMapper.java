@@ -32,16 +32,16 @@ import java.util.function.Supplier;
 @Component
 @Scope("request")
 public class GuardianFieldSetMapper extends CsvFieldSetMapper<Guardian> {
-    private static class AddressValueSetter implements BiConsumer<JpaPersonalizedEntity<?>, String> {
+    private static class AddressValueSetter implements BiConsumer<JpaPersonalizedEntity, String> {
 
-        private final Function<JpaPersonalizedEntity<?>, ? extends AbstractAddressValue<?>> addressGetter;
+        private final Function<JpaPersonalizedEntity, ? extends AbstractAddressValue<?>> addressGetter;
 
-        AddressValueSetter(Function<JpaPersonalizedEntity<?>, ? extends AbstractAddressValue<?>> addressGetter) {
+        AddressValueSetter(Function<JpaPersonalizedEntity, ? extends AbstractAddressValue<?>> addressGetter) {
 
             this.addressGetter = addressGetter;
         }
 
-        public void accept(JpaPersonalizedEntity<?> personalizedEntity, String value) {
+        public void accept(JpaPersonalizedEntity personalizedEntity, String value) {
             AbstractAddressValue<?> addressValue = addressGetter.apply(personalizedEntity);
             addressValue.setValue(value);
         }
@@ -109,7 +109,7 @@ public class GuardianFieldSetMapper extends CsvFieldSetMapper<Guardian> {
         finders.put("personalId", personalIdFinder);
 
         //Setters, set the fields
-        abstract class AbstractAddressValueSetter<P extends JpaPersonalizedEntity<?>, T extends Enum<T>, E extends AbstractAddressValue<T>> implements BiFunction<P, T, E> {
+        abstract class AbstractAddressValueSetter<P extends JpaPersonalizedEntity, T extends Enum<T>, E extends AbstractAddressValue<T>> implements BiFunction<P, T, E> {
             abstract public E getAddressValue(P person, T enumType);
 
             @Override

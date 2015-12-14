@@ -9,12 +9,13 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by vitaly on 01.12.15.
  */
-public class FileOption {
+public class FileOption  implements Serializable {
     private static final int DEFAULT_PREVIEW_ROW_COUNT = 10;
 
     private int previewRowsCount = DEFAULT_PREVIEW_ROW_COUNT;

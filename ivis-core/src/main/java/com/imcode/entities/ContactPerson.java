@@ -17,19 +17,18 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.Entity;
 
 /**
  * Created by vitaly on 14.05.15.
  */
 @Entity
-@Table(name = "dbo_guardian")
-public class Guardian extends AbstractPerson implements Serializable, JpaPersonalizedEntity {
-    public static final String TABLE_SUFFIX = "guardian";
+@Table(name = "dbo_contact_person")
+public class ContactPerson extends AbstractPerson implements Serializable, JpaPersonalizedEntity {
+    public static final String TABLE_SUFFIX = "contact_person";
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "personId")
 //    @Transient
-    private Person person = new Person();
+    private Person person;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER)
@@ -138,10 +137,10 @@ public class Guardian extends AbstractPerson implements Serializable, JpaPersona
 
         return phones.get(type);
     }
-    public Guardian() {
+    public ContactPerson() {
     }
 
-    public Guardian(String pid, String firstName, String lastName) {
+    public ContactPerson(String pid, String firstName, String lastName) {
         super(pid, firstName, lastName);
     }
 

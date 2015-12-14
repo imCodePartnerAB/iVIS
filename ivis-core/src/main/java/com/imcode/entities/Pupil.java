@@ -1,9 +1,15 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.AfterSchoolCenterSchema;
+import com.imcode.entities.embed.Email;
+import com.imcode.entities.embed.Phone;
+import com.imcode.entities.enums.AddressTypeEnum;
+import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
+import com.imcode.entities.superclasses.AbstractPerson;
 import com.imcode.services.PersonalizedService;
 import com.imcode.utils.SetListAdapter;
 import org.hibernate.annotations.LazyCollection;
@@ -19,24 +25,30 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_pupil")
-public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable, JpaPersonalizedEntity<Long> {
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-//    @ManyToOne(fetch = FetchType.EAGER)
+public class Pupil extends AbstractPerson implements Serializable, JpaPersonalizedEntity {
+    private static final String TABLE_SUFFIX = "pupil";
+    ////    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")
-    private Person person = new Person();
+//    @Transient
+    private Person person;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contactPersonId")
+//    @Transient
     private Person contactPerson;
 
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementFrom;
 
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Temporal(TemporalType.DATE)
     @Column
     private Date classPlacementTo;
 
+//    @JsonBackReference
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "schoolClassId")
@@ -53,6 +65,7 @@ public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable,
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER)//, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+////    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "pupilId"),
             inverseJoinColumns = @JoinColumn(name = "guardianId"))
@@ -69,6 +82,118 @@ public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable,
     @CollectionTable(name = "dbo_pupil_after_school_center_schema",
             joinColumns = @JoinColumn(name = "ownerId"), uniqueConstraints = @UniqueConstraint(columnNames = {"ownerId", "afrerSchoolSectionId", "dayOfWeek"}))
     private List<AfterSchoolCenterSchema> schoolCenterSchema;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection
+    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_address", joinColumns = @JoinColumn(name = "ownerId"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "typeKey", length = 50)
+    private Map<AddressTypeEnum, Address> addresses = new EnumMap<>(AddressTypeEnum.class);
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection
+    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_email", joinColumns = @JoinColumn(name = "ownerId"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "typeKey", length = 50)
+    private Map<CommunicationTypeEnum, Email> emails = new EnumMap<>(CommunicationTypeEnum.class);
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection
+    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_phone", joinColumns = @JoinColumn(name = "ownerId"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "typeKey", length = 50)
+    private Map<CommunicationTypeEnum, Phone> phones = new EnumMap<>(CommunicationTypeEnum.class);
+
+
+    public Pupil() {
+    }
+
+    public Pupil(long id) {
+        this.id = id;
+    }
+
+    public Pupil(String pid, String firstName, String lastName) {
+        super(pid, firstName, lastName);
+    }
+
+    //Comunication information
+    public Map<AddressTypeEnum, Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Map<AddressTypeEnum, Address> addresses) {
+//        this.addresses = convertToEnumMap(addresses, AddressTypeEnum.class);
+        this.addresses = addresses;
+    }
+
+    @JsonIgnore
+    public void setAddress(Address address) {
+//        EnumMap<AddressTypeEnum, Address> map = (EnumMap<AddressTypeEnum, Address>) this.addresses;
+        putAddressValueIntoMap(AddressTypeEnum.class, address, addresses);
+    }
+
+    @JsonIgnore
+    public Address getAddress(AddressTypeEnum addressType) {
+        Objects.requireNonNull(addressType);
+
+        if (addresses == null) {
+            return null;
+        }
+
+        return addresses.get(addressType);
+    }
+
+    public Map<CommunicationTypeEnum, Email> getEmails() {
+        return emails;
+    }
+
+    public void setEmails(Map<CommunicationTypeEnum, Email> emails) {
+//        this.emails = convertToEnumMap(emails, CommunicationTypeEnum.class);
+        this.emails = emails;
+    }
+
+    @JsonIgnore
+    public void setEmail(Email email) {
+//        EnumMap<CommunicationTypeEnum, Email> map = (EnumMap<CommunicationTypeEnum, Email>) this.emails;
+        putAddressValueIntoMap(CommunicationTypeEnum.class, email, emails);
+    }
+
+    @JsonIgnore
+    public Email getEmail(CommunicationTypeEnum type) {
+        Objects.requireNonNull(type);
+
+        if (emails == null) {
+            return null;
+        }
+
+        return emails.get(type);
+    }
+
+    public Map<CommunicationTypeEnum, Phone> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(Map<CommunicationTypeEnum, Phone> phones) {
+//        this.phones = convertToEnumMap(phones, CommunicationTypeEnum.class);
+        this.phones = phones;
+    }
+
+    @JsonIgnore
+    public void setPhone(Phone phone) {
+//        EnumMap<CommunicationTypeEnum, Phone> map = (EnumMap<CommunicationTypeEnum, Phone>) this.phones;
+        putAddressValueIntoMap(CommunicationTypeEnum.class, phone, phones);
+    }
+
+    @JsonIgnore
+    public Phone getPhone(CommunicationTypeEnum type) {
+        Objects.requireNonNull(type);
+
+        if (emails == null) {
+            return null;
+        }
+
+        return phones.get(type);
+    }
 
     public Person getPerson() {
         return person;
@@ -117,6 +242,24 @@ public class Pupil extends AbstractJpaDatedEntity<Long> implements Serializable,
         if (guardians != null)
         this.guardians = new LinkedHashSet<>(guardians);
     }
+
+
+//    @JsonIgnore
+//    public List<AfterSchoolCenterSchema> getSchoolCenterSchemaList() {
+//        if (schoolCenterSchema != null) {
+//            return new SetListAdapter<>((LinkedHashSet)schoolCenterSchema);
+//        } else {
+//            schoolCenterSchema = new LinkedHashSet<>();
+//            return getSchoolCenterSchemaList();
+//        }
+//    }
+//
+//    @JsonIgnore
+//    public void setSchoolCenterSchemaLIst(List<AfterSchoolCenterSchema> schoolCenterSchema) {
+//        if (schoolCenterSchema != null)
+//            this.schoolCenterSchema = new LinkedHashSet<>(schoolCenterSchema);
+//    }
+
 
     public Set<Guardian> getGuardians() {
         return guardians;

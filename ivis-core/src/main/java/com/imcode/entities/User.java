@@ -21,7 +21,7 @@ import javax.persistence.Entity;
 //@AttributeOverrides({
         @AttributeOverride(name="name", column = @Column(unique = true, length = 150, nullable = false))
 //})
-public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable, JpaPersonalizedEntity<Long> {
+public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable, JpaPersonalizedEntity {
     public static final String DEFAULT_PASSWORD = "";
 
 //    @NotNull(message = "{user.requiredPassword}")
@@ -110,6 +110,37 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    //todo Переделать эту фигню!!!
+    @Override
+    public String getPersonalId() {
+        return null;
+    }
+
+    @Override
+    public void setPersonalId(String personalId) {
+
+    }
+
+    @Override
+    public String getFirstName() {
+        return null;
+    }
+
+    @Override
+    public void setFirstName(String firstName) {
+
+    }
+
+    @Override
+    public String getLastName() {
+        return null;
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+
     }
 
     @JsonIgnore

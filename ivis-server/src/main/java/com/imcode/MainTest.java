@@ -1,12 +1,37 @@
 package com.imcode;
 
+import com.imcode.controllers.html.CsvLoaderController;
+import com.imcode.controllers.html.form.upload.FileOption;
+import com.imcode.controllers.html.form.upload.FileUploadOptionsForm;
+import com.imcode.entities.Guardian;
+import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
+import com.imcode.entities.embed.Email;
+import com.imcode.entities.embed.Phone;
+import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.enums.StatementStatus;
 import com.imcode.repositories.PupilRepository;
+import com.imcode.services.GuardianService;
 import com.imcode.services.PersonService;
+import com.imcode.utils.StaticUtils;
 import org.exolab.castor.xml.*;
+import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.mapping.FieldSetMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.file.transform.FieldSet;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValues;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.convert.EntityConverter;
+import org.springframework.validation.BindException;
+import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,8 +42,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.imcode.entities.enums.CommunicationTypeEnum.*;
 
 /**
  * Created by vitaly on 17.02.15.
@@ -164,11 +195,22 @@ public class MainTest {
 //////
 //////            }
 ////        } catch (Exception ignore) { }
-        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-        ctx.load("classpath:/spring/data.xml");
-        ctx.refresh();
-        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
-        System.out.println(pupilRepository.findAll());
+        GenericXmlApplicationContext ctx = getApplicationContext();
+        GuardianService guardianService = ctx.getBean(GuardianService.class);
+
+//        Guardian guardian = guardianService.find(24L);
+        Guardian guardian = new Guardian();
+        Person person = guardian.getPerson();
+        person.setPhone(Phone.of(MOBILE, "0971396134"));
+        person.setEmail(Email.of(HOME, "cheetah@3g.ua"));
+
+////        guardian.setId(88L);
+        guardian = guardianService.save(guardian);
+//
+        System.out.println(guardian.getId());
+
+//        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
+//        System.out.println(pupilRepository.findAll());
 
 //        PersonService personService = ctx.getBean(PersonService.class);
 //        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
@@ -307,5 +349,80 @@ public class MainTest {
 //////        List<User> users = userService.findAll();
 ////////        User user = (User) userService.loadUserByUsername("admin");
 //////        System.out.println(users);
+
+        MutablePropertyValues pvs = new MutablePropertyValues();
+        pvs.add("firstName", "Vitaly");
+        pvs.add("lastName", "Seresa");
+        pvs.add("personalId", "1111111");
+        pvs.add("email", "email@gmail.com");
+        pvs.add("phones[HOME]", "0971396134");
+        pvs.add("pupils", "1, 2, 3");
+
+        Guardian target = new Guardian();
+        DataBinder binder = new DataBinder(target);
+        DefaultConversionService conversionService = new DefaultConversionService();
+        DefaultConversionService.addDefaultConverters(conversionService);
+        conversionService.addConverter(String.class, Phone.class, (String source) -> Phone.of(HOME, source));
+        conversionService.addConverter(String.class, Email.class, (String source) -> Email.of(HOME, source));
+        conversionService.addConverter(String.class, Pupil.class, (String source) -> new Pupil(Long.parseLong(source)));
+        binder.setConversionService(conversionService);
+        binder.bind(pvs);
+        System.out.println(target);
+
+//        ApplicationContext ctx = StaticUtils.getApplicationContext();
+//        CsvLoaderController controller = new CsvLoaderController();
+//        controller.setApplicationContext(ctx);
+//        FileUploadOptionsForm fileUploadOptionsForm = StaticUtils.loadObjectFromFile("/home/vitaly/programs/apache-tomcat-8.0.21/bin/upload/Admin/optionForm");
+//        FileOption fileOption = fileUploadOptionsForm.getFileOptionList().get(0);
+//        final Path file = Paths.get("/home/vitaly/SkypeFiles/Guardians.csv");
+//
+//        FileSystemResource resource = new FileSystemResource(file.toFile());
+//        FlatFileItemReader<Guardian> itemReader = new FlatFileItemReader<>();
+//        itemReader.setResource(resource);
+//
+//        DefaultLineMapper<Guardian> lineMapper = new DefaultLineMapper<>();
+//        DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+//        tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
+//        lineMapper.setLineTokenizer(tokenizer);
+//        FieldSetMapper<Guardian> fieldMapper = new GuardianBinder();
+//        lineMapper.setFieldSetMapper(fieldMapper);
+//
+//        itemReader.setLineMapper(lineMapper);
+//        itemReader.setLinesToSkip(fileOption.getSkipRows());
+//        itemReader.open(new ExecutionContext());
+//        List<Guardian> result = new ArrayList<>();
+//
+//        Guardian g = null;
+//        try {
+//            while ((g = itemReader.read()) != null) {
+//                result.add(g);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+////        DataBinder binder = new
+////        List<Guardian> guardians = controller.parseFile(fileOption, file);
+////        Set<String> properties = getBeanFieldsRecursively(Pupil.class);
+////        System.out.println(properties);
+    }
+
+    private static GenericXmlApplicationContext getApplicationContext() {
+        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
+        ctx.load("classpath:/spring/data.xml");
+        ctx.refresh();
+        return ctx;
+    }
+}
+
+class GuardianBinder implements FieldSetMapper<Guardian> {
+
+    @Override
+    public Guardian mapFieldSet(FieldSet fieldSet) throws BindException {
+        Guardian target = new Guardian();
+        DataBinder binder = new DataBinder(target);
+        PropertyValues pvs = new MutablePropertyValues(fieldSet.getProperties());
+        binder.bind(pvs);
+        return target;
     }
 }

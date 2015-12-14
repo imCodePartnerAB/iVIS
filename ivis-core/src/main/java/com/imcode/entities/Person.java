@@ -6,8 +6,9 @@ import com.imcode.entities.embed.Phone;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.enums.CommunicationTypeEnum;
-import com.imcode.entities.interfaces.JpaPersonalizedEntity;
+import com.imcode.entities.superclasses.AbstractAddressValue;
 import com.imcode.entities.superclasses.AbstractIdEntity;
+import com.imcode.entities.superclasses.AbstractPerson;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.util.StringUtils;
@@ -22,72 +23,81 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_person")
-public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEntity<Long>, Serializable {
-    @Column
-    private String personalId;
-
-    @Column
-    private String firstName;
-
-    @Column
-    private String lastName;
+//@MappedSuperclass
+public class Person extends AbstractPerson implements Serializable {
+//    @Column
+//    private String personalId;
+//
+//    @Column
+//    private String firstName;
+//
+//    @Column
+//    private String lastName;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "typeKey", length = 50)
-    private Map<AddressTypeEnum, Address> addresses = new EnumMap<>(AddressTypeEnum.class);
+    private Map<AddressTypeEnum, Address> addresses;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "ownerId"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "typeKey", length = 50)
-    private Map<CommunicationTypeEnum, Email> emails = new EnumMap<>(CommunicationTypeEnum.class);
+    private Map<CommunicationTypeEnum, Email> emails;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "ownerId"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "typeKey", length = 50)
-    private Map<CommunicationTypeEnum, Phone> phones = new EnumMap<>(CommunicationTypeEnum.class);
+    private Map<CommunicationTypeEnum, Phone> phones;
 
     public Person() {
     }
 
     public Person(String pid, String firstName, String lastName) {
-        this.personalId = pid;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        super(pid, firstName, lastName);
     }
 
-    public String getFirstName() {
-        return firstName;
+    //todo Убрать это
+    @Override
+    public Person getPerson() {
+        return this;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    @Override
+    public void setPerson(Person person) {
+
     }
 
-    public String getLastName() {
-        return lastName;
-    }
+//    public String getPersonalId() {
+//        return personalId;
+//    }
+//
+//    public void setPersonalId(String personalId) {
+//        this.personalId = personalId;
+//    }
+//
+//    public String getFirstName() {
+//        return firstName;
+//    }
+//
+//    public void setFirstName(String firstName) {
+//        this.firstName = firstName;
+//    }
+//
+//    public String getLastName() {
+//        return lastName;
+//    }
+//
+//    public void setLastName(String lastName) {
+//        this.lastName = lastName;
+//    }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPersonalId() {
-        return personalId;
-    }
-
-    public void setPersonalId(String personalId) {
-        this.personalId = personalId;
-    }
-
-    //Commynications
-    //Address
+    //Comunication information
     public Map<AddressTypeEnum, Address> getAddresses() {
         return addresses;
     }
@@ -98,14 +108,8 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
 
     @JsonIgnore
     public void setAddress(Address address) {
-        Objects.requireNonNull(address);
-        Objects.requireNonNull(address.getAddressType());
-
-        if (addresses == null) {
-            addresses = new EnumMap<>(AddressTypeEnum.class);
-        }
-
-        addresses.put(address.getAddressType(), address);
+        EnumMap<AddressTypeEnum, Address> map = (EnumMap<AddressTypeEnum, Address>) this.addresses;
+        putAddressValueIntoEnumMap(AddressTypeEnum.class, address, map);
     }
 
     @JsonIgnore
@@ -119,7 +123,6 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
         return addresses.get(addressType);
     }
 
-    //Emails
     public Map<CommunicationTypeEnum, Email> getEmails() {
         return emails;
     }
@@ -130,14 +133,8 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
 
     @JsonIgnore
     public void setEmail(Email email) {
-        Objects.requireNonNull(email);
-        Objects.requireNonNull(email.getType());
-
-        if (emails == null) {
-            emails = new EnumMap<>(CommunicationTypeEnum.class);
-        }
-
-        emails.put(email.getType(), email);
+        EnumMap<CommunicationTypeEnum, Email> map = (EnumMap<CommunicationTypeEnum, Email>) this.emails;
+        putAddressValueIntoEnumMap(CommunicationTypeEnum.class, email, map);
     }
 
     @JsonIgnore
@@ -151,7 +148,6 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
         return emails.get(type);
     }
 
-    //Phones
     public Map<CommunicationTypeEnum, Phone> getPhones() {
         return phones;
     }
@@ -162,14 +158,8 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
 
     @JsonIgnore
     public void setPhone(Phone phone) {
-        Objects.requireNonNull(phone);
-        Objects.requireNonNull(phone.getType());
-
-        if (phones == null) {
-            phones = new EnumMap<>(CommunicationTypeEnum.class);
-        }
-
-        phones.put(phone.getType(), phone);
+        EnumMap<CommunicationTypeEnum, Phone> map = (EnumMap<CommunicationTypeEnum, Phone>) this.phones;
+        putAddressValueIntoEnumMap(CommunicationTypeEnum.class, phone, map);
     }
 
     @JsonIgnore
@@ -181,20 +171,6 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
         }
 
         return phones.get(type);
-    }
-
-
-    private <K extends Enum<K>, V> EnumMap<K, V> convertToEnumMap(Map<K, V> newValue, Class<K> type) {
-        if (!(newValue instanceof EnumMap)) {
-            if (newValue == null || newValue.isEmpty()) {
-                return new EnumMap<>(type);
-            } else {
-                return new EnumMap<>(newValue);
-            }
-
-        }
-
-        return  (EnumMap<K, V>) newValue;
     }
 
     public static Person fromString(String firstNameLastName) {
@@ -216,6 +192,23 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
         return person;
     }
 
+//    @Override
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder();
+//        if (StringUtils.hasText(firstName))
+//            addWord(sb, firstName);
+//
+//        if (StringUtils.hasText(lastName))
+//            addWord(sb, lastName);
+//
+//
+//        if (sb.length() == 0)
+//            addWord(sb, personalId);
+//        ;
+//
+//        return sb.toString();
+//    }
+
     private void addWord(StringBuilder sb, String word) {
         if (sb.length() > 0 && sb.charAt(sb.length() - 1) != ' ') {
             sb.append(' ');
@@ -224,32 +217,28 @@ public class Person extends AbstractIdEntity<Long> implements JpaPersonalizedEnt
         sb.append(word);
     }
 
+    private <K extends Enum<K>, V> EnumMap<K, V> convertToEnumMap(Map<K, V> newValue, Class<K> type) {
+        if (!(newValue instanceof EnumMap)) {
+            if (newValue == null || newValue.isEmpty()) {
+                return new EnumMap<>(type);
+            } else {
+                return new EnumMap<>(newValue);
+            }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        if (StringUtils.hasText(firstName)) {
-            addWord(sb, firstName);
         }
 
-        if (StringUtils.hasText(lastName)) {
-            addWord(sb, lastName);
-        }
-
-        if (sb.length() == 0) {
-            addWord(sb, personalId);
-        }
-
-        return sb.toString();
+        return (EnumMap<K, V>) newValue;
     }
 
-    @Override
-    public Person getPerson() {
-        return this;
-    }
+    private <K extends Enum<K>, V extends AbstractAddressValue<K>> void putAddressValueIntoEnumMap(Class<K> enumClass, V addressValue, EnumMap<K, V> map) {
+        Objects.requireNonNull(addressValue);
+        K addressValueType = addressValue.getType();
+        Objects.requireNonNull(addressValueType);
 
-    @Override
-    public void setPerson(Person person) {
-        //// TODO: 11.12.15  подумать что сделать с этой фигней
+        if (map == null) {
+            map = new EnumMap<>(enumClass);
+        }
+
+        map.put(addressValueType, addressValue);
     }
 }

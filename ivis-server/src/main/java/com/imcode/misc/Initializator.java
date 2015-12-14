@@ -94,7 +94,7 @@ public class Initializator {
 //    @Autowired
 //    private Aut userDetailsManager;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
 //        intializeSecurityJpa();
 //        intializeOAuth2Jpa();

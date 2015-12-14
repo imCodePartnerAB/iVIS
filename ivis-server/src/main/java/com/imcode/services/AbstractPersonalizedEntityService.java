@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by vitaly on 10.08.15.
  */
-public class AbstractPersonalizedEntityService<T extends JpaPersonalizedEntity<Long>, REPOSITORY_TYPE extends PersonalizedRepository<T>> extends AbstractService<T, Long, REPOSITORY_TYPE> implements PersonalizedService<T> {
+public class AbstractPersonalizedEntityService<T extends JpaPersonalizedEntity, REPOSITORY_TYPE extends PersonalizedRepository<T>> extends AbstractService<T, Long, REPOSITORY_TYPE> implements PersonalizedService<T> {
     @Override
     public T findFirstByPersonalId(String personalId) {
 //        if (repo instanceof NamedService) {

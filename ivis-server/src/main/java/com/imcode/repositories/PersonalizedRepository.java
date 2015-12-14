@@ -14,7 +14,7 @@ import java.util.List;
  * Created by vitaly on 09.09.15.
  */
 @NoRepositoryBean
-public interface PersonalizedRepository<T extends JpaPersonalizedEntity<Long>> extends JpaRepository<T, Long> {
+public interface PersonalizedRepository<T extends JpaPersonalizedEntity> extends JpaRepository<T, Long> {
 
     @Query("select p from #{#entityName} p where p.person.personalId = :personalId")
     T findFirstByPersonalId(@Param("personalId") String personalId);
