@@ -271,7 +271,7 @@ public class PupilController {
 //        person.setLastName(fieldSet.readRawString("lastName"));
 //        person.setPersonalId(fieldSet.readRawString("personalId"));
 //
-//        Address address = Address.ofType(AddressTypeEnum.REGISTERED);
+//        Address address = Address.of(AddressTypeEnum.REGISTERED);
 //        address.setCareOf(fieldSet.readRawString("careOf"));
 //        address.setStreet(fieldSet.readRawString("street"));
 //        address.setPostalCode(fieldSet.readInt("postalCode"));

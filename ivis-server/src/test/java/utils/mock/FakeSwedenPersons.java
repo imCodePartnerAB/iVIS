@@ -22,29 +22,8 @@ import java.util.regex.Pattern;
  */
 public class FakeSwedenPersons {
     public static void main(String[] args) throws IOException {
-//        final String startURL = "https://fejk.se/";
-//        Map<String, String> dictionary = getSwedenDictionary();
-//        Pattern pattern = Pattern.compile("<tr.+>\\s*<td>(?:<a.*?>)?([\\w-Åö]+)(?:</a>)?:.*\\s*<td>(?:<a.*?>)?(.*?)(?:</a>)?</td>", Pattern.MULTILINE + Pattern.CASE_INSENSITIVE);
-//        List<Map<String, String>> swedenPersons = new ArrayList<>();
-//
-//        try(PageGetter pageGetter = new PageGetter(startURL)){
-//            for (int i = 0; i < 30; i++) {
-//                String page = pageGetter.getText();
-//                Map<String, String> swede = new LinkedHashMap<>();
-//                swedenPersons.add(swede);
-//
-//                Matcher matcher = pattern.matcher(page);
-//                while (matcher.find()) {
-//                    String key = dictionary.get(matcher.group(1));
-//                    if (key != null) {
-//                        final String value = matcher.group(2);
-//                        swede.put(key, value);
-//                        System.out.printf("%-40s", value);
-//                    }
-//                }
-//                System.out.println();
-//            }
-//        }
+
+
         ExecutorService executorService = Executors.newCachedThreadPool();
         for (int i = 0; i < 10; i++) {
             executorService.submit(new PersonMapperTask());
@@ -53,23 +32,23 @@ public class FakeSwedenPersons {
         executorService.shutdown();
     }
 
-    public static Map<String, String> getSwedenDictionary() {
-        Map<String, String> map = new HashMap<>();
-        map.put("Namn", "Name");
-        map.put("Gata", "Street");
-        map.put("Postort", "City");
-        map.put("Telefon", "Phone");
-        map.put("Mail", "Mail");
-        map.put("Ålder", "Age");
-        map.put("Födelsedatum", "Birthday");
-        map.put("Personnummer", "PersonalId");
-        map.put("IP-adres", "IpAddress");
-        map.put("PIN-kod", "PinCode");
-        map.put("Lösenord", "Password");
-        map.put("Skostorlek", "ShoeSize");
-
-        return map;
-    }
+//    public static Map<String, String> getSwedenDictionary() {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("Namn", "Name");
+//        map.put("Gata", "Street");
+//        map.put("Postort", "City");
+//        map.put("Telefon", "Phone");
+//        map.put("Mail", "Mail");
+//        map.put("Ålder", "Age");
+//        map.put("Födelsedatum", "Birthday");
+//        map.put("Personnummer", "PersonalId");
+//        map.put("IP-adres", "IpAddress");
+//        map.put("PIN-kod", "PinCode");
+//        map.put("Lösenord", "Password");
+//        map.put("Skostorlek", "ShoeSize");
+//
+//        return map;
+//    }
 
     public static String getPage(String startURL) {
         HttpClient httpclient = new DefaultHttpClient();

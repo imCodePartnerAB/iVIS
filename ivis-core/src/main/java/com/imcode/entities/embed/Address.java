@@ -38,7 +38,7 @@ public class Address extends AbstractAddressValue<AddressTypeEnum> implements Se
 //    @Enumerated(EnumType.STRING)
 //    private AddressTypeEnum addressType;
 
-    public static Address ofType(AddressTypeEnum type) {
+    public static Address of(AddressTypeEnum type) {
         Address address = new Address();
         address.setAddressType(type);
 
