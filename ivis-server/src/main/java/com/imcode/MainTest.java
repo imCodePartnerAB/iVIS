@@ -1,15 +1,8 @@
 package com.imcode;
 
-import com.imcode.controllers.converters.MutableConversionServiceFactoryBean;
 import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
-import com.imcode.entities.Pupil;
-import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
-import com.imcode.repositories.GuardianRepository;
-import com.imcode.repositories.PupilRepository;
-import com.imcode.services.GuardianService;
-import com.imcode.services.PupilService;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.beans.MutablePropertyValues;
@@ -21,14 +14,16 @@ import org.springframework.validation.DataBinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-//import sun.plugin.dom.core.Document;
 
-import javax.persistence.EntityManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
+
+//import sun.plugin.dom.core.Document;
 
 /**
  * Created by vitaly on 17.02.15.

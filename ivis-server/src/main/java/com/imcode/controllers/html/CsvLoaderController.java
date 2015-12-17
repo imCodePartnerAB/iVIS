@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 public class CsvLoaderController {
     private static final String UPLOAD_FILE_MANAGER = "uploadFileManager";
     private final Logger logger = Logger.getLogger(getClass().getName());
+    private boolean debug = false;
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -120,8 +121,6 @@ public class CsvLoaderController {
             HttpServletRequest request,
             Principal principal) {
 
-
-//        System.out.println("hello");
         UploadFileManager uploadFileManager = getUploadFileManeger(request);
         List<List> resultList = new ArrayList<>();
 
@@ -129,7 +128,8 @@ public class CsvLoaderController {
             for (FileOption fileOption : optionsForm.getFileOptionList()) {
                 List<Object> result = new ArrayList<>();
                 resultList.add(result);
-                Path file = uploadFileManager.getFile(fileOption.getFileId());
+                String fileId = fileOption.getFileId();
+                Path file = uploadFileManager.getFile(fileId);
 
                 if (file == null || Files.notExists(file)) {
                     throw new RuntimeException("file not found");
@@ -142,24 +142,26 @@ public class CsvLoaderController {
                 }
 
                 FileSystemResource resource = new FileSystemResource(file.toFile());
-                FlatFileItemReader<?> itemReader = new FlatFileItemReader<>();
-                itemReader.setResource(resource);
+
+                DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+                tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
+
+                FieldSetMapper fieldMapper = entityLoader.getFieldSetMapper(fileOption);
 
                 DefaultLineMapper lineMapper = new DefaultLineMapper<>();
-                final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
-                tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
                 lineMapper.setLineTokenizer(tokenizer);
-                FieldSetMapper fieldMapper = entityLoader.getFieldSetMapper(fileOption);
                 lineMapper.setFieldSetMapper(fieldMapper);
 
+                FlatFileItemReader<?> itemReader = new FlatFileItemReader<>();
+                itemReader.setResource(resource);
                 itemReader.setLineMapper(lineMapper);
                 itemReader.setLinesToSkip(fileOption.getSkipRows());
                 itemReader.open(new ExecutionContext());
 
-                Object g = null;
+                Object entity;
                 try {
-                    while ((g = itemReader.read()) != null) {
-                        result.add(g);
+                    while ((entity = itemReader.read()) != null) {
+                        result.add(entity);
                     }
                 } catch (Exception e) {
                     logger.warning(e::getMessage);
@@ -174,6 +176,10 @@ public class CsvLoaderController {
                 }
 
                 fileOption.setResult(result);
+
+                if (!debug) {
+                    uploadFileManager.delete(fileId);
+                }
             }
         }
         model.addAttribute("fileUploadOptionsForm", optionsForm);

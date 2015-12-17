@@ -107,7 +107,7 @@
         <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <intercept-url pattern="/csv/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <!--<intercept-url pattern="/csv/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
 
 

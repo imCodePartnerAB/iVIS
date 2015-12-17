@@ -26,8 +26,7 @@ public class MutableConversionServiceFactoryBean extends ConversionServiceFactor
     protected GenericConversionService createConversionService() {
         DefaultConversionService conversionService = new DefaultConversionService();
         //removing appropriate converters
-//        removeConvertible.entrySet().stream().forEach(entry->conversionService.removeConvertible(entry.getKey(), entry.getValue()));
-        conversionService.addConverter(new NotNullStringToCollectionConverter(conversionService));
+        removeConvertible.entrySet().stream().forEach(entry->conversionService.removeConvertible(entry.getKey(), entry.getValue()));
         return conversionService;
     }
 }
