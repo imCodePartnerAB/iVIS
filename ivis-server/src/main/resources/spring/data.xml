@@ -23,22 +23,19 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
 
-
-
-
     <!--<beans:bean id="messageSource"-->
-          <!--class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
-        <!--&lt;!&ndash;<property name="basename" value="messages" />&ndash;&gt;-->
-        <!--<beans:property name="basename" value="classpath:messages" />-->
-        <!--<beans:property name="defaultEncoding" value="UTF-8" />-->
+    <!--class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
+    <!--&lt;!&ndash;<property name="basename" value="messages" />&ndash;&gt;-->
+    <!--<beans:property name="basename" value="classpath:messages" />-->
+    <!--<beans:property name="defaultEncoding" value="UTF-8" />-->
     <!--</beans:bean>-->
 
     <!--propertyConfigurer-->
     <beans:bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <beans:property name="locations">
             <beans:list>
-                <!--<beans:value>/WEB-INF/server.properties</beans:value>-->
-                <beans:value>classpath:server1.properties</beans:value>
+                <beans:value>/WEB-INF/server.properties</beans:value>
+                <!--<beans:value>classpath:server1.properties</beans:value>-->
                 <!--<beans:value>classpath:server.properties</beans:value>-->
             </beans:list>
         </beans:property>
@@ -46,10 +43,10 @@
 
     <!--dataSource-->
     <beans:bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-        <beans:property name="driverClassName" value="${JdbcDriver}" />
-        <beans:property name="url" value="${JdbcUrl}" />
-        <beans:property name="username" value="${User}" />
-        <beans:property name="password" value="${Password}" />
+        <beans:property name="driverClassName" value="${JdbcDriver}"/>
+        <beans:property name="url" value="${JdbcUrl}"/>
+        <beans:property name="username" value="${User}"/>
+        <beans:property name="password" value="${Password}"/>
     </beans:bean>
 
     <beans:bean id="hibernatePersistence" class="org.hibernate.ejb.HibernatePersistence">
@@ -82,14 +79,14 @@
 
     <beans:bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
                 c:emf-ref="myEmf"/>
-        <!--<beans:property name="entityManagerFactory" ref="myEmf"/>-->
+    <!--<beans:property name="entityManagerFactory" ref="myEmf"/>-->
     <!--</beans:bean>-->
 
 
     <!--<beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl" init-method="initialize">-->
-        <!--<beans:property name="applicationService" ref="applicationServiceRepoImpl"/>-->
-        <!--<beans:property name="userService" ref="userServiceRepoImpl"/>-->
-        <!--<beans:property name="tokenInfoRepository" ref="tokenInfoRepository"/>-->
+    <!--<beans:property name="applicationService" ref="applicationServiceRepoImpl"/>-->
+    <!--<beans:property name="userService" ref="userServiceRepoImpl"/>-->
+    <!--<beans:property name="tokenInfoRepository" ref="tokenInfoRepository"/>-->
     <!--</beans:bean>-->
 
     <beans:bean id="errorFactory" class="com.imcode.misc.errors.ErrorFactory">
@@ -108,10 +105,10 @@
                 p:basenames="classpath:/messages" p:defaultEncoding="UTF-8"/>
 
     <!--<beans:bean id="clientDetails" class="org.springframework.security.oauth2.provider.client.JdbcClientDetailsService"-->
-                <!--c:dataSource-ref="dataSource"/>-->
+    <!--c:dataSource-ref="dataSource"/>-->
 
 
-        <!--<beans:constructor-arg name="dataSource" ref="dataSource"/>-->
+    <!--<beans:constructor-arg name="dataSource" ref="dataSource"/>-->
     <!--</beans:bean>-->
 
     <context:component-scan base-package="com.imcode.services"/>
@@ -119,186 +116,179 @@
     <!--<beans:bean id="tokenCheckAdvice" class="com.imcode.oauth2.TokenCheckAdvice"/>-->
     <!--<aop:aspectj-autoproxy />-->
     <!--&lt;!&ndash;<aop:config>&ndash;&gt;-->
-        <!--&lt;!&ndash;<aop:pointcut id="tokenRequared" expression="execution(* com.imcode.controllers.restful.SchoolClassControllerImpl.test(..))"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:pointcut id="tokenRequared" expression="execution(* com.imcode.controllers.restful.SchoolClassControllerImpl.test(..))"/>&ndash;&gt;-->
 
-        <!--&lt;!&ndash;<aop:aspect ref="tokenCheckAdvice">&ndash;&gt;-->
-            <!--&lt;!&ndash;<aop:around method="aroundAdvice" pointcut-ref="tokenRequared"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;</aop:aspect>&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:aspect ref="tokenCheckAdvice">&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:around method="aroundAdvice" pointcut-ref="tokenRequared"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</aop:aspect>&ndash;&gt;-->
     <!--&lt;!&ndash;</aop:config>&ndash;&gt;-->
     <!--<aop:aspectj-autoproxy>-->
-        <!--<aop:include name="tokenCheckAdvice"/>-->
+    <!--<aop:include name="tokenCheckAdvice"/>-->
     <!--</aop:aspectj-autoproxy>-->
 
     <!--<beans:bean id="initializator" class="com.imcode.misc.Initializator"/>-->
-<beans:bean class="com.imcode.controllers.html.form.upload.loaders.LoaderService">
-    <beans:property name="loaders">
-        <beans:map>
-            <beans:entry key="com.imcode.entities.Guardian">
-                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader" c:entityType="com.imcode.entities.Guardian" c:conversionService-ref="csvConversionService">
-                    <beans:property name="entityServise" ref="guardianServiceRepoImpl"/>
-                    <beans:property name="finders">
-                        <beans:map>
-                            <beans:entry key="id">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
-                                            c:entityServise-ref="guardianServiceRepoImpl" c:idClass="java.lang.Long"
-                                            c:conversionService-ref="csvConversionService"/>
-                            </beans:entry>
-                            <beans:entry key="person.personalId">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
+    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.LoaderService">
+        <beans:property name="loaders">
+            <beans:map>
+                <beans:entry key="com.imcode.entities.Guardian">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.Guardian"
+                                c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="guardianServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="guardianServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="person.personalId">
+                                    <beans:bean
+                                            class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
                                             c:entityServise-ref="guardianServiceRepoImpl"/>
-                            </beans:entry>
-                        </beans:map>
-                    </beans:property>
-                    <beans:property name="allowedFieldSet">
-                        <beans:set value-type="java.lang.String">
-                            <beans:value>pupils</beans:value>
-                            <beans:value>person.personalId</beans:value>
-                            <beans:value>person.firstName</beans:value>
-                            <beans:value>person.lastName</beans:value>
-                            <beans:value>person.phone</beans:value>
-                            <beans:value>person.email</beans:value>
-                            <beans:value>person.addresses[REGISTERED].postalCode</beans:value>
-                            <beans:value>person.addresses[REGISTERED].municipalityCode</beans:value>
-                            <beans:value>person.addresses[REGISTERED].city</beans:value>
-                            <beans:value>person.addresses[REGISTERED].street</beans:value>
-                            <beans:value>person.addresses[REGISTERED].street2</beans:value>
-                            <beans:value>person.addresses[REGISTERED].careOf</beans:value>
-                        </beans:set>
-                    </beans:property>
-                </beans:bean>
-            </beans:entry>
-            <beans:entry key="com.imcode.entities.Pupil">
-                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader" c:entityType="com.imcode.entities.Pupil" c:conversionService-ref="csvConversionService">
-                    <beans:property name="entityServise" ref="pupilServiceRepoImpl"/>
-                    <beans:property name="finders">
-                        <beans:map>
-                            <beans:entry key="id">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
-                                            c:entityServise-ref="pupilServiceRepoImpl" c:idClass="java.lang.Long"
-                                            c:conversionService-ref="csvConversionService"/>
-                            </beans:entry>
-                            <beans:entry key="person.personalId">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>pupils</beans:value>
+                                <beans:value>person.personalId</beans:value>
+                                <beans:value>person.firstName</beans:value>
+                                <beans:value>person.lastName</beans:value>
+                                <beans:value>person.phone</beans:value>
+                                <beans:value>person.email</beans:value>
+                                <beans:value>person.addresses[REGISTERED].postalCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].municipalityCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].city</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street2</beans:value>
+                                <beans:value>person.addresses[REGISTERED].careOf</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+                <beans:entry key="com.imcode.entities.Pupil">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.Pupil" c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="pupilServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="pupilServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="person.personalId">
+                                    <beans:bean
+                                            class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
                                             c:entityServise-ref="pupilServiceRepoImpl"/>
-                            </beans:entry>
-                        </beans:map>
-                    </beans:property>
-                    <beans:property name="allowedFieldSet">
-                        <beans:set value-type="java.lang.String">
-                            <beans:value>guardians</beans:value>
-                            <beans:value>person.personalId</beans:value>
-                            <beans:value>person.firstName</beans:value>
-                            <beans:value>person.lastName</beans:value>
-                            <beans:value>person.phone</beans:value>
-                            <beans:value>person.email</beans:value>
-                            <beans:value>person.addresses[REGISTERED].postalCode</beans:value>
-                            <beans:value>person.addresses[REGISTERED].municipalityCode</beans:value>
-                            <beans:value>person.addresses[REGISTERED].city</beans:value>
-                            <beans:value>person.addresses[REGISTERED].street</beans:value>
-                            <beans:value>person.addresses[REGISTERED].street2</beans:value>
-                            <beans:value>person.addresses[REGISTERED].careOf</beans:value>
-                        </beans:set>
-                    </beans:property>
-                </beans:bean>
-            </beans:entry>
-            <beans:entry key="com.imcode.entities.Person">
-                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader" c:entityType="com.imcode.entities.Person" c:conversionService-ref="csvConversionService">
-                    <beans:property name="entityServise" ref="personServiceRepoImpl"/>
-                    <beans:property name="finders">
-                        <beans:map>
-                            <beans:entry key="id">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
-                                            c:entityServise-ref="personServiceRepoImpl" c:idClass="java.lang.Long"
-                                            c:conversionService-ref="csvConversionService"/>
-                            </beans:entry>
-                            <beans:entry key="personalId">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
-                                            c:entityServise-ref="personServiceRepoImpl" />
-                            </beans:entry>
-                        </beans:map>
-                    </beans:property>
-                    <beans:property name="allowedFieldSet">
-                        <beans:set value-type="java.lang.String">
-                            <beans:value>personalId</beans:value>
-                            <beans:value>firstName</beans:value>
-                            <beans:value>lastName</beans:value>
-                            <beans:value>phone</beans:value>
-                            <beans:value>email</beans:value>
-                            <beans:value>addresses[REGISTERED].postalCode</beans:value>
-                            <beans:value>addresses[REGISTERED].municipalityCode</beans:value>
-                            <beans:value>addresses[REGISTERED].city</beans:value>
-                            <beans:value>addresses[REGISTERED].street</beans:value>
-                            <beans:value>addresses[REGISTERED].street2</beans:value>
-                            <beans:value>addresses[REGISTERED].careOf</beans:value>
-                        </beans:set>
-                    </beans:property>
-                </beans:bean>
-            </beans:entry>
-            <beans:entry key="com.imcode.entities.School">
-                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader" c:entityType="com.imcode.entities.School" c:conversionService-ref="csvConversionService">
-                    <beans:property name="entityServise" ref="schoolServiceRepoImpl"/>
-                    <beans:property name="finders">
-                        <beans:map>
-                            <beans:entry key="id">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
-                                            c:entityServise-ref="schoolServiceRepoImpl" c:idClass="java.lang.Long"
-                                            c:conversionService-ref="csvConversionService"/>
-                            </beans:entry>
-                            <beans:entry key="name">
-                                <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByNameFinder"
-                                            c:entityServise-ref="schoolServiceRepoImpl"/>
-                            </beans:entry>
-                        </beans:map>
-                    </beans:property>
-                    <beans:property name="allowedFieldSet">
-                        <beans:set value-type="java.lang.String">
-                            <beans:value>name</beans:value>
-                            <beans:value>schoolId</beans:value>
-                            <beans:value>afterSchoolCenterSections</beans:value>
-                            <beans:value>schoolClasses</beans:value>
-                            <beans:value>services</beans:value>
-                        </beans:set>
-                    </beans:property>
-                </beans:bean>
-            </beans:entry>
-        </beans:map>
-    </beans:property>
-</beans:bean>
-
-    <!--<beans:bean class="com.imcode.controllers.html.form.upload.loaders.CsvGuardianLoader">-->
-        <!--<beans:property name="allowedFieldSet">-->
-            <!--<beans:set value-type="java.lang.String">-->
-                <!--<beans:value>pupils</beans:value>-->
-                <!--<beans:value>person.personalId</beans:value>-->
-                <!--<beans:value>person.firstName</beans:value>-->
-                <!--<beans:value>person.lastName</beans:value>-->
-                <!--<beans:value>person.phone</beans:value>-->
-                <!--<beans:value>person.email</beans:value>-->
-                <!--<beans:value>person.addresses[REGISTERED].postalCode</beans:value>-->
-                <!--<beans:value>person.addresses[REGISTERED].municipalityCode</beans:value>-->
-                <!--<beans:value>person.addresses[REGISTERED].city</beans:value>-->
-                <!--<beans:value>person.addresses[REGISTERED].street</beans:value>-->
-                <!--<beans:value>person.addresses[REGISTERED].street2</beans:value>-->
-                <!--<beans:value>person.addresses[REGISTERED].careOf</beans:value>-->
-            <!--</beans:set>-->
-        <!--</beans:property>-->
-        <!--<beans:property name="conversionService" ref="csvConversionService"/>-->
-        <!--<beans:property name="entityServise" ref="guardianServiceRepoImpl"/>-->
-    <!--</beans:bean>-->
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>guardians</beans:value>
+                                <beans:value>person.personalId</beans:value>
+                                <beans:value>person.firstName</beans:value>
+                                <beans:value>person.lastName</beans:value>
+                                <beans:value>person.phone</beans:value>
+                                <beans:value>person.email</beans:value>
+                                <beans:value>person.addresses[REGISTERED].postalCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].municipalityCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].city</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street2</beans:value>
+                                <beans:value>person.addresses[REGISTERED].careOf</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+                <beans:entry key="com.imcode.entities.Person">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.Person"
+                                c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="personServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="personServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="personalId">
+                                    <beans:bean
+                                            class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
+                                            c:entityServise-ref="personServiceRepoImpl"/>
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>personalId</beans:value>
+                                <beans:value>firstName</beans:value>
+                                <beans:value>lastName</beans:value>
+                                <beans:value>phone</beans:value>
+                                <beans:value>email</beans:value>
+                                <beans:value>addresses[REGISTERED].postalCode</beans:value>
+                                <beans:value>addresses[REGISTERED].municipalityCode</beans:value>
+                                <beans:value>addresses[REGISTERED].city</beans:value>
+                                <beans:value>addresses[REGISTERED].street</beans:value>
+                                <beans:value>addresses[REGISTERED].street2</beans:value>
+                                <beans:value>addresses[REGISTERED].careOf</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+                <beans:entry key="com.imcode.entities.School">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.School"
+                                c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="schoolServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="schoolServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="name">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByNameFinder"
+                                                c:entityServise-ref="schoolServiceRepoImpl"/>
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>name</beans:value>
+                                <beans:value>schoolId</beans:value>
+                                <beans:value>afterSchoolCenterSections</beans:value>
+                                <beans:value>schoolClasses</beans:value>
+                                <beans:value>services</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+            </beans:map>
+        </beans:property>
+    </beans:bean>
 
     <beans:bean id="csvConversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <beans:property name="converters">
             <beans:set>
                 <beans:bean class="com.imcode.controllers.converters.PhoneConverter"/>
                 <beans:bean class="com.imcode.controllers.converters.EmailConverter"/>
-                <beans:bean class="com.imcode.controllers.converters.GuardianConverter" c:entityService-ref="guardianServiceRepoImpl"/>
-                <beans:bean class="com.imcode.controllers.converters.PupilConverter" c:entityService-ref="pupilServiceRepoImpl"/>
-                <beans:bean class="com.imcode.controllers.converters.PersonConverter" c:entityService-ref="personServiceRepoImpl"/>
+                <beans:bean class="com.imcode.controllers.converters.GuardianConverter"
+                            c:entityService-ref="guardianServiceRepoImpl"/>
+                <beans:bean class="com.imcode.controllers.converters.PupilConverter"
+                            c:entityService-ref="pupilServiceRepoImpl"/>
+                <beans:bean class="com.imcode.controllers.converters.PersonConverter"
+                            c:entityService-ref="personServiceRepoImpl"/>
             </beans:set>
         </beans:property>
     </beans:bean>
 
     <!--This converter don't insert the null items to collections-->
-    <beans:bean class="com.imcode.controllers.converters.NotNullStringToCollectionConverter" c:conversionService-ref="csvConversionService"/>
-    
+    <beans:bean class="com.imcode.controllers.converters.NotNullStringToCollectionConverter"
+                c:conversionService-ref="csvConversionService"/>
+
 </beans:beans>

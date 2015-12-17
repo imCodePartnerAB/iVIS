@@ -176,10 +176,13 @@ public class CsvLoaderController {
                 }
 
                 fileOption.setResult(result);
+            }
+        }
 
-                if (!debug) {
-                    uploadFileManager.delete(fileId);
-                }
+        if (!debug) {
+            for (FileOption fileOption : optionsForm.getFileOptionList()) {
+                String fileId = fileOption.getFileId();
+                uploadFileManager.delete(fileId);
             }
         }
         model.addAttribute("fileUploadOptionsForm", optionsForm);
