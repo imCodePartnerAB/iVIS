@@ -1,9 +1,10 @@
 package com.imcode.misc;
 
-import com.imcode.entities.*;
+import com.imcode.entities.Application;
+import com.imcode.entities.Person;
+import com.imcode.entities.Role;
+import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
-import com.imcode.entities.enums.ServiceTypeEnum;
-import com.imcode.entities.enums.StatementStatus;
 import com.imcode.entities.oauth2.ClientRole;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
@@ -15,12 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;

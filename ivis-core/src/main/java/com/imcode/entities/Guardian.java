@@ -54,26 +54,6 @@ public class Guardian extends AbstractIdEntity<Long> implements Serializable, Jp
 
     @Override
     public String toString() {
-        //// TODO: 16.12.15  remove
-        return "(" + id + ")" + Objects.toString(person.toString());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Guardian)) return false;
-        if (!super.equals(o)) return false;
-
-        Guardian guardian = (Guardian) o;
-
-        return !(person != null ? !person.equals(guardian.person) : guardian.person != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (person != null ? person.hashCode() : 0);
-        return result;
+        return Objects.toString(person.toString());
     }
 }

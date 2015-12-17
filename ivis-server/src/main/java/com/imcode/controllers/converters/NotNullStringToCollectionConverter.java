@@ -4,6 +4,7 @@ import org.springframework.core.CollectionFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
+import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -14,13 +15,12 @@ import java.util.Set;
  * Created by vitaly on 16.12.15.
  */
 public class NotNullStringToCollectionConverter implements ConditionalGenericConverter {
-    private final ConversionService conversionService;
-
+    private final ConfigurableConversionService conversionService;
 
     public NotNullStringToCollectionConverter(ConversionService conversionService) {
-        this.conversionService = conversionService;
+        this.conversionService = (ConfigurableConversionService) conversionService;
+        this.conversionService.addConverter(this);
     }
-
 
     @Override
     public Set<ConvertiblePair> getConvertibleTypes() {

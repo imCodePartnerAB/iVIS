@@ -229,23 +229,22 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
         map.put(addressValueType, addressValue);
     }
 
-    // TODO: 16.12.15 remove
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AbstractPerson)) return false;
-        if (!super.equals(o)) return false;
-
-        AbstractPerson that = (AbstractPerson) o;
-
-        return !(getPersonalId() != null ? !getPersonalId().equals(that.getPersonalId()) : that.getPersonalId() != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (getPersonalId() != null ? getPersonalId().hashCode() : 0);
-        return result;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof AbstractPerson)) return false;
+//        if (!super.equals(o)) return false;
+//
+//        AbstractPerson that = (AbstractPerson) o;
+//
+//        return !(getPersonalId() != null ? !getPersonalId().equals(that.getPersonalId()) : that.getPersonalId() != null);
+//
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result = super.hashCode();
+//        result = 31 * result + (getPersonalId() != null ? getPersonalId().hashCode() : 0);
+//        return result;
+//    }
 }

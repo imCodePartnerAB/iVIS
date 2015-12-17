@@ -1,64 +1,34 @@
 package com.imcode;
 
-import com.imcode.controllers.html.CsvLoaderController;
-import com.imcode.controllers.html.form.upload.FileOption;
-import com.imcode.controllers.html.form.upload.FileUploadOptionsForm;
+import com.imcode.controllers.converters.MutableConversionServiceFactoryBean;
 import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
-import com.imcode.entities.embed.Email;
-import com.imcode.entities.embed.Phone;
-import com.imcode.entities.enums.CommunicationTypeEnum;
-import com.imcode.entities.enums.StatementStatus;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.repositories.GuardianRepository;
 import com.imcode.repositories.PupilRepository;
 import com.imcode.services.GuardianService;
-import com.imcode.services.PersonService;
 import com.imcode.services.PupilService;
-import com.imcode.services.TestService;
-import com.imcode.utils.StaticUtils;
-import org.exolab.castor.xml.*;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.data.convert.EntityConverter;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.validation.BindException;
 import org.springframework.validation.DataBinder;
-import org.springframework.web.bind.WebDataBinder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 //import sun.plugin.dom.core.Document;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import static com.imcode.entities.enums.CommunicationTypeEnum.*;
 
 /**
  * Created by vitaly on 17.02.15.
@@ -205,53 +175,55 @@ public class MainTest {
 //////            }
 ////        } catch (Exception ignore) { }
         GenericXmlApplicationContext ctx = getApplicationContext();
-        EntityManager em = ctx.getBean(EntityManager.class);
-
-        GuardianService guardianService = ctx.getBean(GuardianService.class);
-        PupilService pupilService = ctx.getBean(PupilService.class);
-
-        GuardianRepository guardianRepository = ctx.getBean(GuardianRepository.class);
-        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
+        ConversionService cs = ctx.getBean("csvConversionService", ConversionService.class);
+        System.out.println();
+//        EntityManager em = ctx.getBean(EntityManager.class);
 //
-        TestService service = ctx.getBean(TestService.class);
+//        GuardianService guardianService = ctx.getBean(GuardianService.class);
+//        PupilService pupilService = ctx.getBean(PupilService.class);
 //
-        Guardian guardian = guardianService.find(24L);
-//        Guardian g0 = getPersonalizedEntity(Guardian::new, "790411-5867", "Birgit", "Engström");
-        Guardian g1 = getPersonalizedEntity(Guardian::new, "790411-5867", "Birgit", "Engström");
-        Guardian g2 = getPersonalizedEntity(Guardian::new, "530304-5677", "Orvar", "Vestman");
-        Guardian g3 = getPersonalizedEntity(Guardian::new, "841214-4142", "Adela", "Leandersson");
-        Guardian g4 = getPersonalizedEntity(Guardian::new, "840612-7657", "Karl-Gunnar", "Lovén");
-        Guardian g5 = getPersonalizedEntity(Guardian::new, "570526-9289", "Margit", "Ljungqvist");
-        Pupil p1 = getPersonalizedEntity(Pupil::new, "630815-2237", "Seth", "Hällström");
-        Pupil p2 = getPersonalizedEntity(Pupil::new, "820614-8051", "Torvald", "Forsmark");
-        Pupil p3 = getPersonalizedEntity(Pupil::new, "600327-6273", "Linné", "Rosell");
-        Pupil p4 = getPersonalizedEntity(Pupil::new, "870609-0316", "Isidor", "Medin");
-        Pupil p5 = getPersonalizedEntity(Pupil::new, "950808-3442", "Sofia", "Karlström");
-
-        p1.setGuardians(new HashSet<>(Arrays.asList()));
-        p2.setGuardians(new HashSet<>(Arrays.asList()));
-//        p2.setGuardians(new HashSet<>(Arrays.asList(g1,g2)));
-//        p3.setGuardians(new HashSet<>(Arrays.asList(g3,g4)));
-//        p4.setGuardians(new HashSet<>(Arrays.asList(g5)));
-//        p5.setGuardians(new HashSet<>(Arrays.asList(g5)));
+//        GuardianRepository guardianRepository = ctx.getBean(GuardianRepository.class);
+//        PupilRepository pupilRepository = ctx.getBean(PupilRepository.class);
+////
+////        TestService service = ctx.getBean(TestService.class);
+////
+//        Guardian guardian = guardianService.find(24L);
+////        Guardian g0 = getPersonalizedEntity(Guardian::new, "790411-5867", "Birgit", "Engström");
+//        Guardian g1 = getPersonalizedEntity(Guardian::new, "790411-5867", "Birgit", "Engström");
+//        Guardian g2 = getPersonalizedEntity(Guardian::new, "530304-5677", "Orvar", "Vestman");
+//        Guardian g3 = getPersonalizedEntity(Guardian::new, "841214-4142", "Adela", "Leandersson");
+//        Guardian g4 = getPersonalizedEntity(Guardian::new, "840612-7657", "Karl-Gunnar", "Lovén");
+//        Guardian g5 = getPersonalizedEntity(Guardian::new, "570526-9289", "Margit", "Ljungqvist");
+//        Pupil p1 = getPersonalizedEntity(Pupil::new, "630815-2237", "Seth", "Hällström");
+//        Pupil p2 = getPersonalizedEntity(Pupil::new, "820614-8051", "Torvald", "Forsmark");
+//        Pupil p3 = getPersonalizedEntity(Pupil::new, "600327-6273", "Linné", "Rosell");
+//        Pupil p4 = getPersonalizedEntity(Pupil::new, "870609-0316", "Isidor", "Medin");
+//        Pupil p5 = getPersonalizedEntity(Pupil::new, "950808-3442", "Sofia", "Karlström");
 //
-        g1.setPupils(new HashSet<>(Arrays.asList()));
-//        g1.setPupils(new HashSet<>(Arrays.asList(p1, p2)));
-//        g2.setPupils(new HashSet<>(Arrays.asList(p1, p2)));
-//        g3.setPupils(new HashSet<>(Arrays.asList(p3)));
-//        g4.setPupils(new HashSet<>(Arrays.asList(p3)));
-//        g5.setPupils(new HashSet<>(Arrays.asList(p4,p5)));
-
-        Set<Guardian> guardianSet = new HashSet<>(Arrays.asList(g1, g2, g3, g4, g5));
-        Set<Pupil> pupilSet = new HashSet<>(Arrays.asList(p1, p2, p3, p4, p5));
-        List<JpaEntity<Long>> entities = new ArrayList<>();
-        entities.addAll(guardianSet);
-        entities.addAll(pupilSet);
-
-        Pupil pp1 = pupilService.save(p1);
-        Pupil pp2 = pupilService.save(p2);
-        Guardian gg1 = guardianService.save(g1);
-        System.out.println("end.");
+//        p1.setGuardians(new HashSet<>(Arrays.asList()));
+//        p2.setGuardians(new HashSet<>(Arrays.asList()));
+////        p2.setGuardians(new HashSet<>(Arrays.asList(g1,g2)));
+////        p3.setGuardians(new HashSet<>(Arrays.asList(g3,g4)));
+////        p4.setGuardians(new HashSet<>(Arrays.asList(g5)));
+////        p5.setGuardians(new HashSet<>(Arrays.asList(g5)));
+////
+//        g1.setPupils(new HashSet<>(Arrays.asList()));
+////        g1.setPupils(new HashSet<>(Arrays.asList(p1, p2)));
+////        g2.setPupils(new HashSet<>(Arrays.asList(p1, p2)));
+////        g3.setPupils(new HashSet<>(Arrays.asList(p3)));
+////        g4.setPupils(new HashSet<>(Arrays.asList(p3)));
+////        g5.setPupils(new HashSet<>(Arrays.asList(p4,p5)));
+//
+//        Set<Guardian> guardianSet = new HashSet<>(Arrays.asList(g1, g2, g3, g4, g5));
+//        Set<Pupil> pupilSet = new HashSet<>(Arrays.asList(p1, p2, p3, p4, p5));
+//        List<JpaEntity<Long>> entities = new ArrayList<>();
+//        entities.addAll(guardianSet);
+//        entities.addAll(pupilSet);
+//
+//        Pupil pp1 = pupilService.save(p1);
+//        Pupil pp2 = pupilService.save(p2);
+//        Guardian gg1 = guardianService.save(g1);
+//        System.out.println("end.");
 //        service.persist(entities);
 //        service.persist(Collections.singletonList(p1));
 //        guardianSet.stream().forEach(guardianService::save);
@@ -283,8 +255,8 @@ public class MainTest {
 //            e.printStackTrace();
 //        }
 
-        System.out.println(guardianSet);
-        System.out.println(pupilSet);
+//        System.out.println(guardianSet);
+//        System.out.println(pupilSet);
 
 
 //        person.setPhone(Phone.of(MOBILE, "0971396134"));

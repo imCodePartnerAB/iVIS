@@ -19,11 +19,13 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 /**
  * Created by vitaly on 10.12.15.
  */
 public class EntityLoader<T> {
+    private final Logger logger = Logger.getLogger(getClass().getName());
     private final Class<T> entityType;
     private ConversionService conversionService;
     private Set<String> allowedFieldSet;
@@ -33,9 +35,6 @@ public class EntityLoader<T> {
 
     @SuppressWarnings("unchecked")
     public EntityLoader(Class<T> entityType, ConversionService conversionService) {
-        DefaultConversionService cs = (DefaultConversionService) conversionService;
-        cs.removeConvertible(String.class, Collection.class);
-        cs.addConverter(new NotNullStringToCollectionConverter(cs));
         this.entityType = entityType;
         this.conversionService = conversionService;
         this.newEntitySupplier = () -> {
@@ -156,7 +155,11 @@ public class EntityLoader<T> {
             AbstractService<T, ?, ?> service = (AbstractService<T, ?, ?>) entityServise;
             for (int i = 0; i < entityList.size(); i++) {
                 T entity = entityList.get(i);
-                entityList.set(i, service.saveWithoutFlush(entity));
+                try {
+                    entityList.set(i, service.saveWithoutFlush(entity));
+                } catch (Exception e) {
+                    logger.warning(e::getMessage);
+                }
             }
             service.flush();
         }

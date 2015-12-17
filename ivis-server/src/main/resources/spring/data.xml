@@ -287,7 +287,6 @@
     <!--</beans:bean>-->
 
     <beans:bean id="csvConversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-    <!--<beans:bean id="csvConversionService" class="org.springframework.core.convert.support.DefaultConversionService">-->
         <beans:property name="converters">
             <beans:set>
                 <beans:bean class="com.imcode.controllers.converters.PhoneConverter"/>
@@ -298,5 +297,8 @@
             </beans:set>
         </beans:property>
     </beans:bean>
+
+    <!--This converter don't insert the null items to collections-->
+    <beans:bean class="com.imcode.controllers.converters.NotNullStringToCollectionConverter" c:conversionService-ref="csvConversionService"/>
     
 </beans:beans>

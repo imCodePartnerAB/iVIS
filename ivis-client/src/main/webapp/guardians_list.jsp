@@ -1,16 +1,9 @@
-<%@ page import="com.imcode.entities.Person,
-                 com.imcode.entities.Application" pageEncoding="UTF-8" %>
-<%@ page import="com.imcode.entities.enums.StatementStatus" %>
-<%@ page import="com.imcode.services.ApplicationService" %>
-<%@ page import="imcode.server.Imcms" %>
+<%@ page import="com.imcode.entities.Guardian,
+                 com.imcode.services.GuardianService" pageEncoding="UTF-8" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
-<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
-<%@ page import="java.util.LinkedList" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.imcode.services.GuardianService" %>
-<%@ page import="com.imcode.entities.Guardian" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -35,7 +28,7 @@
         <div class="box">
 
             <%
-                request.setAttribute("statementStatusEnum", StatementStatus.values());
+//                request.setAttribute("statementStatusEnum", StatementStatus.values());
                 List<Guardian> guardians = null;
                 if (IvisOAuth2Utils.isTokenGood(request)) {
                     request.setAttribute("isAuthorized", true);

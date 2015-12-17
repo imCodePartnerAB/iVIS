@@ -2,12 +2,8 @@ package com.imcode.imcms.addon.ivisclient.controllers;
 
 import com.imcode.entities.Application;
 import com.imcode.entities.Guardian;
-import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
 import com.imcode.entities.embed.Decision;
-import com.imcode.entities.enums.StatementStatus;
-import com.imcode.imcms.addon.ivisclient.controllers.form.Message;
-import com.imcode.imcms.addon.ivisclient.controllers.form.MessageType;
 import com.imcode.services.ApplicationService;
 import com.imcode.services.GuardianService;
 import com.imcode.services.PersonService;
@@ -23,29 +19,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
-import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
 
 /**
  * Created by vitaly on 26.05.15.

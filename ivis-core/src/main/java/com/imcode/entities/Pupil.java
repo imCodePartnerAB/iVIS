@@ -180,7 +180,6 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
 
     @Override
     public String toString() {
-        //// TODO: 16.12.15  remove
-        return "(" + id + ")" + Objects.toString(person.toString());
+        return Objects.toString(person.toString());
     }
 }

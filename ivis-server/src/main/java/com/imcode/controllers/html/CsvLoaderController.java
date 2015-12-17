@@ -7,15 +7,8 @@ import com.imcode.controllers.html.form.upload.FileUploadForm;
 import com.imcode.controllers.html.form.upload.FileUploadOptionsForm;
 import com.imcode.controllers.html.form.upload.loaders.EntityLoader;
 import com.imcode.controllers.html.form.upload.loaders.LoaderService;
-import com.imcode.entities.*;
-//import com.imcode.misc.MutablePropertyFilter;
-import com.imcode.entities.interfaces.JpaPersonalizedEntity;
+import com.imcode.entities.Person;
 import com.imcode.misc.UploadFileManager;
-import com.imcode.services.GenericService;
-import com.imcode.services.GuardianService;
-import com.imcode.services.PersonService;
-import com.imcode.services.csv.CsvFieldSetMapper;
-import com.imcode.services.csv.GuardianFieldSetMapper;
 import com.imcode.utils.StaticUtils;
 import com.sun.net.httpserver.HttpPrincipal;
 import org.apache.commons.lang3.ClassUtils;
@@ -25,32 +18,28 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.item.file.transform.FieldSet;
-import org.springframework.beans.MutablePropertyValues;
-import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindException;
-import org.springframework.validation.DataBinder;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+//import com.imcode.misc.MutablePropertyFilter;
 
 /**
  * Created by vitaly on 01.12.15.
@@ -59,6 +48,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/csv")
 public class CsvLoaderController {
     private static final String UPLOAD_FILE_MANAGER = "uploadFileManager";
+    private final Logger logger = Logger.getLogger(getClass().getName());
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -77,7 +67,8 @@ public class CsvLoaderController {
     public String step2(
             @ModelAttribute("uploadForm") FileUploadForm uploadForm,
             Model model,
-            HttpServletRequest request) {
+            HttpServletRequest request,
+            Principal principal) {
 
         List<MultipartFile> files = uploadForm.getFiles();
         Map<Class<?>, Set<String>> typeMap = loaderService.stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getAllowedFieldSet()));
@@ -85,8 +76,6 @@ public class CsvLoaderController {
         List<FileOption> fileOptionList = new ArrayList<>();
         FileUploadOptionsForm fileUploadOptionsForm = new FileUploadOptionsForm();
         fileUploadOptionsForm.setFileOptionList(fileOptionList);
-        //todo chabge on real user
-        Principal principal = new HttpPrincipal("Admin", "pass");
 
         if (null != files && files.size() > 0) {
             UploadFileManager fileManager = getUploadFileManeger(request);
@@ -106,8 +95,7 @@ public class CsvLoaderController {
         try {
             typeMapJson = objectMapper.writeValueAsString(typeMap);
         } catch (JsonProcessingException e) {
-            //todo log this thing
-            e.printStackTrace();
+            logger.warning(e::getMessage);
         }
 
         model.addAttribute("fileUploadOptionsForm", fileUploadOptionsForm);
@@ -174,7 +162,7 @@ public class CsvLoaderController {
                         result.add(g);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.warning(e::getMessage);
                 }
 
                 ItemWriter itemWriter = entityLoader.getItemWriter();
@@ -182,7 +170,7 @@ public class CsvLoaderController {
                 try {
                     itemWriter.write(result);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.warning(e::getMessage);
                 }
 
                 fileOption.setResult(result);
@@ -257,45 +245,45 @@ public class CsvLoaderController {
 //    }
 
 
-    @SuppressWarnings("unchecked")
-    public <T> FieldSetMapper<T> getMapper(Class<T> clazz, FileOption fileOption) {
-        CsvFieldSetMapper<T> fieldSetMapper = (CsvFieldSetMapper<T>) new GuardianFieldSetMapper();
-        fieldSetMapper.setFileOption(fileOption);
-        GuardianService guardianService = applicationContext.getBean(GuardianService.class);
-        fieldSetMapper.setService((GenericService<T, ?>) guardianService);
-        return fieldSetMapper;
-    }
-
-    @PostConstruct
-    public void init() {
-//        fieldSetMappers.put(Guardian.class, () -> {applicationContext.getBean(GuardianFieldSetMapper.class)});
-    }
-
-    public static void main(String[] args) {
-//        Set<String> properties = getBeanFieldsRecursively(Pupil.class);
-//        System.out.println(properties);
-    }
-
-}
-
-class PersonalizedItemWriter<T extends JpaPersonalizedEntity> implements ItemWriter<T> {
-    private final GenericService<T, ?> entityService;
-    private final PersonService personService;
-
-    PersonalizedItemWriter(GenericService<T, ?> entityService, PersonService personService) {
-        this.entityService = entityService;
-        this.personService = personService;
-    }
-
-    @Override
-    public void write(List<? extends T> items) throws Exception {
-        for (T item : items) {
-            Person person = item.getPerson();
-//            if (person.getId() == null) {
-            person = personService.save(person);
-            item.setPerson(person);
-//            }
-            entityService.save(item);
-        }
-    }
+//    @SuppressWarnings("unchecked")
+//    public <T> FieldSetMapper<T> getMapper(Class<T> clazz, FileOption fileOption) {
+//        CsvFieldSetMapper<T> fieldSetMapper = (CsvFieldSetMapper<T>) new GuardianFieldSetMapper();
+//        fieldSetMapper.setFileOption(fileOption);
+//        GuardianService guardianService = applicationContext.getBean(GuardianService.class);
+//        fieldSetMapper.setService((GenericService<T, ?>) guardianService);
+//        return fieldSetMapper;
+//    }
+//
+//    @PostConstruct
+//    public void init() {
+////        fieldSetMappers.put(Guardian.class, () -> {applicationContext.getBean(GuardianFieldSetMapper.class)});
+//    }
+//
+//    public static void main(String[] args) {
+////        Set<String> properties = getBeanFieldsRecursively(Pupil.class);
+////        System.out.println(properties);
+//    }
+//
+//}
+//
+//class PersonalizedItemWriter<T extends JpaPersonalizedEntity> implements ItemWriter<T> {
+//    private final GenericService<T, ?> entityService;
+//    private final PersonService personService;
+//
+//    PersonalizedItemWriter(GenericService<T, ?> entityService, PersonService personService) {
+//        this.entityService = entityService;
+//        this.personService = personService;
+//    }
+//
+//    @Override
+//    public void write(List<? extends T> items) throws Exception {
+//        for (T item : items) {
+//            Person person = item.getPerson();
+////            if (person.getId() == null) {
+//            person = personService.save(person);
+//            item.setPerson(person);
+////            }
+//            entityService.save(item);
+//        }
+//    }
 }

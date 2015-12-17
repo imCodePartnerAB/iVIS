@@ -1,18 +1,12 @@
 <%@ page import="com.imcode.entities.Application,
-                 com.imcode.services.ApplicationService" pageEncoding="UTF-8" %>
+                 com.imcode.entities.embed.Decision" pageEncoding="UTF-8" %>
+<%@ page import="com.imcode.services.AcademicYearService" %>
+<%@ page import="com.imcode.services.ApplicationService" %>
+<%@ page import="com.imcode.services.SchoolTransportService" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
-<%@ page import="com.imcode.entities.AcademicYear" %>
-<%@ page import="com.imcode.services.AcademicYearService" %>
-<%@ page import="com.imcode.entities.SchoolTransport" %>
-<%@ page import="com.imcode.services.SchoolTransportService" %>
-<%@ page import="com.imcode.entities.embed.SchoolTransportSchema" %>
-<%@ page import="java.util.*" %>
-<%@ page import="java.time.DayOfWeek" %>
-<%@ page import="com.imcode.entities.enums.StatementStatus" %>
-<%@ page import="com.imcode.entities.embed.Decision" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

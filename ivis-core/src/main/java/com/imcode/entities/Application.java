@@ -1,18 +1,11 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.Decision;
-import com.imcode.entities.embed.SchoolTransportSchema;
-import com.imcode.entities.enums.StatementStatus;
-import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.Entity;
 
 /**
  * Created by vitaly on 14.05.15.

@@ -1,9 +1,8 @@
 package com.imcode.imcms.addon.ivisclient;
 
+import com.imcode.entities.Application;
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
-import com.imcode.entities.Application;
-import com.imcode.entities.enums.StatementStatus;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
