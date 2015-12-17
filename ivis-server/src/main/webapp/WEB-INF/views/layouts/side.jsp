@@ -12,11 +12,13 @@
 <spring:url value="/pupils" var="pupilsUrl"/>
 <spring:url value="/sql" var="sqlUrl"/>
 <spring:url value="/xml" var="xmlUrl"/>
+<spring:url value="/csv" var="csvUrl"/>
 <spring:message var="labelMainMenu" code="label.mainMenu.title"/>
 <spring:message var="labelClients" code="label.mainMenu.clientList"/>
 <spring:message var="labelUsers" code="label.mainMenu.userList"/>
 <spring:message var="labelSchools" code="label.mainMenu.schoolList"/>
 <spring:message var="labelPupils" code="label.mainMenu.pupilList"/>
+<spring:message var="labelCsvImport" code="label.mainMenu.csvImport"/>
 <spring:message var="labelChangePassword" code="label.security.changePassword"/>
 <spring:message var="labelLogout" code="label.security.logout"/>
 <%--<spring:message var="" code="label."/>--%>
@@ -28,6 +30,7 @@
         <a class="main-menu-item" href="${usersUrl}">${labelUsers}</a>
         <a class="main-menu-item" href="${schoolsUrl}">${labelSchools}</a>
         <a class="main-menu-item" href="${pupilsUrl}">${labelPupils}</a>
+        <a class="main-menu-item" href="${csvUrl}">${labelCsvImport}</a>
         <%--<a class="main-menu-item" href="${sqlUrl}">SQL</a>--%>
         <%--<a class="main-menu-item" href="${xmlUrl}">Application import</a>--%>
 
