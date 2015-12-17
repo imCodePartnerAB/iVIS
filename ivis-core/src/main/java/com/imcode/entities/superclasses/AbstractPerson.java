@@ -1,15 +1,7 @@
 package com.imcode.entities.superclasses;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.imcode.entities.embed.Address;
-import com.imcode.entities.embed.Email;
-import com.imcode.entities.embed.Phone;
-import com.imcode.entities.enums.AddressTypeEnum;
-import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.interfaces.JpaContactedPerson;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -189,6 +181,7 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
         if (StringUtils.hasText(firstName))
             addWord(sb, firstName);
 
@@ -224,7 +217,7 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
 //        return (EnumMap<K, V>) newValue;
 //    }
 
-    protected  <K extends Enum<K>, V extends AbstractAddressValue<K>> void putAddressValueIntoMap(Class<K> enumClass, V addressValue, Map<K, V> map) {
+    protected  <K extends Enum<K>, V extends ContactInformation<K>> void putAddressValueIntoMap(Class<K> enumClass, V addressValue, Map<K, V> map) {
         Objects.requireNonNull(addressValue);
         K addressValueType = addressValue.getType();
         Objects.requireNonNull(addressValueType);
@@ -234,5 +227,25 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
         }
 
         map.put(addressValueType, addressValue);
+    }
+
+    // TODO: 16.12.15 remove
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractPerson)) return false;
+        if (!super.equals(o)) return false;
+
+        AbstractPerson that = (AbstractPerson) o;
+
+        return !(getPersonalId() != null ? !getPersonalId().equals(that.getPersonalId()) : that.getPersonalId() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getPersonalId() != null ? getPersonalId().hashCode() : 0);
+        return result;
     }
 }

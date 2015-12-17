@@ -94,12 +94,10 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     }
 
     @Override
-//    @JsonIgnore
     public Set<Role> getAuthorities() {
         return roles;
     }
 
-//    @JsonIgnore
     public void setAuthorities(Set<Role> roles) {
         this.roles = roles;
     }
@@ -110,37 +108,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     public void setPerson(Person person) {
         this.person = person;
-    }
-
-    //todo Переделать эту фигню!!!
-    @Override
-    public String getPersonalId() {
-        return null;
-    }
-
-    @Override
-    public void setPersonalId(String personalId) {
-
-    }
-
-    @Override
-    public String getFirstName() {
-        return null;
-    }
-
-    @Override
-    public void setFirstName(String firstName) {
-
-    }
-
-    @Override
-    public String getLastName() {
-        return null;
-    }
-
-    @Override
-    public void setLastName(String lastName) {
-
     }
 
     @JsonIgnore
@@ -182,27 +149,11 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Override
     public String toString() {
         return name == null ? Long.toString(id) : name;
-//        final StringBuilder sb = new StringBuilder("User{");
-//        sb.append("id=").append(id);
-//        sb.append(", login='").append(name).append('\'');
-//        sb.append(", pwd='").append(password).append('\'');
-////        sb.append(", firstName='").append(firstName).append('\'');
-////        sb.append(", lastName='").append(lastName).append('\'');
-////        sb.append(", bitrhday=").append(bitrhday);
-////        sb.append(", email='").append(email).append('\'');
-////        sb.append(", phoneNumber='").append(phoneNumber).append('\'');
-////        sb.append(", streetAddress='").append(streetAddress).append('\'');
-////        sb.append(", postalCode='").append(postalCode).append('\'');
-////        sb.append(", city='").append(city).append('\'');
-////        sb.append(", school=").append(school);
-////        sb.append(", schoolClass=").append(schoolClass);
-//        sb.append('}');
-//        return sb.toString();
     }
 
     //Setter utility
     @JsonIgnore
     public void setAuthorities(Role role) {
-        this.roles = new HashSet<>(Arrays.asList(role));
+        this.roles = new HashSet<>(Collections.singleton(role));
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 /**
  * Created by vitaly on 11.12.15.
  */
-public abstract class PersonalizedConverter<T extends JpaPersonalizedEntity<Long>> implements Converter<String, T> {
+public abstract class PersonalizedConverter<T extends JpaPersonalizedEntity> implements Converter<String, T> {
     private PersonalizedService<T> entityService;
 
     public PersonalizedConverter(PersonalizedService<T> entityService) {

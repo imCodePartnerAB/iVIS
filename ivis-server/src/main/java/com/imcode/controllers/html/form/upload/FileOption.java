@@ -9,6 +9,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class FileOption  implements Serializable {
 
     protected void fillPreviewLines(MultipartFile file) {
         try {
-            Resource resource = new InputStreamResource(file.getInputStream());
+            Resource resource = new InputStreamResource(new ByteArrayInputStream(file.getBytes()));
             DefaultLineMapper<String[]> lineMapper = new DefaultLineMapper<>();
             lineMapper.setLineTokenizer(new DelimitedLineTokenizer());
             lineMapper.setFieldSetMapper(FieldSet::getValues);

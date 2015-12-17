@@ -50,6 +50,16 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
         return repo.findAll();
     }
 
+    @Transactional
+    public T saveWithoutFlush(T entity) {
+        return repo.save(entity);
+    }
+
+    @Transactional
+    public void flush() {
+        repo.flush();
+    }
+
     public REPOSITORY_TYPE getRepo() {
         return repo;
     }

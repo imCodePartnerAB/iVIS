@@ -1,6 +1,8 @@
 package com.imcode.controllers.html.form.upload.loaders;
 
+import com.imcode.controllers.converters.NotNullStringToCollectionConverter;
 import com.imcode.controllers.html.form.upload.FileOption;
+import com.imcode.services.AbstractService;
 import com.imcode.services.GenericService;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
@@ -31,6 +33,9 @@ public class EntityLoader<T> {
 
     @SuppressWarnings("unchecked")
     public EntityLoader(Class<T> entityType, ConversionService conversionService) {
+        DefaultConversionService cs = (DefaultConversionService) conversionService;
+        cs.removeConvertible(String.class, Collection.class);
+        cs.addConverter(new NotNullStringToCollectionConverter(cs));
         this.entityType = entityType;
         this.conversionService = conversionService;
         this.newEntitySupplier = () -> {
@@ -148,10 +153,12 @@ public class EntityLoader<T> {
         @SuppressWarnings("unchecked")
         public void write(List<? extends T> items) throws Exception {
             List<T> entityList = (List<T>) items;
+            AbstractService<T, ?, ?> service = (AbstractService<T, ?, ?>) entityServise;
             for (int i = 0; i < entityList.size(); i++) {
                 T entity = entityList.get(i);
-                entityList.set(i, entityServise.save(entity));
+                entityList.set(i, service.saveWithoutFlush(entity));
             }
+            service.flush();
         }
     }
 

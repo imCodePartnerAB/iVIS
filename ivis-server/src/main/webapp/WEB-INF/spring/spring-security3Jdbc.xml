@@ -370,7 +370,7 @@
             <!--</list>-->
         <!--</property>-->
     <!--</bean>-->
-    <bean id="initializator" class="com.imcode.misc.Initializator"/>
+    <!--<bean id="initializator" class="com.imcode.misc.Initializator"/>-->
 
 
 </beans>

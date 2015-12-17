@@ -1,7 +1,7 @@
 package com.imcode.entities.embed;
 
 import com.imcode.entities.enums.CommunicationTypeEnum;
-import com.imcode.entities.superclasses.AbstractAddressValue;
+import com.imcode.entities.superclasses.ContactInformation;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.io.Serializable;
 //@Table(name = "dbo_phone")
 @Embeddable
 //public class Phone extends AbstractIdEntity  implements Serializable {
-public class Phone extends AbstractAddressValue<CommunicationTypeEnum> implements Serializable {
+public class Phone extends ContactInformation<CommunicationTypeEnum> implements Serializable {
 //    @Column
 //    private String number;
 //

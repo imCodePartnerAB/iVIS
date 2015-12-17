@@ -64,15 +64,15 @@ public abstract class AbstractIdEntity<ID extends Serializable> implements JpaEn
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AbstractIdEntity idEntity = (AbstractIdEntity) o;
+        AbstractIdEntity that = (AbstractIdEntity) o;
 
-        return !(id != null ? !id.equals(idEntity.id) : idEntity.id != null);
+        return !(id != null ? !id.equals(that.id) : this == that);
 
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return id != null ? id.hashCode() : super.hashCode();
     }
 
     @Override

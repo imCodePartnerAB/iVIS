@@ -11,21 +11,21 @@ import javax.persistence.MappedSuperclass;
  * Created by vitaly on 01.12.15.
  */
 @MappedSuperclass
-public abstract class AbstractAddressValue<T extends Enum<T>> implements MutableAddressValue<T> {
+public abstract class ContactInformation<T extends Enum<T>> implements MutableAddressValue<T> {
     @Enumerated(EnumType.STRING)
     protected T type;
 
     @Column
     protected String value;
 
-    public AbstractAddressValue() {
+    public ContactInformation() {
     }
 
-//    protected AbstractAddressValue(T type) {
+//    protected ContactInformation(T type) {
 //        this.type = type;
 //    }
 
-    protected AbstractAddressValue(T type, String value) {
+    protected ContactInformation(T type, String value) {
         this.value = value;
         this.type = type;
     }
@@ -52,7 +52,7 @@ public abstract class AbstractAddressValue<T extends Enum<T>> implements Mutable
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AbstractAddressValue<T> that = (AbstractAddressValue<T>) o;
+        ContactInformation<T> that = (ContactInformation<T>) o;
 
         if (value != null ? !value.equals(that.value) : that.value != null) return false;
         return type == that.type;

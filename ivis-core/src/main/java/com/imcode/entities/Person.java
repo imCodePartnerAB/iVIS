@@ -6,12 +6,10 @@ import com.imcode.entities.embed.Phone;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.enums.CommunicationTypeEnum;
-import com.imcode.entities.superclasses.AbstractAddressValue;
-import com.imcode.entities.superclasses.AbstractIdEntity;
+import com.imcode.entities.superclasses.ContactInformation;
 import com.imcode.entities.superclasses.AbstractPerson;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -39,21 +37,21 @@ public class Person extends AbstractPerson implements Serializable {
     @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "typeKey", length = 50)
-    private Map<AddressTypeEnum, Address> addresses;
+    private Map<AddressTypeEnum, Address> addresses = new EnumMap<>(AddressTypeEnum.class);
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "ownerId"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "typeKey", length = 50)
-    private Map<CommunicationTypeEnum, Email> emails;
+    private Map<CommunicationTypeEnum, Email> emails = new EnumMap<>(CommunicationTypeEnum.class);
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "ownerId"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "typeKey", length = 50)
-    private Map<CommunicationTypeEnum, Phone> phones;
+    private Map<CommunicationTypeEnum, Phone> phones = new EnumMap<>(CommunicationTypeEnum.class);
 
     public Person() {
     }
@@ -230,7 +228,7 @@ public class Person extends AbstractPerson implements Serializable {
         return (EnumMap<K, V>) newValue;
     }
 
-    private <K extends Enum<K>, V extends AbstractAddressValue<K>> void putAddressValueIntoEnumMap(Class<K> enumClass, V addressValue, EnumMap<K, V> map) {
+    private <K extends Enum<K>, V extends ContactInformation<K>> void putAddressValueIntoEnumMap(Class<K> enumClass, V addressValue, EnumMap<K, V> map) {
         Objects.requireNonNull(addressValue);
         K addressValueType = addressValue.getType();
         Objects.requireNonNull(addressValueType);
@@ -241,4 +239,6 @@ public class Person extends AbstractPerson implements Serializable {
 
         map.put(addressValueType, addressValue);
     }
+
+
 }

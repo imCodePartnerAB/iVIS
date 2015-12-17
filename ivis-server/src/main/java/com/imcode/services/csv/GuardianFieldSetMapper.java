@@ -5,21 +5,17 @@ import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
-import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
-import com.imcode.entities.superclasses.AbstractAddressValue;
+import com.imcode.entities.superclasses.ContactInformation;
 import com.imcode.services.GenericService;
 import com.imcode.services.GuardianService;
-import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -34,15 +30,15 @@ import java.util.function.Supplier;
 public class GuardianFieldSetMapper extends CsvFieldSetMapper<Guardian> {
     private static class AddressValueSetter implements BiConsumer<JpaPersonalizedEntity, String> {
 
-        private final Function<JpaPersonalizedEntity, ? extends AbstractAddressValue<?>> addressGetter;
+        private final Function<JpaPersonalizedEntity, ? extends ContactInformation<?>> addressGetter;
 
-        AddressValueSetter(Function<JpaPersonalizedEntity, ? extends AbstractAddressValue<?>> addressGetter) {
+        AddressValueSetter(Function<JpaPersonalizedEntity, ? extends ContactInformation<?>> addressGetter) {
 
             this.addressGetter = addressGetter;
         }
 
         public void accept(JpaPersonalizedEntity personalizedEntity, String value) {
-            AbstractAddressValue<?> addressValue = addressGetter.apply(personalizedEntity);
+            ContactInformation<?> addressValue = addressGetter.apply(personalizedEntity);
             addressValue.setValue(value);
         }
 
@@ -109,7 +105,7 @@ public class GuardianFieldSetMapper extends CsvFieldSetMapper<Guardian> {
         finders.put("personalId", personalIdFinder);
 
         //Setters, set the fields
-        abstract class AbstractAddressValueSetter<P extends JpaPersonalizedEntity, T extends Enum<T>, E extends AbstractAddressValue<T>> implements BiFunction<P, T, E> {
+        abstract class AbstractAddressValueSetter<P extends JpaPersonalizedEntity, T extends Enum<T>, E extends ContactInformation<T>> implements BiFunction<P, T, E> {
             abstract public E getAddressValue(P person, T enumType);
 
             @Override

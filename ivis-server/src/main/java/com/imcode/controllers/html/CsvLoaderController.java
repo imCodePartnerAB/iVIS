@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imcode.controllers.html.form.upload.FileOption;
 import com.imcode.controllers.html.form.upload.FileUploadForm;
 import com.imcode.controllers.html.form.upload.FileUploadOptionsForm;
+import com.imcode.controllers.html.form.upload.loaders.EntityLoader;
+import com.imcode.controllers.html.form.upload.loaders.LoaderService;
 import com.imcode.entities.*;
 //import com.imcode.misc.MutablePropertyFilter;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
@@ -60,6 +62,9 @@ public class CsvLoaderController {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private LoaderService loaderService;
+
     private Map<Class<?>, Supplier<FieldSetMapper>> fieldSetMappers;
 
 
@@ -71,22 +76,11 @@ public class CsvLoaderController {
     @RequestMapping(value = "/step2", method = RequestMethod.POST)
     public String step2(
             @ModelAttribute("uploadForm") FileUploadForm uploadForm,
-            Model map,
+            Model model,
             HttpServletRequest request) {
 
         List<MultipartFile> files = uploadForm.getFiles();
-//        List<String> fileNames = new ArrayList<>();
-//        List<Class> entityTypeList = Arrays.asList(
-//                School.class,
-//                SchoolClass.class,
-//                Person.class,
-//                Pupil.class,
-//                Guardian.class
-//        );
-
-//        Map<Class, Set<String>> typeMap = entityTypeList.stream().collect(Collectors.toMap(Function.identity(), CsvLoaderController::getBeanFields));
-        Map<Class, Set<String>> typeMap = new LinkedHashMap<>();
-        typeMap.put(Guardian.class, new GuardianFieldSetMapper().getFieldNames());
+        Map<Class<?>, Set<String>> typeMap = loaderService.stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getAllowedFieldSet()));
         Set<String> mockEntityProperties = typeMap.get(Person.class);
         List<FileOption> fileOptionList = new ArrayList<>();
         FileUploadOptionsForm fileUploadOptionsForm = new FileUploadOptionsForm();
@@ -95,13 +89,15 @@ public class CsvLoaderController {
         Principal principal = new HttpPrincipal("Admin", "pass");
 
         if (null != files && files.size() > 0) {
-            UploadFileManager fileManager = new UploadFileManager(principal);
+            UploadFileManager fileManager = getUploadFileManeger(request);
             HttpSession session = request.getSession(true);
             session.setAttribute(UPLOAD_FILE_MANAGER, fileManager);
 
             for (MultipartFile multipartFile : files) {
+                FileOption fileOption = FileOption.of(null, multipartFile, 10);
                 String fileId = fileManager.put(multipartFile);
-                fileOptionList.add(FileOption.of(fileId, multipartFile, 10));
+                fileOption.setFileId(fileId);
+                fileOptionList.add(fileOption);
             }
         }
 
@@ -114,79 +110,96 @@ public class CsvLoaderController {
             e.printStackTrace();
         }
 
-        map.addAttribute("fileUploadOptionsForm", fileUploadOptionsForm);
-        map.addAttribute("typeMap", typeMap);
-        map.addAttribute("typeMapJson", typeMapJson);
-        map.addAttribute("mockEntityProperties", mockEntityProperties);
+        model.addAttribute("fileUploadOptionsForm", fileUploadOptionsForm);
+        model.addAttribute("typeMap", typeMap);
+        model.addAttribute("typeMapJson", typeMapJson);
+        model.addAttribute("mockEntityProperties", mockEntityProperties);
 
         return "csv/file_upload_step2";
     }
 
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test(Model model, HttpServletRequest request, Principal principal) {
+        FileUploadOptionsForm optionsForm = StaticUtils.loadObjectFromFile("/home/vitaly/Загрузки/FileUploadOptionsForm.dat");
+        return step3(optionsForm, model, request, principal);
+    }
+
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/step3", method = RequestMethod.POST)
     public String step3(
             @ModelAttribute("fileUploadOptionsForm") FileUploadOptionsForm optionsForm,
-            Model map,
-            HttpSession session) {
-
-        List<Guardian> result = new ArrayList<>();
-        System.out.println("hello");
-        UploadFileManager uploadFileManager = (UploadFileManager) session.getAttribute(UPLOAD_FILE_MANAGER);
-
-        for (FileOption fileOption : optionsForm.getFileOptionList()) {
-            Path file = uploadFileManager.getFile(fileOption.getFileId());
-
-            result = parseFile(fileOption, file);
+            Model model,
+            HttpServletRequest request,
+            Principal principal) {
 
 
+//        System.out.println("hello");
+        UploadFileManager uploadFileManager = getUploadFileManeger(request);
+        List<List> resultList = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            for (FileOption fileOption : optionsForm.getFileOptionList()) {
+                List<Object> result = new ArrayList<>();
+                resultList.add(result);
+                Path file = uploadFileManager.getFile(fileOption.getFileId());
+
+                if (file == null || Files.notExists(file)) {
+                    throw new RuntimeException("file not found");
+                }
+
+                EntityLoader<?> entityLoader = loaderService.getLoader(fileOption.getType());
+
+                if (entityLoader == null) {
+                    throw new RuntimeException("loader not found");
+                }
+
+                FileSystemResource resource = new FileSystemResource(file.toFile());
+                FlatFileItemReader<?> itemReader = new FlatFileItemReader<>();
+                itemReader.setResource(resource);
+
+                DefaultLineMapper lineMapper = new DefaultLineMapper<>();
+                final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
+                tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
+                lineMapper.setLineTokenizer(tokenizer);
+                FieldSetMapper fieldMapper = entityLoader.getFieldSetMapper(fileOption);
+                lineMapper.setFieldSetMapper(fieldMapper);
+
+                itemReader.setLineMapper(lineMapper);
+                itemReader.setLinesToSkip(fileOption.getSkipRows());
+                itemReader.open(new ExecutionContext());
+
+                Object g = null;
+                try {
+                    while ((g = itemReader.read()) != null) {
+                        result.add(g);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                ItemWriter itemWriter = entityLoader.getItemWriter();
+
+                try {
+                    itemWriter.write(result);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                fileOption.setResult(result);
+            }
         }
-
-
-//        GuardianFieldSetMapper guardianFieldSetMapper = applicationContext.getBean(GuardianFieldSetMapper.class);
-//        guardianFieldSetMapper.setFileOption(optionsForm.getFileOptionList().get(0));
-
+        model.addAttribute("fileUploadOptionsForm", optionsForm);
         return "csv/file_upload_step3";
     }
 
-    private List<Guardian> parseFile(FileOption fileOption, Path file) {
-        List<Guardian> result = new ArrayList<>();
+    private UploadFileManager getUploadFileManeger(HttpServletRequest request) {
+        UploadFileManager uploadFileManager = (UploadFileManager) request.getSession(true).getAttribute(UPLOAD_FILE_MANAGER);
 
-        if (file == null || Files.notExists(file)) {
-            throw new RuntimeException("file not found");
+        if (uploadFileManager == null) {
+            uploadFileManager = new UploadFileManager(request.getUserPrincipal());
         }
 
-        FileSystemResource resource = new FileSystemResource(file.toFile());
-        FlatFileItemReader<Guardian> itemReader = new FlatFileItemReader<>();
-        itemReader.setResource(resource);
-
-        DefaultLineMapper<Guardian> lineMapper = new DefaultLineMapper<>();
-        final DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
-        tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
-        lineMapper.setLineTokenizer(tokenizer);
-        FieldSetMapper<Guardian> fieldMapper = getMapper(Guardian.class, fileOption);
-        lineMapper.setFieldSetMapper(fieldMapper);
-
-        itemReader.setLineMapper(lineMapper);
-        itemReader.setLinesToSkip(fileOption.getSkipRows());
-        itemReader.open(new ExecutionContext());
-
-        Guardian g = null;
-        try {
-            while ((g = itemReader.read()) != null) {
-                result.add(g);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        PersonalizedItemWriter<Guardian> itemWriter = new PersonalizedItemWriter<>(applicationContext.getBean(GuardianService.class), applicationContext.getBean(PersonService.class));
-
-        try {
-            itemWriter.write(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return uploadFileManager;
     }
 
     public static Set<String> getBeanFields(Class<?> clazz) {
@@ -259,59 +272,10 @@ public class CsvLoaderController {
     }
 
     public static void main(String[] args) {
-//        ApplicationContext ctx = StaticUtils.getApplicationContext();
-//        CsvLoaderController controller = new CsvLoaderController();
-//        controller.setApplicationContext(ctx);
-//        FileUploadOptionsForm fileUploadOptionsForm = StaticUtils.loadObjectFromFile("/home/vitaly/programs/apache-tomcat-8.0.21/bin/upload/Admin/optionForm");
-//        FileOption fileOption = fileUploadOptionsForm.getFileOptionList().get(0);
-//        final Path file = Paths.get("/home/vitaly/SkypeFiles/Guardians.csv");
-//
-//        FileSystemResource resource = new FileSystemResource(file.toFile());
-//        FlatFileItemReader<Guardian> itemReader = new FlatFileItemReader<>();
-//        itemReader.setResource(resource);
-//
-//        DefaultLineMapper<Guardian> lineMapper = new DefaultLineMapper<>();
-//        DelimitedLineTokenizer tokenizer = new DelimitedLineTokenizer();
-//        tokenizer.setNames(fileOption.getColumnNameList().toArray(new String[fileOption.getColumnNameList().size()]));
-//        lineMapper.setLineTokenizer(tokenizer);
-//        FieldSetMapper<Guardian> fieldMapper = new GuardianBinder();
-//        lineMapper.setFieldSetMapper(fieldMapper);
-//
-//        itemReader.setLineMapper(lineMapper);
-//        itemReader.setLinesToSkip(fileOption.getSkipRows());
-//        itemReader.open(new ExecutionContext());
-//        List<Guardian> result = new ArrayList<>();
-//
-//        Guardian g = null;
-//        try {
-//            while ((g = itemReader.read()) != null) {
-//                result.add(g);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-////        DataBinder binder = new
-//        List<Guardian> guardians = controller.parseFile(fileOption, file);
-////        Set<String> properties = getBeanFieldsRecursively(Pupil.class);
-////        System.out.println(properties);
+//        Set<String> properties = getBeanFieldsRecursively(Pupil.class);
+//        System.out.println(properties);
     }
 
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    public Map<Class<?>, Supplier<FieldSetMapper>> getFieldSetMappers() {
-        return fieldSetMappers;
-    }
-
-    public void setFieldSetMappers(Map<Class<?>, Supplier<FieldSetMapper>> fieldSetMappers) {
-        this.fieldSetMappers = fieldSetMappers;
-    }
 }
 
 class PersonalizedItemWriter<T extends JpaPersonalizedEntity> implements ItemWriter<T> {
@@ -328,22 +292,10 @@ class PersonalizedItemWriter<T extends JpaPersonalizedEntity> implements ItemWri
         for (T item : items) {
             Person person = item.getPerson();
 //            if (person.getId() == null) {
-                person = personService.save(person);
-                item.setPerson(person);
+            person = personService.save(person);
+            item.setPerson(person);
 //            }
             entityService.save(item);
         }
-    }
-}
-
-class GuardianBinder implements FieldSetMapper<Guardian> {
-
-    @Override
-    public Guardian mapFieldSet(FieldSet fieldSet) throws BindException {
-        Guardian target = new Guardian();
-        DataBinder binder = new DataBinder(target);
-        PropertyValues pvs = new MutablePropertyValues(fieldSet.getProperties());
-        binder.bind(pvs);
-        return target;
     }
 }

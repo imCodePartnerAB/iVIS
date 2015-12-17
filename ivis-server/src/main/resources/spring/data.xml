@@ -287,6 +287,7 @@
     <!--</beans:bean>-->
 
     <beans:bean id="csvConversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+    <!--<beans:bean id="csvConversionService" class="org.springframework.core.convert.support.DefaultConversionService">-->
         <beans:property name="converters">
             <beans:set>
                 <beans:bean class="com.imcode.controllers.converters.PhoneConverter"/>

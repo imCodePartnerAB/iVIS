@@ -30,7 +30,7 @@ import java.util.Random;
  * Created by vitaly on 23.03.15.
  */
 @SuppressWarnings({"deprecation"})
-@Service
+//@Service
 public class Initializator {
     @Autowired
     private DataSource dataSource;
@@ -106,41 +106,41 @@ public class Initializator {
     }
 
     private void initializePupilJpa() {
-        List<Pupil> PupilList = pupilRepository.findAll();
-
-        if (PupilList.size() == 0) {
-//            Person
-            Person person = new Person();
-            person.setId(1L);
-            person.setFirstName("Vitaliy");
-            person.setLastName("Sereda");
-            person.setPersonalId("850717-5019");
-            person = personRepository.save(person);
-
-
-
-//            School
-            School school = new School();
-            school.setName("School #1");
-            school.setServices(ServiceTypeEnum.AFTER_SCHOOL_CENTER, ServiceTypeEnum.ELEMENTARY_SCHOOL, ServiceTypeEnum.SECONDARY_SCHOOL);
-            school = schoolRepository.save(school);
-
-//            SchoolClass
-            SchoolClass schoolClass = new SchoolClass("A1-1", school, new Date(0, 0, 0, 8, 0), new Date(0, 0, 0, 15, 0));
-            schoolClass = schoolClassRepository.save(schoolClass);
-            SchoolClass schoolClass1 = new SchoolClass("A2-1", school, new Date(0, 0, 0, 12, 0), new Date(0, 0, 0, 18, 0));
-            schoolClass1 = schoolClassRepository.save(schoolClass1);
-
-            AcademicYear academicYear = new AcademicYear("2014-2015");
-            academicYear = academicYearRepository.save(academicYear);
-
-//            Pupil
-            Pupil pupil = new Pupil();
-            pupil.setPerson(person);
-            pupil.setSchoolClass(schoolClass);
-            pupil.setAcademicYear(academicYear);
-            pupil = pupilRepository.save(pupil);
-        }
+//        List<Pupil> PupilList = pupilRepository.findAll();
+//
+//        if (PupilList.size() == 0) {
+////            Person
+//            Person person = new Person();
+//            person.setId(1L);
+//            person.setFirstName("Vitaliy");
+//            person.setLastName("Sereda");
+//            person.setPersonalId("850717-5019");
+//            person = personRepository.save(person);
+//
+//
+//
+////            School
+//            School school = new School();
+//            school.setName("School #1");
+//            school.setServices(ServiceTypeEnum.AFTER_SCHOOL_CENTER, ServiceTypeEnum.ELEMENTARY_SCHOOL, ServiceTypeEnum.SECONDARY_SCHOOL);
+//            school = schoolRepository.save(school);
+//
+////            SchoolClass
+//            SchoolClass schoolClass = new SchoolClass("A1-1", school, new Date(0, 0, 0, 8, 0), new Date(0, 0, 0, 15, 0));
+//            schoolClass = schoolClassRepository.save(schoolClass);
+//            SchoolClass schoolClass1 = new SchoolClass("A2-1", school, new Date(0, 0, 0, 12, 0), new Date(0, 0, 0, 18, 0));
+//            schoolClass1 = schoolClassRepository.save(schoolClass1);
+//
+//            AcademicYear academicYear = new AcademicYear("2014-2015");
+//            academicYear = academicYearRepository.save(academicYear);
+//
+////            Pupil
+//            Pupil pupil = new Pupil();
+//            pupil.setPerson(person);
+//            pupil.setSchoolClass(schoolClass);
+//            pupil.setAcademicYear(academicYear);
+//            pupil = pupilRepository.save(pupil);
+//        }
     }
 
     private void initializePersonJpa() {

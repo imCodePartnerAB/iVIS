@@ -12,16 +12,16 @@ public interface JpaPersonalizedEntity extends JpaEntity<Long>{
 
     void setPerson(Person person);
 
-    String getPersonalId();
-
-    void setPersonalId(String personalId);
-
-    String getFirstName();
-
-    void setFirstName(String firstName);
-
-    String getLastName();
-
-    void setLastName(String lastName);
+//    String getPersonalId();
+//
+//    void setPersonalId(String personalId);
+//
+//    String getFirstName();
+//
+//    void setFirstName(String firstName);
+//
+//    String getLastName();
+//
+//    void setLastName(String lastName);
 
 }
