@@ -11,6 +11,8 @@ public interface UserRepository extends PersonalizedRepository<User> {
     @Query("select u from User u where u.name = :username")
     User findByUsername(@Param("username") String username);
 
+    User findBySaml2Id(String saml2Id);
+
 //    User findByPerson(Person person);
 
 //    @Query("select u from User u where u.person.personalId = :id")

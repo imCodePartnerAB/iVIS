@@ -4,6 +4,7 @@
 <spring:url value="/restore_password" var="restoreUrl"/>
 <spring:url value="/login.do" var="loginUrl"/>
 <spring:url value="/logout.do" var="logoutUrl"/>
+<spring:url value="/acs" var="urlSamlLogin"/>
 <spring:message code="label.security.title" var="labelTitle"/>
 <spring:message code="label.security.username" var="labelUsername"/>
 <spring:message code="label.security.password" var="labelPassword"/>
@@ -11,6 +12,7 @@
 <spring:message code="label.security.registrationDesc" var="labelRegistrationDesc"/>
 <spring:message code="label.security.restorePassword" var="labelRestorePassword"/>
 <spring:message code="label.security.restorePasswordDesc" var="labelRestorePasswordDesc"/>
+<spring:message code="label.security.samlLogin" var="labelSamlLogin"/>
 <c:if test="${not empty param.error}">
     <font color="red"> Login Error: ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} </font>
 </c:if>
@@ -26,6 +28,8 @@
             <label>${labelPassword}</label>
             <input type="password" name="j_password"/>
         </div>
+        <h2>SAML</h2>
+        <a href="${urlSamlLogin}">${labelSamlLogin}</a>
         <div class="buttons">
             <button type="submit" class="positive" name="login" value="Login">Login</button>
         </div>

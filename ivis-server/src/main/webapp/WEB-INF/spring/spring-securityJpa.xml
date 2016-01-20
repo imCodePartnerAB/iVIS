@@ -34,6 +34,33 @@
         <!--<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />-->
         <!--&lt;!&ndash;<access-denied-handler ref="oauthAccessDeniedHandler" />&ndash;&gt;-->
     <!--</http>-->
+    <!--<context:annotation-config/>-->
+
+    <!--&lt;!&ndash;SAML2&ndash;&gt;-->
+    <!--<context:component-scan base-package="org.springframework.security.saml"/>-->
+
+    <!--<bean class="org.springframework.security.saml.metadata.MetadataGenerator">-->
+        <!--<property name="bindingsSSO">-->
+            <!--<list>-->
+                <!--<value>artifact</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="bindingsSLO">-->
+            <!--<list>-->
+                <!--<value>redirect</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="bindingsHoKSSO">-->
+            <!--<list/>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<sec:http pattern="/sql/**" entry-point-ref="samlEntryPoint">-->
+        <!--<sec:custom-filter before="FIRST" ref="metadataGeneratorFilter" />-->
+        <!--<sec:custom-filter after="BASIC_AUTH_FILTER" ref="samlFilter"/>-->
+    <!--</sec:http>-->
+    <!--&lt;!&ndash;SAML2&ndash;&gt;-->
+
     <http pattern="/favicon.ico" security="none" xmlns="http://www.springframework.org/schema/security"/>
     <http pattern="/mock/**" security="none" xmlns="http://www.springframework.org/schema/security"/>
 
@@ -104,11 +131,14 @@
         <!--<intercept-url pattern="/oauth/**" access="ROLE_USER" />-->
         <!--<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <!--<intercept-url pattern="/oauth/authorize" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <intercept-url pattern="/acs/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <!--<intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <!--<intercept-url pattern="/aсs/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <!--<intercept-url pattern="/aсs" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <!--<intercept-url pattern="/csv/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
-        <intercept-url pattern="/sql/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <!--<intercept-url pattern="/sql/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
 
 

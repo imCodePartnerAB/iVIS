@@ -69,6 +69,7 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
     @JoinColumn(name = "afterSchoolCenterSectionId")
     private AfterSchoolCenterSection afterSchoolCenterSection;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_pupil_after_school_center_schema",
             joinColumns = @JoinColumn(name = "ownerId"), uniqueConstraints = @UniqueConstraint(columnNames = {"ownerId", "afrerSchoolSectionId", "dayOfWeek"}))

@@ -10,6 +10,8 @@
         <param-value>/WEB-INF/spring/app-context-xml.xml</param-value>
     </context-param>
 
+
+
     <!-- Фильтр для перекодировки в utf8 -->
     <filter>
         <filter-name>charsetFilter</filter-name>
@@ -36,6 +38,48 @@
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--SAML2 Filter-->
+    <filter>
+        <description>Checking for answer from IDP server</description>
+        <filter-name>SSOFilter</filter-name>
+        <filter-class>com.imcode.saml2.SAMLSPFilter</filter-class>
+        <init-param>
+            <param-name>excludedUrlPattern</param-name>
+            <param-value>.*\.jpg</param-value>
+        </init-param>
+        <init-param>
+            <param-name>idProviderSSOUrl</param-name>
+            <param-value>https://m00-mg-local.testidp.funktionstjanster.se/samlv2/idp/req/0/0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>spProviderId</param-name>
+            <param-value>${server.name}</param-value>
+        </init-param>
+        <init-param>
+            <param-name>acsUrl</param-name>
+            <param-value>${server.name}/acs</param-value>
+        </init-param>
+        <init-param>
+            <param-name>logoutUrl</param-name>
+            <param-value>/logout</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SSOFilter</filter-name>
+        <url-pattern>/VerifyUserViaBankId</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>SSOFilter</filter-name>
+        <url-pattern>/logout</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>SSOFilter</filter-name>
+        <url-pattern>/acs</url-pattern>
     </filter-mapping>
 
     <!--Этот фильтр предоставляет поддержку для HTTP-методов, отличных от GETи POST(например, PUT )-->

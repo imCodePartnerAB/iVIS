@@ -1,5 +1,6 @@
 package com.imcode.entities.embed;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.superclasses.ContactInformation;
 
@@ -115,11 +116,13 @@ public class Address extends ContactInformation<AddressTypeEnum> implements Seri
         this.type = addressType;
     }
 
+    @JsonIgnore
     @Override
     public String getValue() {
         return toString();
     }
 
+    @JsonIgnore
     @Override
     public void setValue(String address) {
         throw new UnsupportedOperationException();

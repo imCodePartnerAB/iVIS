@@ -47,6 +47,9 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     private Set<Role> roles = new HashSet<>();
 
+    @Column
+    private String saml2Id;
+
     public User() {
     }
 
@@ -155,5 +158,13 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @JsonIgnore
     public void setAuthorities(Role role) {
         this.roles = new HashSet<>(Collections.singleton(role));
+    }
+
+    public String getSaml2Id() {
+        return saml2Id;
+    }
+
+    public void setSaml2Id(String saml2Id) {
+        this.saml2Id = saml2Id;
     }
 }
