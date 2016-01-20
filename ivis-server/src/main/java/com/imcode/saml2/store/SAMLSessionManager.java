@@ -140,7 +140,7 @@ public class SAMLSessionManager {
 //        }
     }
 
-    private User prepareUser(SAMLSessionInfo sessionInfo) {return null;}
+//    private User prepareUser(SAMLSessionInfo sessionInfo) {return null;}
 
 //    private UserDomainObject prepareUser(SAMLSessionInfo sessionInfo) {
 //        UserDomainObject user = new UserDomainObject();

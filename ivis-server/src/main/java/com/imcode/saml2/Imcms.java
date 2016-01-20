@@ -141,6 +141,7 @@ public class Imcms {
 //
     private static Properties getServerProperties() {
         Properties props = new Properties();
+        props.setProperty("server-name", "http://ivis.dev.imcode.com/acs");
         props.setProperty("authentication-method-1", "loginPassword");
         props.setProperty("authentication-method-2", "cgi");
         props.setProperty("cgi-authentication-method-url", "https://m00-mg-local.testidp.funktionstjanster.se/samlv2/idp/req/0/0");
