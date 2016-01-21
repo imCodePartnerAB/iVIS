@@ -31,6 +31,7 @@ public class FilterConfig {
         isEnabled = configurationMap.containsKey(AUTHENTICATION_METHOD_NAME_PROP);
         excludedUrlPattern = config.getInitParameter(EXCLUDED_URL_PATTERN_PARAMETER);
         spProviderId = Imcms.getServerName();
+//        acsUrl = spProviderId+config.getServletContext().getContextPath() + "/acs";
         acsUrl = spProviderId+config.getServletContext().getContextPath() + "/acs";
         idpSSOUrl = isEnabled ? configurationMap.get(AUTHENTICATION_METHOD_NAME_PROP).getUrl() : "";//config.getInitParameter(IDP_SSO_URL_PARAMETER);
         logoutUrl = config.getInitParameter(SP_LOGOUT_URL_PARAMETER);
