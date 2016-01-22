@@ -27,6 +27,12 @@ public class ApplicationFormQuestion implements Comparable<ApplicationFormQuesti
     private String xsdElementName;
 
     @Column
+    private String stepName;
+
+    @Column
+    private Integer stepSortOrder;
+
+    @Column
     private String text;
 
     @Column
@@ -62,6 +68,22 @@ public class ApplicationFormQuestion implements Comparable<ApplicationFormQuesti
 
     public void setXsdElementName(String xsdElementName) {
         this.xsdElementName = xsdElementName;
+    }
+
+    public String getStepName() {
+        return stepName;
+    }
+
+    public void setStepName(String stepName) {
+        this.stepName = stepName;
+    }
+
+    public Integer getStepSortOrder() {
+        return stepSortOrder;
+    }
+
+    public void setStepSortOrder(Integer stepSortOrder) {
+        this.stepSortOrder = stepSortOrder;
     }
 
     @Override
