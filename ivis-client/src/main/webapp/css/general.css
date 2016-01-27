@@ -175,6 +175,50 @@ dl dd {
   padding: 0 20px;
 }
 
+.step {
+}
+
+.step > .name {
+  background: #f0f0ff;
+  border-bottom: 3px solid #dcdcf0;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  line-height: 40px;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.step .questions {
+  padding: 20px 0 20px 20px;
+}
+
+.step .questions .question {
+  overflow: hidden;
+}
+
+.step .questions .question:nth-child(2n+1) {
+  background: #fbfbff;
+}
+
+.step .questions .question:hover {
+  background: #ffff96;
+}
+
+.step .questions .question > .name {
+  box-sizing: border-box;
+  float: left;
+  padding: 5px 20px;
+  width: 50%;
+}
+
+.step .questions .question .answer {
+  box-sizing: border-box;
+  float: left;
+  padding: 5px 20px;
+  width: 50%;
+}
+
 form {
   margin: 0;
   padding: 0;

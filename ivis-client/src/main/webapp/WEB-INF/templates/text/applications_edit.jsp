@@ -78,14 +78,14 @@
         <c:forEach items="${steps.entrySet()}" var="entry" varStatus="fileOptionStatus">
             <div class="step">
                 <div class="name">${entry.key.name}</div>
-            </div>
-            <div class="questions">
-                <c:forEach items="${entry.value}" var="question" varStatus="fileOptionStatus">
-                    <div class="question">
-                        <div class="name">${question.text}</div>
-                        <div class="ansqer">${question.value}</div>
-                    </div>
-                </c:forEach>
+                <div class="questions">
+                    <c:forEach items="${entry.value}" var="question" varStatus="fileOptionStatus">
+                        <div class="question">
+                            <div class="name">${question.text}</div>
+                            <div class="answer">${question.value}</div>
+                        </div>
+                    </c:forEach>
+                </div>
             </div>
         </c:forEach>
     </div>
