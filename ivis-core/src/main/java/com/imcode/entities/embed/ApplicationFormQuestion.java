@@ -9,6 +9,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Comparator;
+import java.util.function.Function;
 
 import static java.util.Comparator.*;
 import static java.util.Comparator.comparing;
@@ -18,7 +19,27 @@ import static java.util.Comparator.comparing;
  */
 @Embeddable
 public class ApplicationFormQuestion implements Comparable<ApplicationFormQuestion>{
-    private static Comparator<ApplicationFormQuestion> naturalComparator = nullsFirst(comparing(ApplicationFormQuestion::getSortOrder));
+    private static Comparator<ApplicationFormQuestion> naturalComparator = nullsLast(comparing(ApplicationFormQuestion::getSortOrder, nullsLast(comparingInt(Integer::intValue))));
+//    private static Comparator<ApplicationFormQuestion> naturalComparator = new Comparator<ApplicationFormQuestion>() {
+//        @Override
+//        public int compare(ApplicationFormQuestion o1, ApplicationFormQuestion o2) {
+//            if (o1 == o2) {
+//                return 0;
+//            }
+//
+//            if (o1 == null) {
+//                return -1;
+//            }
+//
+//            if (o2 == null) {
+//                return 1;
+//            }
+//
+//
+//
+//            return 0;
+//        }
+//    };
 
     @Column
     private Integer sortOrder;
@@ -115,5 +136,28 @@ public class ApplicationFormQuestion implements Comparable<ApplicationFormQuesti
     @Override
     public int compareTo(ApplicationFormQuestion o) {
         return naturalComparator.compare(this, o);
+    }
+
+    public static void main(String[] args) {
+//        Comparator<ApplicationFormQuestion> comparator = new Comparator<ApplicationFormQuestion>() {
+//            @Override
+//            public int compare(ApplicationFormQuestion o1, ApplicationFormQuestion o2) {
+//                Integer sortOrder1 = o1.getSortOrder();
+//                Integer sortOrder2 = o2.getSortOrder();
+//
+//                if (sortOrder1 == null || sortOrder2 == null) {
+//
+//                }
+//
+//                return 0;
+//            }
+//        };
+
+        ApplicationFormQuestion q1 = new ApplicationFormQuestion();
+        ApplicationFormQuestion q2 = new ApplicationFormQuestion();
+        q1.setSortOrder(1);
+        q2.setSortOrder(3);
+        System.out.println(naturalComparator.compare(q1, q2));
+
     }
 }

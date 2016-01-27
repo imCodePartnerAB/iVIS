@@ -7,10 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 import javax.persistence.Entity;
 
 /**
@@ -154,12 +152,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         return name == null ? Long.toString(id) : name;
     }
 
-    //Setter utility
-    @JsonIgnore
-    public void setAuthorities(Role role) {
-        this.roles = new HashSet<>(Collections.singleton(role));
-    }
-
     public String getSaml2Id() {
         return saml2Id;
     }
@@ -167,4 +159,37 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     public void setSaml2Id(String saml2Id) {
         this.saml2Id = saml2Id;
     }
+
+    //Setter utility
+    @JsonIgnore
+    public void setAuthorities(Role role) {
+        this.roles = new HashSet<>(Collections.singleton(role));
+    }
+
+    //Utilities
+    public boolean hasRoles(String... roleNames) {
+        Objects.requireNonNull(roleNames);
+        return getRoleNames().containsAll(Arrays.asList(roleNames));
+    }
+
+    public boolean hasRoles(Role... requiredRoles) {
+        Objects.requireNonNull(requiredRoles);
+        return roles.containsAll(Arrays.asList(requiredRoles));
+    }
+
+    public Set<String> getRoleNames() {
+        return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
+    }
+
+    public static void main(String[] args) {
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(1l, "ROLE_ADMIN"));
+        roles.add(new Role(2l, "ROLE_USER"));
+        roles.add(new Role(3l, "ROLE_GUARDIAN"));
+        roles.add(new Role(4l, "ROLE_STUDENT"));
+        Role roleAdmin = new Role("ROLE_ADMIN");
+        User vitaly = new User("Admin", "pass", true, roles);
+        System.out.println(roles.contains(roleAdmin));
+    }
+
 }
