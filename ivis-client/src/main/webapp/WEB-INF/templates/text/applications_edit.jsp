@@ -35,14 +35,14 @@
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
             return;
         }
-        Map<Step, Set<ApplicationFormQuestion>> steps = new TreeMap<>();
+        Map<Step, Set<ApplicationFormQuestion>> steps = new TreeMap<Step, Set<ApplicationFormQuestion>>();
 
         for (ApplicationFormQuestion formQuestion : app.getApplicationForm().getQuestions()) {
             Step step = new Step(formQuestion.getStepName(), formQuestion.getStepSortOrder());
             Set<ApplicationFormQuestion> questions = steps.get(step);
 
             if (questions == null) {
-                questions = new TreeSet<>();
+                questions = new TreeSet<ApplicationFormQuestion>();
                 steps.put(step, questions);
             }
 
