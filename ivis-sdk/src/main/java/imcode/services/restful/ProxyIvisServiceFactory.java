@@ -460,7 +460,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 //            serviceFactory.checkEntityClassList(serviceFactory.entityClassList);
 //            GenericService service = serviceFactory.getService(RoleService.class);
             UserService service = serviceFactory.getService(UserService.class);
-            List<User> entityList = service.findAll();
+            User entityList = service.getCurrentUser();
 ////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
 //            Pupil entity = (Pupil) service.find(1);
 

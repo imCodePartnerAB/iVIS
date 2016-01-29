@@ -1,5 +1,6 @@
 package com.imcode.entities.embed;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.superclasses.ContactInformation;
 
@@ -44,21 +45,25 @@ public class Email extends ContactInformation<CommunicationTypeEnum> implements 
 //        this.address = address;
 //        this.communicationType = CommunicationTypeEnum.MOBILE;
 //    }
+    @JsonIgnore
     @Deprecated
     public String getAddress() {
         return value;
     }
 
+    @JsonIgnore
     @Deprecated
     public void setAddress(String address) {
         this.value = address;
     }
 
+    @JsonIgnore
     @Deprecated
     public CommunicationTypeEnum getCommunicationType() {
         return type;
     }
 
+    @JsonIgnore
     @Deprecated
     public void setCommunicationType(CommunicationTypeEnum communicationType) {
         this.type = communicationType;

@@ -1,5 +1,6 @@
 package com.imcode.entities.embed;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.superclasses.ContactInformation;
 
@@ -36,21 +37,25 @@ public class Phone extends ContactInformation<CommunicationTypeEnum> implements 
         super(type, value);
     }
 
+    @JsonIgnore
     @Deprecated
     public String getNumber() {
         return value;
     }
 
+    @JsonIgnore
     @Deprecated
     public void setNumber(String value) {
         this.value = value;
     }
 
+    @JsonIgnore
     @Deprecated
     public CommunicationTypeEnum getCommunicationType() {
         return type;
     }
 
+    @JsonIgnore
     @Deprecated
     public void setCommunicationType(CommunicationTypeEnum type) {
         this.type = type;
