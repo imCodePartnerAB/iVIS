@@ -4,6 +4,7 @@ import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Person;
 import com.imcode.entities.User;
 import com.imcode.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,8 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/v1/{format}/users")
 public class UserRestControllerImpl extends AbstractRestController<User, Long, UserService>{
+    @Autowired
+    private UserService userService;
 //    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
 //    public User getByPersonalId(WebRequest webRequest, @RequestParam("personalId") String personId) {
 //        return null;
@@ -30,6 +33,7 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
         try {
             Authentication authentication = (Authentication) webRequest.getUserPrincipal();
             user = (User) authentication.getPrincipal();
+            user = userService.find(user.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }

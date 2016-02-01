@@ -417,14 +417,17 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
     public static void main(String[] args) {
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
         resource.setId("ivis");
-        resource.setClientId("b4251265-409d-43b3-928d-a290228a2b59");
+//        resource.setClientId("b4251265-409d-43b3-928d-a290228a2b59"); //admin
+        resource.setClientId("08d32c33-91cf-4452-8be8-4d120fbc504e"); //ivis
 //        resource.setGrantType("authorization_code");
         resource.setGrantType("password");
         resource.setClientSecret("secret");
         resource.setAccessTokenUri("http://localhost:8080/ivis/oauth/token");
         resource.setScope(Arrays.asList("read"));
-        resource.setUsername("admin");
-        resource.setPassword("pass");
+//        resource.setUsername("admin");
+//        resource.setPassword("pass");
+        resource.setUsername("ivis");
+        resource.setPassword("111");
 //        resource.setUserAuthorizationUri("http://localhost:8080/ivis/oauth/authorize");
 //        resource.set();
 
