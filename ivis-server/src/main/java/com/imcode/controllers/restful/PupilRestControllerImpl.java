@@ -37,8 +37,8 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
 
         if (user == null) {
             throw new RuntimeException("User unauthorized!");
-        } else if (user.hasRoles("ROLE_ADMIN")) {
-            pupilList = super.getAll(webRequest, model);
+//        } else if (user.hasRoles("ROLE_ADMIN")) {
+//            pupilList = super.getAll(webRequest, model);
         } else if (user.hasRoles("ROLE_GUARDIAN")) {
             Person person = user.getPerson();
             if (person != null) {

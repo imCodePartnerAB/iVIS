@@ -48,6 +48,9 @@ public class ApplicationFormQuestion implements Comparable<ApplicationFormQuesti
     private String xsdElementName;
 
     @Column
+    private String subStepName;
+
+    @Column
     private String stepName;
 
     @Column
@@ -159,5 +162,13 @@ public class ApplicationFormQuestion implements Comparable<ApplicationFormQuesti
         q2.setSortOrder(3);
         System.out.println(naturalComparator.compare(q1, q2));
 
+    }
+
+    public String getSubStepName() {
+        return subStepName;
+    }
+
+    public void setSubStepName(String subStepName) {
+        this.subStepName = subStepName;
     }
 }

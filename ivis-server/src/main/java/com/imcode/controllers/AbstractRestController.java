@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -122,5 +123,4 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
 //    public void setErrorFactory(ErrorFactory errorFactory) {
 //        this.errorFactory = errorFactory;
 //    }
-
 }
