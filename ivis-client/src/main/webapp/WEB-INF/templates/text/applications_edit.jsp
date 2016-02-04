@@ -42,14 +42,14 @@
             Map<String, Set<ApplicationFormQuestion>> subSteps = steps.get(step);
 
             if (subSteps == null) {
-                subSteps = new TreeMap<>();
+                subSteps = new TreeMap<String, Set<ApplicationFormQuestion>>();
                 steps.put(step, subSteps);
             }
             String subStepName = formQuestion.getSubStepName() == null ? "" : formQuestion.getSubStepName();
             Set<ApplicationFormQuestion> questions = subSteps.get(subStepName);
 
             if (questions == null) {
-                questions = new TreeSet<>();
+                questions = new TreeSet<ApplicationFormQuestion>();
                 subSteps.put(subStepName, questions);
             }
 
