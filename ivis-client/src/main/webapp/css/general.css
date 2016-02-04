@@ -193,6 +193,11 @@ dl dd {
   padding: 20px 0 20px 20px;
 }
 
+.step .questions .sub-step {
+  background: #f0f0ff;
+  padding: 5px 20px;
+}
+
 .step .questions .question {
   overflow: hidden;
 }
@@ -212,7 +217,7 @@ dl dd {
   width: 50%;
 }
 
-.step .questions .question .answer {
+.step .questions .question .ansqer {
   box-sizing: border-box;
   float: left;
   padding: 5px 20px;

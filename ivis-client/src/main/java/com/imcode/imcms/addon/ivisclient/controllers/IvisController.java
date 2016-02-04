@@ -110,8 +110,8 @@ public class IvisController {
 
     @RequestMapping(value = "/{id}", params = {"status"}, method = RequestMethod.GET)
     public void updateStatus(HttpServletRequest request,
-                               HttpServletResponse response,
-                               @PathVariable("id") Application application, @RequestParam("status") Decision.Status status) throws IOException {
+                             HttpServletResponse response,
+                             @PathVariable("id") Application application, @RequestParam("status") Decision.Status status) throws IOException {
 //        IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
 //                .endPointUrl(serverAddress)
 //                .responseType("json")
@@ -144,10 +144,10 @@ public class IvisController {
     @Deprecated
     @RequestMapping(value = "/xml", method = RequestMethod.POST)
     public void importApplication(HttpServletRequest request,
-                                    HttpServletResponse response,
+                                  HttpServletResponse response,
                                   @RequestParam(value = "file", required = false) MultipartFile file,
 //                                    @RequestParam("body") String body,
-                                    Model model) throws IOException, URISyntaxException {
+                                  Model model) throws IOException, URISyntaxException {
 
 //        InputStream inputStream = file.getInputStream();
 //        Application application = pharseXml(inputStream);
@@ -200,8 +200,8 @@ public class IvisController {
 //    @ResponseBody
     public void updatePupil(@ModelAttribute("pupil") Pupil pupil,
 //                              @PathVariable("pupilId") Pupil persistedPupil,
-                              HttpServletRequest request,
-                              HttpServletResponse response) throws IOException {
+                            HttpServletRequest request,
+                            HttpServletResponse response) throws IOException {
         PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
         PersonService personService = ivisServiceFactory.getService(PersonService.class);
         GuardianService guardianService = ivisServiceFactory.getService(GuardianService.class);
@@ -215,7 +215,7 @@ public class IvisController {
         }
 
         if (pupil.getGuardians() != null) {
-            for (Guardian guardian :pupil.getGuardians()) {
+            for (Guardian guardian : pupil.getGuardians()) {
                 if (guardian != null) {
 //                    if (guardian.getPerson() != null) {
 //                        personService.save(guardian.getPerson());
@@ -232,11 +232,12 @@ public class IvisController {
 
 //        return "OK";
     }
+
     @RequestMapping(value = "/applications", method = RequestMethod.POST)
 //    @ResponseBody
     public void updateApplication(@ModelAttribute("app") Application application,
-                              HttpServletRequest request,
-                              HttpServletResponse response) throws IOException {
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) throws IOException {
 
 //        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
 //        PersonService personService = ivisServiceFactory.getService(PersonService.class);
@@ -295,7 +296,7 @@ public class IvisController {
         return null;
     }
 
-//   private static class StatmentHandler extends DefaultHandler {
+    //   private static class StatmentHandler extends DefaultHandler {
 //        private Application application;
 //        private LinkedList<String> nodes = new LinkedList<>();
 //        private String fullElementName;
@@ -339,5 +340,42 @@ public class IvisController {
 //        public Application getApplication() {
 //            return application;
 //        }
+//    }
+    public static void main(String[] args) {
+
+        foo(false, null);
+        foo(new Object[]{false});
+    }
+
+    public static void foo(String var) {
+        System.out.println("IvisController.foo(String)");
+    }
+
+//    public static void foo(Object var) {
+//        System.out.println("IvisController.foo(Object)");
+//    }
+
+    public static void foo(Number var) {
+        System.out.println("IvisController.foo(Number)");
+    }
+
+//    public static void foo(Integer var) {
+//        System.out.println("IvisController.foo(Integer)");
+//    }
+
+    public static void foo(Long var) {
+        System.out.println("IvisController.foo(Long)");
+    }
+
+    public static void foo(boolean var, Object... vararg) {
+        System.out.println("IvisController.foo(boolean, vararg)");
+    }
+
+    public static void foo(Object... vararg) {
+        System.out.println("IvisController.foo(vararg)");
+    }
+
+//    public static void foo(int var) {
+//        System.out.println("IvisController.foo(Integer)");
 //    }
 }

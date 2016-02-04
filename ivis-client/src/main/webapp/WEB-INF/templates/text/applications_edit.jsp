@@ -35,15 +35,22 @@
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
             return;
         }
-        Map<Step, Set<ApplicationFormQuestion>> steps = new TreeMap<Step, Set<ApplicationFormQuestion>>();
+        Map<Step, Map<String, Set<ApplicationFormQuestion>>> steps = new TreeMap<Step, Map<String, Set<ApplicationFormQuestion>>>();
 
         for (ApplicationFormQuestion formQuestion : app.getApplicationForm().getQuestions()) {
             Step step = new Step(formQuestion.getStepName(), formQuestion.getStepSortOrder());
-            Set<ApplicationFormQuestion> questions = steps.get(step);
+            Map<String, Set<ApplicationFormQuestion>> subSteps = steps.get(step);
+
+            if (subSteps == null) {
+                subSteps = new TreeMap<>();
+                steps.put(step, subSteps);
+            }
+            String subStepName = formQuestion.getSubStepName() == null ? "" : formQuestion.getSubStepName();
+            Set<ApplicationFormQuestion> questions = subSteps.get(subStepName);
 
             if (questions == null) {
-                questions = new TreeSet<ApplicationFormQuestion>();
-                steps.put(step, questions);
+                questions = new TreeSet<>();
+                subSteps.put(subStepName, questions);
             }
 
             questions.add(formQuestion);
@@ -79,11 +86,25 @@
             <div class="step">
                 <div class="name">${entry.key.name}</div>
                 <div class="questions">
-                    <c:forEach items="${entry.value}" var="question" varStatus="fileOptionStatus">
+
+                    <c:forEach items="${entry.value.entrySet()}" var="subStep" varStatus="fileOptionStatus">
+                        <%--<c:choose>--%>
+                            <%--<c:when test="${not empty subStep.key}">--%>
+                                <%--<div class="subStep">${subStep.key}</div>    --%>
+                            <%--</c:when>--%>
+                            <%--<c:otherwise>--%>
+                                <%----%>
+                            <%--</c:otherwise>--%>
+                        <%--</c:choose>--%>
+                        <c:if test="${not empty subStep.key}">
+                            <div class="sub-step">${subStep.key}</div>
+                        </c:if>
+                    <c:forEach items="${subStep.value}" var="question" varStatus="fileOptionStatus">
                         <div class="question">
                             <div class="name">${question.text}</div>
                             <div class="answer">${question.value}</div>
                         </div>
+                    </c:forEach>
                     </c:forEach>
                 </div>
             </div>
