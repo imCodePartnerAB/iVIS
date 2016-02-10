@@ -53,7 +53,11 @@
                 subSteps.put(subStepName, questions);
             }
 
-            questions.add(formQuestion);
+            String value = formQuestion.getValue();
+
+            if (value != null && !value.isEmpty()) {
+                questions.add(formQuestion);
+            }
         }
 
         request.setAttribute("steps", steps);
@@ -89,22 +93,22 @@
 
                     <c:forEach items="${entry.value.entrySet()}" var="subStep" varStatus="fileOptionStatus">
                         <%--<c:choose>--%>
-                            <%--<c:when test="${not empty subStep.key}">--%>
-                                <%--<div class="subStep">${subStep.key}</div>    --%>
-                            <%--</c:when>--%>
-                            <%--<c:otherwise>--%>
-                                <%----%>
-                            <%--</c:otherwise>--%>
+                        <%--<c:when test="${not empty subStep.key}">--%>
+                        <%--<div class="subStep">${subStep.key}</div>    --%>
+                        <%--</c:when>--%>
+                        <%--<c:otherwise>--%>
+                        <%----%>
+                        <%--</c:otherwise>--%>
                         <%--</c:choose>--%>
                         <c:if test="${not empty subStep.key}">
                             <div class="sub-step">${subStep.key}</div>
                         </c:if>
-                    <c:forEach items="${subStep.value}" var="question" varStatus="fileOptionStatus">
-                        <div class="question">
-                            <div class="name">${question.text}</div>
-                            <div class="answer">${question.value}</div>
-                        </div>
-                    </c:forEach>
+                        <c:forEach items="${subStep.value}" var="question" varStatus="fileOptionStatus">
+                            <div class="question">
+                                <div class="name">${question.text}</div>
+                                <div class="answer">${question.value}</div>
+                            </div>
+                        </c:forEach>
                     </c:forEach>
                 </div>
             </div>

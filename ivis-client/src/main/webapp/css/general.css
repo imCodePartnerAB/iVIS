@@ -202,9 +202,9 @@ dl dd {
   overflow: hidden;
 }
 
-.step .questions .question:nth-child(2n+1) {
-  background: #fbfbff;
-}
+/*.step .questions .question:nth-child(2n+1) {*/
+  /*background: #fbfbff;*/
+/*}*/
 
 .step .questions .question:hover {
   background: #ffff96;
