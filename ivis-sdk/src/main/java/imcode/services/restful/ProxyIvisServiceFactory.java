@@ -8,12 +8,14 @@ import com.imcode.services.GenericService;
 import com.imcode.services.PupilService;
 import com.imcode.services.SchoolService;
 import com.imcode.services.UserService;
+import com.imcode.utils.StaticUtils;
 import imcode.services.GenericServiceProxy;
 import imcode.services.IvisServiceFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -30,6 +32,7 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -461,15 +464,24 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
             serviceFactory.initialize();
             System.out.println("sfas");
 //            serviceFactory.checkEntityClassList(serviceFactory.entityClassList);
-//            GenericService service = serviceFactory.getService(RoleService.class);
-            UserService service = serviceFactory.getService(UserService.class);
-            User entityList = service.getCurrentUser();
+            GenericService service = serviceFactory.getService(PupilService.class);
+//            UserService service = serviceFactory.getService(UserService.class);
+//            User entityList = service.getCurrentUser();
 ////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
-//            Pupil entity = (Pupil) service.find(1);
+            Pupil entity = (Pupil) service.find(3);
+            entity.setClassPlacementFrom(LocalDate.now());
+            service.save(entity);
 
 //            Object entity = service.find(0);
 //            System.out.println(entity);
-            System.out.println(entityList);
+//            System.out.println(entityList);
+
+//            ApplicationContext ctx = StaticUtils.getApplicationContext();
+//            PupilService service = ctx.getBean(PupilService.class);
+//            Pupil entity = service.find(3L);
+//            entity.setClassPlacementFrom(LocalDate.now());
+//            service.save(entity);
+
         } catch (Exception e) {
             e.printStackTrace();
 

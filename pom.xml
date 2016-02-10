@@ -13,6 +13,7 @@
     <properties>
         <spring-oauth2.version>2.0.5.RELEASE</spring-oauth2.version>
         <spring-framework.version>4.1.6.RELEASE</spring-framework.version>
+        <jackson.databind-version>2.4.0</jackson.databind-version>
     </properties>
     <packaging>pom</packaging>
     <name>iVIS</name>

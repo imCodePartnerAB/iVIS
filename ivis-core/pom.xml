@@ -15,7 +15,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.databind-version>2.2.3</jackson.databind-version>
+        <!--<jackson.databind-version>2.4.0</jackson.databind-version>-->
         <!--<org.springframework-version>4.0.3.RELEASE</org.springframework-version>-->
         <!--<hibernate.version>3.6.9.Final</hibernate.version>-->
         <org.slf4j-version>1.7.5</org.slf4j-version>
@@ -136,6 +136,17 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.databind-version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.databind-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.play</groupId>
+            <artifactId>play_2.11</artifactId>
+            <version>2.4.6</version>
+        </dependency>
+
 
         <!-- Test -->
         <dependency>
@@ -143,6 +154,16 @@
             <artifactId>junit</artifactId>
             <version>4.7</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
         </dependency>
     </dependencies>
     <build>

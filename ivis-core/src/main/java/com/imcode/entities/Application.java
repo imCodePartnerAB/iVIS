@@ -6,13 +6,19 @@ import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Created by vitaly on 14.05.15.
  */
 @Entity
 @Table(name = "dbo_application")
+@EntityListeners(AuditableModelListener.class)
 public class Application extends AbstractJpaDatedEntity<Long> implements Serializable{
+    @Transient
+    @JsonIgnore
+    public transient Map<String, Object> loadedValues;
+
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "applicationFormId")
     private ApplicationForm applicationForm;

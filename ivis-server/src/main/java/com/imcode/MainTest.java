@@ -6,6 +6,7 @@ import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.services.PupilService;
+import com.imcode.utils.StaticUtils;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.beans.MutablePropertyValues;
@@ -22,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +119,11 @@ public class MainTest {
     }
 
     public static void main(String[] args) throws Exception {
+        GenericXmlApplicationContext ctx = StaticUtils.getApplicationContext();
+        PupilService service = ctx.getBean(PupilService.class);
+        Pupil pupil = service.find(3L);
+        pupil.setClassPlacementFrom(LocalDate.now());
+        service.save(pupil);
 //        XMLContext context = new XMLContext();
 ////        context.addMapping();
 //
@@ -173,15 +180,15 @@ public class MainTest {
 //////
 //////            }
 ////        } catch (Exception ignore) { }
-        GenericXmlApplicationContext ctx = getApplicationContext();
-        PupilService pupilService = ctx.getBean(PupilService.class);
-        List<Pupil> pupils = pupilService.findAll();
-
-
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(pupils);
-//        ConversionService cs = ctx.getBean("csvConversionService", ConversionService.class);
-        System.out.println(json);
+//        GenericXmlApplicationContext ctx = getApplicationContext();
+//        PupilService pupilService = ctx.getBean(PupilService.class);
+//        List<Pupil> pupils = pupilService.findAll();
+//
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//        String json = mapper.writeValueAsString(pupils);
+////        ConversionService cs = ctx.getBean("csvConversionService", ConversionService.class);
+//        System.out.println(json);
 //        EntityManager em = ctx.getBean(EntityManager.class);
 //
 //        GuardianService guardianService = ctx.getBean(GuardianService.class);

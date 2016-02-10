@@ -37,6 +37,10 @@ public class Decision {
         this(Status.SUBMIT, new Date(), "");
     }
 
+    public Decision(Status status) {
+        this(status, new Date(), "");
+    }
+
     public Decision(Status status, Date date, String comment) {
         this.status = status;
         this.date = date;
@@ -81,7 +85,7 @@ public class Decision {
 
 //    ----------------------------------------------------------------------------
 
-    private void applyStatus(Status status) {
+    public void applyStatus(Status status) {
         this.status = status;
         this.date = new Date();
     }
