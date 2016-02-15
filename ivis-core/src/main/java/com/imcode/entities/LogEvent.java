@@ -14,6 +14,7 @@ import java.util.Date;
  * @since Dec 11, 2012
  */
 @Entity
+@Table(name = "dbo_log_event")
 public class LogEvent extends AbstractIdEntity<Long> {
 
 //    @Transient

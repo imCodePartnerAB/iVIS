@@ -467,25 +467,25 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
                             "com.imcode.entities", "imcode.services.restful");
             serviceFactory.initialize();
 //            serviceFactory.check EntityClassList(serviceFactory.entityClassList);
-//            GenericService service = serviceFactory.getService(ApplicationService.class);
+            GenericService service = serviceFactory.getService(ApplicationService.class);
 //            UserService service = serviceFactory.getService(UserService.class);
 //            User entityList = service.getCurrentUser();
 ////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
 //            Pupil entity = (Pupil) service.find(3);
 //            entity.setClassPlacementFrom(LocalDate.now());
 
-//            Random r = new Random();
-//            Application entity = (Application) service.find(13L);
-//            entity.setDecision(new Decision(Decision.Status.values()[r.nextInt(3)]));
-//            service.save(entity);
+            Random r = new Random();
+            Application entity = (Application) service.find(13L);
+            entity.setDecision(new Decision(Decision.Status.values()[r.nextInt(3)]));
+            service.save(entity);
 
-//            System.out.println(entity);
+            System.out.println(entity);
 
-            LogEventService service = serviceFactory.getService(LogEventService.class);
-            final Application entity = new Application();
-            entity.setId(14L);
-            List<LogEvent> entities  = service.findByEntity(entity);
-            System.out.println(entities);
+//            LogEventService service = serviceFactory.getService(LogEventService.class);
+//            final Application entity = new Application();
+//            entity.setId(14L);
+//            List<LogEvent> entities  = service.findByEntity(entity);
+//            System.out.println(entities);
 
 //            Object entity = service.find(0);
 //            System.out.println(entity);

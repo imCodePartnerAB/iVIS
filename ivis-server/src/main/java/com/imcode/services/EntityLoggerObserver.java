@@ -55,10 +55,10 @@ public class EntityLoggerObserver implements LogEventObserver<AbstractIdEntity<L
 
     public static User getCurrentUser() {
         User user = null;
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (auth instanceof User) {
-            user = (User) auth;
+        if (principal instanceof User) {
+            user = (User) principal;
         }
 
         return user;
