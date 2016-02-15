@@ -1,10 +1,13 @@
 package com.imcode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.imcode.entities.Application;
 import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
+import com.imcode.entities.embed.Decision;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
+import com.imcode.services.ApplicationService;
 import com.imcode.services.PupilService;
 import com.imcode.utils.StaticUtils;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
@@ -24,6 +27,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,10 +124,15 @@ public class MainTest {
 
     public static void main(String[] args) throws Exception {
         GenericXmlApplicationContext ctx = StaticUtils.getApplicationContext();
-        PupilService service = ctx.getBean(PupilService.class);
-        Pupil pupil = service.find(3L);
-        pupil.setClassPlacementFrom(LocalDate.now());
-        service.save(pupil);
+//        PupilService service = ctx.getBean(PupilService.class);
+//        Pupil pupil = service.find(3L);
+//        pupil.setClassPlacementFrom(new Date());
+//        pupil = service.save(pupil);
+        ApplicationService service = ctx.getBean(ApplicationService.class);
+        Application entity = service.find(13L);
+        entity.setUpdateDate(new Date());
+        service.save(entity);
+        System.out.println(entity);
 //        XMLContext context = new XMLContext();
 ////        context.addMapping();
 //

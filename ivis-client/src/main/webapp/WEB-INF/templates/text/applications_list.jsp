@@ -126,19 +126,19 @@
 
     <c:if test="${not empty statements}">
         <tbody>
-        <c:forEach items="${statements}" var="app">
-            <tr data-application-id="${app.id}">
-                <td>${app.id}</td>
-                <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
+        <c:forEach items="${statements}" var="log">
+            <tr data-application-id="${log.id}">
+                <td>${log.id}</td>
+                <fmt:formatDate value="${log.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
                 <td>${dateString}</td>
-                <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
+                <fmt:formatDate value="${log.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
                 <td>${dateString}</td>
-                <td>${app.status.description}</td>
-                <td>${app.registrationNumber}</td>
-                <td>${app.submittedUser}</td>
+                <td>${log.status.description}</td>
+                <td>${log.registrationNumber}</td>
+                <td>${log.submittedUser}</td>
                 <td class="buttons">
                     <a class="button positive"
-                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Visa</a>
+                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>
 
                     <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                           <%--method="get">--%>

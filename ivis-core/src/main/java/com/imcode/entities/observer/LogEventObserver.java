@@ -1,6 +1,6 @@
 package com.imcode.entities.observer;
 
-import com.imcode.entities.observer.Event.Action;
+import com.imcode.entities.LogEvent.Action;
 
 /**
  * An observer
@@ -9,7 +9,7 @@ import com.imcode.entities.observer.Event.Action;
  * @author Gonto
  * @since Dec 11, 2012
  */
-public interface Observer<T> {
+public interface LogEventObserver<T> {
 
     /**
      * Wether this observer observes this class

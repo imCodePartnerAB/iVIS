@@ -1,21 +1,16 @@
 package imcode.services.restful;
 
-import com.imcode.entities.School;
-import com.imcode.entities.User;
+import com.imcode.entities.Application;
+import com.imcode.entities.LogEvent;
+import com.imcode.entities.embed.Decision;
 import com.imcode.entities.superclasses.AbstractIdEntity;
-import com.imcode.entities.Pupil;
-import com.imcode.services.GenericService;
-import com.imcode.services.PupilService;
-import com.imcode.services.SchoolService;
-import com.imcode.services.UserService;
-import com.imcode.utils.StaticUtils;
+import com.imcode.services.*;
 import imcode.services.GenericServiceProxy;
 import imcode.services.IvisServiceFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
@@ -32,7 +27,6 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -40,15 +34,17 @@ import java.util.*;
  */
 public class ProxyIvisServiceFactory implements IvisServiceFactory {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(ProxyIvisServiceFactory.class);
     public static final String DEFAULT_ENTITY_PACKEDGE = "com.imcode.entities";
+    public static final String DEFAULT_SERVICE_PACKEDGE = "imcode.services.restful";
     public static final Class<? extends GenericService> DEFAULT_SERVICE_IMPLEMENTATION = OAuth2Service.class;
+
     public Class<? extends GenericService> abstractOAuth2ServiceClass = DEFAULT_SERVICE_IMPLEMENTATION;
     private final String apiUrl;
     private final OAuth2ClientContext clientContext;
     private final OAuth2ProtectedResourceDetails client;
     private List<Class<? extends AbstractIdEntity>> entityClassList = new LinkedList<>();
-    private List<AbstractOAuth2Service> favoriteServiceList = new LinkedList<>();
+    private List<AbstractOAuth2Service> serviceList = new LinkedList<>();
     private Map<Class<? extends GenericService>, ServiceInfo> serviceMap = new HashMap<>();
     private String entityPackage;
     private String servicePackage;
@@ -65,32 +61,35 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
         this(apiUrl, clientContext, client, DEFAULT_ENTITY_PACKEDGE);
     }
 
+
+
     public ProxyIvisServiceFactory(String apiUrl,
                                    OAuth2ClientContext clientContext,
                                    OAuth2ProtectedResourceDetails client,
                                    String entityPackedge) {
 
-        this(apiUrl, clientContext, client, entityPackedge, "");
+        this(apiUrl, clientContext, client, entityPackedge, DEFAULT_SERVICE_PACKEDGE);
     }
+
     public ProxyIvisServiceFactory(String apiUrl,
                                    OAuth2ClientContext clientContext,
                                    OAuth2ProtectedResourceDetails client,
                                    List<Class<? extends AbstractIdEntity>> entityClassList) {
 
-        this(apiUrl, clientContext, client, entityClassList, Collections.EMPTY_LIST);
+        this(apiUrl, clientContext, client, entityClassList, Collections.emptyList());
     }
 
     public ProxyIvisServiceFactory(String apiUrl,
                                    OAuth2ClientContext clientContext,
                                    OAuth2ProtectedResourceDetails client,
                                    List<Class<? extends AbstractIdEntity>> entityClassList,
-                                   List<AbstractOAuth2Service> favoriteServiceList) {
+                                   List<AbstractOAuth2Service> serviceList) {
         this.apiUrl = apiUrl;
         this.clientContext = clientContext;
         this.client = client;
-        this.entityClassList = Collections.unmodifiableList(entityClassList);
-        this.favoriteServiceList = Collections.unmodifiableList(favoriteServiceList);
-        fillServiceMap();
+        this.entityClassList = entityClassList;
+        this.serviceList = serviceList;
+//        fillServiceMap();
     }
 
     public ProxyIvisServiceFactory(String apiUrl,
@@ -98,21 +97,20 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
                                    OAuth2ProtectedResourceDetails client,
                                    String entityPackage,
                                    String servicePackage) {
-        this.apiUrl = apiUrl;
-        this.clientContext = clientContext;
-        this.client = client;
+        this(apiUrl, clientContext, client, Collections.emptyList(), Collections.emptyList());
         this.entityPackage = entityPackage;
         this.servicePackage = servicePackage;
     }
 
+
     @PostConstruct
     public void initialize() {
-        if (entityClassList.isEmpty() && StringUtils.isNoneEmpty(entityPackage)) {
+        if ((entityClassList == null || entityClassList.isEmpty()) && StringUtils.isNoneEmpty(entityPackage)) {
             entityClassList = loadEntities(entityPackage);
         }
 
-        if (favoriteServiceList.isEmpty() && StringUtils.isNoneEmpty(servicePackage)) {
-            favoriteServiceList = loadServices(servicePackage);
+        if ((serviceList == null || serviceList.isEmpty()) && StringUtils.isNoneEmpty(servicePackage)) {
+            serviceList = loadServices(servicePackage);
         }
 
         fillServiceMap();
@@ -143,8 +141,8 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
         return serviceClass;
     }
 
-    protected  <T extends AbstractIdEntity<ID>, ID extends Serializable> GenericService<T, ID> getServiceImplementation(Class<T> entityClass) {
-        for (GenericService<T, ID> service : favoriteServiceList) {
+    protected <T extends AbstractIdEntity<ID>, ID extends Serializable> GenericService<T, ID> getServiceImplementation(Class<T> entityClass) {
+        for (GenericService<T, ID> service : serviceList) {
             Class<? extends GenericService> serviceClass = service.getClass();
             Class serviceEntityClass = getClassOfTypeArgument(serviceClass, 0);
 
@@ -174,48 +172,54 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
         return componentScaner;
     }
 
-    public List<Class<? extends AbstractIdEntity>> loadEntities(String packedge) {
-        ClassPathScanningCandidateComponentProvider entityScaner = getEntityScaner();
-        Set<BeanDefinition> entitySet = entityScaner.findCandidateComponents(packedge);
-        List<Class<? extends AbstractIdEntity>> entityClassList = new ArrayList<>(entitySet.size());
+    public  List<Class<? extends AbstractIdEntity>> loadEntities(String packedge) {
+        List<Class<? extends AbstractIdEntity>> entityClassList = new ArrayList<>();
 
-        for (BeanDefinition beanDefinition : entitySet) {
-            String className = "";
+        if (StringUtils.isNoneEmpty(packedge)) {
+            ClassPathScanningCandidateComponentProvider entityScaner = getEntityScaner();
+            Set<BeanDefinition> entitySet = entityScaner.findCandidateComponents(packedge);
 
-            try {
-                className = beanDefinition.getBeanClassName();
-                entityClassList.add((Class<? extends AbstractIdEntity>) Class.forName(className));
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException("Unable to load class \"" + className + "\"", e);
+            for (BeanDefinition beanDefinition : entitySet) {
+                String className = "";
+
+                try {
+                    className = beanDefinition.getBeanClassName();
+                    entityClassList.add((Class<? extends AbstractIdEntity>) Class.forName(className));
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("Unable to load class \"" + className + "\"", e);
+                }
             }
-        }
 
+        }
         return entityClassList;
     }
 
-    public List<AbstractOAuth2Service> loadServices(String packedge) {
-        ClassPathScanningCandidateComponentProvider serviceScaner = getServiceScaner();
-        Set<BeanDefinition> serviceSet = serviceScaner.findCandidateComponents(packedge);
-        List<AbstractOAuth2Service> serviceList = new ArrayList<>(serviceSet.size());
+    public  List<AbstractOAuth2Service> loadServices(String packedge) {
+        List<AbstractOAuth2Service> serviceList = new ArrayList<>();
 
-        for (BeanDefinition beanDefinition :serviceSet) {
-            String className = "";
+        if (StringUtils.isNoneEmpty(packedge)) {
+            ClassPathScanningCandidateComponentProvider serviceScaner = getServiceScaner();
+            Set<BeanDefinition> serviceSet = serviceScaner.findCandidateComponents(packedge);
 
-            try {
-                className = beanDefinition.getBeanClassName();
-                Class<GenericService> serviceClass = (Class<GenericService>) Class.forName(className);
-                Class entityClass = getClassOfTypeArgument(serviceClass, 0);
-                Constructor constructor = serviceClass.getConstructor(IvisServiceFactory.class, String.class);
-                AbstractOAuth2Service instance = (AbstractOAuth2Service) constructor.newInstance(this, getDefaultServiceAlias(entityClass));
-                serviceList.add(instance);
-            } catch (ClassNotFoundException e) {
-                logger.error("Unable to load class \"" + className + "\"");
-            } catch (InstantiationException e) {
-                logger.error("Unable to create instance of class \"" + className + "\"");
-            } catch (NoSuchMethodException e) {
-                logger.error("Constructor not fuond \"" + className + "\"");
-            } catch (Exception e) {
-                logger.error(e.getMessage());
+            for (BeanDefinition beanDefinition : serviceSet) {
+                String className = "";
+
+                try {
+                    className = beanDefinition.getBeanClassName();
+                    Class<GenericService> serviceClass = (Class<GenericService>) Class.forName(className);
+                    Class entityClass = getClassOfTypeArgument(serviceClass, 0);
+                    Constructor constructor = serviceClass.getConstructor(IvisServiceFactory.class, String.class);
+                    AbstractOAuth2Service instance = (AbstractOAuth2Service) constructor.newInstance(this, getDefaultServiceAlias(entityClass));
+                    serviceList.add(instance);
+                } catch (ClassNotFoundException e) {
+                    logger.error("Unable to load class \"" + className + "\"");
+                } catch (InstantiationException e) {
+                    logger.error("Unable to create instance of class \"" + className + "\"");
+                } catch (NoSuchMethodException e) {
+                    logger.error("Constructor not fuond \"" + className + "\"");
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
             }
         }
 
@@ -258,7 +262,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 
     @Override
     public <S extends GenericService<T, ID>, T, ID> S getServiceFor(Class<T> entityClass) {
-        Class serviceInterface =  getServiceInterface(entityClass);
+        Class serviceInterface = getServiceInterface(entityClass);
         return (S) getService(serviceInterface);
     }
 
@@ -287,14 +291,14 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
     private static Type[] getGenericParameterTypes(Class<?> clazz) {
         Type[] types = clazz.getGenericInterfaces();
 
-        for (Type type :types) {
+        for (Type type : types) {
             if (type instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType) type;
                 return parameterizedType.getActualTypeArguments();
             }
         }
 
-        return ((ParameterizedType)clazz.getGenericSuperclass()).getActualTypeArguments();
+        return ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
     }
 
     public String getApiUrl() {
@@ -308,7 +312,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 
     @Override
     public boolean hasServiceFor(Class entityClass) {
-        for (ServiceInfo serviceInfo: serviceMap.values()) {
+        for (ServiceInfo serviceInfo : serviceMap.values()) {
             if (entityClass.equals(serviceInfo.entityClass)) {
                 return true;
             }
@@ -377,11 +381,11 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
             return (Class) argument;
         } else {
             throw new IllegalStateException("Type argument(" + index + ") is not a Class instance");
-        } 
+        }
     }
-    
+
     public static <ID extends Serializable> Class<ID> getEntityIdClass(Class<? extends AbstractIdEntity> entityClass) {
-        Type parameter =  ((ParameterizedType) entityClass.getGenericSuperclass()).getActualTypeArguments()[0];
+        Type parameter = ((ParameterizedType) entityClass.getGenericSuperclass()).getActualTypeArguments()[0];
         return (Class<ID>) parameter;
     }
 
@@ -393,29 +397,29 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
         this.entityClassList = entityClassList;
     }
 
-    public List<AbstractOAuth2Service> getFavoriteServiceList() {
-        return favoriteServiceList;
+    public List<AbstractOAuth2Service> getServiceList() {
+        return serviceList;
     }
 
-    public void setFavoriteServiceList(List<AbstractOAuth2Service> favoriteServiceList) {
-        this.favoriteServiceList = favoriteServiceList;
+    public void setServiceList(List<AbstractOAuth2Service> serviceList) {
+        this.serviceList = serviceList;
     }
 
-    public String getEntityPackage() {
-        return entityPackage;
-    }
-
-    public void setEntityPackage(String entityPackage) {
-        this.entityPackage = entityPackage;
-    }
-
-    public String getServicePackage() {
-        return servicePackage;
-    }
-
-    public void setServicePackage(String servicePackage) {
-        this.servicePackage = servicePackage;
-    }
+//    public String getEntityPackage() {
+//        return entityPackage;
+//    }
+//
+//    public void setEntityPackage(String entityPackage) {
+//        this.entityPackage = entityPackage;
+//    }
+//
+//    public String getServicePackage() {
+//        return servicePackage;
+//    }
+//
+//    public void setServicePackage(String servicePackage) {
+//        this.servicePackage = servicePackage;
+//    }
 
     public static void main(String[] args) {
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
@@ -457,20 +461,31 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
         try {
             ProxyIvisServiceFactory serviceFactory =
                     new ProxyIvisServiceFactory("http://localhost:8080/ivis/api/v1/json",
-                    clientContext,
-                    resource,
+                            clientContext,
+                            resource,
 //                    Arrays.asList(SchoolClass.class));
-                    "com.imcode.entities", "imcode.services.restful");
+                            "com.imcode.entities", "imcode.services.restful");
             serviceFactory.initialize();
-            System.out.println("sfas");
-//            serviceFactory.checkEntityClassList(serviceFactory.entityClassList);
-            GenericService service = serviceFactory.getService(PupilService.class);
+//            serviceFactory.check EntityClassList(serviceFactory.entityClassList);
+//            GenericService service = serviceFactory.getService(ApplicationService.class);
 //            UserService service = serviceFactory.getService(UserService.class);
 //            User entityList = service.getCurrentUser();
 ////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
-            Pupil entity = (Pupil) service.find(3);
-            entity.setClassPlacementFrom(LocalDate.now());
-            service.save(entity);
+//            Pupil entity = (Pupil) service.find(3);
+//            entity.setClassPlacementFrom(LocalDate.now());
+
+//            Random r = new Random();
+//            Application entity = (Application) service.find(13L);
+//            entity.setDecision(new Decision(Decision.Status.values()[r.nextInt(3)]));
+//            service.save(entity);
+
+//            System.out.println(entity);
+
+            LogEventService service = serviceFactory.getService(LogEventService.class);
+            final Application entity = new Application();
+            entity.setId(14L);
+            List<LogEvent> entities  = service.findByEntity(entity);
+            System.out.println(entities);
 
 //            Object entity = service.find(0);
 //            System.out.println(entity);

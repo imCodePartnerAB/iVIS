@@ -96,4 +96,20 @@ public class Decision {
     public String toString() {
         return status.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Decision)) return false;
+
+        Decision decision = (Decision) o;
+
+        return status == decision.status;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return status != null ? status.hashCode() : 0;
+    }
 }

@@ -1,89 +1,24 @@
 package com.imcode.entities.observer;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.imcode.entities.observer.Event.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import play.templates.JavaExtensions;
+import com.imcode.entities.interfaces.JpaAuditableEntity;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
-import javax.persistence.*;
+import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.*;
 
 /**
- * This class has all of the hooks for auditing
- *
- * @author Gonto
- * @since Dec 15, 2012
+ * Created by vitaly on 12.02.16.
  */
-public class AuditableModelListener {
-    private static Logger logger = LoggerFactory.getLogger(AuditableModelListener.class);
+public class LogUtils {
+    public static List<String> ignoredFields = Arrays.asList("willbesaved", "id", "createDate", "updateDate");
 
-    public List<String> ignoredFields = Arrays.asList("willbesaved", "id");
-
-    /**
-     * After we load the Model into memory, we transform the object to a {@link Map}
-     * of PropertyName => Object
-     * I save this map in a transient property at the AuditableModel.
-     * Then, when we're going to update this object, I'm going to check for the map of loaded values
-     * and compare this to the map of the modified object. From that, I'm going to get all of the changes
-     */
-    @PostLoad
-    public void postLoad(AuditableModel model) {
-        model.loadedValues = getValues(model);
-    }
-
-    /**
-     * Let's log a Model Removal
-     */
-    @PostRemove
-    public void preRemove(AuditableModel model) {
-//        Logger.debug("PreRemove %s", model.getClass().getSimpleName());
-        logger.debug("PreRemove %s", model.getClass().getSimpleName());
-        ObserverRegistry.notifyChange(model, Action.DELETE, null, model, null);
-    }
-
-    /**
-     * Let's log a model creation
-     */
-    @PostPersist
-    public void prePersist(AuditableModel model) {
-//        Logger.debug("PrePersist %s", model.getClass().getSimpleName());
-        logger.debug("PrePersist %s", model.getClass().getSimpleName());
-        ObserverRegistry.notifyChange(model, Action.CREATE, null, null, model);
-    }
-
-    /**
-     * Here we compare the loaded values vs modified values and emit logging for references
-     */
-    @PreUpdate
-    public void preUpdate(AuditableModel model) {
-//        Logger.debug("PreUpdate %s", model.getClass().getSimpleName());
-        logger.debug("PreUpdate %s", model.getClass().getSimpleName());
-        Map<String, Object> newValues = getValues(model);
-        Map<String, Object> oldValues = model.loadedValues;
-        if (oldValues == null) {
-//            Logger.warn("The old values for model %s are null", model.toString());
-            logger.warn("The old values for model %s are null", model.toString());
-            return;
-        }
-        for (Difference difference : getDifferences(oldValues, newValues)) {
-            ObserverRegistry.notifyChange(model, Action.MODIFY, difference.field, difference.oldValue,
-                    difference.newValue);
-        }
-
-    }
-
-    private Set<Difference> getDifferences(Map<String, Object> oldValues, Map<String, Object> newValues) {
-        Set<Difference> differences = Sets.newHashSet();
-        for (Entry<String, Object> entry : newValues.entrySet()) {
+    public static Set<Difference> getDifferences(Map<String, Object> oldValues, Map<String, Object> newValues) {
+        Set<Difference> differences = new HashSet<>();
+        for (Map.Entry<String, Object> entry : newValues.entrySet()) {
             Object oldForNew = oldValues.get(entry.getKey());
             if (oldForNew == null) {
                 if (entry.getValue() != null) {
@@ -98,18 +33,21 @@ public class AuditableModelListener {
         return differences;
     }
 
-    private Map<String, Object> getValues(AuditableModel model) {
+    public static Map<String, Object> getValues(JpaAuditableEntity model) {
         Class<?> clazz = model.getClass();
-        Map<String, Object> map = Maps.newHashMap();
-        for (Field field : clazz.getFields()) {
+        Map<String, Object> map = new HashMap<>();
+        Field[] fields = FieldUtils.getAllFields(clazz);
+        for (Field field : fields) {
 
             // Skip fields
             if (field.getAnnotation(Transient.class) != null ||
-                    ignoredFields.contains(field.getName().toLowerCase())) {
+                    ignoredFields.contains(field.getName())) {
                 continue;
             }
 
-            String capitalizedField = JavaExtensions.capitalizeWords(field.getName().toLowerCase());
+
+//            String capitalizedField = JavaExtensions.capitalizeWords(field.getName().toLowerCase());
+            String capitalizedField = StringUtils.capitalize(field.getName());
             String getterName = "get" + capitalizedField;
             String isName = "is" + capitalizedField;
             MethodResult methodResult = runMethod(getterName, model);
@@ -137,11 +75,11 @@ public class AuditableModelListener {
         return map;
     }
 
-    private MethodResult runMethod(String name, Object model) {
+    private static MethodResult runMethod(String name, Object model) {
         return invokeMethod(getMethod(model.getClass(), name), model);
     }
 
-    private MethodResult invokeMethod(Method method, Object object) {
+    private static MethodResult invokeMethod(Method method, Object object) {
         if (method == null) {
             return MethodResult.didntRun();
         }
@@ -157,7 +95,7 @@ public class AuditableModelListener {
 
     }
 
-    private Method getMethod(Class<?> clazz, String getterName) {
+    private static Method getMethod(Class<?> clazz, String getterName) {
         Method method = null;
         try {
             method = clazz.getMethod(getterName);
@@ -191,7 +129,7 @@ public class AuditableModelListener {
         public Object newValue;
         public String field;
 
-        public Difference(Object oldValue, Entry<String, Object> newValue) {
+        public Difference(Object oldValue, Map.Entry<String, Object> newValue) {
             this.oldValue = oldValue;
             this.newValue = newValue.getValue();
             this.field = newValue.getKey();

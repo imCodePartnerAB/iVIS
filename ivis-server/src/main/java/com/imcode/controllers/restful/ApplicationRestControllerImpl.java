@@ -1,5 +1,6 @@
 package com.imcode.controllers.restful;
 
+import com.imcode.App;
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Person;
 import com.imcode.entities.Application;
@@ -7,6 +8,7 @@ import com.imcode.entities.User;
 import com.imcode.services.ApplicationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +34,15 @@ public class ApplicationRestControllerImpl extends AbstractRestController<Applic
 //        entity.setSubmitDate(new Date());
 
         return super.create(entity, webRequest);
+    }
+
+    @Override
+    public Object update(@PathVariable("id") Long aLong, @RequestBody(required = false) Application entity, WebRequest webRequest) {
+        if (entity.getId()!=null && entity.getLoadedValues() == null) {
+            Application attachetEntity = getService().find(entity.getId());
+                entity.setLoadedValues(attachetEntity.getLoadedValues());
+        }
+
+        return super.update(aLong, entity, webRequest);
     }
 }

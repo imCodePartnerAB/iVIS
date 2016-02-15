@@ -8,6 +8,7 @@
              xmlns:c="http://www.springframework.org/schema/c"
              xmlns:tx="http://www.springframework.org/schema/tx"
              xmlns:aop="http://www.springframework.org/schema/aop"
+             xmlns:task="http://www.springframework.org/schema/task"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
                   http://www.springframework.org/schema/beans/spring-beans.xsd
                   http://www.springframework.org/schema/data/jpa
@@ -17,11 +18,14 @@
                   http://www.springframework.org/schema/context
                   http://www.springframework.org/schema/context/spring-context.xsd
                   http://www.springframework.org/schema/tx
-                  http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+                  http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!-- Настраивает управление транзакциями с помощью аннотации @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <!--Async-->
+    <task:annotation-driven executor="myExecutor"/>
+    <task:executor id="myExecutor" pool-size="7-42" queue-capacity="11"/>
 
     <!--<beans:bean id="messageSource"-->
     <!--class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
@@ -34,8 +38,8 @@
     <beans:bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <beans:property name="locations">
             <beans:list>
-                <!--<beans:value>/WEB-INF/server.properties</beans:value>-->
-                <beans:value>classpath:server.properties</beans:value>
+                <beans:value>/WEB-INF/server.properties</beans:value>
+                <!--<beans:value>classpath:server.properties</beans:value>-->
                 <!--<beans:value>classpath:server1.properties</beans:value>-->
             </beans:list>
         </beans:property>

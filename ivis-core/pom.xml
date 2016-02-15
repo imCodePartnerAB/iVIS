@@ -141,11 +141,11 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.databind-version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.typesafe.play</groupId>
-            <artifactId>play_2.11</artifactId>
-            <version>2.4.6</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.typesafe.play</groupId>-->
+            <!--<artifactId>play</artifactId>-->
+            <!--<version>2.0.2</version>-->
+        <!--</dependency>-->
 
 
         <!-- Test -->

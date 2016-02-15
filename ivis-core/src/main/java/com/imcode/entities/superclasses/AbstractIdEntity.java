@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @MappedSuperclass
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@Id")
-public abstract class AbstractIdEntity<ID extends Serializable> implements JpaEntity<ID>, Serializable{
+public abstract class AbstractIdEntity<ID extends Serializable> extends AbstractAuditableEntity implements JpaEntity<ID>, Serializable{
     @Id
     @GeneratedValue
     @Column

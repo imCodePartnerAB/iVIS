@@ -10,6 +10,8 @@
 <%@ page import="com.imcode.entities.embed.ApplicationFormQuestion" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.imcode.imcms.addon.ivisclient.utils.Step" %>
+<%@ page import="com.imcode.services.LogEventService" %>
+<%@ page import="com.imcode.entities.LogEvent" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -25,6 +27,7 @@
         ApplicationService applicationService = factory.getService(ApplicationService.class);
         AcademicYearService academicYearService = factory.getService(AcademicYearService.class);
         SchoolTransportService schoolTransportService = factory.getService(SchoolTransportService.class);
+        LogEventService logEventService = factory.getService(LogEventService.class);
 
         Application app = null;
 
@@ -56,6 +59,8 @@
             questions.add(formQuestion);
         }
 
+        List<LogEvent> logs = logEventService.findByEntity(app);
+        request.setAttribute("logs", logs);
         request.setAttribute("steps", steps);
         request.setAttribute("app", app);
         pageContext.setAttribute("statusList", Decision.Status.values());
@@ -137,6 +142,50 @@
         </div>
     </div>
     <div id="loggTabPage" class="tab-page">
+        <table cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <th class="ordered-by">Date</th>
+                <th>Action</th>
+                <th>User</th>
+                <th>Field name</th>
+                <th>Old value</th>
+                <th>New value</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+
+            <c:if test="${not empty logs}">
+                <tbody>
+                <c:forEach items="${logs}" var="log">
+                    <fmt:formatDate value="${log.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <tr data-application-id="${log.id}">
+                        <td>${dateString}</td>
+                        <td>${log.action}</td>
+                        <td>${log.user}</td>
+                        <td>${log.fieldName}</td>
+                        <td>${log.previousValue}</td>
+                        <td>${log.newValue}</td>
+                        <td class="buttons">
+                            <%--<a class="button positive"--%>
+                               <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>--%>
+
+                                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                                <%--method="get">--%>
+                                <%--<button class="positive" type="submit">Approve</button>--%>
+                                <%--<input type="hidden" name="status" value="APPROVE"/>--%>
+                                <%--</form>--%>
+                                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                                <%--method="get">--%>
+                                <%--<button class="negative" type="submit">Decline</button>--%>
+                                <%--<input type="hidden" name="status" value="DENI"/>--%>
+                                <%--</form>--%>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </c:if>
+        </table>
     </div>
 </c:if>
 <script type="text/javascript">
