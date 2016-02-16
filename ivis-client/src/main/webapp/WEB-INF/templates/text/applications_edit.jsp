@@ -69,11 +69,38 @@
 %>
 <c:if test="${not empty app}">
     <h1>Ansökan om skolskjuts</h1>
-
-    <h2>Skapas</h2><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/>
-    <h2>Senast ändrad</h2><fmt:formatDate value="${app.updateDate}" pattern="yyy-MM-dd HH:mm:ss"/>
-    <h2>Status</h2>${app.status.description}
-    <h2>Handläggs av</h2>${app.handledUser}
+    <div class="groups">
+        <div class="group">
+            <div class="title">ID</div>
+            <div class="value">${app.id}</div>
+        </div>
+        <div class="group">
+            <div class="title">Skapad</div>
+            <div class="value"><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/></div>
+        </div>
+        <div class="group">
+            <div class="title">Senast ändrad</div>
+            <div class="value"><fmt:formatDate value="${app.updateDate}" pattern="yyy-MM-dd HH:mm:ss"/></div>
+        </div>
+    </div>
+    <div class="groups">
+        <div class="group">
+            <div class="title">Status</div>
+            <div class="value">${app.status}</div>
+        </div>
+        <div class="group">
+            <div class="title">Reg.nr.</div>
+            <div class="value">${app.applicationForm.id}</div>
+        </div>
+        <div class="group" style="display: none">
+            <div class="title">Handläggs av</div>
+            <div class="value">${app.handledUser}</div>
+        </div>
+    </div>
+    <%--<h2>Skapas</h2><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/>--%>
+    <%--<h2>Senast ändrad</h2><fmt:formatDate value="${app.updateDate}" pattern="yyy-MM-dd HH:mm:ss"/>--%>
+    <%--<h2>Status</h2>${app.status.description}--%>
+    <%--<h2>Handläggs av</h2>${app.handledUser}--%>
 
     <div class="tabs">
         <div class="tab" data-tab-page-id="applicationTabPage">

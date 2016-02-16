@@ -95,6 +95,22 @@ a {
   padding-left: 270px;
 }
 
+.groups {
+  overflow: hidden;
+}
+
+.groups .group {
+  float: left;
+  width: 30%;
+}
+
+.groups .group .title {
+  color: #aaa;
+  font-size: 20px;
+  font-weight: 300;
+  margin-top: 20px;
+}
+
 table {
   border-left: none;
   border-right: none;
@@ -200,10 +216,6 @@ dl dd {
 
 .step .questions .question {
   overflow: hidden;
-}
-
-.step .questions .question:nth-child(2n+1) {
-  background: #fbfbff;
 }
 
 .step .questions .question:hover {

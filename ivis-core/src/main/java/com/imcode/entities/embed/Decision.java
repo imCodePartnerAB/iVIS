@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Embeddable
 public class Decision {
-    public enum Status {APPROVE("Godk"), DENI("Pågår"), SUBMIT("Avslag");
+    public enum Status {APPROVE("Godkännd"), DENI("Pågår"), SUBMIT("Avslag");
         private final String description;
 
         Status(String description) {
