@@ -681,16 +681,16 @@
                     </thead>
 
                     <tbody>
-                    <c:forEach items="${applicationList}" var="log">
-                        <tr data-application-id="${log.id}">
-                            <td>${log.id}</td>
-                            <td>${log.submitDate}</td>
-                            <td>${log.changedDate}</td>
-                            <td>${log.status}</td>
-                            <td>${log.submittedPerson}</td>
+                    <c:forEach items="${applicationList}" var="app">
+                        <tr data-application-id="${app.id}">
+                            <td>${app.id}</td>
+                            <td>${app.submitDate}</td>
+                            <td>${app.changedDate}</td>
+                            <td>${app.status}</td>
+                            <td>${app.submittedPerson}</td>
                             <td class="buttons">
                                 <a class="button positive"
-                                   href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/details.jsp?id=${log.id}">Details</a>
+                                   href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/details.jsp?id=${app.id}">Details</a>
                             </td>
                         </tr>
                     </c:forEach>

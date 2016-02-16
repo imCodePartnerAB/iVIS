@@ -6,11 +6,10 @@
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
 <%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
-<%@ page import="java.util.LinkedList" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Collections" %>
-<%@ page import="java.util.Comparator" %>
 <%@ page import="com.imcode.entities.embed.Decision" %>
+<%@ page import="com.imcode.entities.ApplicationForm" %>
+<%@ page import="java.util.*" %>
+<%@ page import="com.imcode.entities.embed.ApplicationFormQuestion" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -42,7 +41,8 @@
         Decision.Status statusFilter = null;
         try {
             statusFilter = Decision.Status.valueOf(request.getParameter("statusFilter"));
-        } catch (Exception ignore) { }
+        } catch (Exception ignore) {
+        }
 
         List<Application> applicationList = null;
         try {
@@ -78,87 +78,113 @@
     }
 %>
 <c:if test="${isAuthorized}">
-<h1>Ansökningar</h1>
+    <h1>Ansökningar</h1>
 
-<form action="${clientAddress}" method="get">
-    <div class="field">
-        <label>Sök</label>
-        <input type="text" name="searchText" value="${param.searchText}"/>
-        <button class="positive" type="submit">Sök</button>
-        <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>--%>
+    <form action="${clientAddress}" method="get">
+        <div class="field">
+            <label>Sök</label>
+            <input type="text" name="searchText" value="${param.searchText}"/>
+            <button class="positive" type="submit">Sök</button>
+                <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>--%>
+        </div>
+
+        <div class="field">
+            <label>Filtrera</label>
+            <select name="statusFilter">
+                <%
+                    String statusFilter = request.getParameter("statusFilter");
+                    out.println("<option value=\"null\" " + ("null".equalsIgnoreCase(statusFilter) ? "selected\"" : "") + ">Allt</option>");
+
+                    for (Decision.Status statementStatus : Decision.Status.values()) {
+                        out.println("<option value=\"" + statementStatus + "\" " + (statementStatus.toString().equalsIgnoreCase(statusFilter) ? "selected" : "") + ">" + StringUtils.capitalize(statementStatus.getDescription()) + "</option>");
+                    }
+
+                %>
+                    <%--<option value="null" <c:if test="${not empty param.statusFilter and param.statusFilter ne 'null'}">selected</c:if>>All</option>--%>
+                    <%--<c:set var="enums" value="<%=Decision.Status.values()%>"/>--%>
+                    <%--<c:forEach var="enum" items="${enums}" varStatus="starus">--%>
+                    <%--<option value="${starus.current}" <c:if test="${not empty param.statusFilter and param.statusFilter eq starus.current}">selected</c:if>>${starus.current}</option>--%>
+                    <%--</c:forEach>--%>
+            </select>
+            <button class="positive" type="submit">Filtrera</button>
+                <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('statusFilter');">Clear filter</button>--%>
+        </div>
+    </form>
+
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th class="ordered-by">Id</th>
+            <th>Skapad</th>
+            <th>Ändrad</th>
+            <th>Elev</th>
+            <th>Status</th>
+                <%--<th>Reg</th>--%>
+                <%--<th>Av</th>--%>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+
+        <c:if test="${not empty statements}">
+            <tbody>
+            <c:forEach items="${statements}" var="app">
+                <tr data-application-id="${app.id}"
+                    onclick="location.href='<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}';">
+                    <td>${app.id}</td>
+                    <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm"/>
+                    <td>${dateString}</td>
+                    <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm"/>
+                    <td>${dateString}</td>
+                    <%
+                        Application app = (Application) pageContext.getAttribute("app");
+                        String sudentName = null;
+                        ApplicationForm form;
+                        if (app != null && (form = app.getApplicationForm()) != null) {
+                            Set<ApplicationFormQuestion> questions = form.getQuestions();
+                            if (questions != null) {
+                                String firstName = "";
+                                String lastName = "";
+                                for (ApplicationFormQuestion question : questions) {
+                                    if ("PupilPerson.PupilPersonFirstName".equalsIgnoreCase(question.getXsdElementName())) {
+                                        firstName = question.getValue();
+                                    }
+                                    if ("PupilPerson.PupilPersonLastName".equalsIgnoreCase(question.getXsdElementName())) {
+                                        lastName = question.getValue();
+                                    }
+                                    sudentName = firstName + " " + lastName;
+                                }
+                            }
+                        }
+
+                        pageContext.setAttribute("studentName", sudentName);
+                    %>
+                    <td>${studentName}</td>
+                    <td>${app.status.description}</td>
+                        <%--<td>${log.registrationNumber}</td>--%>
+                        <%--<td>${app.submittedUser}</td>--%>
+                    <td class="buttons">
+                        <a class="button positive"
+                           href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Visa</a>
+
+                            <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                            <%--method="get">--%>
+                            <%--<button class="positive" type="submit">Approve</button>--%>
+                            <%--<input type="hidden" name="status" value="APPROVE"/>--%>
+                            <%--</form>--%>
+                            <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                            <%--method="get">--%>
+                            <%--<button class="negative" type="submit">Decline</button>--%>
+                            <%--<input type="hidden" name="status" value="DENI"/>--%>
+                            <%--</form>--%>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </c:if>
+    </table>
+    <div class="buttons">
+        <a class="button positive"
+           href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/import">Import</a>
     </div>
-
-    <div class="field">
-        <label>Filtrera</label>
-        <select name="statusFilter">
-            <%
-                String statusFilter = request.getParameter("statusFilter");
-                out.println("<option value=\"null\" " + ("null".equalsIgnoreCase(statusFilter)? "selected\"":"") + ">Allt</option>");
-
-                for (Decision.Status statementStatus :Decision.Status.values()) {
-                    out.println("<option value=\"" + statementStatus + "\" " + (statementStatus.toString().equalsIgnoreCase(statusFilter) ? "selected" : "") + ">" + StringUtils.capitalize(statementStatus.getDescription()) + "</option>");
-                }
-
-            %>
-            <%--<option value="null" <c:if test="${not empty param.statusFilter and param.statusFilter ne 'null'}">selected</c:if>>All</option>--%>
-                <%--<c:set var="enums" value="<%=Decision.Status.values()%>"/>--%>
-            <%--<c:forEach var="enum" items="${enums}" varStatus="starus">--%>
-                <%--<option value="${starus.current}" <c:if test="${not empty param.statusFilter and param.statusFilter eq starus.current}">selected</c:if>>${starus.current}</option>--%>
-            <%--</c:forEach>--%>
-        </select>
-        <button class="positive" type="submit">Filtrera</button>
-        <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('statusFilter');">Clear filter</button>--%>
-    </div>
-</form>
-
-<table cellpadding="0" cellspacing="0">
-    <thead>
-    <tr>
-        <th class="ordered-by">Id</th>
-        <th>Skapad</th>
-        <th>Uppdaterad</th>
-        <th>Status</th>
-        <th>Reg</th>
-        <th>Av</th>
-        <th>&nbsp;</th>
-    </tr>
-    </thead>
-
-    <c:if test="${not empty statements}">
-        <tbody>
-        <c:forEach items="${statements}" var="log">
-            <tr data-application-id="${log.id}">
-                <td>${log.id}</td>
-                <fmt:formatDate value="${log.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
-                <td>${dateString}</td>
-                <fmt:formatDate value="${log.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
-                <td>${dateString}</td>
-                <td>${log.status.description}</td>
-                <td>${log.registrationNumber}</td>
-                <td>${log.submittedUser}</td>
-                <td class="buttons">
-                    <a class="button positive"
-                       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>
-
-                    <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                          <%--method="get">--%>
-                        <%--<button class="positive" type="submit">Approve</button>--%>
-                        <%--<input type="hidden" name="status" value="APPROVE"/>--%>
-                    <%--</form>--%>
-                    <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                          <%--method="get">--%>
-                        <%--<button class="negative" type="submit">Decline</button>--%>
-                        <%--<input type="hidden" name="status" value="DENI"/>--%>
-                    <%--</form>--%>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </c:if>
-</table>
-<div class="buttons">
-    <a class="button positive"
-       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/import">Import</a>
-</div>
 </c:if>
 <jsp:include page="ivis_footer.jsp"/>

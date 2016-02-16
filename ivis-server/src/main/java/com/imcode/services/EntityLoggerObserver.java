@@ -46,7 +46,13 @@ public class EntityLoggerObserver implements LogEventObserver<AbstractIdEntity<L
         User user = getCurrentUser();
 
         //Mock account geting
-        LogEvent event = new LogEvent(model, action, field, getAsString(previousValue), getAsString(newValue), user);
+        LogEvent event;
+
+        if (LogEvent.Action.MODIFY == action) {
+            event = new LogEvent(model, action, field, getAsString(previousValue), getAsString(newValue), user);
+        } else {
+            event = new LogEvent(model, action, field, null, null, user);
+        }
 
         //We need to save the Event to the database in another thread
         //As otherwise, this will be a StackoverflowEx

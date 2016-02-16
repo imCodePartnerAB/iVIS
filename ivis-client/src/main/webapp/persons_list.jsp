@@ -61,12 +61,12 @@
 
                 <c:if test="${not empty Persons}">
                     <tbody>
-                    <c:forEach items="${Persons}" var="log">
-                        <tr data-application-id="${log.id}" onclick="ivis.ui.selectRow(${log.id});">
-                            <td>${log.id}</td>
-                            <td>${log.firstName}</td>
-                            <td>${log.lastName}</td>
-                            <td>${log.personalId}</td>
+                    <c:forEach items="${Persons}" var="app">
+                        <tr data-application-id="${app.id}" onclick="ivis.ui.selectRow(${app.id});">
+                            <td>${app.id}</td>
+                            <td>${app.firstName}</td>
+                            <td>${app.lastName}</td>
+                            <td>${app.personalId}</td>
                             <%--<td>${app.pupil}</td>--%>
                             <%--<td>${app.submittedPerson}</td>--%>
                             <%--<td class="buttons">--%>

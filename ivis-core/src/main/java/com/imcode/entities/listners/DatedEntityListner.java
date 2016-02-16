@@ -15,7 +15,7 @@ public class DatedEntityListner {
         if (entity instanceof JpaDatedEntity) {
             JpaDatedEntity jpaDatedEntity = (JpaDatedEntity) entity;
             jpaDatedEntity.setCreateDate(new Date());
-            jpaDatedEntity.setUpdateDate(new Date());
+//            jpaDatedEntity.setUpdateDate(new Date());
         }
     }
 

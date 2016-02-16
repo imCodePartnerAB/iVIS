@@ -157,15 +157,15 @@
 
             <c:if test="${not empty logs}">
                 <tbody>
-                <c:forEach items="${logs}" var="log">
-                    <fmt:formatDate value="${log.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
-                        <tr data-application-id="${log.id}">
+                <c:forEach items="${logs}" var="app">
+                    <fmt:formatDate value="${app.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <tr data-application-id="${app.id}">
                         <td>${dateString}</td>
-                        <td>${log.action}</td>
-                        <td>${log.user}</td>
-                        <td>${log.fieldName}</td>
-                        <td>${log.previousValue}</td>
-                        <td>${log.newValue}</td>
+                        <td>${app.action}</td>
+                        <td>${app.user}</td>
+                        <td>${app.fieldName}</td>
+                        <td>${app.previousValue}</td>
+                        <td>${app.newValue}</td>
                         <td class="buttons">
                             <%--<a class="button positive"--%>
                                <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>--%>

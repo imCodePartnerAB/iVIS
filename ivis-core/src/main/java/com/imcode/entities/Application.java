@@ -3,6 +3,7 @@ package com.imcode.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.embed.Decision;
 import com.imcode.entities.listners.AuditableModelListener;
+import com.imcode.entities.listners.DatedEntityListner;
 import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "dbo_application")
-@EntityListeners(AuditableModelListener.class)
+@EntityListeners({AuditableModelListener.class, DatedEntityListner.class})
 public class Application extends AbstractJpaDatedEntity<Long> implements Serializable {
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)

@@ -424,17 +424,17 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
     public static void main(String[] args) {
         ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
         resource.setId("ivis");
-//        resource.setClientId("b4251265-409d-43b3-928d-a290228a2b59"); //admin
-        resource.setClientId("08d32c33-91cf-4452-8be8-4d120fbc504e"); //ivis
+        resource.setClientId("ff11397c-3e3b-4398-80a9-feba203f1928"); //admin
+//        resource.setClientId("08d32c33-91cf-4452-8be8-4d120fbc504e"); //ivis
 //        resource.setGrantType("authorization_code");
         resource.setGrantType("password");
         resource.setClientSecret("secret");
         resource.setAccessTokenUri("http://localhost:8080/ivis/oauth/token");
         resource.setScope(Arrays.asList("read"));
-//        resource.setUsername("admin");
-//        resource.setPassword("pass");
-        resource.setUsername("ivis");
-        resource.setPassword("111");
+        resource.setUsername("admin");
+        resource.setPassword("pass");
+//        resource.setUsername("ivis");
+//        resource.setPassword("111");
 //        resource.setUserAuthorizationUri("http://localhost:8080/ivis/oauth/authorize");
 //        resource.set();
 
@@ -476,6 +476,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 
             Random r = new Random();
             Application entity = (Application) service.find(13L);
+            entity = new Application();
             entity.setDecision(new Decision(Decision.Status.values()[r.nextInt(3)]));
             service.save(entity);
 

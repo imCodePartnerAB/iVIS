@@ -58,7 +58,7 @@ public class AuditableModelListener{
     public void prePersist(JpaAuditableEntity model) {
 //        Logger.debug("PrePersist %s", model.getClass().getSimpleName());
         logger.debug("PrePersist %s", model.getClass().getSimpleName());
-        ObserverRegistry.notifyChange(model, Action.CREATE, null, null, model);
+        ObserverRegistry.notifyChange(model, Action.CREATE, null, null, null);
     }
 
     /**

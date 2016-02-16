@@ -69,13 +69,13 @@
     </thead>
     <c:if test="${not empty pupilList}">
         <tbody>
-        <c:forEach items="${pupilList}" var="log">
-            <tr data-application-id="${log.person.personalId}">
-                <td>${log.person.personalId}</td>
-                <td>${log.person.firstName}</td>
-                <td>${log.person.lastName}</td>
-                <td>${log.school}</td>
-                <td>${log.schoolClass}</td>
+        <c:forEach items="${pupilList}" var="app">
+            <tr data-application-id="${app.person.personalId}">
+                <td>${app.person.personalId}</td>
+                <td>${app.person.firstName}</td>
+                <td>${app.person.lastName}</td>
+                <td>${app.school}</td>
+                <td>${app.schoolClass}</td>
                 <td class="buttons">
                     <%--<a class="button positive" href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/pupils/edit?id=${app.id}">Edit</a>--%>
 
