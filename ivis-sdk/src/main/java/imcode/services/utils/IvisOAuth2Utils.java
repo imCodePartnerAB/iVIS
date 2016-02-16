@@ -2,6 +2,7 @@ package imcode.services.utils;
 
 import com.imcode.entities.Person;
 import imcode.services.IvisServiceFactory;
+import imcode.services.restful.ProxyIvisServiceFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,15 +32,18 @@ public class IvisOAuth2Utils {
     public static final String IVIS_SERVICE_FACTORY_PARAMETER_NAME = "ivisServiceFactory";
 
     public static OAuth2ClientContext getClientContext(HttpServletRequest request) {
-        return getClientContext(request.getSession());
+        return getClientContext(request.getSession(true));
     }
 
     public static OAuth2ClientContext getClientContext(HttpSession session) {
-        OAuth2ClientContext clientContext = null;
-        ApplicationContext ctx = getSpringContext(session);
-        clientContext = ctx.getBean(OAuth2ClientContext.class);
-//        clientContext = (OAuth2ClientContext) session.getAttribute(CLIENT_CONTEXT_PARAMETER_NAME);
 
+        OAuth2ClientContext clientContext = (OAuth2ClientContext) session.getAttribute(CLIENT_CONTEXT_PARAMETER_NAME);
+        if (clientContext == null) {
+//            ApplicationContext ctx = getSpringContext(session);
+//            clientContext = ctx.getBean(OAuth2ClientContext.class);
+            clientContext = new DefaultOAuth2ClientContext();
+            session.setAttribute(CLIENT_CONTEXT_PARAMETER_NAME, clientContext);
+        }
         return clientContext;
     }
 
@@ -62,11 +67,11 @@ public class IvisOAuth2Utils {
     }
 
     public static void setAccessToken(HttpServletRequest request, OAuth2AccessToken accessToken) {
-        setAccessToken(request.getSession(), accessToken);
+        setAccessToken(request.getSession(true), accessToken);
     }
 
     public static OAuth2AccessToken getAccessToken(HttpServletRequest request) {
-        return getAccessToken(request.getSession());
+        return getAccessToken(request.getSession(true));
     }
 
     public static OAuth2AccessToken getAccessToken(HttpSession session) {
@@ -155,18 +160,27 @@ public class IvisOAuth2Utils {
 //    }
 
     public static IvisServiceFactory getServiceFactory(HttpSession session) {
-//        return (IvisServiceFactory) session.getAttribute(IVIS_SERVICE_FACTORY_PARAMETER_NAME);
-        ApplicationContext ctx = getSpringContext(session);
+        ProxyIvisServiceFactory serviceFactory = (ProxyIvisServiceFactory) session.getAttribute(IVIS_SERVICE_FACTORY_PARAMETER_NAME);
 
-        return ctx.getBean(IvisServiceFactory.class);
+        if (serviceFactory == null) {
+            ApplicationContext ctx = getSpringContext(session);
+            ProxyIvisServiceFactory serviceFactoryTemplate = ctx.getBean(ProxyIvisServiceFactory.class);
+            OAuth2ProtectedResourceDetails clientDetails = ctx.getBean(OAuth2ProtectedResourceDetails.class);
+            serviceFactory = new ProxyIvisServiceFactory(serviceFactoryTemplate.getApiUrl(), getClientContext(session), clientDetails);
+            serviceFactory.initialize();
+            session.setAttribute(IVIS_SERVICE_FACTORY_PARAMETER_NAME, serviceFactory);
+        }
+
+        return serviceFactory;
+//        return ctx.getBean(IvisServiceFactory.class);
     }
 
     public static IvisServiceFactory getServiceFactory(HttpServletRequest request) {
-        return getServiceFactory(request.getSession());
+        return getServiceFactory(request.getSession(true));
     }
 
     public static ApplicationContext getSpringContext(HttpServletRequest request) {
-        return getSpringContext(request.getSession());
+        return getSpringContext(request.getSession(true));
     }
 
     public static ApplicationContext getSpringContext(HttpSession session) {
