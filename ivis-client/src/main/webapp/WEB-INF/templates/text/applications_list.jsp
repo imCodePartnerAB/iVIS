@@ -48,19 +48,56 @@
         try {
             List<Application> applications = service.findAll();
             applicationList = new LinkedList<Application>();
+            List<String> searchQuestionNames = Arrays.asList(
+                    "PupilPerson.PupilPersonPersonalid",
+                    "PupilPerson.PupilPersonFirstName",
+                    "PupilPerson.PupilPersonLastName",
+                    "KontaktuppgifterVardnadshavare1.AppliedContactGuardian1PersonalId",
+                    "KontaktuppgifterVardnadshavare1.AppliedContactGuardian1PersonFirstName",
+                    "KontaktuppgifterVardnadshavare1.AppliedContactGuardian1PersonLastName",
+                    "OtherContactPers.OtherContactPersId",
+                    "OtherContactPers.OtherContactFirstName",
+                    "OtherContactPers.OtherContactLastName",
+                    "AppliedPupilPersonAddress2.AppliedPupilGuardian2PersonPersonalid",
+                    "AppliedPupilPersonAddress2.AppliedPupilGuardian2PersonFirstName",
+                    "AppliedPupilPersonAddress2.AppliedPupilGuardian2PersonLastName",
+                    "AppliedPupilPersonAddress.AppliedPupilGuardian1PersonFirstName",
+                    "KontaktuppgifterVardnadshavare2.AppliedContactGuardian2PersonFirstName",
+                    "KontaktuppgifterVardnadshavare2.AppliedContactGuardian2PersonLastName",
+                    "KontaktuppgifterVardnadshavare2.AppliedContactGuardian2PersonalId"
+                    );
 
             for (Application statement : applications) {
-                if (statusFilter != null && statement.getStatus() != statusFilter)
+                if (statusFilter != null && statement.getStatus() != statusFilter) {
                     continue;
+                }
 
-//                if (searchText != null && StringUtils.isNoneEmpty(searchText)) {
-//                    Person pupilPerson = statement.getPupil() != null ? statement.getPupil().getPerson():null;
-//                    Person submittedPerson = statement.getSubmittedPerson();
-//                    if (!IvisOAuth2Utils.personContainsString(pupilPerson, searchText) && !IvisOAuth2Utils.personContainsString(submittedPerson, searchText))
-//                        continue;
-//                }
 
-                applicationList.add(statement);
+                if (searchText != null && StringUtils.isNoneEmpty(searchText)) {
+                    Person userPerson = statement.getSubmittedUser() != null ? statement.getSubmittedUser().getPerson():null;
+                    if (IvisOAuth2Utils.personContainsString(userPerson, searchText)) {
+                        applicationList.add(statement);
+                        continue;
+                    }
+                    if (statement.getApplicationForm() == null || statement.getApplicationForm().getQuestions() == null) {
+                        continue;
+                    }
+                    Set<ApplicationFormQuestion> questions = statement.getApplicationForm().getQuestions();
+                    QUESTIONS:
+                    for (ApplicationFormQuestion question : questions) {
+                        for (String requredQuestionName : searchQuestionNames) {
+                            if (requredQuestionName.equalsIgnoreCase(question.getXsdElementName())
+                                    && question.getValue() != null
+                                    && question.getValue().toLowerCase().contains(searchText.toLowerCase())) {
+                                applicationList.add(statement);
+                                break QUESTIONS;
+                            }
+                        }
+                    }
+                } else {
+                    applicationList.add(statement);
+                }
+
             }
             Collections.sort(applicationList, new Comparator<Application>() {
                 @Override
