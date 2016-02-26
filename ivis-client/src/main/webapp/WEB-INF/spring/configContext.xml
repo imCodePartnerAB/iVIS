@@ -6,13 +6,13 @@
     <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
         <property name="customEditors">
             <map>
-                <entry key="java.io.File" value="com.imcode.imcms.addon.imagearchive.util.FileEditor"/>
-                <entry key="java.io.File[]" value="com.imcode.imcms.addon.imagearchive.util.FileArrayEditor"/>
+                <entry key="java.io.File" value="com.imcode.imcms.imagearchive.util.FileEditor"/>
+                <entry key="java.io.File[]" value="com.imcode.imcms.imagearchive.util.FileArrayEditor"/>
             </map>
         </property>
     </bean>
     
-    <bean class="com.imcode.imcms.addon.imagearchive.Config">
+    <bean class="com.imcode.imcms.imagearchive.Config">
         <property name="storagePath" value="${ImageArchiveStoragePath}"/>
         <property name="tmpPath" value="${ImageArchiveTempPath}"/>
         <property name="imageMagickPath" value="${ImageMagickPath}"/>

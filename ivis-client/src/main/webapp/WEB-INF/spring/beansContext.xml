@@ -24,6 +24,15 @@
           p:accessTokenUri="${AccessTokenUri}"
           p:userAuthorizationUri="${UserAuthorizationUri}"
           p:scope="#{{'read', 'write'}}"/>
+    <!--<bean id="ivisClientWithPassword"-->
+          <!--class="org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails"-->
+          <!--p:grantType="authorization_code"-->
+          <!--p:clientId="${ClientId}"-->
+          <!--p:clientSecret="secret"-->
+          <!--p:accessTokenUri="${AccessTokenUri}"-->
+          <!--p:username="admin"-->
+          <!--p:password="pass"-->
+          <!--p:scope="#{{'read', 'write'}}"/>-->
     <!--p:scope="read"/>-->
 
     <bean id="clientContext" class="org.springframework.security.oauth2.client.DefaultOAuth2ClientContext">

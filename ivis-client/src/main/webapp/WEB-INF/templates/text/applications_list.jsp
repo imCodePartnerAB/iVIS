@@ -166,7 +166,7 @@
             <tbody>
             <c:forEach items="${statements}" var="app">
                 <tr data-application-id="${app.id}"
-                    onclick="location.href='<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}';">
+                    onclick="location.href='<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/show?id=${app.id}';">
                     <td>${app.id}</td>
                     <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm"/>
                     <td>${dateString}</td>
@@ -201,7 +201,7 @@
                         <%--<td>${app.submittedUser}</td>--%>
                     <td class="buttons">
                         <a class="button positive"
-                           href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Visa</a>
+                           href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/show?id=${app.id}">Visa</a>
 
                             <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                             <%--method="get">--%>

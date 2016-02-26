@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.function.Function;
 
@@ -18,7 +19,7 @@ import static java.util.Comparator.comparing;
  * Created by vitaly on 15.10.15.
  */
 @Embeddable
-public class ApplicationFormQuestion implements Comparable<ApplicationFormQuestion>{
+public class ApplicationFormQuestion implements Comparable<ApplicationFormQuestion>, Serializable{
     private static Comparator<ApplicationFormQuestion> naturalComparator = nullsLast(comparing(ApplicationFormQuestion::getSortOrder, nullsLast(comparingInt(Integer::intValue))));
 //    private static Comparator<ApplicationFormQuestion> naturalComparator = new Comparator<ApplicationFormQuestion>() {
 //        @Override

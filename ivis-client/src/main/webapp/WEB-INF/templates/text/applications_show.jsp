@@ -69,7 +69,6 @@
 %>
 <c:if test="${not empty app}">
     <h1>Ansökan om skolskjuts</h1>
-
     <div class="groups">
         <div class="group">
             <div class="title">ID</div>
@@ -115,47 +114,33 @@
         </div>
     </div>
     <div id="applicationTabPage" class="tab-page">
-        <c:set var="applicationForm" value="${app.applicationForm}"/>
-        <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/edit/${app.id}" method="post" >
-            <c:set var="index" value="${0}"/>
-            <c:forEach items="${steps.entrySet()}" var="entry">
-                <div class="step">
-                    <div class="name">${entry.key.name}</div>
-                    <div class="questions">
-                        <c:forEach items="${entry.value.entrySet()}" var="subStep">
-                            <c:if test="${not empty subStep.key}">
-                                <div class="sub-step">${subStep.key}</div>
-                            </c:if>
-                            <c:forEach items="${subStep.value}" var="question" varStatus="varStatus">
-                                <div class="question">
-                                    <div class="name">${question.text}</div>
-                                        <%--<form:input path="questions[${varStatus.index}].xsdElementName"/>--%>
-                                        <%--<div class="answer">${question.value}</div>--%>
-                                        <input type="hidden" name="questions[${index}].xsdElementName" value="${question.xsdElementName}"/>
-                                        <%--<input type="hidden" name="questions.xsdElementName" value="${question.xsdElementName}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].sortOrder" value="${question.sortOrder}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].subStepName" value="${question.subStepName}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].stepName" value="${question.stepName}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].stepSortOrder" value="${question.stepSortOrder}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].text" value="${question.text}"/>--%>
-                                        <%--<input name="questions[${varStatus.index}].value" value="${question.value}"/>--%>
+        <c:forEach items="${steps.entrySet()}" var="entry" varStatus="fileOptionStatus">
+            <div class="step">
+                <div class="name">${entry.key.name}</div>
+                <div class="questions">
 
-                                        <input type="hidden" name="questions[${index}].sortOrder" value="${question.sortOrder}"/>
-                                        <input type="hidden" name="questions[${index}].subStepName" value="${question.subStepName}"/>
-                                        <input type="hidden" name="questions[${index}].stepName" value="${question.stepName}"/>
-                                        <input type="hidden" name="questions[${index}].stepSortOrder" value="${question.stepSortOrder}"/>
-                                        <input type="hidden" name="questions[${index}].text" value="${question.text}"/>
-                                        <input name="questions[${index}].value" value="${question.value}"/>
-                                    <c:set var="index" value="${index + 1}"/>
-                                </div>
-                            </c:forEach>
-                        </c:forEach>
-                    </div>
+                    <c:forEach items="${entry.value.entrySet()}" var="subStep" varStatus="fileOptionStatus">
+                        <%--<c:choose>--%>
+                            <%--<c:when test="${not empty subStep.key}">--%>
+                                <%--<div class="subStep">${subStep.key}</div>    --%>
+                            <%--</c:when>--%>
+                            <%--<c:otherwise>--%>
+                                <%----%>
+                            <%--</c:otherwise>--%>
+                        <%--</c:choose>--%>
+                        <c:if test="${not empty subStep.key}">
+                            <div class="sub-step">${subStep.key}</div>
+                        </c:if>
+                    <c:forEach items="${subStep.value}" var="question" varStatus="fileOptionStatus">
+                        <div class="question">
+                            <div class="name">${question.text}</div>
+                            <div class="answer">${question.value}</div>
+                        </div>
+                    </c:forEach>
+                    </c:forEach>
                 </div>
-            </c:forEach>
-            <button class="positive" type="submit">Save</button>
-            <button class="negative" type="reset">Cancel</button>
-        </form>
+            </div>
+        </c:forEach>
     </div>
 
     <div id="decisionTabPage" class="tab-page">
@@ -201,7 +186,7 @@
                 <tbody>
                 <c:forEach items="${logs}" var="app">
                     <fmt:formatDate value="${app.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
-                    <tr data-application-id="${app.id}">
+                        <tr data-application-id="${app.id}">
                         <td>${dateString}</td>
                         <td>${app.action}</td>
                         <td>${app.user}</td>
@@ -209,8 +194,8 @@
                         <td>${app.previousValue}</td>
                         <td>${app.newValue}</td>
                         <td class="buttons">
-                                <%--<a class="button positive"--%>
-                                <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>--%>
+                            <%--<a class="button positive"--%>
+                               <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>--%>
 
                                 <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                                 <%--method="get">--%>
@@ -229,6 +214,7 @@
             </c:if>
         </table>
     </div>
+    <a class="button positive" href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Edit</a>
 </c:if>
 <script type="text/javascript">
     var onOpen = function () {

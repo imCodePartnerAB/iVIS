@@ -2,12 +2,16 @@ package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.embed.Decision;
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.listners.AuditableModelListener;
 import com.imcode.entities.listners.DatedEntityListner;
 import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Created by vitaly on 14.05.15.
@@ -17,7 +21,7 @@ import java.io.Serializable;
 @EntityListeners({AuditableModelListener.class, DatedEntityListner.class})
 public class Application extends AbstractJpaDatedEntity<Long> implements Serializable {
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "applicationFormId")
     private ApplicationForm applicationForm;
 
@@ -110,4 +114,20 @@ public class Application extends AbstractJpaDatedEntity<Long> implements Seriali
 
         decision.setStatus(status);
     }
+
+    @Override
+    public boolean deepEquals(JpaEntity entity) {
+        if (this == entity) return true;
+        if (entity == null || getClass() != entity.getClass()) return false;
+
+        Application that = (Application) entity;
+        return Objects.equals(this.id, that.id)
+                && Objects.equals(this.decision, that.decision)
+                && Objects.equals(this.regardingUser, that.regardingUser)
+                && Objects.equals(this.registrationNumber, that.registrationNumber)
+                && Objects.equals(this.handledUser, that.handledUser)
+                && Objects.equals(this.submittedUser, that.submittedUser)
+                && JpaEntity.deepEquals(this.applicationForm, that.applicationForm);
+    }
 }
+

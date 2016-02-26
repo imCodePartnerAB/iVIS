@@ -158,7 +158,7 @@
         <dependency>
             <groupId>com.imcode.imcms</groupId>
             <artifactId>imcms</artifactId>
-            <version>SNAPSHOT</version>
+            <version>6.0.0-alpha104</version>
             <type>war</type>
             <!--<exclusions>-->
                 <!--<exclusion>-->
@@ -179,7 +179,7 @@
         <dependency>
             <groupId>com.imcode.imcms</groupId>
             <artifactId>imcms</artifactId>
-            <version>SNAPSHOT</version>
+            <version>6.0.0-alpha104</version>
             <classifier>classes</classifier>
             <type>jar</type>
             <scope>provided</scope>
@@ -207,12 +207,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.5.1</version>
+            <version>${jackson.databind-version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.5.1</version>
+            <version>${jackson.databind-version}</version>
         </dependency>
         <!--iVIS-->
         <dependency>

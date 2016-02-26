@@ -1,13 +1,11 @@
 package com.imcode.imcms.addon.ivisclient.controllers;
 
-import com.imcode.entities.Application;
-import com.imcode.entities.Guardian;
-import com.imcode.entities.Pupil;
+import com.imcode.entities.*;
+import com.imcode.entities.embed.ApplicationFormQuestion;
 import com.imcode.entities.embed.Decision;
-import com.imcode.services.ApplicationService;
-import com.imcode.services.GuardianService;
-import com.imcode.services.PersonService;
-import com.imcode.services.PupilService;
+import com.imcode.imcms.addon.ivisclient.controllers.form.ApplicationFormCmd;
+import com.imcode.services.*;
+import imcode.server.Imcms;
 import imcode.services.IvisServiceFactory;
 import imcode.services.utils.IvisOAuth2Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
@@ -34,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * Created by vitaly on 26.05.15.
@@ -61,8 +62,8 @@ public class IvisController {
     @Value("${ClientAddress}")
     private String clientAddress;
 
-    @Autowired
-    private IvisServiceFactory ivisServiceFactory;
+//    @Autowired
+//    private IvisServiceFactory ivisServiceFactory;
 
 
 //    @InitBinder
@@ -111,7 +112,7 @@ public class IvisController {
     @RequestMapping(value = "/{id}", params = {"status"}, method = RequestMethod.GET)
     public void updateStatus(HttpServletRequest request,
                              HttpServletResponse response,
-                             @PathVariable("id") Application application, @RequestParam("status") Decision.Status status) throws IOException {
+                             @PathVariable("id") Long applicationId, @RequestParam("status") Decision.Status status) throws IOException {
 //        IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
 //                .endPointUrl(serverAddress)
 //                .responseType("json")
@@ -119,11 +120,11 @@ public class IvisController {
 //        DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
 //        ApplicationService service = factory.getStatementService();
 
-        ApplicationService service = ivisServiceFactory.getService(ApplicationService.class);
+        ApplicationService service = getIvisServiceFactory(request).getService(ApplicationService.class);
 //
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
-//                Application application = service.find(id);
+                Application application = service.find(applicationId);
 //
                 if (application != null && application.getDecision() != null) {
                     application.getDecision().setStatus(status);
@@ -138,6 +139,42 @@ public class IvisController {
 
         response.sendRedirect(getRequestReferer(request));
 
+//        return id + ":" + status.toString();
+    }
+
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
+    public void updateStatus(HttpServletRequest request,
+                             HttpServletResponse response,
+                             @PathVariable("id") Long applicationId, @ModelAttribute("applicationForm") ApplicationFormCmd applicationFormCmd, BindingResult bindingResult) throws IOException {
+
+        ApplicationService service = getIvisServiceFactory(request).getService(ApplicationService.class);
+        ApplicationFormService formService = getIvisServiceFactory(request).getService(ApplicationFormService.class);
+        EntityVersionService versionService = getIvisServiceFactory(request).getService(EntityVersionService.class);
+
+        if (IvisOAuth2Utils.getAccessToken(request) != null) {
+            try {
+                Application application = service.find(applicationId);
+//
+                if (application != null && application.getApplicationForm() != null) {
+                    ApplicationForm applicationForm = application.getApplicationForm();
+//                    ApplicationForm newApplicationForm = new ApplicationForm();
+//                    newApplicationForm.setId(applicationForm.getId());
+//                    newApplicationForm.setName(applicationForm.getName());
+//                    newApplicationForm.setVersion(applicationForm.getVersion());
+//                    newApplicationForm.setQuestions(new LinkedHashSet<>(applicationFormCmd.getQuestions()));
+//                    if (!newApplicationForm.deepEquals(applicationForm)) {
+                    applicationForm.setQuestions(applicationFormCmd.getQuestionSet());
+                    formService.save(applicationForm);
+//                        versionService.save(new EntityVersion(application));
+//                    }
+                }
+            } catch (UserRedirectRequiredException e) {
+                IvisOAuth2Utils.setAccessToken(request, null);
+            }
+        }
+
+        response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/applications/show?id=" + applicationId);
+//
 //        return id + ":" + status.toString();
     }
 
@@ -163,8 +200,8 @@ public class IvisController {
 ////                    .responseType("json")
 ////                    .version("v1").build());
 ////            DefaultIvisServiceFactory factory = ivis.getServiceFactory(client, IvisOAuth2Utils.getClientContext(request));
-//            ApplicationService applicationService = ivisServiceFactory.getService(ApplicationService.class);
-//            PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
+//            ApplicationService applicationService = getIvisServiceFactory(request).getService(ApplicationService.class);
+//            PupilService pupilService = getIvisServiceFactory(request).getService(PupilService.class);
 //
 //            try {
 ////                application = new Application();
@@ -202,9 +239,9 @@ public class IvisController {
 //                              @PathVariable("pupilId") Pupil persistedPupil,
                             HttpServletRequest request,
                             HttpServletResponse response) throws IOException {
-        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
-        PersonService personService = ivisServiceFactory.getService(PersonService.class);
-        GuardianService guardianService = ivisServiceFactory.getService(GuardianService.class);
+        PupilService pupilService = getIvisServiceFactory(request).getService(PupilService.class);
+        PersonService personService = getIvisServiceFactory(request).getService(PersonService.class);
+        GuardianService guardianService = getIvisServiceFactory(request).getService(GuardianService.class);
 
         if (pupil.getPerson() != null) {
             personService.save(pupil.getPerson());
@@ -239,10 +276,10 @@ public class IvisController {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws IOException {
 
-//        PupilService pupilService = ivisServiceFactory.getService(PupilService.class);
-//        PersonService personService = ivisServiceFactory.getService(PersonService.class);
-//        GuardianService guardianService = ivisServiceFactory.getService(GuardianService.class);
-        ApplicationService applicationService = ivisServiceFactory.getService(ApplicationService.class);
+//        PupilService pupilService = getIvisServiceFactory(request).getService(PupilService.class);
+//        PersonService personService = getIvisServiceFactory(request).getService(PersonService.class);
+//        GuardianService guardianService = getIvisServiceFactory(request).getService(GuardianService.class);
+        ApplicationService applicationService = getIvisServiceFactory(request).getService(ApplicationService.class);
 
 //        if (application.getPerson() != null) {
 //            personService.save(application.getPerson());
@@ -275,107 +312,13 @@ public class IvisController {
         return request.getHeader("referer");
     }
 
-    @Deprecated
-    private static Application pharseXml(InputStream inputStream) {
+    private void checkServiceFactory(HttpServletRequest request) {
+        if (getIvisServiceFactory(request) == null) {
 
-//        StatmentHandler handler = new StatmentHandler();
-//
-//        try {
-//
-//            SAXParserFactory factory = SAXParserFactory.newInstance();
-//            SAXParser saxParser = factory.newSAXParser();
-//
-//            saxParser.parse(inputStream, handler);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//
-//        return handler.getApplication();
-        return null;
+        }
     }
 
-    //   private static class StatmentHandler extends DefaultHandler {
-//        private Application application;
-//        private LinkedList<String> nodes = new LinkedList<>();
-//        private String fullElementName;
-//        private String elementName;
-//
-//
-//        @Override
-//        public void startDocument() throws SAXException {
-//            if (application != null) {
-//                throw new SAXException("This application handler " + this + " is allredy used, please create a new one.");
-//            }
-//
-//            application = new Application();
-//            application.setStatus(StatementStatus.created);
-//        }
-//
-//        @Override
-//        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-//            nodes.add(qName);
-//        }
-//
-//        @Override
-//        public void characters(char[] ch, int start, int length) throws SAXException {
-//            String currentNode = nodes.getLast();
-//            String value = new String(ch, start, length);
-//            System.out.println(ch);
-//
-//            if (nodes.contains("student") && "Personnummer".equalsIgnoreCase(currentNode)) {
-//                Person person = new Person(value, null, null);
-//                Pupil pupil = new Pupil();
-//                pupil.setPerson(person);
-//                application.setPupil(pupil);
-//            }
-//        }
-//
-//        @Override
-//        public void endElement(String uri, String localName, String qName) throws SAXException {
-//            nodes.removeLast();
-//        }
-//
-//        public Application getApplication() {
-//            return application;
-//        }
-//    }
-    public static void main(String[] args) {
-
-        foo(false, null);
-        foo(new Object[]{false});
+    private IvisServiceFactory getIvisServiceFactory(HttpServletRequest request) {
+        return IvisOAuth2Utils.getServiceFactory(request);
     }
-
-    public static void foo(String var) {
-        System.out.println("IvisController.foo(String)");
-    }
-
-//    public static void foo(Object var) {
-//        System.out.println("IvisController.foo(Object)");
-//    }
-
-    public static void foo(Number var) {
-        System.out.println("IvisController.foo(Number)");
-    }
-
-//    public static void foo(Integer var) {
-//        System.out.println("IvisController.foo(Integer)");
-//    }
-
-    public static void foo(Long var) {
-        System.out.println("IvisController.foo(Long)");
-    }
-
-    public static void foo(boolean var, Object... vararg) {
-        System.out.println("IvisController.foo(boolean, vararg)");
-    }
-
-    public static void foo(Object... vararg) {
-        System.out.println("IvisController.foo(vararg)");
-    }
-
-//    public static void foo(int var) {
-//        System.out.println("IvisController.foo(Integer)");
-//    }
 }

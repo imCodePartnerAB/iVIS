@@ -4,13 +4,14 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by vitaly on 15.10.15.
  */
 @Embeddable
-public class Decision {
+public class Decision implements Serializable{
     public enum Status {APPROVE("Godkänd"), DENI("Avslagen"), SUBMIT("Emottagen");
         private final String description;
 

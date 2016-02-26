@@ -52,14 +52,15 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public Object update(@PathVariable("id") ID id, @RequestBody(required = false) T entity, WebRequest webRequest) {
-        T existsEntity = getService().find(id);
-
-        if (existsEntity != null) {
-            BeanUtils.copyProperties(entity, existsEntity, "id");
-            service.save(entity);
-        }
-
-        return existsEntity;
+//        T existsEntity = getService().find(id);
+//
+//        if (existsEntity != null) {
+//            BeanUtils.copyProperties(existsEntity, entity, "id");
+//            service.save(entity);
+//        }
+//
+//        return existsEntity;
+        return service.save(entity);
     }
 
     //Deleting entity
