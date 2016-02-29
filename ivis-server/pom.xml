@@ -11,7 +11,7 @@
     <name>ivis-server</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <!--<jackson.databind-version>2.2.3</jackson.databind-version>-->
+        <jackson.databind-version>2.2.3</jackson.databind-version>
         <!--<spring-framework.version>4.1.5.RELEASE</spring-framework.version>-->
         <spring-security.version>3.2.5.RELEASE</spring-security.version>
         <!--<spring-security.version>4.0.1.RELEASE</spring-security.version>-->

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
@@ -139,7 +140,11 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
             uriVariables = new Object[]{idEntity.getId()};
             String uri = request.getAddress();
             HttpMethod method = request.getMethod();
-            restTemplate.put(uri, entity, uriVariables);
+//            try {
+                restTemplate.put(uri, entity, uriVariables);
+//            } catch (RestClientException e) {
+//                throw new RuntimeException(e);
+//            }
         }
 
         return result;
