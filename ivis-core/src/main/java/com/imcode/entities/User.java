@@ -95,10 +95,12 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     }
 
     @Override
+    @JsonIgnore
     public Set<Role> getAuthorities() {
         return roles;
     }
 
+    @JsonIgnore
     public void setAuthorities(Set<Role> roles) {
         this.roles = roles;
     }
@@ -177,6 +179,7 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         return roles.containsAll(Arrays.asList(requiredRoles));
     }
 
+    @JsonIgnore
     public Set<String> getRoleNames() {
         return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
     }

@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
@@ -40,6 +41,7 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
 //    }
 
     @Override
+    @JsonIgnore
     public String getAuthority() {
         return name;
     }

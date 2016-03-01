@@ -1,6 +1,7 @@
 package com.imcode.entities.superclasses;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.imcode.entities.interfaces.JpaEntity;
 
@@ -38,6 +39,7 @@ public abstract class AbstractIdEntity<ID extends Serializable> extends Abstract
     }
 
     @Override
+    @JsonIgnore
     public String getClassDescription() {
         StringBuilder builder = new StringBuilder();
         String className = this.getClass().getSimpleName();
