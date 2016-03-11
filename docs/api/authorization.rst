@@ -1,7 +1,7 @@
 ﻿Authorization
 =============
 
-1. In order to be authorized and to obtain the token you have to get authorization code first by sending GET request to
+Step 1. In order to be authorized and to obtain the token you have to get authorization code first by sending GET request to
 
 /oauth/authorize?response_type=code&client_id={yourClientId}&redirect_uri={redirectUrl}&display=popup&scope={scope}
 
@@ -11,7 +11,7 @@ where
 {redirectUrl} is the URL that will receive authorization code after successful authorization
 {scope} is the list of the required permissions (currently you can use 'read+write')
 
-2. When you have the authorization code (it is sent by GET request to your {redirectUrl}) you can try to get token by
+Step 2. When you have the authorization code (it is sent by GET request to your {redirectUrl}) you can try to get token by
 sending POST request to
 
 /oauth/token
@@ -36,7 +36,7 @@ access_token (token itself)
 expiration_date
 refresh_token
 
-3. When your token is expired you can refresh (update) it without repeating authorization by sending request to
+Step 3. When your token is expired you can refresh (update) it without repeating authorization by sending request to
 
 /oauth/token?grant_type=refresh_token&refresh_token={yourRefreshToken}
 
