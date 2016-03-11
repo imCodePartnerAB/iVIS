@@ -18,3 +18,4 @@ Contents
 
    basic_concepts/index
    quick_start/index
+   api/index
