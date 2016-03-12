@@ -117,10 +117,12 @@ public class Application extends AbstractJpaDatedEntity<Long> implements Seriali
 
     @Override
     public boolean deepEquals(JpaEntity entity) {
-        if (this == entity) return true;
-        if (entity == null || getClass() != entity.getClass()) return false;
+        if (!super.deepEquals(entity)) {
+            return false;
+        }
 
         Application that = (Application) entity;
+
         return Objects.equals(this.id, that.id)
                 && Objects.equals(this.decision, that.decision)
                 && Objects.equals(this.regardingUser, that.regardingUser)

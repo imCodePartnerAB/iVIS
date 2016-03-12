@@ -1,7 +1,6 @@
 package com.imcode.imcms.addon.ivisclient.controllers;
 
 import com.imcode.entities.*;
-import com.imcode.entities.embed.ApplicationFormQuestion;
 import com.imcode.entities.embed.Decision;
 import com.imcode.imcms.addon.ivisclient.controllers.form.ApplicationFormCmd;
 import com.imcode.services.*;
@@ -31,10 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 /**
  * Created by vitaly on 26.05.15.

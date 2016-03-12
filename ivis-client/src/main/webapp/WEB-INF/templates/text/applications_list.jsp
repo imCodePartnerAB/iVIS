@@ -9,7 +9,7 @@
 <%@ page import="com.imcode.entities.embed.Decision" %>
 <%@ page import="com.imcode.entities.ApplicationForm" %>
 <%@ page import="java.util.*" %>
-<%@ page import="com.imcode.entities.embed.ApplicationFormQuestion" %>
+<%@ page import="com.imcode.entities.ApplicationFormQuestion" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

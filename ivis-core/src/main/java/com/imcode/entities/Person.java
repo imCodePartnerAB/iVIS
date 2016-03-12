@@ -21,16 +21,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_person")
-//@MappedSuperclass
 public class Person extends AbstractPerson implements Serializable {
-//    @Column
-//    private String personalId;
-//
-//    @Column
-//    private String firstName;
-//
-//    @Column
-//    private String lastName;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
@@ -71,30 +62,6 @@ public class Person extends AbstractPerson implements Serializable {
 
     }
 
-//    public String getPersonalId() {
-//        return personalId;
-//    }
-//
-//    public void setPersonalId(String personalId) {
-//        this.personalId = personalId;
-//    }
-//
-//    public String getFirstName() {
-//        return firstName;
-//    }
-//
-//    public void setFirstName(String firstName) {
-//        this.firstName = firstName;
-//    }
-//
-//    public String getLastName() {
-//        return lastName;
-//    }
-//
-//    public void setLastName(String lastName) {
-//        this.lastName = lastName;
-//    }
-
     //Comunication information
     public Map<AddressTypeEnum, Address> getAddresses() {
         return addresses;
@@ -107,7 +74,7 @@ public class Person extends AbstractPerson implements Serializable {
     @JsonIgnore
     public void setAddress(Address address) {
         EnumMap<AddressTypeEnum, Address> map = (EnumMap<AddressTypeEnum, Address>) this.addresses;
-        putAddressValueIntoEnumMap(AddressTypeEnum.class, address, map);
+        putAddressValueIntoMap(AddressTypeEnum.class, address, map);
     }
 
     @JsonIgnore
@@ -132,7 +99,7 @@ public class Person extends AbstractPerson implements Serializable {
     @JsonIgnore
     public void setEmail(Email email) {
         EnumMap<CommunicationTypeEnum, Email> map = (EnumMap<CommunicationTypeEnum, Email>) this.emails;
-        putAddressValueIntoEnumMap(CommunicationTypeEnum.class, email, map);
+        putAddressValueIntoMap(CommunicationTypeEnum.class, email, map);
     }
 
     @JsonIgnore
@@ -157,7 +124,7 @@ public class Person extends AbstractPerson implements Serializable {
     @JsonIgnore
     public void setPhone(Phone phone) {
         EnumMap<CommunicationTypeEnum, Phone> map = (EnumMap<CommunicationTypeEnum, Phone>) this.phones;
-        putAddressValueIntoEnumMap(CommunicationTypeEnum.class, phone, map);
+        putAddressValueIntoMap(CommunicationTypeEnum.class, phone, map);
     }
 
     @JsonIgnore
@@ -190,23 +157,6 @@ public class Person extends AbstractPerson implements Serializable {
         return person;
     }
 
-//    @Override
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        if (StringUtils.hasText(firstName))
-//            addWord(sb, firstName);
-//
-//        if (StringUtils.hasText(lastName))
-//            addWord(sb, lastName);
-//
-//
-//        if (sb.length() == 0)
-//            addWord(sb, personalId);
-//        ;
-//
-//        return sb.toString();
-//    }
-
     private void addWord(StringBuilder sb, String word) {
         if (sb.length() > 0 && sb.charAt(sb.length() - 1) != ' ') {
             sb.append(' ');
@@ -227,18 +177,5 @@ public class Person extends AbstractPerson implements Serializable {
 
         return (EnumMap<K, V>) newValue;
     }
-
-    private <K extends Enum<K>, V extends ContactInformation<K>> void putAddressValueIntoEnumMap(Class<K> enumClass, V addressValue, EnumMap<K, V> map) {
-        Objects.requireNonNull(addressValue);
-        K addressValueType = addressValue.getType();
-        Objects.requireNonNull(addressValueType);
-
-        if (map == null) {
-            map = new EnumMap<>(enumClass);
-        }
-
-        map.put(addressValueType, addressValue);
-    }
-
 
 }

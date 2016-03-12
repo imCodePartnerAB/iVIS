@@ -1,6 +1,5 @@
 package com.imcode.entities;
 
-import com.imcode.entities.embed.ApplicationFormQuestion;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -18,12 +17,15 @@ public class ApplicationForm extends AbstractNamedEntity<Long> {
     @Column
     private Integer version;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @OrderBy("sortOrder ASC")
-    @CollectionTable(name = "dbo_application_form_question",
-            joinColumns = @JoinColumn(name = "applicationFormId"),
-            uniqueConstraints = @UniqueConstraint(columnNames = {"applicationFormId", "xsdElementName"}))
-    private Set<ApplicationFormQuestion> questions;
+    //    @ElementCollection(fetch = FetchType.EAGER)
+//    @OrderBy("sortOrder ASC")
+//    @CollectionTable(name = "dbo_application_form_question",
+//            joinColumns = @JoinColumn(name = "applicationFormId"),
+//            uniqueConstraints = @UniqueConstraint(columnNames = {"applicationFormId", "xsdElementName"}))
+//    @Transient
+//    private Set<ApplicationFormQuestion> questions;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "applicationForm")
+    private List<ApplicationFormStep> steps = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "applicationForm")
     private Set<Application> applications;
@@ -37,13 +39,13 @@ public class ApplicationForm extends AbstractNamedEntity<Long> {
         this.version = version;
     }
 
-    public Set<ApplicationFormQuestion> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Set<ApplicationFormQuestion> questions) {
-        this.questions = questions;
-    }
+//    public Set<ApplicationFormQuestion> getQuestions() {
+//        return questions;
+//    }
+//
+//    public void setQuestions(Set<ApplicationFormQuestion> questions) {
+//        this.questions = questions;
+//    }
 
     @Override
     public String toString() {
@@ -56,45 +58,16 @@ public class ApplicationForm extends AbstractNamedEntity<Long> {
 
     @Override
     public boolean deepEquals(JpaEntity entity) {
-        if (this == entity) return true;
-        if (entity == null || getClass() != entity.getClass()) return false;
-
-        ApplicationForm that = (ApplicationForm) entity;
-        if (
-                Objects.equals(this.id, that.id)
-                        && Objects.equals(this.name, that.name)
-                        && Objects.equals(this.version, that.version)) {
-            if (this.questions == that.questions) {
-                return true;
-            } else if (this.questions != null && that.questions != null && this.questions.size() == that.questions.size()) {
-                Set<ApplicationFormQuestion> thisQuestions = this.questions;
-                Set<ApplicationFormQuestion> tempQuestions = new HashSet<>(that.questions);
-
-                //deep equals question sets
-                for (ApplicationFormQuestion thisQuestion : thisQuestions) {
-                    Iterator<ApplicationFormQuestion> iterator = tempQuestions.iterator();
-                    boolean hasEquals = false;
-
-                    while (iterator.hasNext()) {
-                        ApplicationFormQuestion thatQuestion = iterator.next();
-                        //remove equal element if found
-                        if (EqualsBuilder.reflectionEquals(thisQuestion, thatQuestion, false)) {
-                            iterator.remove();
-                            hasEquals = true;
-                            break;
-                        }
-                    }
-
-                    //if equality not found
-                    if (!hasEquals) {
-                        return false;
-                    }
-                }
-                return tempQuestions.isEmpty();
-            }
+        if (!super.deepEquals(entity)) {
+            return false;
         }
 
-        return false;
+        ApplicationForm that = (ApplicationForm) entity;
+
+        return Objects.equals(this.id, that.id)
+                && Objects.equals(this.name, that.name)
+                && Objects.equals(this.version, that.version)
+                && JpaEntity.deepEquals(this.steps, that.steps);
     }
 
     public Set<Application> getApplications() {
@@ -103,5 +76,13 @@ public class ApplicationForm extends AbstractNamedEntity<Long> {
 
     public void setApplications(Set<Application> applications) {
         this.applications = applications;
+    }
+
+    public List<ApplicationFormStep> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<ApplicationFormStep> steps) {
+        this.steps = steps;
     }
 }

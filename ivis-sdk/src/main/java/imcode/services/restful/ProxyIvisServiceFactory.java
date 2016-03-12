@@ -9,6 +9,8 @@ import com.imcode.services.*;
 import imcode.services.GenericServiceProxy;
 import imcode.services.IvisServiceFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -468,7 +470,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
                             "com.imcode.entities", "imcode.services.restful");
             serviceFactory.initialize();
 //            serviceFactory.check EntityClassList(serviceFactory.entityClassList);
-//            GenericService service = serviceFactory.getService(ApplicationService.class);
+            GenericService service = serviceFactory.getService(ApplicationService.class);
 ////            UserService service = serviceFactory.getService(UserService.class);
 ////            User entityList = service.getCurrentUser();
 //////            SchoolClass schoolClass = (SchoolClass) service1.find(1L);
@@ -476,15 +478,16 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 ////            entity.setClassPlacementFrom(LocalDate.now());
 //
 //            Random r = new Random();
-//            Application entity = (Application) service.find(75L);
+            Application entity = (Application) service.find(75L);
+            String entityString = ToStringBuilder.reflectionToString(entity, ToStringStyle.JSON_STYLE);
 ////            entity = new Application();
 //            entity.setDecision(new Decision(Decision.Status.values()[r.nextInt(3)]));
 //            service.save(entity);
-            SchoolService service = serviceFactory.getService(SchoolService.class);
-            School entity = service.find(10l);
-            service.save(entity);
+//            SchoolService service = serviceFactory.getService(SchoolService.class);
+//            School entity = service.find(10l);
+//            service.save(entity);
 
-            System.out.println(service.findAll());
+            System.out.println(entityString);
 
 //            LogEventService service = serviceFactory.getService(LogEventService.class);
 //            final Application entity = new Application();

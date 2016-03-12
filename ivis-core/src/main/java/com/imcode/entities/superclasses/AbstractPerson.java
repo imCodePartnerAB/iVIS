@@ -1,6 +1,7 @@
 package com.imcode.entities.superclasses;
 
 import com.imcode.entities.interfaces.JpaContactedPerson;
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import org.springframework.util.StringUtils;
 
@@ -25,27 +26,6 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
 
     @Column
     private String lastName;
-
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    @ElementCollection
-//    @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
-//    @MapKeyEnumerated(EnumType.STRING)
-//    @MapKeyColumn(name = "typeKey", length = 50)
-//    private Map<AddressTypeEnum, Address> addresses;
-//
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    @ElementCollection
-//    @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "ownerId"))
-//    @MapKeyEnumerated(EnumType.STRING)
-//    @MapKeyColumn(name = "typeKey", length = 50)
-//    private Map<CommunicationTypeEnum, Email> emails;
-//
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    @ElementCollection
-//    @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "ownerId"))
-//    @MapKeyEnumerated(EnumType.STRING)
-//    @MapKeyColumn(name = "typeKey", length = 50)
-//    private Map<CommunicationTypeEnum, Phone> phones;
 
     public AbstractPerson() {
     }
@@ -80,104 +60,6 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
         this.lastName = lastName;
     }
 
-//    //Comunication information
-//    public Map<AddressTypeEnum, Address> getAddresses() {
-//        return addresses;
-//    }
-//
-//    public void setAddresses(Map<AddressTypeEnum, Address> addresses) {
-////        this.addresses = convertToEnumMap(addresses, AddressTypeEnum.class);
-//        this.addresses = addresses;
-//    }
-//
-//    @JsonIgnore
-//    public void setAddress(Address address) {
-////        EnumMap<AddressTypeEnum, Address> map = (EnumMap<AddressTypeEnum, Address>) this.addresses;
-//        putAddressValueIntoMap(AddressTypeEnum.class, address, addresses);
-//    }
-//
-//    @JsonIgnore
-//    public Address getAddress(AddressTypeEnum addressType) {
-//        Objects.requireNonNull(addressType);
-//
-//        if (addresses == null) {
-//            return null;
-//        }
-//
-//        return addresses.get(addressType);
-//    }
-//
-//    public Map<CommunicationTypeEnum, Email> getEmails() {
-//        return emails;
-//    }
-//
-//    public void setEmails(Map<CommunicationTypeEnum, Email> emails) {
-////        this.emails = convertToEnumMap(emails, CommunicationTypeEnum.class);
-//        this.emails = emails;
-//    }
-//
-//    @JsonIgnore
-//    public void setEmail(Email email) {
-////        EnumMap<CommunicationTypeEnum, Email> map = (EnumMap<CommunicationTypeEnum, Email>) this.emails;
-//        putAddressValueIntoMap(CommunicationTypeEnum.class, email, emails);
-//    }
-//
-//    @JsonIgnore
-//    public Email getEmail(CommunicationTypeEnum type) {
-//        Objects.requireNonNull(type);
-//
-//        if (emails == null) {
-//            return null;
-//        }
-//
-//        return emails.get(type);
-//    }
-//
-//    public Map<CommunicationTypeEnum, Phone> getPhones() {
-//        return phones;
-//    }
-//
-//    public void setPhones(Map<CommunicationTypeEnum, Phone> phones) {
-////        this.phones = convertToEnumMap(phones, CommunicationTypeEnum.class);
-//        this.phones = phones;
-//    }
-//
-//    @JsonIgnore
-//    public void setPhone(Phone phone) {
-////        EnumMap<CommunicationTypeEnum, Phone> map = (EnumMap<CommunicationTypeEnum, Phone>) this.phones;
-//        putAddressValueIntoMap(CommunicationTypeEnum.class, phone, phones);
-//    }
-//
-//    @JsonIgnore
-//    public Phone getPhone(CommunicationTypeEnum type) {
-//        Objects.requireNonNull(type);
-//
-//        if (emails == null) {
-//            return null;
-//        }
-//
-//        return phones.get(type);
-//    }
-
-//    public static AbstractPerson fromString(String firstNameLastName) {
-//        if (firstNameLastName == null || firstNameLastName.isEmpty()) {
-//            throw new IllegalArgumentException("The \"firstNameLastName\" should be not epmty!");
-//        }
-//
-//        AbstractPerson person = new AbstractPerson();
-//
-//        String[] parts = firstNameLastName.split(" ");
-//
-//        person.setFirstName(parts[0]);
-//        try {
-//            person.setLastName(parts[1]);
-//        } catch (Exception ignore) {
-//        }
-//
-//
-//        return person;
-//    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -204,20 +86,7 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
         sb.append(word);
     }
 
-//    private <K extends Enum<K>, V> EnumMap<K, V> convertToEnumMap(Map<K, V> newValue, Class<K> type) {
-//        if (!(newValue instanceof EnumMap)) {
-//            if (newValue == null || newValue.isEmpty()) {
-//                return new EnumMap<>(type);
-//            } else {
-//                return new EnumMap<>(newValue);
-//            }
-//
-//        }
-//
-//        return (EnumMap<K, V>) newValue;
-//    }
-
-    protected  <K extends Enum<K>, V extends ContactInformation<K>> void putAddressValueIntoMap(Class<K> enumClass, V addressValue, Map<K, V> map) {
+    protected  static <K extends Enum<K>, V extends ContactInformation<K>> void putAddressValueIntoMap(Class<K> enumClass, V addressValue, Map<K, V> map) {
         Objects.requireNonNull(addressValue);
         K addressValueType = addressValue.getType();
         Objects.requireNonNull(addressValueType);
@@ -229,22 +98,18 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
         map.put(addressValueType, addressValue);
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof AbstractPerson)) return false;
-//        if (!super.equals(o)) return false;
-//
-//        AbstractPerson that = (AbstractPerson) o;
-//
-//        return !(getPersonalId() != null ? !getPersonalId().equals(that.getPersonalId()) : that.getPersonalId() != null);
-//
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = super.hashCode();
-//        result = 31 * result + (getPersonalId() != null ? getPersonalId().hashCode() : 0);
-//        return result;
-//    }
+    @Override
+    public boolean deepEquals(JpaEntity entity) {
+        if (!super.deepEquals(entity)) {
+            return false;
+        }
+
+        AbstractPerson that = (AbstractPerson) entity;
+
+        return Objects.equals(this.personalId, that.personalId)
+               && Objects.equals(this.firstName, that.firstName)
+               && Objects.equals(this.lastName, that.lastName)
+//               && Objects.equals(this., that.)
+                ;
+    }
 }

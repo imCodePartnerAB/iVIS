@@ -1,6 +1,6 @@
 package com.imcode.imcms.addon.ivisclient.utils;
 
-import com.imcode.entities.embed.ApplicationFormQuestion;
+import com.imcode.entities.ApplicationFormQuestion;
 
 import java.util.*;
 

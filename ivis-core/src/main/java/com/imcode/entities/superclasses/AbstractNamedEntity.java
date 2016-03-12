@@ -1,10 +1,12 @@
 package com.imcode.entities.superclasses;
 
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.interfaces.JpaNamedEntity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Created by vitaly on 13.05.15.
@@ -38,5 +40,16 @@ public abstract class AbstractNamedEntity<ID extends Serializable> extends Abstr
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "(" + getId() + ':' + name + ')';
+    }
+
+    @Override
+    public boolean deepEquals(JpaEntity entity) {
+        if (!super.deepEquals(entity)) {
+            return false;
+        }
+
+        AbstractNamedEntity that = (AbstractNamedEntity) entity;
+
+        return Objects.equals(this.name, that.name);
     }
 }

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Created by vitaly on 13.05.15.
@@ -75,6 +76,14 @@ public abstract class AbstractIdEntity<ID extends Serializable> extends Abstract
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : super.hashCode();
+    }
+
+    @Override
+    public boolean deepEquals(JpaEntity entity) {
+        if (this == entity) return true;
+        if (entity == null || this.getClass() != entity.getClass()) return false;
+
+        return Objects.equals(this.getId(), entity.getId());
     }
 
     @Override

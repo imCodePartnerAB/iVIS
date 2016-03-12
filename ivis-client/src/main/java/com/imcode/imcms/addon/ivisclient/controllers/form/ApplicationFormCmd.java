@@ -1,6 +1,6 @@
 package com.imcode.imcms.addon.ivisclient.controllers.form;
 
-import com.imcode.entities.embed.ApplicationFormQuestion;
+import com.imcode.entities.ApplicationFormQuestion;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
