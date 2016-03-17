@@ -16,3 +16,8 @@ Root for the all relative URLs is 'http://ivis.dev.imcode.com/';
    authorization
    schools
    schoolclasses
+   applications
+   applicationforms
+   applicationformsteps
+   applicationformquestiongroups
+   applicationformquestions
