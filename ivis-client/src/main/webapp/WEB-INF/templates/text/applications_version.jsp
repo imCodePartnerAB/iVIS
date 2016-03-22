@@ -124,7 +124,7 @@
                 <div class="name">${entry.key.name}</div>
                 <div class="questions">
 
-                    <c:forEach items="${entry.value.entrySet()}" var="subStep" varStatus="fileOptionStatus">
+                    <c:forEach items="${entry.value.entrySet()}" var="group" varStatus="fileOptionStatus">
                         <%--<c:choose>--%>
                             <%--<c:when test="${not empty subStep.key}">--%>
                                 <%--<div class="subStep">${subStep.key}</div>    --%>
@@ -133,10 +133,10 @@
                                 <%----%>
                             <%--</c:otherwise>--%>
                         <%--</c:choose>--%>
-                        <c:if test="${not empty subStep.key}">
-                            <div class="sub-step">${subStep.key}</div>
+                        <c:if test="${not empty group.key}">
+                            <div class="sub-step">${group.key}</div>
                         </c:if>
-                    <c:forEach items="${subStep.value}" var="question" varStatus="fileOptionStatus">
+                    <c:forEach items="${group.value}" var="question" varStatus="fileOptionStatus">
                         <div class="question">
                             <div class="name">${question.text}</div>
                             <div class="answer">${question.value}</div>

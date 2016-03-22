@@ -5,10 +5,7 @@ import com.imcode.entities.superclasses.AbstractSortableNamedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
@@ -19,6 +16,26 @@ import static java.util.Comparator.comparing;
 @Entity
 @Table(name = "dbo_application_form_question")
 public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> implements Serializable {
+    public ApplicationFormQuestion() {
+    }
+
+    public ApplicationFormQuestion(String name, String text, String value, String questionType) {
+        this(name, null, text, value, false, Collections.singletonList(value), String.class, false, Collections.emptyList(), questionType, null);
+    }
+
+    public ApplicationFormQuestion(String name, Integer sortOrder, String text, String value, Boolean multiValues, List<String> values, Class<? extends Serializable> valueType, Boolean multiVariants, List<String> variants, String questionType, ApplicationFormQuestionGroup questionGroup) {
+        super(null, name, sortOrder);
+        this.text = text;
+        this.value = value;
+        this.multiValues = multiValues;
+        this.values = values;
+//        this.valueType = valueType;
+        this.multiVariants = multiVariants;
+        this.variants = variants;
+        this.questionType = questionType;
+        this.questionGroup = questionGroup;
+    }
+
     public ApplicationFormQuestionGroup getQuestionGroup() {
         return questionGroup;
     }
@@ -52,13 +69,13 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
         }
     }
 
-    public <T extends Serializable> Helper<T> getHelper(Class<T> valueType) {
-        if (valueType != this.valueType) {
-            throw new IllegalArgumentException("Value type '" + valueType + "' of argument and value type of question '" + this.valueType + "' isn't equals");
-        }
-
-        return new Helper<>();
-    }
+//    public <T extends Serializable> Helper<T> getHelper(Class<T> valueType) {
+//        if (valueType != this.valueType) {
+//            throw new IllegalArgumentException("Value type '" + valueType + "' of argument and value type of question '" + this.valueType + "' isn't equals");
+//        }
+//
+//        return new Helper<>();
+//    }
 
     public static class ListToStringConverter implements AttributeConverter<List, String> {
 //                private static final ObjectMapper mapper = new ObjectMapper();
@@ -87,8 +104,8 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
     @Convert(converter = ListToStringConverter.class)
     private List<String> values = new ArrayList<>();
 
-    @Column(nullable = false)
-    private Class<? extends Serializable> valueType;
+//    @Column(nullable = false)
+//    private Class<? extends Serializable> valueType = String.class;
 
     @Column(nullable = false)
     private Boolean multiVariants = Boolean.FALSE;
@@ -96,6 +113,7 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
     @Convert(converter = ListToStringConverter.class)
     private List<String> variants = new ArrayList<>();
 
+    @Column
     private String questionType;
 
     @ManyToOne
@@ -109,7 +127,7 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
         this.text = text;
     }
 
-    public Serializable getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -133,13 +151,13 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
         this.values = values;
     }
 
-    public Class<? extends Serializable> getValueType() {
-        return valueType;
-    }
-
-    public void setValueType(Class<? extends Serializable> valueType) {
-        this.valueType = valueType;
-    }
+//    public Class<? extends Serializable> getValueType() {
+//        return valueType;
+//    }
+//
+//    public void setValueType(Class<? extends Serializable> valueType) {
+//        this.valueType = valueType;
+//    }
 
     public Boolean getMultiVariants() {
         return multiVariants;
@@ -170,7 +188,7 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
                 && Objects.equals(this.value, that.value)
                 && Objects.equals(this.multiValues, that.multiValues)
                 && Objects.equals(this.values, that.values)
-                && Objects.equals(this.valueType, that.valueType)
+//                && Objects.equals(this.valueType, that.valueType)
                 && Objects.equals(this.multiVariants, that.multiVariants)
                 && Objects.equals(this.variants, that.variants);
     }

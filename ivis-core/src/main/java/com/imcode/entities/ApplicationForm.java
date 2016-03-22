@@ -85,4 +85,8 @@ public class ApplicationForm extends AbstractNamedEntity<Long> {
     public void setSteps(List<ApplicationFormStep> steps) {
         this.steps = steps;
     }
+
+    public void addStep(ApplicationFormStep step) {
+        steps.add(step);
+    }
 }

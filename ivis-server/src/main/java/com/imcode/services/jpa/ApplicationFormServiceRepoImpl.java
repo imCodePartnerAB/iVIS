@@ -18,11 +18,13 @@ public class ApplicationFormServiceRepoImpl extends AbstractService<ApplicationF
 
     @Override
     public ApplicationForm save(ApplicationForm entity) {
-        ApplicationForm oldEntity = repo.findOne(entity.getId());
-        if (!oldEntity.deepEquals(entity)) {
-            for (Application application :entity.getApplications()) {
-                EntityVersion version = new EntityVersion(application);
-                entityVersionService.saveAsync(version);
+        if (entity.getId() != null) {
+            ApplicationForm oldEntity = repo.findOne(entity.getId());
+            if (oldEntity != null && !oldEntity.deepEquals(entity)) {
+                for (Application application : entity.getApplications()) {
+                    EntityVersion version = new EntityVersion(application);
+                    entityVersionService.saveAsync(version);
+                }
             }
         }
 

@@ -22,7 +22,7 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
     @JoinTable(name = "dbo_school_service_cross")
     private Set<ServiceTypeEnum> services;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "school")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "school", cascade = {CascadeType.REFRESH})
 //    @JsonManagedReference
     private Set<SchoolClass> schoolClasses;
 

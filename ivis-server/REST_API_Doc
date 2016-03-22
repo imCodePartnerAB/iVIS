@@ -81,3 +81,135 @@ FIND BY NAME:
     url: /
     method: GET
     params: name(String)
+
+Application
+MAIN URL: /api/v1/{format}/applications
+CREATE
+    url: /
+    method: POST
+    params: entity(Application)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(Application)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+    example: http://localhost:8080/ivis/api/v1/json/applications?access_token=28cc01de-b9a0-418c-bd32-1b1e52b9d467
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+
+ApplicationForm
+MAIN URL: /api/v1/{format}/applicationforms
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationForm)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationForm)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+ApplicationFormStep
+MAIN URL: /api/v1/{format}/applicationformsteps
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationFormStep)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationFormStep)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+ApplicationFormQuestionGroup
+MAIN URL: /api/v1/{format}/applicationformquestiongroups
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationFormQuestionGroup)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationFormQuestionGroup)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+ApplicationFormQuestion
+MAIN URL: /api/v1/{format}/applicationformquestion
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationFormQuestion)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationFormQuestion)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)

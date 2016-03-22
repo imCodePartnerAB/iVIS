@@ -211,7 +211,21 @@ dl dd {
 
 .step .questions .sub-step {
   background: #f0f0ff;
+  overflow: hidden;
+}
+
+.step .questions .sub-step > .name {
+  box-sizing: border-box;
+  float: left;
   padding: 5px 20px;
+  width: 50%;
+}
+
+.step .questions .sub-step > .answer {
+  box-sizing: border-box;
+  float: left;
+  padding: 5px 20px;
+  width: 50%;
 }
 
 .step .questions .question {
@@ -229,7 +243,7 @@ dl dd {
   width: 50%;
 }
 
-.step .questions .question .ansqer {
+.step .questions .question .answer {
   box-sizing: border-box;
   float: left;
   padding: 5px 20px;

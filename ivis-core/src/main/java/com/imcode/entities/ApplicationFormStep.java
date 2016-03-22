@@ -59,4 +59,8 @@ public class ApplicationFormStep extends AbstractSortableNamedEntity<Long> {
         return Objects.equals(this.text, that.text)
                 && JpaEntity.deepEquals(this.questionGroups, that.questionGroups);
     }
+
+    public void addQuestionGroup(ApplicationFormQuestionGroup questionGroup) {
+        questionGroups.add(questionGroup);
+    }
 }

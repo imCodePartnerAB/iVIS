@@ -9,9 +9,12 @@ import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by vitaly on 14.05.15.
@@ -130,6 +133,43 @@ public class Application extends AbstractJpaDatedEntity<Long> implements Seriali
                 && Objects.equals(this.handledUser, that.handledUser)
                 && Objects.equals(this.submittedUser, that.submittedUser)
                 && JpaEntity.deepEquals(this.applicationForm, that.applicationForm);
+    }
+
+    @JsonIgnore
+    public Optional<ApplicationFormQuestion> findQuestion(String name, boolean ignoreCase) {
+        Predicate<ApplicationFormQuestion> filter = ignoreCase
+                ? q -> name.equals(q.getName())
+                : q -> name.equalsIgnoreCase(q.getName());
+
+        return findQuestion(filter);
+    }
+
+    @JsonIgnore
+    public Optional<ApplicationFormQuestion> findQuestion(String name, String value, boolean ignoreCase) {
+        Predicate<ApplicationFormQuestion> filter = ignoreCase
+                ? q -> name.equals(q.getName())
+                : q -> name.equalsIgnoreCase(q.getName());
+        filter.and(applicationFormQuestion -> applicationFormQuestion.getValue() != null
+                && applicationFormQuestion.getValue().toLowerCase().contains(value));
+
+        return findQuestion(filter);
+    }
+
+    @JsonIgnore
+    public Optional<ApplicationFormQuestion> findQuestion(Predicate<ApplicationFormQuestion> filter) {
+        return getQuestionStream().filter(filter).findFirst();
+    }
+
+    @JsonIgnore
+    public List<ApplicationFormQuestion> getQuestionList() {
+        return getQuestionStream().collect(Collectors.toList());
+    }
+
+@JsonIgnore
+    public Stream<ApplicationFormQuestion> getQuestionStream() {
+        return applicationForm.getSteps().stream()
+                .flatMap(applicationFormStep -> applicationFormStep.getQuestionGroups()
+                        .stream()).flatMap(questionGroup -> questionGroup.getQuestions().stream());
     }
 }
 

@@ -31,6 +31,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Created by vitaly on 26.05.15.
@@ -38,6 +43,7 @@ import java.net.URISyntaxException;
 @Controller
 @RequestMapping(value = "/ivis")
 public class IvisController {
+    Logger log = Logger.getLogger(IvisController.class.getName());
     @Autowired
     private ApplicationContext appContext;
 
@@ -143,26 +149,39 @@ public class IvisController {
                              HttpServletResponse response,
                              @PathVariable("id") Long applicationId, @ModelAttribute("applicationForm") ApplicationFormCmd applicationFormCmd, BindingResult bindingResult) throws IOException {
 
-        ApplicationService service = getIvisServiceFactory(request).getService(ApplicationService.class);
-        ApplicationFormService formService = getIvisServiceFactory(request).getService(ApplicationFormService.class);
-        EntityVersionService versionService = getIvisServiceFactory(request).getService(EntityVersionService.class);
+        final IvisServiceFactory ivisServiceFactory = getIvisServiceFactory(request);
+        ApplicationService service = ivisServiceFactory.getService(ApplicationService.class);
+        ApplicationFormQuestionService questionService = ivisServiceFactory.getService(ApplicationFormQuestionService.class);
+//        ApplicationFormService formService = getIvisServiceFactory(request).getService(ApplicationFormService.class);
+        EntityVersionService versionService = ivisServiceFactory.getService(EntityVersionService.class);
 
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
+                boolean changed = false;
+                for (ApplicationFormQuestion question :applicationFormCmd.getQuestions()) {
+                    ApplicationFormQuestion realQuestion = questionService.find(question.getId());
+                    if (realQuestion != null) {
+                        if (realQuestion.getMultiValues() && !Objects.equals(realQuestion.getValues(), question.getValues())) {
+                            realQuestion.setValues(question.getValues());
+                            realQuestion.setValue(question.getValues().stream().collect(Collectors.joining()));
+//                            questionService.save(realQuestion);
+                            changed = true;
+                        } else if (!realQuestion.getMultiValues() && !Objects.equals(realQuestion.getValue(), question.getValue())) {
+                            realQuestion.setValue(question.getValue());
+                            realQuestion.setValues(Collections.singletonList(question.getValue()));
+//                            questionService.save(realQuestion);
+                            changed = true;
+                        }
+                    }
+//                    if (question.getValue())
+                }
+
                 Application application = service.find(applicationId);
-//
-                if (application != null && application.getApplicationForm() != null) {
-                    ApplicationForm applicationForm = application.getApplicationForm();
-//                    ApplicationForm newApplicationForm = new ApplicationForm();
-//                    newApplicationForm.setId(applicationForm.getId());
-//                    newApplicationForm.setName(applicationForm.getName());
-//                    newApplicationForm.setVersion(applicationForm.getVersion());
-//                    newApplicationForm.setQuestions(new LinkedHashSet<>(applicationFormCmd.getQuestions()));
-//                    if (!newApplicationForm.deepEquals(applicationForm)) {
-                    applicationForm.setQuestions(applicationFormCmd.getQuestionSet());
-                    formService.save(applicationForm);
-//                        versionService.save(new EntityVersion(application));
-//                    }
+                if (application != null && changed) {
+                    EntityVersion version = new EntityVersion(application);
+                    versionService.save(version);
+//                    ApplicationForm applicationForm = application.getApplicationForm();
+//                    formService.save(applicationForm);
                 }
             } catch (UserRedirectRequiredException e) {
                 IvisOAuth2Utils.setAccessToken(request, null);
@@ -317,4 +336,38 @@ public class IvisController {
     private IvisServiceFactory getIvisServiceFactory(HttpServletRequest request) {
         return IvisOAuth2Utils.getServiceFactory(request);
     }
+
+    private void saveApplication(Application application, IvisServiceFactory ivisServiceFactory) {
+//        ivisServiceFactory = ApplicationPopulator.localIvisServiceFactory();
+        ApplicationService applicationService = ivisServiceFactory.getService(ApplicationService.class);
+        ApplicationFormService formService = ivisServiceFactory.getService(ApplicationFormService.class);
+        ApplicationFormStepService stepService = ivisServiceFactory.getService(ApplicationFormStepService.class);
+        ApplicationFormQuestionGroupService groupService = ivisServiceFactory.getService(ApplicationFormQuestionGroupService.class);
+        ApplicationFormQuestionService questionService = ivisServiceFactory.getService(ApplicationFormQuestionService.class);
+        ApplicationForm form = application.getApplicationForm();
+
+        List<ApplicationFormStep> steps = form.getSteps();
+        for (int s = 0; s < steps.size(); s++) {
+            ApplicationFormStep step = steps.get(s);
+            List<ApplicationFormQuestionGroup> questionGroups = step.getQuestionGroups();
+            for (int g = 0; g < questionGroups.size(); g++) {
+                ApplicationFormQuestionGroup questionGroup = questionGroups.get(g);
+                List<ApplicationFormQuestion> questions = questionGroup.getQuestions();
+                for (int q = 0; q < questions.size(); q++) {
+                    ApplicationFormQuestion question = questions.get(q);
+                    question = questionService.save(question);
+                    questions.set(q, question);
+                }
+                questionGroup = groupService.save(questionGroup);
+                questionGroups.set(g, questionGroup);
+            }
+            step = stepService.save(step);
+            steps.set(s, step);
+        }
+        form = formService.save(form);
+        application.setApplicationForm(form);
+        application = applicationService.save(application);
+        log.info("Application id = " + application.getId() + " created.");
+    }
+
 }

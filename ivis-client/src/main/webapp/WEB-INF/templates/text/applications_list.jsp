@@ -10,6 +10,7 @@
 <%@ page import="com.imcode.entities.ApplicationForm" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.imcode.entities.ApplicationFormQuestion" %>
+<%@ page import="java.util.function.Predicate" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -49,24 +50,23 @@
             List<Application> applications = service.findAll();
             applicationList = new LinkedList<Application>();
             List<String> searchQuestionNames = Arrays.asList(
-                    "PupilPerson.PupilPersonPersonalid",
-                    "PupilPerson.PupilPersonFirstName",
-                    "PupilPerson.PupilPersonLastName",
-                    "KontaktuppgifterVardnadshavare1.AppliedContactGuardian1PersonalId",
-                    "KontaktuppgifterVardnadshavare1.AppliedContactGuardian1PersonFirstName",
-                    "KontaktuppgifterVardnadshavare1.AppliedContactGuardian1PersonLastName",
-                    "OtherContactPers.OtherContactPersId",
-                    "OtherContactPers.OtherContactFirstName",
-                    "OtherContactPers.OtherContactLastName",
-                    "AppliedPupilPersonAddress2.AppliedPupilGuardian2PersonPersonalid",
-                    "AppliedPupilPersonAddress2.AppliedPupilGuardian2PersonFirstName",
-                    "AppliedPupilPersonAddress2.AppliedPupilGuardian2PersonLastName",
-                    "AppliedPupilPersonAddress.AppliedPupilGuardian1PersonFirstName",
-                    "KontaktuppgifterVardnadshavare2.AppliedContactGuardian2PersonFirstName",
-                    "KontaktuppgifterVardnadshavare2.AppliedContactGuardian2PersonLastName",
-                    "KontaktuppgifterVardnadshavare2.AppliedContactGuardian2PersonalId"
-                    );
-
+                    "PupilPersonPersonalid",
+                    "PupilPersonFirstName",
+                    "PupilPersonLastName",
+                    "AppliedContactGuardian1PersonalId",
+                    "AppliedContactGuardian1PersonFirstName",
+                    "AppliedContactGuardian1PersonLastName",
+                    "OtherContactPersId",
+                    "OtherContactFirstName",
+                    "OtherContactLastName",
+                    "AppliedPupilGuardian2PersonPersonalid",
+                    "AppliedPupilGuardian2PersonFirstName",
+                    "AppliedPupilGuardian2PersonLastName",
+                    "AppliedPupilGuardian1PersonFirstName",
+                    "AppliedContactGuardian2PersonFirstName",
+                    "AppliedContactGuardian2PersonLastName",
+                    "AppliedContactGuardian2PersonalId"
+            );
             for (Application statement : applications) {
                 if (statusFilter != null && statement.getStatus() != statusFilter) {
                     continue;
@@ -74,26 +74,32 @@
 
 
                 if (searchText != null && StringUtils.isNoneEmpty(searchText)) {
-                    Person userPerson = statement.getSubmittedUser() != null ? statement.getSubmittedUser().getPerson():null;
+                    Person userPerson = statement.getSubmittedUser() != null ? statement.getSubmittedUser().getPerson() : null;
                     if (IvisOAuth2Utils.personContainsString(userPerson, searchText)) {
                         applicationList.add(statement);
                         continue;
                     }
-                    if (statement.getApplicationForm() == null || statement.getApplicationForm().getQuestions() == null) {
+                    if (statement.getApplicationForm() == null || statement.getApplicationForm() == null) {
                         continue;
                     }
-                    Set<ApplicationFormQuestion> questions = statement.getApplicationForm().getQuestions();
+//                    Set<ApplicationFormQuestion> questions = statement.getApplicationForm().getQuestions();
                     QUESTIONS:
-                    for (ApplicationFormQuestion question : questions) {
-                        for (String requredQuestionName : searchQuestionNames) {
-                            if (requredQuestionName.equalsIgnoreCase(question.getXsdElementName())
-                                    && question.getValue() != null
-                                    && question.getValue().toLowerCase().contains(searchText.toLowerCase())) {
-                                applicationList.add(statement);
-                                break QUESTIONS;
-                            }
+//                    for (ApplicationFormQuestion question : questions) {
+                    for (String requredQuestionName : searchQuestionNames) {
+//                        Predicate<ApplicationFormQuestion> filter = new FilterClass(requredQuestionName, searchText)
+                        if (statement.findQuestion(requredQuestionName, searchText, true).isPresent()) {
+                            applicationList.add(statement);
+                            break QUESTIONS;
                         }
+//                            if (requredQuestionName.equalsIgnoreCase(question.getXsdElementName())
+//                                    && question.getValue() != null
+//                                    && question.getValue().toLowerCase().contains(searchText.toLowerCase())) {
+//                                applicationList.add(statement);
+//                                break QUESTIONS;
+//                            }
                     }
+//                    }
+
                 } else {
                     applicationList.add(statement);
                 }
@@ -106,7 +112,8 @@
                 }
             });
 
-        } catch (UserRedirectRequiredException e) {
+        } catch
+                (UserRedirectRequiredException e) {
             IvisOAuth2Utils.setAccessToken(session, null);
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
             return;
@@ -128,15 +135,10 @@
         <div class="field">
             <label>Filtrera</label>
             <select name="statusFilter">
-                <%
-                    String statusFilter = request.getParameter("statusFilter");
+                <% String statusFilter = request.getParameter("statusFilter");
                     out.println("<option value=\"null\" " + ("null".equalsIgnoreCase(statusFilter) ? "selected\"" : "") + ">Alla</option>");
-
-                    for (Decision.Status statementStatus : Decision.Status.values()) {
-                        out.println("<option value=\"" + statementStatus + "\" " + (statementStatus.toString().equalsIgnoreCase(statusFilter) ? "selected" : "") + ">" + StringUtils.capitalize(statementStatus.getDescription()) + "</option>");
-                    }
-
-                %>
+                    for (Decision.Status statementStatus : Decision.Status.values())
+                        out.println("<option value=\"" + statementStatus + "\" " + (statementStatus.toString().equalsIgnoreCase(statusFilter) ? "selected" : "") + ">" + StringUtils.capitalize(statementStatus.getDescription()) + "</option>"); %>
                     <%--<option value="null" <c:if test="${not empty param.statusFilter and param.statusFilter ne 'null'}">selected</c:if>>All</option>--%>
                     <%--<c:set var="enums" value="<%=Decision.Status.values()%>"/>--%>
                     <%--<c:forEach var="enum" items="${enums}" varStatus="starus">--%>
@@ -172,25 +174,31 @@
                     <td>${dateString}</td>
                     <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm"/>
                     <td>${dateString}</td>
-                    <%
-                        Application app = (Application) pageContext.getAttribute("app");
+                    <% Application app = (Application) pageContext.getAttribute("app");
                         String sudentName = null;
                         ApplicationForm form;
                         if (app != null && (form = app.getApplicationForm()) != null) {
-                            Set<ApplicationFormQuestion> questions = form.getQuestions();
-                            if (questions != null) {
-                                String firstName = "";
-                                String lastName = "";
-                                for (ApplicationFormQuestion question : questions) {
-                                    if ("PupilPerson.PupilPersonFirstName".equalsIgnoreCase(question.getXsdElementName())) {
-                                        firstName = question.getValue();
-                                    }
-                                    if ("PupilPerson.PupilPersonLastName".equalsIgnoreCase(question.getXsdElementName())) {
-                                        lastName = question.getValue();
-                                    }
+//                            List<ApplicationFormQuestion> questions = app.getQuestionList();
+//                            if (questions != null) {
+                                String firstName = app.findQuestion("PupilPersonFirstName", true).orElse(new ApplicationFormQuestion()).getValue();
+                                String lastName = app.findQuestion("PupilPersonFirstName", true).orElse(new ApplicationFormQuestion()).getValue();
+//                            ApplicationFormQuestion firstNameQuestion = app.findQuestion("PupilPerson.PupilPersonFirstName", true).orElse(new ApplicationFormQuestion()).getValue();
+//                            if (firstNameQuestion != null) {
+//                                firstName = firstNameQuestion.getValue();
+//                            }
+//
+//                            ApplicationFormQuestion lastNameQuestion = app.findQuestion("PupilPerson.PupilPersonLastName", true);
+//                            if (lastNameQuestion != null) {
+//                                lastName = firstNameQuestion.getValue();
+//                            }
+//                                for (ApplicationFormQuestion question : questions) {
+//                                    if ("PupilPerson.PupilPersonFirstName".equalsIgnoreCase(question.getXsdElementName()))
+//                                        firstName = question.getValue();
+//                                    if ("PupilPerson.PupilPersonLastName".equalsIgnoreCase(question.getXsdElementName()))
+//                                        lastName = question.getValue();
                                     sudentName = firstName + " " + lastName;
-                                }
-                            }
+//                                }
+//                            }
                         }
 
                         pageContext.setAttribute("studentName", sudentName);

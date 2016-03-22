@@ -71,4 +71,8 @@ public class ApplicationFormQuestionGroup extends AbstractSortableNamedEntity<Lo
                 && Objects.equals(this.questionType, that.questionType)
                 && JpaEntity.deepEquals(this.questions, that.questions);
     }
+
+    public void addQuestion(ApplicationFormQuestion question) {
+        questions.add(question);
+    }
 }

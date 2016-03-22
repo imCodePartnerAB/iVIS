@@ -46,7 +46,12 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
     @RequestMapping(method = RequestMethod.POST)
 //    @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) {
-        return service.save(entity);
+        try {
+            return service.save(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     // Updating entity

@@ -16,10 +16,12 @@ public class ApplicationServiceRepoImpl extends AbstractService<Application, Lon
 
     @Override
     public Application save(Application entity) {
-        Application oldEntity = repo.findOne(entity.getId());
-        if (!oldEntity.deepEquals(entity)) {
-            EntityVersion version = new EntityVersion(oldEntity);
-            entityVersionService.saveAsync(version);
+        if (entity.getId() != null) {
+            Application oldEntity = repo.findOne(entity.getId());
+            if (oldEntity != null && !oldEntity.deepEquals(entity)) {
+                EntityVersion version = new EntityVersion(oldEntity);
+                entityVersionService.saveAsync(version);
+            }
         }
 
         return super.save(entity);

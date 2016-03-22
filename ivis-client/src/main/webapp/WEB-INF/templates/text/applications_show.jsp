@@ -29,40 +29,42 @@
         EntityVersionService versionService = factory.getService(EntityVersionService.class);
 
         Application app = null;
-
+        List<LogEvent> logs = null;
+        List<EntityVersion> versions = null;
         try {
             app = applicationService.find(Long.valueOf(request.getParameter("id")));
+            logs = logEventService.findByEntity(app);
+            versions = versionService.findByEntity(app);
         } catch (UserRedirectRequiredException e) {
             IvisOAuth2Utils.setAccessToken(session, null);
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
             return;
         }
-        Map<Step, Map<String, Set<ApplicationFormQuestion>>> steps = new TreeMap<Step, Map<String, Set<ApplicationFormQuestion>>>();
+//        Map<Step, Map<String, Set<ApplicationFormQuestion>>> steps = new TreeMap<Step, Map<String, Set<ApplicationFormQuestion>>>();
+//
+//        for (ApplicationFormQuestion formQuestion : app.getApplicationForm().getQuestions()) {
+//            Step step = new Step(formQuestion.getStepName(), formQuestion.getStepSortOrder());
+//            Map<String, Set<ApplicationFormQuestion>> subSteps = steps.get(step);
+//
+//            if (subSteps == null) {
+//                subSteps = new TreeMap<String, Set<ApplicationFormQuestion>>();
+//                steps.put(step, subSteps);
+//            }
+//            String subStepName = formQuestion.getSubStepName() == null ? "" : formQuestion.getSubStepName();
+//            Set<ApplicationFormQuestion> questions = subSteps.get(subStepName);
+//
+//            if (questions == null) {
+//                questions = new TreeSet<ApplicationFormQuestion>();
+//                subSteps.put(subStepName, questions);
+//            }
+//
+//            questions.add(formQuestion);
+//        }
 
-        for (ApplicationFormQuestion formQuestion : app.getApplicationForm().getQuestions()) {
-            Step step = new Step(formQuestion.getStepName(), formQuestion.getStepSortOrder());
-            Map<String, Set<ApplicationFormQuestion>> subSteps = steps.get(step);
 
-            if (subSteps == null) {
-                subSteps = new TreeMap<String, Set<ApplicationFormQuestion>>();
-                steps.put(step, subSteps);
-            }
-            String subStepName = formQuestion.getSubStepName() == null ? "" : formQuestion.getSubStepName();
-            Set<ApplicationFormQuestion> questions = subSteps.get(subStepName);
-
-            if (questions == null) {
-                questions = new TreeSet<ApplicationFormQuestion>();
-                subSteps.put(subStepName, questions);
-            }
-
-            questions.add(formQuestion);
-        }
-
-        List<LogEvent> logs = logEventService.findByEntity(app);
-        List<EntityVersion> versions = versionService.findByEntity(app);
         request.setAttribute("logs", logs);
         request.setAttribute("versions", versions);
-        request.setAttribute("steps", steps);
+//        request.setAttribute("steps", steps);
         request.setAttribute("app", app);
         pageContext.setAttribute("statusList", Decision.Status.values());
 
@@ -70,6 +72,7 @@
 %>
 <c:if test="${not empty app}">
     <h1>Ansökan om skolskjuts</h1>
+
     <div class="groups">
         <div class="group">
             <div class="title">ID</div>
@@ -118,29 +121,48 @@
         </div>
     </div>
     <div id="applicationTabPage" class="tab-page">
-        <c:forEach items="${steps.entrySet()}" var="entry" varStatus="fileOptionStatus">
+        <c:forEach var="step" items="${app.applicationForm.steps}">
             <div class="step">
-                <div class="name">${entry.key.name}</div>
+                <div class="name">${step.text}</div>
                 <div class="questions">
 
-                    <c:forEach items="${entry.value.entrySet()}" var="subStep" varStatus="fileOptionStatus">
-                        <%--<c:choose>--%>
-                            <%--<c:when test="${not empty subStep.key}">--%>
-                                <%--<div class="subStep">${subStep.key}</div>    --%>
-                            <%--</c:when>--%>
-                            <%--<c:otherwise>--%>
-                                <%----%>
-                            <%--</c:otherwise>--%>
-                        <%--</c:choose>--%>
-                        <c:if test="${not empty subStep.key}">
-                            <div class="sub-step">${subStep.key}</div>
-                        </c:if>
-                    <c:forEach items="${subStep.value}" var="question" varStatus="fileOptionStatus">
-                        <div class="question">
-                            <div class="name">${question.text}</div>
-                            <div class="answer">${question.value}</div>
+                    <c:forEach items="${step.questionGroups}" var="group">
+                        <div class="sub-step">
+                            <div class="name">${group.text}</div>
+                            <c:if test="${not fn:endsWith(group.questionType, 'TextFieldQueryInstance') and not empty group.questions}">
+                                <c:set var="question" value="${group.questions.get(0)}"/>
+                                <c:choose>
+                                    <c:when test="${question.multiValues}">
+                                        <div class="answer">
+                                            <c:forEach var="value" items="${question.values}">${value}, </c:forEach>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="answer">${question.value}</div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:if>
                         </div>
-                    </c:forEach>
+                        <c:if test="${fn:endsWith(group.questionType, 'TextFieldQueryInstance')}">
+                            <div class="answer">
+                                <c:forEach items="${group.questions}" var="question">
+                                    <div class="question">
+                                        <div class="name">${question.text}</div>
+                                        <c:choose>
+                                            <c:when test="${question.multiValues}">
+                                                <div class="answer">
+                                                    <c:forEach var="value"
+                                                               items="${question.values}">${value}, </c:forEach>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="answer">${question.value}</div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </c:if>
                     </c:forEach>
                 </div>
             </div>
@@ -190,7 +212,7 @@
                 <tbody>
                 <c:forEach items="${logs}" var="app">
                     <fmt:formatDate value="${app.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
-                        <tr data-application-id="${app.id}">
+                    <tr data-application-id="${app.id}">
                         <td>${dateString}</td>
                         <td>${app.action}</td>
                         <td>${app.user}</td>
@@ -198,8 +220,8 @@
                         <td>${app.previousValue}</td>
                         <td>${app.newValue}</td>
                         <td class="buttons">
-                            <%--<a class="button positive"--%>
-                               <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>--%>
+                                <%--<a class="button positive"--%>
+                                <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>--%>
 
                                 <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                                 <%--method="get">--%>
@@ -223,11 +245,11 @@
             <thead>
             <tr>
                 <th class="ordered-by">Date</th>
-                <%--<th>Action</th>--%>
-                <%--<th>User</th>--%>
-                <%--<th>Field name</th>--%>
-                <%--<th>Old value</th>--%>
-                <%--<th>New value</th>--%>
+                    <%--<th>Action</th>--%>
+                    <%--<th>User</th>--%>
+                    <%--<th>Field name</th>--%>
+                    <%--<th>Old value</th>--%>
+                    <%--<th>New value</th>--%>
                 <th>&nbsp;</th>
             </tr>
             </thead>
@@ -236,13 +258,13 @@
                 <tbody>
                 <c:forEach items="${versions}" var="version">
                     <fmt:formatDate value="${version.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
-                        <tr data-application-id="${version.id}">
+                    <tr data-application-id="${version.id}">
                         <td>${dateString}</td>
-                        <%--<td>${app.action}</td>--%>
-                        <%--<td>${app.user}</td>--%>
-                        <%--<td>${app.fieldName}</td>--%>
-                        <%--<td>${app.previousValue}</td>--%>
-                        <%--<td>${app.newValue}</td>--%>
+                            <%--<td>${app.action}</td>--%>
+                            <%--<td>${app.user}</td>--%>
+                            <%--<td>${app.fieldName}</td>--%>
+                            <%--<td>${app.previousValue}</td>--%>
+                            <%--<td>${app.newValue}</td>--%>
                         <td class="buttons">
                             <a class="button positive"
                                href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/version?id=${version.id}">Visa</a>
@@ -264,7 +286,8 @@
             </c:if>
         </table>
     </div>
-    <a class="button positive" href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Edit</a>
+    <a class="button positive"
+       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Edit</a>
 </c:if>
 <script type="text/javascript">
     var onOpen = function () {

@@ -38,30 +38,30 @@
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
             return;
         }
-        Map<Step, Map<String, Set<ApplicationFormQuestion>>> steps = new TreeMap<Step, Map<String, Set<ApplicationFormQuestion>>>();
-
-        for (ApplicationFormQuestion formQuestion : app.getApplicationForm().getQuestions()) {
-            Step step = new Step(formQuestion.getStepName(), formQuestion.getStepSortOrder());
-            Map<String, Set<ApplicationFormQuestion>> subSteps = steps.get(step);
-
-            if (subSteps == null) {
-                subSteps = new TreeMap<String, Set<ApplicationFormQuestion>>();
-                steps.put(step, subSteps);
-            }
-            String subStepName = formQuestion.getSubStepName() == null ? "" : formQuestion.getSubStepName();
-            Set<ApplicationFormQuestion> questions = subSteps.get(subStepName);
-
-            if (questions == null) {
-                questions = new TreeSet<ApplicationFormQuestion>();
-                subSteps.put(subStepName, questions);
-            }
-
-            questions.add(formQuestion);
-        }
+//        Map<Step, Map<String, Set<ApplicationFormQuestion>>> steps = new TreeMap<Step, Map<String, Set<ApplicationFormQuestion>>>();
+//
+//        for (ApplicationFormQuestion formQuestion : app.getApplicationForm().getQuestions()) {
+//            Step step = new Step(formQuestion.getStepName(), formQuestion.getStepSortOrder());
+//            Map<String, Set<ApplicationFormQuestion>> subSteps = steps.get(step);
+//
+//            if (subSteps == null) {
+//                subSteps = new TreeMap<String, Set<ApplicationFormQuestion>>();
+//                steps.put(step, subSteps);
+//            }
+//            String subStepName = formQuestion.getSubStepName() == null ? "" : formQuestion.getSubStepName();
+//            Set<ApplicationFormQuestion> questions = subSteps.get(subStepName);
+//
+//            if (questions == null) {
+//                questions = new TreeSet<ApplicationFormQuestion>();
+//                subSteps.put(subStepName, questions);
+//            }
+//
+//            questions.add(formQuestion);
+//        }
 
         List<LogEvent> logs = logEventService.findByEntity(app);
         request.setAttribute("logs", logs);
-        request.setAttribute("steps", steps);
+//        request.setAttribute("steps", steps);
         request.setAttribute("app", app);
         pageContext.setAttribute("statusList", Decision.Status.values());
 
@@ -116,43 +116,176 @@
     </div>
     <div id="applicationTabPage" class="tab-page">
         <c:set var="applicationForm" value="${app.applicationForm}"/>
-        <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/edit/${app.id}" method="post" >
+        <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/edit/${app.id}"
+              method="post">
             <c:set var="index" value="${0}"/>
-            <c:forEach items="${steps.entrySet()}" var="entry">
+            <c:forEach var="step" items="${app.applicationForm.steps}">
                 <div class="step">
-                    <div class="name">${entry.key.name}</div>
+                    <div class="name">${step.text}</div>
                     <div class="questions">
-                        <c:forEach items="${entry.value.entrySet()}" var="subStep">
-                            <c:if test="${not empty subStep.key}">
-                                <div class="sub-step">${subStep.key}</div>
-                            </c:if>
-                            <c:forEach items="${subStep.value}" var="question" varStatus="varStatus">
-                                <div class="question">
-                                    <div class="name">${question.text}</div>
-                                        <%--<form:input path="questions[${varStatus.index}].xsdElementName"/>--%>
-                                        <%--<div class="answer">${question.value}</div>--%>
-                                        <input type="hidden" name="questions[${index}].xsdElementName" value="${question.xsdElementName}"/>
-                                        <%--<input type="hidden" name="questions.xsdElementName" value="${question.xsdElementName}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].sortOrder" value="${question.sortOrder}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].subStepName" value="${question.subStepName}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].stepName" value="${question.stepName}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].stepSortOrder" value="${question.stepSortOrder}"/>--%>
-                                        <%--<input type="hidden" name="questions[${varStatus.index}].text" value="${question.text}"/>--%>
-                                        <%--<input name="questions[${varStatus.index}].value" value="${question.value}"/>--%>
+                        <c:forEach items="${step.questionGroups}" var="group">
+                            <div class="sub-step">
+                                <div class="name">${group.text}</div>
+                                <%--<c:choose>--%>
+                                    <%--<c:when test="${fn:endsWith(group.questionType, 'DropDownQueryInstance')}">--%>
+                                        <%--<div class="answer">DropDownQueryInstance</div>--%>
+                                    <%--</c:when>--%>
+                                    <%--<c:when test="${fn:endsWith(group.questionType, 'RadioButtonQueryInstance')}">--%>
+                                        <%--<div class="answer">RadioButtonQueryInstance</div>--%>
+                                    <%--</c:when>--%>
+                                    <%--<c:when test="${fn:endsWith(group.questionType, 'CheckboxQueryInstance')}">--%>
+                                        <%--<div class="answer">CheckboxQueryInstance</div>--%>
+                                    <%--</c:when>--%>
+                                    <%--<c:when test="${fn:endsWith(group.questionType, '')}">--%>
+                                    <%--<div class="answer"></div>--%>
+                                    <%--</c:when>--%>
 
-                                        <input type="hidden" name="questions[${index}].sortOrder" value="${question.sortOrder}"/>
-                                        <input type="hidden" name="questions[${index}].subStepName" value="${question.subStepName}"/>
-                                        <input type="hidden" name="questions[${index}].stepName" value="${question.stepName}"/>
-                                        <input type="hidden" name="questions[${index}].stepSortOrder" value="${question.stepSortOrder}"/>
-                                        <input type="hidden" name="questions[${index}].text" value="${question.text}"/>
-                                        <input name="questions[${index}].value" value="${question.value}"/>
-                                    <c:set var="index" value="${index + 1}"/>
-                                </div>
-                            </c:forEach>
+                                <%--</c:choose>--%>
+                                    <%--<c:if test="${not fn:endsWith(group.questionType, 'TextFieldQueryInstance') and not empty group.questions}">--%>
+                                    <%--<c:set var="question" value="${group.questions.get(0)}"/>--%>
+                                    <%--<c:choose>--%>
+                                    <%--<c:when test="${question.multiValues}">--%>
+                                    <%--<div class="answer">--%>
+                                    <%--<c:forEach var="value" items="${question.values}">${value}, </c:forEach>--%>
+                                    <%--</div>--%>
+                                    <%--</c:when>--%>
+                                    <%--<c:otherwise>--%>
+                                    <%--<div class="answer">${question.value}</div>--%>
+                                    <%--</c:otherwise>--%>
+                                    <%--</c:choose>--%>
+                                    <%--</c:if>--%>
+                            </div>
+                            <c:choose>
+                                <c:when test="${fn:endsWith(group.questionType, '2.TextFieldQueryInstance')}">
+                                    <%--<div class="answer">LabelFieldQueryInstance</div>--%>
+                                    <c:forEach items="${group.questions}" var="question">
+                                        <div class="question">
+                                            <div class="name">${question.text}</div>
+                                            <div class="answer">${question.value}</div>
+                                        </div>
+                                    </c:forEach>
+                                </c:when>
+                                <c:when test="${fn:endsWith(group.questionType, 'y.TextFieldQueryInstance')}">
+                                    <c:forEach items="${group.questions}" var="question">
+                                        <div class="question">
+                                            <div class="name">${question.text}</div>
+                                            <input type="hidden" name="questions[${index}].id" value="${question.id}"/>
+                                                <input name="questions[${index}].value" value="${question.value}"/>
+                                                <c:set var="index" value="${index + 1}"/>
+                                        </div>
+                                    </c:forEach>
+                                </c:when>
+                                <c:when test="${fn:endsWith(group.questionType, 'TextAreaQueryInstance')}">
+                                    <c:set var="question" value="${group.questions[0]}"/>
+                                    <div class="question">
+                                        <div class="name"> </div>
+                                        <input type="hidden" name="questions[${index}].id" value="${question.id}"/>
+                                        <textarea name="questions[${index}].value">${question.value}</textarea>
+                                        <c:set var="index" value="${index + 1}"/>
+                                    </div>
+                                </c:when>
+                                <c:when test="${fn:endsWith(group.questionType, 'DropDownQueryInstance')}">
+                                    <c:set var="question" value="${group.questions[0]}"/>
+                                    <div class="question">
+                                        <div class="name"> </div>
+                                        <input type="hidden" name="questions[${index}].id" value="${question.id}"/>
+                                        <select name="questions[${index}].value">
+                                            <option/>
+                                            <c:forEach var="variant" items="${question.variants}">
+                                                <option value="${variant}" <c:if test="${variant.equalsIgnoreCase(question.value)}">selected="selected" </c:if>>${variant}</option>
+                                            </c:forEach>
+                                        </select>
+                                        <c:set var="index" value="${index + 1}"/>
+                                    </div>
+                                </c:when>
+                                <c:when test="${fn:endsWith(group.questionType, 'RadioButtonQueryInstance')}">
+                                    <c:set var="question" value="${group.questions[0]}"/>
+                                    <div class="question">
+                                        <%--<div class="name"> </div>--%>
+                                        <input type="hidden" name="questions[${index}].id" value="${question.id}"/>
+                                            <c:forEach var="variant" items="${question.variants}">
+                                                <div class="name"> </div>
+                                                <input type="radio" name="questions[${index}].value" value="${variant}" <c:if test="${variant.equalsIgnoreCase(question.value)}">checked="checked" </c:if>> ${variant}<br>
+                                            </c:forEach>
+                                        <c:set var="index" value="${index + 1}"/>
+                                    </div>
+                                </c:when>
+                                <c:when test="${fn:endsWith(group.questionType, 'CheckboxQueryInstance')}">
+                                    <c:set var="question" value="${group.questions[0]}"/>
+                                    <div class="question">
+                                        <input type="hidden" name="questions[${index}].id" value="${question.id}"/>
+                                        <c:forEach var="variant" items="${question.variants}">
+                                            <c:set var="checked" value="false"/>
+                                            <c:forEach var="value" items="${question.values}">
+                                                <c:if test="${not checked and value eq variant}">
+                                                <c:set var="checked" value="true"/>
+                                                </c:if>
+                                            </c:forEach>
+                                            <div class="name"> </div>
+                                            <input type="checkbox" name="questions[${index}].values" value="${variant}" <c:if test="${checked}">checked="checked" </c:if>> ${variant}<br>
+                                        </c:forEach>
+                                        <c:set var="index" value="${index + 1}"/>
+                                    </div>
+                                </c:when>
+                            </c:choose>
+                            <%--<div class="answer">--%>
+                            <%--<c:forEach items="${group.questions}" var="question">--%>
+                            <%--<div class="question">--%>
+                            <%--<div class="name">${question.text}</div>--%>
+                            <%--<c:choose>--%>
+                            <%--<c:when test="${question.multiValues}">--%>
+                            <%--<div class="answer">--%>
+                            <%--<c:forEach var="value"--%>
+                            <%--items="${question.values}">${value}, </c:forEach>--%>
+                            <%--</div>--%>
+                            <%--</c:when>--%>
+                            <%--<c:otherwise>--%>
+                            <%--<div class="answer">${question.value}</div>--%>
+                            <%--</c:otherwise>--%>
+                            <%--</c:choose>--%>
+                            <%--</div>--%>
+                            <%--</c:forEach>--%>
+                            <%--</div>--%>
+                            <%--</c:if>--%>
                         </c:forEach>
                     </div>
                 </div>
             </c:forEach>
+                <%--<c:forEach items="${steps.entrySet()}" var="entry">--%>
+                <%--<div class="step">--%>
+                <%--<div class="name">${entry.key.name}</div>--%>
+                <%--<div class="questions">--%>
+                <%--<c:forEach items="${entry.value.entrySet()}" var="group">--%>
+                <%--<c:if test="${not empty group.key}">--%>
+                <%--<div class="sub-step">${group.key}</div>--%>
+                <%--</c:if>--%>
+                <%--<c:forEach items="${group.value}" var="question" varStatus="varStatus">--%>
+                <%--<div class="question">--%>
+                <%--<div class="name">${question.text}</div>--%>
+                <%--&lt;%&ndash;<form:input path="questions[${varStatus.index}].xsdElementName"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<div class="answer">${question.value}</div>&ndash;%&gt;--%>
+                <%--<input type="hidden" name="questions[${index}].xsdElementName" value="${question.xsdElementName}"/>--%>
+                <%--&lt;%&ndash;<input type="hidden" name="questions.xsdElementName" value="${question.xsdElementName}"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="hidden" name="questions[${varStatus.index}].sortOrder" value="${question.sortOrder}"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="hidden" name="questions[${varStatus.index}].subStepName" value="${question.subStepName}"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="hidden" name="questions[${varStatus.index}].stepName" value="${question.stepName}"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="hidden" name="questions[${varStatus.index}].stepSortOrder" value="${question.stepSortOrder}"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input type="hidden" name="questions[${varStatus.index}].text" value="${question.text}"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<input name="questions[${varStatus.index}].value" value="${question.value}"/>&ndash;%&gt;--%>
+
+                <%--<input type="hidden" name="questions[${index}].sortOrder" value="${question.sortOrder}"/>--%>
+                <%--<input type="hidden" name="questions[${index}].subStepName" value="${question.subStepName}"/>--%>
+                <%--<input type="hidden" name="questions[${index}].stepName" value="${question.stepName}"/>--%>
+                <%--<input type="hidden" name="questions[${index}].stepSortOrder" value="${question.stepSortOrder}"/>--%>
+                <%--<input type="hidden" name="questions[${index}].text" value="${question.text}"/>--%>
+                <%--<input name="questions[${index}].value" value="${question.value}"/>--%>
+                <%--<c:set var="index" value="${index + 1}"/>--%>
+                <%--</div>--%>
+                <%--</c:forEach>--%>
+                <%--</c:forEach>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--</c:forEach>--%>
             <button class="positive" type="submit">Save</button>
             <button class="negative" type="reset">Cancel</button>
         </form>
