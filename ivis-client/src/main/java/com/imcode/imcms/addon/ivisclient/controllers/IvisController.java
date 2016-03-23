@@ -164,12 +164,12 @@ public class IvisController {
                         if (realQuestion.getMultiValues() && !Objects.equals(realQuestion.getValues(), question.getValues())) {
                             realQuestion.setValues(question.getValues());
                             realQuestion.setValue(question.getValues().stream().collect(Collectors.joining()));
-//                            questionService.save(realQuestion);
+                            questionService.save(realQuestion);
                             changed = true;
                         } else if (!realQuestion.getMultiValues() && !Objects.equals(realQuestion.getValue(), question.getValue())) {
                             realQuestion.setValue(question.getValue());
                             realQuestion.setValues(Collections.singletonList(question.getValue()));
-//                            questionService.save(realQuestion);
+                            questionService.save(realQuestion);
                             changed = true;
                         }
                     }
