@@ -1,9 +1,7 @@
 package imcode.services.restful;
 
 import com.imcode.entities.EntityVersion;
-import com.imcode.entities.EntityVersion;
 import com.imcode.entities.interfaces.JpaEntity;
-import com.imcode.services.EntityVersionService;
 import com.imcode.services.EntityVersionService;
 import imcode.services.IvisServiceFactory;
 
@@ -38,7 +36,7 @@ public class OAuth2EntityVersionService extends AbstractOAuth2Service<EntityVers
         Map<String, Object> params = new HashMap<>(2);
         params.put("entityClassName", entity.getClass().getName());
         params.put("entityId", entity.getId());
-        List<EntityVersion> result = sendRequestList(getFindAllRequest(), params);
+        List<EntityVersion> result = obtainEntityList(getFindAllRequest(), params);
 
         return result;
     }

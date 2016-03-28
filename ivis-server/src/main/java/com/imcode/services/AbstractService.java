@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.List;
@@ -59,6 +58,13 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
     public void flush() {
         repo.flush();
     }
+
+    @Override
+    @Transactional
+    public Iterable<T> save(Iterable<T> entities) {
+        return repo.save(entities);
+    }
+
 
     public REPOSITORY_TYPE getRepo() {
         return repo;

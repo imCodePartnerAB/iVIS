@@ -6,7 +6,6 @@ import com.imcode.services.LogEventService;
 import imcode.services.IvisServiceFactory;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class OAuth2LogEventService extends AbstractOAuth2Service<LogEvent, Long>
         Map<String, Object> params = new HashMap<>(2);
         params.put("entityClassName", entity.getClass().getName());
         params.put("entityId", entity.getId());
-        List<LogEvent> result = sendRequestList(getFindAllRequest(), params);
+        List<LogEvent> result = obtainEntityList(getFindAllRequest(), params);
 //        RestServiseRequest request = getFindAllRequest();
 //        String uri = request.getAddress() + "?entityId={entityId}";
 //        Object[] uriVariables = {entityId};

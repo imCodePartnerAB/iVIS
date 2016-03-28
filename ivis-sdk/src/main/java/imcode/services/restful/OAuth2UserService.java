@@ -1,6 +1,5 @@
 package imcode.services.restful;
 
-import com.imcode.entities.Person;
 import com.imcode.entities.User;
 import com.imcode.services.UserService;
 import imcode.services.IvisServiceFactory;
@@ -32,7 +31,7 @@ public class OAuth2UserService extends AbstractOAuth2Service<User, Long> impleme
     public User getCurrentUser() {
                 User result = null;
         RestTemplate restTemplate = getRestTemplate();
-        RestServiseRequest request = getFindAllRequest();
+        RestServiceRequest request = getFindAllRequest();
 
         String uri = request.getAddress() + "/current";
         HttpMethod method = request.getMethod();

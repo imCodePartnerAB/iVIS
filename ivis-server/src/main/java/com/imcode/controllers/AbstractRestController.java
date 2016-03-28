@@ -1,5 +1,6 @@
 package com.imcode.controllers;
 
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
@@ -7,6 +8,7 @@ import com.imcode.services.PersonalizedService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.repository.query.Param;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -14,11 +16,14 @@ import org.springframework.web.context.request.WebRequest;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by vitaly on 17.02.15.
  */
-public abstract class AbstractRestController<T, ID extends Serializable, SERVICE_TYPE extends GenericService<T, ID>> implements CrudController<T, ID>{
+public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends Serializable, SERVICE_TYPE extends GenericService<T, ID>> implements CrudController<T, ID>{
 
     @Autowired
     private SERVICE_TYPE service;
@@ -46,13 +51,26 @@ public abstract class AbstractRestController<T, ID extends Serializable, SERVICE
     @RequestMapping(method = RequestMethod.POST)
 //    @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) {
-        try {
+//        try {
             return service.save(entity);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw e;
+//        }
     }
+
+    @RequestMapping(value = "/bulk", method = RequestMethod.POST)
+    public @ResponseBody Object sava(@RequestBody Iterable<T> entities, WebRequest webRequest, @RequestParam(required = false) Boolean full) {
+        Iterable<T> result = service.save(entities);
+
+        if (Boolean.FALSE.equals(full)) {
+            List<ID> ids = StreamSupport.stream(result.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
+            return ids;
+        }
+
+        return result;
+    }
+
 
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
