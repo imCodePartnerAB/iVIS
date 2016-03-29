@@ -525,6 +525,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 
 //            Object entity = service.find(0);
             System.out.println(entity);
+
 //            System.out.println(entityList);
 
 //            ApplicationContext ctx = StaticUtils.getApplicationContext();
