@@ -506,7 +506,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 ////            entity.setClassPlacementFrom(LocalDate.now());
 //
 //            Random r = new Random();
-//            Application entity = (Application) service.find(75L);
+            Application entity = (Application) service.find(6L);
 //            String entityString = ToStringBuilder.reflectionToString(entity, ToStringStyle.JSON_STYLE);
 ////            entity = new Application();
 //            entity.setDecision(new Decision(Decision.Status.values()[r.nextInt(3)]));
@@ -524,7 +524,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 //            System.out.println(entities);
 
 //            Object entity = service.find(0);
-//            System.out.println(entity);
+            System.out.println(entity);
 //            System.out.println(entityList);
 
 //            ApplicationContext ctx = StaticUtils.getApplicationContext();
@@ -545,16 +545,16 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 //            SchoolClass schoolClass = new SchoolClass("School class #1", school, new Date(), new Date());
 //            schoolClass = schoolClassService.save(schoolClass);
 //            school = schoolService.find(school.getId());
-            List<SchoolTransport> entities = schoolTransportService.findAll();
-            List<SchoolTransport> outList = new ArrayList<>(5);
-            outList.add(new SchoolTransport("Bus #1"));
-            outList.add(new SchoolTransport("Bus #2"));
-            outList.add(new SchoolTransport("Bus #3"));
-            outList.add(new SchoolTransport("Bus #4"));
-            outList.add(new SchoolTransport("Bus #5"));
-            SchoolTransport st = schoolTransportService.save(outList.get(0));
-            Iterable<SchoolTransport> inList = schoolTransportService.save(outList);
-            System.out.println(inList);
+//            List<SchoolTransport> entities = schoolTransportService.findAll();
+//            List<SchoolTransport> outList = new ArrayList<>(5);
+//            outList.add(new SchoolTransport("Bus #1"));
+//            outList.add(new SchoolTransport("Bus #2"));
+//            outList.add(new SchoolTransport("Bus #3"));
+//            outList.add(new SchoolTransport("Bus #4"));
+//            outList.add(new SchoolTransport("Bus #5"));
+//            SchoolTransport st = schoolTransportService.save(outList.get(0));
+//            Iterable<SchoolTransport> inList = schoolTransportService.save(outList);
+//            System.out.println(inList);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -125,11 +125,12 @@ public class MainTest {
 ////        pupil.setClassPlacementFrom(new Date());
 ////        pupil = service.save(pupil);
 ////        ApplicationService service = ctx.getBean(ApplicationService.class);
-        ApplicationFormService service = ctx.getBean(ApplicationFormService.class);
+        ApplicationFormService applicationFormService = ctx.getBean(ApplicationFormService.class);
+        ApplicationService applicationService = ctx.getBean(ApplicationService.class);
 //        ApplicationFormQuestionService service = ctx.getBean(ApplicationFormQuestionService.class);
 //        EntityVersionService service2 = ctx.getBean(EntityVersionService.class);
 ////        Application entity = service.find(13L);
-        ApplicationForm entity = service.find(75L);
+        ApplicationForm entity = applicationFormService.find(6L);
         System.out.println(entity);
 ////        entity.setUpdateDate(new Date());
 ////        entity.getApplicationForm().getQuestions().iterator().next().setValue("1111");

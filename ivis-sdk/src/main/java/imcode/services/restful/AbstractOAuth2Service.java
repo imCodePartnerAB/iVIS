@@ -250,7 +250,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 //        }
 //
 //        return result;
-        return obtainEntity(getFindRequest(), parameterMap("id", id));
+        return obtainEntity(getFindRequest(), Collections.emptyMap(), id);
     }
 
     @Override
@@ -292,14 +292,14 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         return obtainEntity(getFindAllRequest(), parameterMap("name,first", name, true));
     }
 
-    protected T obtainEntity(RestServiceRequest request, Map<String, ?> params) {
+    protected T obtainEntity(RestServiceRequest request, Map<String, ?> params, Object... uriVariables) {
         T result = null;
 
         String uri = buildUrlString(request, params);
         HttpMethod method = request.getMethod();
         RestTemplate restTemplate = getRestTemplate();
 
-        ResponseEntity<T> responseEntity = restTemplate.exchange(uri, method, null, getEntityClass());
+        ResponseEntity<T> responseEntity = restTemplate.exchange(uri, method, null, getEntityClass(), uriVariables);
 
         if (responseEntity.getBody() != null) {
             result = responseEntity.getBody();
