@@ -1,15 +1,13 @@
-<%@ page import="com.imcode.entities.Application,
-                 com.imcode.entities.embed.Decision" pageEncoding="UTF-8" %>
+<%@ page import="com.imcode.entities.embed.Decision" pageEncoding="UTF-8" %>
 <%@ page import="imcode.server.Imcms" %>
 <%@ page import="imcode.services.IvisServiceFactory" %>
 <%@ page import="imcode.services.utils.IvisOAuth2Utils" %>
 <%@ page import="org.springframework.security.oauth2.client.resource.UserRedirectRequiredException" %>
-<%@ page import="com.imcode.entities.ApplicationFormQuestion" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.imcode.imcms.addon.ivisclient.utils.Step" %>
-<%@ page import="com.imcode.entities.LogEvent" %>
 <%@ page import="com.imcode.services.*" %>
-<%@ page import="com.imcode.entities.EntityVersion" %>
+<%@ page import="com.imcode.entities.*" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 
 <%@taglib prefix="imcms" uri="imcms" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -33,6 +31,34 @@
         List<EntityVersion> versions = null;
         try {
             app = applicationService.find(Long.valueOf(request.getParameter("id")));
+            //clean empty questions
+            for (ApplicationFormStep step :app.getApplicationForm().getSteps()) {
+                Iterator<ApplicationFormQuestionGroup> groupIterator = step.getQuestionGroups().iterator();
+                while (groupIterator.hasNext()) {
+                    ApplicationFormQuestionGroup group = groupIterator.next();
+
+                    if (group.getQuestions() == null || group.getQuestions().isEmpty()) {
+                        groupIterator.remove();
+                        continue;
+                    }
+
+                    boolean empty = true;
+
+                    for (ApplicationFormQuestion question :group.getQuestions()) {
+                        if (!StringUtils.isEmpty(question.getValue())) {
+                            empty = false;
+                            break;
+                        }
+                    }
+
+                    if (empty) {
+                        groupIterator.remove();
+                        continue;
+                    }
+
+                }
+            }
+
             logs = logEventService.findByEntity(app);
             versions = versionService.findByEntity(app);
         } catch (UserRedirectRequiredException e) {

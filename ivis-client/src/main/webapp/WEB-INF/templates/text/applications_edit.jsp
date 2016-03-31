@@ -156,16 +156,26 @@
                                     <%--</c:if>--%>
                             </div>
                             <c:choose>
-                                <c:when test="${fn:endsWith(group.questionType, '2.TextFieldQueryInstance')}">
-                                    <%--<div class="answer">LabelFieldQueryInstance</div>--%>
-                                    <c:forEach items="${group.questions}" var="question">
-                                        <div class="question">
-                                            <div class="name">${question.text}</div>
-                                            <div class="answer">${question.value}</div>
-                                        </div>
-                                    </c:forEach>
-                                </c:when>
-                                <c:when test="${fn:endsWith(group.questionType, 'y.TextFieldQueryInstance')}">
+                                <%--<c:when test="${fn:endsWith(group.questionType, '2.TextFieldQueryInstance')}">--%>
+                                    <%--&lt;%&ndash;<div class="answer">LabelFieldQueryInstance</div>&ndash;%&gt;--%>
+                                    <%--<c:forEach items="${group.questions}" var="question">--%>
+                                        <%--<div class="question">--%>
+                                            <%--<div class="name">${question.text}</div>--%>
+                                            <%--<div class="answer">${question.value}</div>--%>
+                                        <%--</div>--%>
+                                    <%--</c:forEach>--%>
+                                <%--</c:when>--%>
+                                <%--<c:when test="${fn:endsWith(group.questionType, 'y.TextFieldQueryInstance')}">--%>
+                                    <%--<c:forEach items="${group.questions}" var="question">--%>
+                                        <%--<div class="question">--%>
+                                            <%--<div class="name">${question.text}</div>--%>
+                                            <%--<input type="hidden" name="questions[${index}].id" value="${question.id}"/>--%>
+                                                <%--<input name="questions[${index}].value" value="${question.value}"/>--%>
+                                                <%--<c:set var="index" value="${index + 1}"/>--%>
+                                        <%--</div>--%>
+                                    <%--</c:forEach>--%>
+                                <%--</c:when>--%>
+                                <c:when test="${fn:endsWith(group.questionType, 'TextFieldQueryInstance')}">
                                     <c:forEach items="${group.questions}" var="question">
                                         <div class="question">
                                             <div class="name">${question.text}</div>
