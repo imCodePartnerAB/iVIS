@@ -2,6 +2,7 @@ package com.imcode.imcms.addon.ivisclient.controllers;
 
 import com.imcode.entities.*;
 import com.imcode.entities.embed.Decision;
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.imcms.addon.ivisclient.controllers.form.ApplicationFormCmd;
 import com.imcode.services.*;
 import imcode.server.Imcms;
@@ -155,7 +156,7 @@ public class IvisController {
         Application application = service.find(applicationId);
 
         List<ApplicationFormQuestion> persistedQuestions = application.getQuestionList();
-        Collections.sort(persistedQuestions);
+        Collections.sort(persistedQuestions, JpaEntity.BY_ID_COMPARATOR);
 
 
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
@@ -164,8 +165,8 @@ public class IvisController {
                 List<ApplicationFormQuestion> questions = new ArrayList<>();
                 for (ApplicationFormQuestion question :applicationFormCmd.getQuestions()) {
 //                    ApplicationFormQuestion realQuestion = questionService.find(question.getId());
-                    int questionIndex = Collections.binarySearch(persistedQuestions, question);
-                    if (questionIndex > 0) {
+                    int questionIndex = Collections.binarySearch(persistedQuestions, question, JpaEntity.BY_ID_COMPARATOR);
+                    if (questionIndex >= 0) {
                         ApplicationFormQuestion realQuestion = persistedQuestions.get(questionIndex);
                         if (realQuestion.getMultiValues() && !Objects.equals(realQuestion.getValues(), question.getValues())) {
                             realQuestion.setValues(question.getValues());

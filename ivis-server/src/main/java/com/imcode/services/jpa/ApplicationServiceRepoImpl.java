@@ -11,21 +11,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ApplicationServiceRepoImpl extends AbstractService<Application, Long, ApplicationRepository> implements ApplicationService {
-    @Autowired
-    private EntityVersionService entityVersionService;
-
-    @Override
-    public Application save(Application entity) {
-        if (entity.getId() != null) {
-            Application oldEntity = repo.findOne(entity.getId());
-            if (oldEntity != null && !oldEntity.deepEquals(entity)) {
-                EntityVersion version = new EntityVersion(oldEntity);
-                entityVersionService.saveAsync(version);
-            }
-        }
-
-        return super.save(entity);
-    }
+//    @Autowired
+//    private EntityVersionService entityVersionService;
+//
+//    @Override
+//    public Application save(Application entity) {
+//        if (entity.getId() != null) {
+//            Application oldEntity = repo.findOne(entity.getId());
+//            if (oldEntity != null && !oldEntity.deepEquals(entity)) {
+//                EntityVersion version = new EntityVersion(oldEntity);
+//                entityVersionService.saveAsync(version);
+//            }
+//        }
+//
+//        return super.save(entity);
+//    }
 
 //    private boolean deepEquals(Application oldEntity, Application entity) {
 //        //a new one

@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ApplicationFormStepServiceRepoImpl extends AbstractService<ApplicationFormStep, Long, ApplicationFormStepRepository> implements ApplicationFormStepService {
-    @Autowired
-    private EntityVersionService entityVersionService;
+//    @Autowired
+//    private EntityVersionService entityVersionService;
 
-    @Autowired
-    private ApplicationService applicationService;
+//    @Autowired
+//    private ApplicationService applicationService;
 
 //    @Override
 //    public ApplicationForm save(ApplicationForm entity) {

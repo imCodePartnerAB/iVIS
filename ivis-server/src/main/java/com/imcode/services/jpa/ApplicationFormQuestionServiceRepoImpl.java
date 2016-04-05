@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ApplicationFormQuestionServiceRepoImpl extends AbstractService<ApplicationFormQuestion, Long, ApplicationFormQuestionRepository> implements ApplicationFormQuestionService {
-    @Autowired
-    private EntityVersionService entityVersionService;
+//    @Autowired
+//    private EntityVersionService entityVersionService;
 
     @Autowired
     private ApplicationService applicationService;

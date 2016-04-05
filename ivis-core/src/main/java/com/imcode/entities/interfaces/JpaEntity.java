@@ -6,10 +6,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import java.io.Serializable;
 import java.util.*;
 
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.nullsLast;
+
 /**
  * Created by vitaly on 10.07.15.
  */
 public interface JpaEntity<ID extends Serializable> extends Serializable {
+    Comparator<JpaEntity<Long>> BY_ID_COMPARATOR = nullsLast(comparing(JpaEntity::getId, nullsLast(Long::compare)));
+
     ID getId();
 
     void setId(ID id);
