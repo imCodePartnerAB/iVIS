@@ -152,14 +152,21 @@ public class IvisController {
         ApplicationFormQuestionService questionService = ivisServiceFactory.getService(ApplicationFormQuestionService.class);
 //        ApplicationFormService formService = getIvisServiceFactory(request).getService(ApplicationFormService.class);
         EntityVersionService versionService = ivisServiceFactory.getService(EntityVersionService.class);
+        Application application = service.find(applicationId);
+
+        List<ApplicationFormQuestion> persistedQuestions = application.getQuestionList();
+        Collections.sort(persistedQuestions);
+
 
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
                 boolean changed = false;
                 List<ApplicationFormQuestion> questions = new ArrayList<>();
                 for (ApplicationFormQuestion question :applicationFormCmd.getQuestions()) {
-                    ApplicationFormQuestion realQuestion = questionService.find(question.getId());
-                    if (realQuestion != null) {
+//                    ApplicationFormQuestion realQuestion = questionService.find(question.getId());
+                    int questionIndex = Collections.binarySearch(persistedQuestions, question);
+                    if (questionIndex > 0) {
+                        ApplicationFormQuestion realQuestion = persistedQuestions.get(questionIndex);
                         if (realQuestion.getMultiValues() && !Objects.equals(realQuestion.getValues(), question.getValues())) {
                             realQuestion.setValues(question.getValues());
                             realQuestion.setValue(question.getValues().stream().collect(Collectors.joining()));
@@ -175,8 +182,8 @@ public class IvisController {
 //                    if (question.getValue())
                 }
 
-                Application application = service.find(applicationId);
-                if (application != null && changed) {
+
+                if (changed) {
                     EntityVersion version = new EntityVersion(application);
                     version = versionService.save(version);
                     application.setUpdateDate(new Date());
