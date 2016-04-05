@@ -31,9 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -158,6 +156,7 @@ public class IvisController {
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
                 boolean changed = false;
+                List<ApplicationFormQuestion> questions = new ArrayList<>();
                 for (ApplicationFormQuestion question :applicationFormCmd.getQuestions()) {
                     ApplicationFormQuestion realQuestion = questionService.find(question.getId());
                     if (realQuestion != null) {
@@ -169,7 +168,7 @@ public class IvisController {
                         } else if (!realQuestion.getMultiValues() && !Objects.equals(realQuestion.getValue(), question.getValue())) {
                             realQuestion.setValue(question.getValue());
                             realQuestion.setValues(Collections.singletonList(question.getValue()));
-                            questionService.save(realQuestion);
+                            questions.add(realQuestion);
                             changed = true;
                         }
                     }
@@ -179,7 +178,11 @@ public class IvisController {
                 Application application = service.find(applicationId);
                 if (application != null && changed) {
                     EntityVersion version = new EntityVersion(application);
-                    versionService.save(version);
+                    version = versionService.save(version);
+                    application.setUpdateDate(new Date());
+                    service.save(application);
+                    Iterable<ApplicationFormQuestion> savedQuestions = questionService.save(questions);
+//                    int count = 1; // dummy :)
 //                    ApplicationForm applicationForm = application.getApplicationForm();
 //                    formService.save(applicationForm);
                 }

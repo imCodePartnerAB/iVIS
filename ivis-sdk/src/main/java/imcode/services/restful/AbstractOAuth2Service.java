@@ -182,35 +182,8 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     @Override
     public Iterable<T> save(Iterable<T> entities) {
-//        Iterable<T> result = Collections.emptySet();
-////        AbstractIdEntity idEntity = (AbstractIdEntity) entity;
-//        RestTemplate restTemplate = getRestTemplate();
         RestServiceRequest request = getCreateRequest();
-////        Object[] uriVariables = null;
-//
-////        if (idEntity.getId() == null) {
-////            request = getCreateRequest();
-//            String uri = request.getAddress();
-////            HttpMethod method = request.getMethod();
-//            result = restTemplate.postForObject(uri, entity, getGeneticType("T"));
-//            result = restTemplate.postForObject(uri, entities, getEntityClass());
-//////        } else {
-//////            request = getUpdateRequest();
-//////            uriVariables = new Object[]{idEntity.getId()};
-//////            String uri = request.getAddress();
-//////            HttpMethod method = request.getMethod();
-////            try {
-//////            restTemplate.put(uri, entity, uriVariables);
-////            } catch (RestClientException e) {
-////                throw new RuntimeException(e);
-////            }
-//////        }
-//
-//        return result;
-
         List<T> result = new LinkedList<>();
-
-//        String uri = buildUrlString(request, params);
         String uri = request.getAddress() + "/bulk";
         HttpMethod method = request.getMethod();
         RestTemplate restTemplate = getRestTemplate();

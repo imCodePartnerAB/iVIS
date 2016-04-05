@@ -1,11 +1,14 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.json.EntityVersionDeserializer;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -161,5 +164,15 @@ public class EntityVersion extends AbstractIdEntity<Long> {
 //
 //    public void setUser(User user) {
 //        this.user = user;
+//    }
+
+//    public static void main(String[] args) throws IOException {
+//        Role role = new Role(5L, "ROLE_USER");
+//        EntityVersion version = new EntityVersion(role);
+//        ObjectMapper mapper = new ObjectMapper();
+//        String versionString = mapper.writeValueAsString(version);
+//        EntityVersion version1 = mapper.readValue(versionString, EntityVersion.class);
+//        System.out.println(version1);
+//
 //    }
 }
