@@ -128,7 +128,10 @@
         <div class="field">
             <label>Sök</label>
             <input type="text" name="searchText" value="${param.searchText}"/>
-            <button class="positive" type="submit">Sök</button>
+            <div class="buttons inline">
+                <button class="positive button" type="submit">Sök</button>
+            </div>
+
                 <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>--%>
         </div>
 
@@ -145,7 +148,10 @@
                     <%--<option value="${starus.current}" <c:if test="${not empty param.statusFilter and param.statusFilter eq starus.current}">selected</c:if>>${starus.current}</option>--%>
                     <%--</c:forEach>--%>
             </select>
-            <button class="positive" type="submit">Filtrera</button>
+
+            <div class="buttons inline">
+                <button class="positive button" type="submit">Filtrera</button>
+            </div>
                 <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('statusFilter');">Clear filter</button>--%>
         </div>
     </form>

@@ -28,6 +28,10 @@ a {
   color: #0064ff;
 }
 
+.clear {
+  clear: both;
+}
+
 .container {
   position: relative;
   min-height: 100%;
@@ -239,14 +243,33 @@ dl dd {
 .step .questions .question > .name {
   box-sizing: border-box;
   float: left;
-  padding: 5px 20px;
+  margin: 5px 0;
+  /*padding: 5px 20px;*/
   width: 50%;
+}
+
+.step .questions .question input {
+  margin: 5px 0;
+  width: 350px;
+}
+
+.step .questions .question select {
+  margin: 5px 0;
+  width: 350px;
+  height: 26px;
+}
+
+.step .questions .question textarea {
+  margin: 5px 0;
+  width: 350px;
+  height: 75px;
 }
 
 .step .questions .question .answer {
   box-sizing: border-box;
   float: left;
-  padding: 5px 20px;
+  /*margin: 5px 0;*/
+  /*padding: 5px 20px;*/
   width: 50%;
 }
 
@@ -331,7 +354,11 @@ input, button {
 }
 
 .buttons button:active, .buttons .button:active {
-  border-bottom-width: 1px !important;
+  border-bottom-width: 3px !important;
+}
+
+.inline {
+  display: inline-block;
 }
 
 .positive {
@@ -344,6 +371,10 @@ input, button {
   background: #aad160;
 }
 
+.leveling {
+  float: left;
+}
+
 .negative {
   background: #cb5b5a;
   border-bottom: 3px solid #ac3635 !important;
@@ -352,6 +383,10 @@ input, button {
 
 .negative:hover {
   background: #d16160;
+}
+
+.spacer {
+  margin-left: 20px;
 }
 
 .neutral {
@@ -428,3 +463,4 @@ input, button {
   padding-top: 20px;
   width: 372px;
 }
+

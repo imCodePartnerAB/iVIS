@@ -181,14 +181,15 @@
             <div class="buttons">
                 <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                       method="get">
-                    <button class="positive" type="submit">Godk</button>
+                    <button class="positive leveling" type="submit">Godk</button>
                     <input type="hidden" name="status" value="APPROVE"/>
                 </form>
                 <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                       method="get">
-                    <button class="negative" type="submit">Pågår</button>
+                    <button class="negative leveling spacer" type="submit">Pågår</button>
                     <input type="hidden" name="status" value="DENI"/>
                 </form>
+                <div class="clear"></div>
             </div>
 
         </div>
@@ -251,8 +252,11 @@
             </c:if>
         </table>
     </div>
-    <a class="button positive"
-       href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Edit</a>
+    <div class="buttons">
+        <a class="button positive"
+           href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Edit</a>
+    </div>
+
 </c:if>
 <script type="text/javascript">
     var onOpen = function () {

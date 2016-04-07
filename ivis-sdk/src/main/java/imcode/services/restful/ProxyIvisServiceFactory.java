@@ -506,7 +506,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
 ////            entity.setClassPlacementFrom(LocalDate.now());
 //
 //            Random r = new Random();
-            Application entity = (Application) service.find(6L);
+            Application entity = (Application) service.find(5L);
 //            String entityString = ToStringBuilder.reflectionToString(entity, ToStringStyle.JSON_STYLE);
 ////            entity = new Application();
 //            entity.setDecision(new Decision(Decision.Status.values()[r.nextInt(3)]));
