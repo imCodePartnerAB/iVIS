@@ -244,24 +244,36 @@ dl dd {
   box-sizing: border-box;
   float: left;
   margin: 5px 0;
-  /*padding: 5px 20px;*/
+  padding-top: 10px;
   width: 50%;
 }
 
+.step .questions .question > .radio-checkbox-input {
+  width: 20px;
+}
+
 .step .questions .question input {
-  margin: 5px 0;
+  border: 1px solid #f0f0ff;
+  border-radius: 3px;
+  margin: 10px 0;
+  padding: 7.5px 10px;
   width: 350px;
 }
 
 .step .questions .question select {
+  border: 1px solid #f0f0ff;
+  border-radius: 3px;
   margin: 5px 0;
-  width: 350px;
-  height: 26px;
+  width: 372px;
+  height: 27px;
+
 }
 
 .step .questions .question textarea {
+  border: 1px solid #f0f0ff;
+  border-radius: 3px;
   margin: 5px 0;
-  width: 350px;
+  width: 372px;
   height: 75px;
 }
 
@@ -278,7 +290,7 @@ form {
   padding: 0;
 }
 
-input, button {
+input, button, textarea {
   font: normal 15px 'Open Sans', sans-serif;
 }
 

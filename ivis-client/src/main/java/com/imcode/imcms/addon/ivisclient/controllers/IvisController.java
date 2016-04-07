@@ -144,9 +144,9 @@ public class IvisController {
     }
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.POST)
-    public void updateStatus(HttpServletRequest request,
-                             HttpServletResponse response,
-                             @PathVariable("id") Long applicationId, @ModelAttribute("applicationForm") ApplicationFormCmd applicationFormCmd, BindingResult bindingResult) throws IOException {
+    public void editApplication(HttpServletRequest request,
+                                HttpServletResponse response,
+                                @PathVariable("id") Long applicationId, @ModelAttribute("applicationForm") ApplicationFormCmd applicationFormCmd, BindingResult bindingResult) throws IOException {
 
         final IvisServiceFactory ivisServiceFactory = getIvisServiceFactory(request);
         ApplicationService service = ivisServiceFactory.getService(ApplicationService.class);

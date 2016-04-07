@@ -215,7 +215,7 @@
                                         <input type="hidden" name="questions[${index}].id" value="${question.id}"/>
                                             <c:forEach var="variant" items="${question.variants}">
                                                 <div class="name"> </div>
-                                                <input type="radio" name="questions[${index}].value" value="${variant}" <c:if test="${variant.equalsIgnoreCase(question.value)}">checked="checked" </c:if>> ${variant}<br>
+                                                <input class="radio-checkbox-input " type="radio" name="questions[${index}].value" value="${variant}" <c:if test="${variant.equalsIgnoreCase(question.value)}">checked="checked" </c:if>> ${variant}<br>
                                             </c:forEach>
                                         <c:set var="index" value="${index + 1}"/>
                                     </div>
@@ -232,7 +232,7 @@
                                                 </c:if>
                                             </c:forEach>
                                             <div class="name"> </div>
-                                            <input type="checkbox" name="questions[${index}].values" value="${variant}" <c:if test="${checked}">checked="checked" </c:if>> ${variant}<br>
+                                            <input class="radio-checkbox-input " type="checkbox" name="questions[${index}].values" value="${variant}" <c:if test="${checked}">checked="checked" </c:if>> ${variant}<br>
                                         </c:forEach>
                                         <c:set var="index" value="${index + 1}"/>
                                     </div>
