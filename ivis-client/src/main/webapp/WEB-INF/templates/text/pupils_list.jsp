@@ -50,7 +50,9 @@
         <label>Sök</label>
         <input type="text" name="searchText" value="${param.searchText}"/>
         <%--<div class="buttons">--%>
-        <button class="positive" type="submit">Sök</button>
+        <div class="buttons inline">
+            <button class="positive button" type="submit">Sök</button>
+        </div>
         <%--<button class="negative" type="button" onclick="ivis.ui.clearSerchText('searchText');">Clear search</button>--%>
         <%--</div>--%>
     </div>

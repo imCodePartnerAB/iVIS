@@ -243,13 +243,13 @@ dl dd {
 .step .questions .question > .name {
   box-sizing: border-box;
   float: left;
-  margin: 5px 0;
-  padding-top: 10px;
+  margin: 10px 0;
+  padding: 7.5px 20px;
   width: 50%;
 }
 
 .step .questions .question > .radio-checkbox-input {
-  width: 20px;
+  width: 10px;
 }
 
 .step .questions .question input {
@@ -265,7 +265,8 @@ dl dd {
   border-radius: 3px;
   margin: 5px 0;
   width: 372px;
-  height: 27px;
+  padding: 10px;
+  /*height: 27px;*/
 
 }
 
@@ -280,8 +281,8 @@ dl dd {
 .step .questions .question .answer {
   box-sizing: border-box;
   float: left;
-  /*margin: 5px 0;*/
-  /*padding: 5px 20px;*/
+  margin: 10px 0;
+  padding: 7.5px 20px;
   width: 50%;
 }
 

@@ -233,9 +233,9 @@
             </tbody>
         </c:if>
     </table>
-    <div class="buttons">
-        <a class="button positive"
-           href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/import">Import</a>
-    </div>
+    <%--<div class="buttons">--%>
+        <%--<a class="button positive"--%>
+           <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/import">Import</a>--%>
+    <%--</div>--%>
 </c:if>
 <jsp:include page="ivis_footer.jsp"/>
