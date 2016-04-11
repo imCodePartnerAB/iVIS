@@ -60,17 +60,57 @@
             }
 
             logs = logEventService.findByEntity(app);
+
+
+
+
             versions = versionService.findByEntity(app);
+
+//            boolean hasCreateVersion = true;
+//            if (versions.size() == 0) {
+//                hasCreateVersion = false;
+//                EntityVersion version = new EntityVersion(app);
+//                version.setTimestamp(app.getCreateDate());
+//                version = versionService.save(version);
+//            } else if (!versions.get(0).getTimestamp().equals(app.getCreateDate())) {
+//                hasCreateVersion = false;
+//                EntityVersion version = new EntityVersion(app);
+//                version.setTimestamp(app.getCreateDate());
+//                version = versionService.save(version);
+//            }
+//
+//            if (!hasCreateVersion) {
+//                versions = versionService.findByEntity(app);
+//            }
+
         } catch (UserRedirectRequiredException e) {
             IvisOAuth2Utils.setAccessToken(session, null);
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
             return;
         }
 
+        EntityVersion version = new EntityVersion(app);
+        version.setTimestamp(app.getCreateDate());
+        versions.add(0, version);
+
+        int numEntWhichHaveDecision = Integer.MIN_VALUE;
+
+        int counter = 0;
+        for (EntityVersion entityVersion : versions) {
+            Application appBuf = (Application) entityVersion.getEntity();
+            if (appBuf.getDecision().getStatus().equals(Decision.Status.APPROVE)) {
+                numEntWhichHaveDecision = counter;
+                break;
+            }
+            counter++;
+
+        }
+
         request.setAttribute("logs", logs);
         request.setAttribute("versions", versions);
         request.setAttribute("app", app);
         pageContext.setAttribute("statusList", Decision.Status.values());
+        request.setAttribute("numEntWhichHaveDecision", numEntWhichHaveDecision);
 
     }
 %>
@@ -233,19 +273,42 @@
             <tr>
                 <th class="ordered-by">Date</th>
                 <th>&nbsp;</th>
+                <th>&nbsp;</th>
             </tr>
             </thead>
 
             <c:if test="${not empty versions}">
                 <tbody>
-                <c:forEach items="${versions}" var="version">
+                <c:forEach items="${versions}" var="version" varStatus="numberOfElement">
                     <fmt:formatDate value="${version.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
                     <tr data-application-id="${version.id}">
+
                         <td>${dateString}</td>
+
+                        <c:if test="${numberOfElement.index == 0}">
+                            <c:if test="${numberOfElement.index == numEntWhichHaveDecision}">
+                                <td>Original, Beslut</td>
+                            </c:if>
+                            <c:if test="${numberOfElement.index != numEntWhichHaveDecision}">
+                                <td>Original</td>
+                            </c:if>
+                        </c:if>
+
+                        <c:if test="${numberOfElement.index > 0}">
+                            <c:if test="${numberOfElement.index == numEntWhichHaveDecision}">
+                                <td>Beslut</td>
+                            </c:if>
+                            <c:if test="${numberOfElement.index != numEntWhichHaveDecision}">
+                                <td>&nbsp;</td>
+                            </c:if>
+                        </c:if>
+
+
                         <td class="buttons">
                             <a class="button positive"
                                href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/version?id=${version.id}">Visa</a>
                         </td>
+
                     </tr>
                 </c:forEach>
                 </tbody>

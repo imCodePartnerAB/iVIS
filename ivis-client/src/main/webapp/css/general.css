@@ -243,7 +243,7 @@ dl dd {
 .step .questions .question > .name {
   box-sizing: border-box;
   float: left;
-  margin: 10px 0;
+  margin: 0 0;
   padding: 7.5px 20px;
   width: 50%;
 }
@@ -281,7 +281,7 @@ dl dd {
 .step .questions .question .answer {
   box-sizing: border-box;
   float: left;
-  margin: 10px 0;
+  margin: 0 0;
   padding: 7.5px 20px;
   width: 50%;
 }
