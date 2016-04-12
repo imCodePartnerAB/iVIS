@@ -122,15 +122,19 @@ public class IvisController {
 //        ApplicationService service = factory.getStatementService();
 
         ApplicationService service = getIvisServiceFactory(request).getService(ApplicationService.class);
+        EntityVersionService entityVersionService = getIvisServiceFactory(request).getService(EntityVersionService.class);
 //
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
                 Application application = service.find(applicationId);
 //
                 if (application != null && application.getDecision() != null) {
-                    application.getDecision().setStatus(status);
-
-                    service.save(application);
+                    if (!application.getDecision().getStatus().equals(status)){
+                        application.getDecision().setStatus(status);
+                        application.getDecision().setDate(new Date());
+                        service.save(application);
+                        entityVersionService.save(new EntityVersion(application));
+                    }
 
                 }
             } catch (UserRedirectRequiredException e) {

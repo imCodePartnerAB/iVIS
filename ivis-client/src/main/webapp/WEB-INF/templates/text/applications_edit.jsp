@@ -318,19 +318,19 @@
                 <dt>Comment</dt>
                 <dd>${app.decision.comment}</dd>
             </dl>
-            <div class="buttons">
-                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                      method="get">
-                    <button class="positive leveling" type="submit">Godk</button>
-                    <input type="hidden" name="status" value="APPROVE"/>
-                </form>
-                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                      method="get">
-                    <button class="negative leveling spacer" type="submit">Pågår</button>
-                    <input type="hidden" name="status" value="DENI"/>
-                </form>
-                <div class="clear"></div>
-            </div>
+            <%--<div class="buttons">--%>
+                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                      <%--method="get">--%>
+                    <%--<button class="positive leveling" type="submit">Godk</button>--%>
+                    <%--<input type="hidden" name="status" value="APPROVE"/>--%>
+                <%--</form>--%>
+                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
+                      <%--method="get">--%>
+                    <%--<button class="negative leveling spacer" type="submit">Pågår</button>--%>
+                    <%--<input type="hidden" name="status" value="DENI"/>--%>
+                <%--</form>--%>
+                <%--<div class="clear"></div>--%>
+            <%--</div>--%>
 
         </div>
     </div>

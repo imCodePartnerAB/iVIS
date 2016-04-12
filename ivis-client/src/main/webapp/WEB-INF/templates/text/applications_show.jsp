@@ -78,23 +78,23 @@
 //        version.setTimestamp(app.getCreateDate());
 //        versions.add(0, version);
 
-        int numEntWhichHaveDecision = Integer.MIN_VALUE;
-
-        int counter = 0;
-        for (EntityVersion entityVersion : versions) {
-            Application appBuf = (Application) entityVersion.getEntity();
-            if (appBuf.getDecision().getStatus().equals(Decision.Status.APPROVE)) {
-                numEntWhichHaveDecision = counter;
-                break;
-            }
-            counter++;
-        }
+//        int numEntWhichHaveDecision = Integer.MIN_VALUE;
+//
+//        int counter = 0;
+//        for (EntityVersion entityVersion : versions) {
+//            Application appBuf = (Application) entityVersion.getEntity();
+//            if (appBuf.getDecision().getStatus().equals(Decision.Status.APPROVE)) {
+//                numEntWhichHaveDecision = counter;
+//                break;
+//            }
+//            counter++;
+//        }
 
         request.setAttribute("logs", logs);
         request.setAttribute("versions", versions);
         request.setAttribute("app", app);
         pageContext.setAttribute("statusList", Decision.Status.values());
-        request.setAttribute("numEntWhichHaveDecision", numEntWhichHaveDecision);
+//        request.setAttribute("numEntWhichHaveDecision", numEntWhichHaveDecision);
 
     }
 %>
@@ -270,19 +270,14 @@
                         <td>${dateString}</td>
 
                         <c:if test="${numberOfElement.index == 0}">
-                            <c:if test="${numberOfElement.index == numEntWhichHaveDecision}">
-                                <td>Original, Beslut</td>
-                            </c:if>
-                            <c:if test="${numberOfElement.index != numEntWhichHaveDecision}">
-                                <td>Original</td>
-                            </c:if>
+                            <td>Original</td>
                         </c:if>
 
                         <c:if test="${numberOfElement.index > 0}">
-                            <c:if test="${numberOfElement.index == numEntWhichHaveDecision}">
+                            <c:if test="${version.entity.decision.status != 'SUBMIT'}">
                                 <td>Beslut</td>
                             </c:if>
-                            <c:if test="${numberOfElement.index != numEntWhichHaveDecision}">
+                            <c:if test="${version.entity.decision.status == 'SUBMIT'}">
                                 <td>&nbsp;</td>
                             </c:if>
                         </c:if>
