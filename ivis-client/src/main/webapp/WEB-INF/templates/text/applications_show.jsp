@@ -66,22 +66,7 @@
 
             versions = versionService.findByEntity(app);
 
-//            boolean hasCreateVersion = true;
-//            if (versions.size() == 0) {
-//                hasCreateVersion = false;
-//                EntityVersion version = new EntityVersion(app);
-//                version.setTimestamp(app.getCreateDate());
-//                version = versionService.save(version);
-//            } else if (!versions.get(0).getTimestamp().equals(app.getCreateDate())) {
-//                hasCreateVersion = false;
-//                EntityVersion version = new EntityVersion(app);
-//                version.setTimestamp(app.getCreateDate());
-//                version = versionService.save(version);
-//            }
-//
-//            if (!hasCreateVersion) {
-//                versions = versionService.findByEntity(app);
-//            }
+
 
         } catch (UserRedirectRequiredException e) {
             IvisOAuth2Utils.setAccessToken(session, null);
@@ -89,9 +74,9 @@
             return;
         }
 
-        EntityVersion version = new EntityVersion(app);
-        version.setTimestamp(app.getCreateDate());
-        versions.add(0, version);
+//        EntityVersion version = new EntityVersion(app);
+//        version.setTimestamp(app.getCreateDate());
+//        versions.add(0, version);
 
         int numEntWhichHaveDecision = Integer.MIN_VALUE;
 
@@ -103,7 +88,6 @@
                 break;
             }
             counter++;
-
         }
 
         request.setAttribute("logs", logs);
