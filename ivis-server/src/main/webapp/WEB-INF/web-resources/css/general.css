@@ -184,6 +184,18 @@ input, button {
   font: normal 15px 'Open Sans', sans-serif;
 }
 
+.validation-error-authorized {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
+
+.validation-error-roles {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
+
 .field {
   padding-top: 10px;
 }

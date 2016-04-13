@@ -41,7 +41,9 @@
                 <%--<td>${client.isAutoApprove(client.scope)}</td>--%>
                 <td class="buttons">
                     <a class="button positive" href="clients/${client.clientId}?form">Edit</a>
-                    <button class="negative" type="button">Remove</button>
+                    <button class="negative" type="button" onclick="location.href = 'clients/${client.clientId}?delete';">
+                        Remove
+                    </button>
                 </td>
             </tr>
         </c:forEach>

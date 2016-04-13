@@ -175,4 +175,29 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
         return "redirect:/clients";
     }
+
+
+    //    Invoke Delete
+    @RequestMapping(value = "/{id}", params = "delete", method = RequestMethod.GET)
+    public ModelAndView deleteClient(@PathVariable("id") String id, ModelAndView model, WebRequest webRequest, Authentication principal) {
+        JpaClientDetails clientDetails;
+        addListsInModel(model);
+
+        if (webRequest.isUserInRole("ROLE_ADMIN")) {
+            clientDetails = clientDetailsService.findOne(id);
+            clientDetailsService.removeClientDetails(id);
+        }else if (principal != null) {
+            clientDetails = null;
+            //clientDetails = clientDetailsService.findUserClientById(id, (User) principal.getPrincipal());
+            clientDetailsService.removeClientDetails(id);
+        } else {
+            model.addObject("message", new Message(MessageType.ERROR, "Client not found"));
+            model.setViewName("clients/list");
+            return model;
+        }
+
+        model.addObject("client", clientDetails);
+        model.setViewName("redirect:/clients");
+        return model;
+    }
 }

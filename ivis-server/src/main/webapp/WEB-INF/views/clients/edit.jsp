@@ -6,6 +6,7 @@
 <spring:url value="/clients" var="backUrl"/>
 <h1>Edit Client</h1>
 
+
 <form:form modelAttribute="client" id="clientUpdateForm" method="post">
     <%--<c:if test="${not empty message}">--%>
     <%--<div id="message" class="${message.type}">${message.message}</div>--%>
@@ -51,6 +52,9 @@
         <form:checkboxes path="scope" items="${scopeList}" cssErrorClass="error" cssClass="check-box" />
         <form:errors path="scope" cssClass="error-description"/>
     </div>
+    <div class="validation-error-authorized">
+        Please check one variant of Authorized Grant Types*
+    </div>
     <div class="field">
         <form:label path="authorizedGrantTypes">
             Authorized Grant Types*
@@ -67,12 +71,15 @@
     <form:input path="registeredRedirectUri" cssErrorClass="error"/>
         <form:errors path="registeredRedirectUri" cssClass="error-description"/>
     </div>
+    <div class="validation-error-roles">
+        Please check one variant of Roles*
+    </div>
     <div class="checkbox">
         <form:label path="roles">
             Roles*
         </form:label>
         <form:checkboxes path="roles" items="${clientRoleList}" itemLabel="name" cssErrorClass="error"
-                         cssClass="check-box" itemValue="id"/>
+                         cssClass="check-box" itemValue="id" />
         <form:errors path="roles" cssClass="error-description"/>
     </div>
     <div class="field">
@@ -94,7 +101,7 @@
     </div>
 
     <div class="buttons">
-        <button class="positive" type="submit">Save</button>
+        <button class="positive" type="submit" onclick="return validate();">Save</button>
         <a class="button neutral" href="${backUrl}">Back</a>
     </div>
 </form:form>
