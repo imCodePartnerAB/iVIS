@@ -295,7 +295,7 @@
         </table>
     </div>
     <div class="buttons">
-        <a class="button positive"
+        <a class="button positive" onclick="ivis.ui.redirectOnFirstTabByCookie();"
            href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Edit</a>
     </div>
 

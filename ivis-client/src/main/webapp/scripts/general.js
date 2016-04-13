@@ -33,9 +33,9 @@ IVis.Tabs.prototype =
         currentTab = $(".tabs > .tab[data-tab-page-id='" + tabId + "']");
 
         if (currentTab.length == 0) {
-            $(".tabs > .tab").first()
+            $(".tabs > .tab").first().click();
                 //.next()
-                .click();
+
         } else {
             currentTab.click();
         }
@@ -592,6 +592,10 @@ IVis.UI.prototype =
                 $this.displayPersonInfo(result.person, owner, containerName + ".person", $this);
             });
     },
+
+    redirectOnFirstTabByCookie: function() {
+        $.cookie("data-tab-page-id", "applicationTabPage", {path: '/'});
+    }
 
     //enableFormValidation: function(formName) {
     //    $('#' + formName).validate();
