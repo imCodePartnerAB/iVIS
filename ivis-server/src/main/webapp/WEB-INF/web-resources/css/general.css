@@ -196,6 +196,18 @@ input, button {
   display: none;
 }
 
+.validation-error-access-token {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
+
+.validation-error-refresh-token {
+  color: red;
+  font-size: 12px;
+  display: none;
+}
+
 .field {
   padding-top: 10px;
 }

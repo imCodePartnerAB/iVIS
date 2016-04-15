@@ -53,7 +53,7 @@
         <form:errors path="scope" cssClass="error-description"/>
     </div>
     <div class="validation-error-authorized">
-        Please check one variant of Authorized Grant Types*
+        Please choose one variant of Authorized Grant Types*
     </div>
     <div class="field">
         <form:label path="authorizedGrantTypes">
@@ -72,7 +72,7 @@
         <form:errors path="registeredRedirectUri" cssClass="error-description"/>
     </div>
     <div class="validation-error-roles">
-        Please check one variant of Roles*
+        Please choose one variant of Roles*
     </div>
     <div class="checkbox">
         <form:label path="roles">
@@ -81,6 +81,10 @@
         <form:checkboxes path="roles" items="${clientRoleList}" itemLabel="name" cssErrorClass="error"
                          cssClass="check-box" itemValue="id" />
         <form:errors path="roles" cssClass="error-description"/>
+    </div>
+
+    <div class="validation-error-access-token">
+        Must be natural number
     </div>
     <div class="field">
     <form:label path="accessTokenValiditySeconds">
@@ -91,6 +95,9 @@
     <form:errors path="accessTokenValiditySeconds" cssClass="error"/>
     </div>
 
+    <div class="validation-error-refresh-token">
+        Must be natural number
+    </div>
     <div class="field">
     <form:label path="refreshTokenValiditySeconds">
     Refresh Token Validity(sec)*

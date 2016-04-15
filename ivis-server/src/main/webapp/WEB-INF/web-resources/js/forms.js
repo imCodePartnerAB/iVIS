@@ -19,22 +19,43 @@ function deleteElementRest(url, id, callback) {
     )
 };
 
+
+
 function validate() {
+
+    var isNaturalNumber = function (n) {
+        return !isNaN(n) && n.indexOf('-') === -1 && n.indexOf('.') === -1 && isFinite(n)                ;
+    };
+
     if (!$('#roles1').is(':checked') && !$('#roles2').is(':checked')) {
         $('.validation-error-roles').show();
         return false;
     }
+
     var selected = false;
     $($('#authorizedGrantTypes').children()).each(function(){if($(this).prop('selected')) {
 
         selected = true;
     }});
 
-
-
     if (!selected) {
         $('.validation-error-authorized').show();
         return selected;
+    }
+
+
+    if (!isNaturalNumber($('#accessTokenValiditySeconds').val())) {
+        $('.validation-error-access-token').show();
+        return false;
+
+    }
+
+
+
+    if (!isNaturalNumber($('#refreshTokenValiditySeconds').val())) {
+        $('.validation-error-refresh-token').show();
+        return false;
+
     }
 
     return true;

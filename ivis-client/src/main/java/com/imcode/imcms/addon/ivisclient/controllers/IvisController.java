@@ -123,6 +123,7 @@ public class IvisController {
 
         ApplicationService service = getIvisServiceFactory(request).getService(ApplicationService.class);
         EntityVersionService entityVersionService = getIvisServiceFactory(request).getService(EntityVersionService.class);
+        LogEventService logEventService = getIvisServiceFactory(request).getService(LogEventService.class);
 //
         if (IvisOAuth2Utils.getAccessToken(request) != null) {
             try {
@@ -133,7 +134,16 @@ public class IvisController {
                         application.getDecision().setStatus(status);
                         application.getDecision().setDate(new Date());
                         service.save(application);
-                        entityVersionService.save(new EntityVersion(application));
+                        EntityVersion version = new EntityVersion(application);
+                        entityVersionService.save(version);
+                        LogEvent log = logEventService.findByEntity(application).get(0);
+                        log.setTimestamp(version.getTimestamp());
+                        log.setAction(LogEvent.Action.MODIFY);
+
+                        log.setId(null);
+
+                        logEventService.save(log);
+
                     }
 
                 }
@@ -157,6 +167,8 @@ public class IvisController {
         ApplicationFormQuestionService questionService = ivisServiceFactory.getService(ApplicationFormQuestionService.class);
 //        ApplicationFormService formService = getIvisServiceFactory(request).getService(ApplicationFormService.class);
         EntityVersionService versionService = ivisServiceFactory.getService(EntityVersionService.class);
+        LogEventService logEventService = ivisServiceFactory.getService(LogEventService.class);
+
         Application application = service.find(applicationId);
 
         List<ApplicationFormQuestion> persistedQuestions = application.getQuestionList();
@@ -191,6 +203,17 @@ public class IvisController {
                 if (changed) {
                     EntityVersion version = new EntityVersion(application);
                     version = versionService.save(version);
+
+                    LogEvent log = logEventService.findByEntity(application).get(0);
+                    log.setTimestamp(version.getTimestamp());
+                    log.setAction(LogEvent.Action.MODIFY);
+
+                    log.setId(null);
+
+                    logEventService.save(log);
+
+
+
                     application.setUpdateDate(new Date());
                     service.save(application);
                     Iterable<ApplicationFormQuestion> savedQuestions = questionService.save(questions);
