@@ -220,12 +220,12 @@
                             <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                             <%--method="get">--%>
                             <%--<button class="positive" type="submit">Approve</button>--%>
-                            <%--<input type="hidden" name="status" value="APPROVE"/>--%>
+                            <%--<input type="hidden" name="status" value="APPROVED"/>--%>
                             <%--</form>--%>
                             <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                             <%--method="get">--%>
                             <%--<button class="negative" type="submit">Decline</button>--%>
-                            <%--<input type="hidden" name="status" value="DENI"/>--%>
+                            <%--<input type="hidden" name="status" value="DENIED"/>--%>
                             <%--</form>--%>
                     </td>
                 </tr>

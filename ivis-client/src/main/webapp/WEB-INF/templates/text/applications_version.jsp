@@ -221,7 +221,7 @@
                 <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                       <%--method="get">--%>
                     <%--<button class="negative" type="submit">Pågår</button>--%>
-                    <%--<input type="hidden" name="status" value="DENI"/>--%>
+                    <%--<input type="hidden" name="status" value="DENIED"/>--%>
                 <%--</form>--%>
             <%--</div>--%>
 
@@ -297,7 +297,7 @@
                 <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                       <%--method="get">--%>
                     <%--<button class="negative" type="submit">Pågår</button>--%>
-                    <%--<input type="hidden" name="status" value="DENI"/>--%>
+                    <%--<input type="hidden" name="status" value="DENIED"/>--%>
                 <%--</form>--%>
             <%--</div>--%>
 
@@ -343,7 +343,7 @@
                                 <%--&lt;%&ndash;<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"&ndash;%&gt;--%>
                                 <%--&lt;%&ndash;method="get">&ndash;%&gt;--%>
                                 <%--&lt;%&ndash;<button class="negative" type="submit">Decline</button>&ndash;%&gt;--%>
-                                <%--&lt;%&ndash;<input type="hidden" name="status" value="DENI"/>&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;<input type="hidden" name="status" value="DENIED"/>&ndash;%&gt;--%>
                                 <%--&lt;%&ndash;</form>&ndash;%&gt;--%>
                         <%--</td>--%>
                     <%--</tr>--%>
@@ -389,7 +389,7 @@
                                 <%--&lt;%&ndash;<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"&ndash;%&gt;--%>
                                 <%--&lt;%&ndash;method="get">&ndash;%&gt;--%>
                                 <%--&lt;%&ndash;<button class="negative" type="submit">Decline</button>&ndash;%&gt;--%>
-                                <%--&lt;%&ndash;<input type="hidden" name="status" value="DENI"/>&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;<input type="hidden" name="status" value="DENIED"/>&ndash;%&gt;--%>
                                 <%--&lt;%&ndash;</form>&ndash;%&gt;--%>
                         <%--</td>--%>
                     <%--</tr>--%>

@@ -134,8 +134,8 @@ public class MainTest {
         System.out.println(entity);
 ////        entity.setUpdateDate(new Date());
 ////        entity.getApplicationForm().getQuestions().iterator().next().setValue("1111");
-////        entity.setStatus(Decision.Status.APPROVE);
-////        entity.setStatus(Decision.Status.DENI);
+////        entity.setStatus(Decision.Status.APPROVED);
+////        entity.setStatus(Decision.Status.DENIED);
 ////        service.save(entity);
 ////        entity.getApplicationForm().setVersion(100);
 ////        service.save(entity);

@@ -12,7 +12,8 @@ import java.util.Date;
  */
 @Embeddable
 public class Decision implements Serializable{
-    public enum Status {APPROVE("Godkänd"), DENI("Avslagen"), SUBMIT("Hanteras");
+    public enum Status {
+        APPROVED("Godkänd"), DENIED("Avslagen"), HANDLED("Hanteras");
         private final String description;
 
         Status(String description) {
@@ -35,7 +36,7 @@ public class Decision implements Serializable{
     public String comment;
 
     public Decision() {
-        this(Status.SUBMIT, new Date(), "");
+        this(Status.HANDLED, new Date(), "");
     }
 
     public Decision(Status status) {
@@ -73,15 +74,15 @@ public class Decision implements Serializable{
     }
 
     public void approve() {
-        applyStatus(Status.APPROVE);
+        applyStatus(Status.APPROVED);
     }
 
     public void deni() {
-        applyStatus(Status.DENI);
+        applyStatus(Status.DENIED);
     }
 
     public void submit() {
-        applyStatus(Status.SUBMIT);
+        applyStatus(Status.HANDLED);
     }
 
 //    ----------------------------------------------------------------------------

@@ -327,7 +327,7 @@
                 <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                       <%--method="get">--%>
                     <%--<button class="negative leveling spacer" type="submit">Pågår</button>--%>
-                    <%--<input type="hidden" name="status" value="DENI"/>--%>
+                    <%--<input type="hidden" name="status" value="DENIED"/>--%>
                 <%--</form>--%>
                 <%--<div class="clear"></div>--%>
             <%--</div>--%>
@@ -371,7 +371,7 @@
                                 <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
                                 <%--method="get">--%>
                                 <%--<button class="negative" type="submit">Decline</button>--%>
-                                <%--<input type="hidden" name="status" value="DENI"/>--%>
+                                <%--<input type="hidden" name="status" value="DENIED"/>--%>
                                 <%--</form>--%>
                         </td>
                     </tr>

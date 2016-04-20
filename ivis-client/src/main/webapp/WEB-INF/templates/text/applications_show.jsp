@@ -83,7 +83,7 @@
 //        int counter = 0;
 //        for (EntityVersion entityVersion : versions) {
 //            Application appBuf = (Application) entityVersion.getEntity();
-//            if (appBuf.getDecision().getStatus().equals(Decision.Status.APPROVE)) {
+//            if (appBuf.getDecision().getStatus().equals(Decision.Status.APPROVED)) {
 //                numEntWhichHaveDecision = counter;
 //                break;
 //            }
@@ -194,24 +194,24 @@
 
     <div id="decisionTabPage" class="tab-page">
         <div class="field" id="statusSelect">
-            <c:if test="${app.decision.status == 'SUBMIT'}">
+            <c:if test="${app.decision.status == 'HANDLED'}">
                 <div class="buttons">
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">
                         <button class="positive leveling" type="submit">Godkänd</button>
-                        <input type="hidden" name="status" value="APPROVE"/>
+                        <input type="hidden" name="status" value="APPROVED"/>
                     </form>
 
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">
                         <button class="negative leveling spacer" type="submit">Avslagen</button>
-                        <input type="hidden" name="status" value="DENI"/>
+                        <input type="hidden" name="status" value="DENIED"/>
                     </form>
                 </div>
                 <div class="clear"></div>
             </c:if>
 
-            <c:if test="${app.decision.status != 'SUBMIT'}">
+            <c:if test="${app.decision.status != 'HANDLED'}">
 
                 <div class="decision-info">
                     <dl>
@@ -224,22 +224,22 @@
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">
                         <button class="handled leveling" type="submit">Hanteras</button>
-                        <input type="hidden" name="status" value="SUBMIT"/>
+                        <input type="hidden" name="status" value="HANDLED"/>
                     </form>
 
-                    <c:if test="${app.decision.status == 'DENI'}">
+                    <c:if test="${app.decision.status == 'DENIED'}">
                         <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                               method="get">
                             <button class="positive leveling spacer" type="submit">Godkänd</button>
-                            <input type="hidden" name="status" value="APPROVE"/>
+                            <input type="hidden" name="status" value="APPROVED"/>
                         </form>
                     </c:if>
 
-                    <c:if test="${app.decision.status == 'APPROVE'}">
+                    <c:if test="${app.decision.status == 'APPROVED'}">
                         <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                               method="get">
                             <button class="negative leveling spacer" type="submit">Avslagen</button>
-                            <input type="hidden" name="status" value="DENI"/>
+                            <input type="hidden" name="status" value="DENIED"/>
                         </form>
                     </c:if>
 
@@ -316,10 +316,10 @@
                         </c:if>
 
                         <c:if test="${numberOfElement.index > 0}">
-                            <c:if test="${version.entity.decision.status != 'SUBMIT'}">
+                            <c:if test="${version.entity.decision.status != 'HANDLED'}">
                                 <td>Beslut</td>
                             </c:if>
-                            <c:if test="${version.entity.decision.status == 'SUBMIT'}">
+                            <c:if test="${version.entity.decision.status == 'HANDLED'}">
                                 <td>&nbsp;</td>
                             </c:if>
                         </c:if>

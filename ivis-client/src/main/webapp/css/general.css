@@ -414,13 +414,15 @@ input, button, textarea {
 
 .spacer-mid {
   margin-left: 157px;
-  line-height: 25px;
+  line-height: 35px;
+  display: inline-block;
 }
 
 .spacer-big {
   margin-left: 320px;
   cursor: pointer;
-  line-height: 25px;
+  line-height: 35px;
+  display: inline-block;
 }
 
 .decision-change {
