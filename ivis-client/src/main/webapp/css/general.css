@@ -398,8 +398,37 @@ input, button, textarea {
   background: #d16160;
 }
 
+.handled {
+  background: #ff9700;
+  border-bottom: 3px solid #cb5b5a !important;
+  color: #fff;
+}
+
+.handled:hover {
+  background: #ffb403;
+}
+
 .spacer {
   margin-left: 20px;
+}
+
+.spacer-mid {
+  margin-left: 157px;
+  line-height: 25px;
+}
+
+.spacer-big {
+  margin-left: 320px;
+  cursor: pointer;
+  line-height: 25px;
+}
+
+.decision-change {
+  display: none;
+}
+
+.decision-change a {
+  text-decoration: none;
 }
 
 .neutral {

@@ -595,6 +595,11 @@ IVis.UI.prototype =
 
     redirectOnFirstTabByCookie: function() {
         $.cookie("data-tab-page-id", "applicationTabPage", {path: '/'});
+    },
+
+    hideInfoAndShowBtnsChangeDecision: function() {
+        $('.decision-info').hide();
+        $('.decision-change').show();
     }
 
     //enableFormValidation: function(formName) {

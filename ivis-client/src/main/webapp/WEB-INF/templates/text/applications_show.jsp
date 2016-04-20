@@ -194,27 +194,69 @@
 
     <div id="decisionTabPage" class="tab-page">
         <div class="field" id="statusSelect">
-            <dl>
-                <dt>Status</dt>
-                <dd>${app.decision.status.description}</dd>
-                <dt>Date</dt>
-                <dd>${app.decision.date}</dd>
-                <dt>Comment</dt>
-                <dd>${app.decision.comment}</dd>
-            </dl>
-            <div class="buttons">
-                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                      method="get">
-                    <button class="positive leveling" type="submit">Godk</button>
-                    <input type="hidden" name="status" value="APPROVE"/>
-                </form>
-                <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
-                      method="get">
-                    <button class="negative leveling spacer" type="submit">Pågår</button>
-                    <input type="hidden" name="status" value="DENI"/>
-                </form>
+            <c:if test="${app.decision.status == 'SUBMIT'}">
+                <div class="buttons">
+                    <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                          method="get">
+                        <button class="positive leveling" type="submit">Godkänd</button>
+                        <input type="hidden" name="status" value="APPROVE"/>
+                    </form>
+
+                    <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                          method="get">
+                        <button class="negative leveling spacer" type="submit">Avslagen</button>
+                        <input type="hidden" name="status" value="DENI"/>
+                    </form>
+                </div>
                 <div class="clear"></div>
-            </div>
+            </c:if>
+
+            <c:if test="${app.decision.status != 'SUBMIT'}">
+
+                <div class="decision-info">
+                    <dl>
+                        <dd>${app.decision.status.description}<a class="spacer-big" onclick="ivis.ui.hideInfoAndShowBtnsChangeDecision();">Ändra</a></dd>
+                        <dd><fmt:formatDate value="${app.decision.date}" pattern="yyyy-MM-dd HH:mm:ss"/></dd>
+                    </dl>
+                </div>
+
+                <div class="buttons decision-change">
+                    <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                          method="get">
+                        <button class="handled leveling" type="submit">Hanteras</button>
+                        <input type="hidden" name="status" value="SUBMIT"/>
+                    </form>
+
+                    <c:if test="${app.decision.status == 'DENI'}">
+                        <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                              method="get">
+                            <button class="positive leveling spacer" type="submit">Godkänd</button>
+                            <input type="hidden" name="status" value="APPROVE"/>
+                        </form>
+                    </c:if>
+
+                    <c:if test="${app.decision.status == 'APPROVE'}">
+                        <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
+                              method="get">
+                            <button class="negative leveling spacer" type="submit">Avslagen</button>
+                            <input type="hidden" name="status" value="DENI"/>
+                        </form>
+                    </c:if>
+
+                    <a class="leveling spacer-mid" href="">Avbryt</a>
+                </div>
+
+
+
+                <div class="clear"></div>
+            </c:if>
+
+            <dl>
+                <dt>Kommentar</dt>
+                <dd>${app.decision.comment}</dd>
+                <dd><a>Lägg till kommentar</a></dd>
+            </dl>
+
 
         </div>
     </div>
