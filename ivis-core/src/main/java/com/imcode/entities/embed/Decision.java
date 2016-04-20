@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Embeddable
 public class Decision implements Serializable{
-    public enum Status {APPROVE("Godkänd"), DENI("Avslagen"), SUBMIT("Emottagen");
+    public enum Status {APPROVE("Godkänd"), DENI("Avslagen"), SUBMIT("Emottaen");
         private final String description;
 
         Status(String description) {
