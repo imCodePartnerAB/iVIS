@@ -255,7 +255,7 @@ public class IvisController {
                  ApplicationService service = ivisServiceFactory.getService(ApplicationService.class);
                  Application application = service.find(applicationId);
                  Decision decision = application.getDecision();
-                 decision.setComment(commentTextarea);
+                 decision.setComment(decision.getComment() + "<br/>" + commentTextarea);
                  application.setDecision(decision);
                  service.save(application);
              }
