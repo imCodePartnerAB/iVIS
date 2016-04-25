@@ -613,6 +613,47 @@ IVis.UI.prototype =
 
 
 };
+function browserDetectNav(chrAfterPoint) {
+    var
+        UA = window.navigator.userAgent,
+
+        OperaB = /Opera[ \/]+\w+\.\w+/i,
+        OperaV = /Version[ \/]+\w+\.\w+/i,
+        FirefoxB = /Firefox\/\w+\.\w+/i,
+        ChromeB = /Chrome\/\w+\.\w+/i,
+        SafariB = /Version\/\w+\.\w+/i,
+        IEB = /MSIE *\d+\.\w+/i,
+        SafariV = /Safari\/\w+\.\w+/i,
+
+        browser = new Array(),
+        browserSplit = /[ \/\.]/i,
+        OperaV = UA.match(OperaV),
+        Firefox = UA.match(FirefoxB),
+        Chrome = UA.match(ChromeB),
+        Safari = UA.match(SafariB),
+        SafariV = UA.match(SafariV),
+        IE = UA.match(IEB),
+        Opera = UA.match(OperaB);
+
+
+    if ((!Opera == "") & (!OperaV == "")) browser[0] = OperaV[0].replace(/Version/, "Opera");
+    else if (!Opera == "")    browser[0] = Opera[0];
+    else if (!IE == "") browser[0] = IE[0];
+    else if (!Firefox == "") browser[0] = Firefox[0];
+    else if (!Chrome == "") browser[0] = Chrome[0];
+    else if ((!Safari == "") && (!SafariV == "")) browser[0] = Safari[0].replace("Version", "Safari");
+
+
+    var outputData;
+
+    if (browser[0] != null) outputData = browser[0].split(browserSplit);
+    if ((chrAfterPoint == null) && (outputData != null)) {
+        chrAfterPoint = outputData[2].length;
+        outputData[2] = outputData[2].substring(0, chrAfterPoint);
+        return (outputData);
+    }
+    else return (false);
+}
 
 var wnd;
 function ivisOAuth(authUrl) {
@@ -628,47 +669,7 @@ function ivisOAuth(authUrl) {
         wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
     }
 
-    function browserDetectNav(chrAfterPoint) {
-        var
-            UA = window.navigator.userAgent,
 
-            OperaB = /Opera[ \/]+\w+\.\w+/i,
-            OperaV = /Version[ \/]+\w+\.\w+/i,
-            FirefoxB = /Firefox\/\w+\.\w+/i,
-            ChromeB = /Chrome\/\w+\.\w+/i,
-            SafariB = /Version\/\w+\.\w+/i,
-            IEB = /MSIE *\d+\.\w+/i,
-            SafariV = /Safari\/\w+\.\w+/i,
-
-            browser = new Array(),
-            browserSplit = /[ \/\.]/i,
-            OperaV = UA.match(OperaV),
-            Firefox = UA.match(FirefoxB),
-            Chrome = UA.match(ChromeB),
-            Safari = UA.match(SafariB),
-            SafariV = UA.match(SafariV),
-            IE = UA.match(IEB),
-            Opera = UA.match(OperaB);
-
-
-        if ((!Opera == "") & (!OperaV == "")) browser[0] = OperaV[0].replace(/Version/, "Opera");
-        else if (!Opera == "")    browser[0] = Opera[0];
-        else if (!IE == "") browser[0] = IE[0];
-        else if (!Firefox == "") browser[0] = Firefox[0];
-        else if (!Chrome == "") browser[0] = Chrome[0];
-        else if ((!Safari == "") && (!SafariV == "")) browser[0] = Safari[0].replace("Version", "Safari");
-
-
-        var outputData;
-
-        if (browser[0] != null) outputData = browser[0].split(browserSplit);
-        if ((chrAfterPoint == null) && (outputData != null)) {
-            chrAfterPoint = outputData[2].length;
-            outputData[2] = outputData[2].substring(0, chrAfterPoint); // берем нужное ко-во знаков
-            return (outputData);
-        }
-        else return (false);
-    }
 
 
 }
@@ -681,9 +682,16 @@ function ivisOAuth(authUrl) {
 //    wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
 //}
 
+
 function authComplete() {
-    wnd.close();
-    location.reload();
+    var browser = browserDetectNav();
+    if (browser[0] !== 'Safari') {
+        wnd.close();
+        location.reload();
+    } else {
+        location.href = '/';
+    }
+
 }
 
 function onSelectedItem(itemName, id) {
