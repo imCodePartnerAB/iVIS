@@ -107,12 +107,12 @@
         <div class="tab" data-tab-page-id="applicationTabPage">
             Ansökan
         </div>
-        <div class="tab" data-tab-page-id="decisionTabPage">
-            Beslut
-        </div>
-        <div class="tab" data-tab-page-id="loggTabPage">
-            Logg
-        </div>
+        <%--<div class="tab" data-tab-page-id="decisionTabPage">--%>
+            <%--Beslut--%>
+        <%--</div>--%>
+        <%--<div class="tab" data-tab-page-id="loggTabPage">--%>
+            <%--Logg--%>
+        <%--</div>--%>
     </div>
     <div id="applicationTabPage" class="tab-page">
         <c:set var="applicationForm" value="${app.applicationForm}"/>
@@ -299,87 +299,87 @@
                 <%--</div>--%>
                 <%--</c:forEach>--%>
             <div class="buttons">
-                <button class="positive  leveling" type="submit">Save</button>
+                <button class="positive  leveling" type="submit">Spara</button>
                 <button class="negative  leveling spacer" type="reset" onclick="location.href = location.href.replace('edit', 'show')">
-                    Cancel
+                    Avbryt
                 </button>
             </div>
         </form>
         <div class="clear"></div>
     </div>
 
-    <div id="decisionTabPage" class="tab-page">
-        <div class="field" id="statusSelect">
-            <dl>
-                <dt>Status</dt>
-                <dd>${app.decision.status.description}</dd>
-                <dt>Date</dt>
-                <dd>${app.decision.date}</dd>
-                <dt>Comment</dt>
-                <dd>${app.decision.comment}</dd>
-            </dl>
-            <%--<div class="buttons">--%>
-                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                      <%--method="get">--%>
-                    <%--<button class="positive leveling" type="submit">Godk</button>--%>
-                    <%--<input type="hidden" name="status" value="APPROVE"/>--%>
-                <%--</form>--%>
-                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                      <%--method="get">--%>
-                    <%--<button class="negative leveling spacer" type="submit">Pågår</button>--%>
-                    <%--<input type="hidden" name="status" value="DENIED"/>--%>
-                <%--</form>--%>
-                <%--<div class="clear"></div>--%>
-            <%--</div>--%>
+    <%--<div id="decisionTabPage" class="tab-page">--%>
+        <%--<div class="field" id="statusSelect">--%>
+            <%--<dl>--%>
+                <%--<dt>Status</dt>--%>
+                <%--<dd>${app.decision.status.description}</dd>--%>
+                <%--<dt>Date</dt>--%>
+                <%--<dd><fmt:formatDate value="${app.decision.date}" pattern="yyyy-MM-dd HH:mm:ss"/></dd>--%>
+                <%--<dt>Comment</dt>--%>
+                <%--<dd>${app.decision.comment}</dd>--%>
+            <%--</dl>--%>
+            <%--&lt;%&ndash;<div class="buttons">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"&ndash;%&gt;--%>
+                      <%--&lt;%&ndash;method="get">&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<button class="positive leveling" type="submit">Godk</button>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<input type="hidden" name="status" value="APPROVE"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;</form>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"&ndash;%&gt;--%>
+                      <%--&lt;%&ndash;method="get">&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<button class="negative leveling spacer" type="submit">Pågår</button>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<input type="hidden" name="status" value="DENIED"/>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;</form>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<div class="clear"></div>&ndash;%&gt;--%>
+            <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
 
-        </div>
-    </div>
-    <div id="loggTabPage" class="tab-page">
-        <table cellpadding="0" cellspacing="0">
-            <thead>
-            <tr>
-                <th class="ordered-by">Date</th>
-                <th>Action</th>
-                <th>User</th>
-                <th>Field name</th>
-                <th>Old value</th>
-                <th>New value</th>
-                <th>&nbsp;</th>
-            </tr>
-            </thead>
+        <%--</div>--%>
+    <%--</div>--%>
+    <%--<div id="loggTabPage" class="tab-page">--%>
+        <%--<table cellpadding="0" cellspacing="0">--%>
+            <%--<thead>--%>
+            <%--<tr>--%>
+                <%--<th class="ordered-by">Datum</th>--%>
+                <%--<th>åtgärd</th>--%>
+                <%--<th>användare</th>--%>
+                <%--&lt;%&ndash;<th>Field name</th>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<th>Old value</th>&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<th>New value</th>&ndash;%&gt;--%>
+                <%--<th>&nbsp;</th>--%>
+            <%--</tr>--%>
+            <%--</thead>--%>
 
-            <c:if test="${not empty logs}">
-                <tbody>
-                <c:forEach items="${logs}" var="app">
-                    <fmt:formatDate value="${app.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>
-                    <tr data-application-id="${app.id}">
-                        <td>${dateString}</td>
-                        <td>${app.action}</td>
-                        <td>${app.user}</td>
-                        <td>${app.fieldName}</td>
-                        <td>${app.previousValue}</td>
-                        <td>${app.newValue}</td>
-                        <td class="buttons">
-                                <%--<a class="button positive"--%>
-                                <%--href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>--%>
+            <%--<c:if test="${not empty logs}">--%>
+                <%--<tbody>--%>
+                <%--<c:forEach items="${logs}" var="app">--%>
+                    <%--<fmt:formatDate value="${app.timestamp}" var="dateString" pattern="yyyy-MM-dd HH:mm:ss"/>--%>
+                    <%--<tr data-application-id="${app.id}">--%>
+                        <%--<td>${dateString}</td>--%>
+                        <%--<td>${app.action}</td>--%>
+                        <%--<td>${app.user}</td>--%>
+                        <%--&lt;%&ndash;<td>${app.fieldName}</td>&ndash;%&gt;--%>
+                        <%--&lt;%&ndash;<td>${app.previousValue}</td>&ndash;%&gt;--%>
+                        <%--&lt;%&ndash;<td>${app.newValue}</td>&ndash;%&gt;--%>
+                        <%--<td class="buttons">--%>
+                                <%--&lt;%&ndash;<a class="button positive"&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${log.id}">Visa</a>&ndash;%&gt;--%>
 
-                                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                                <%--method="get">--%>
-                                <%--<button class="positive" type="submit">Approve</button>--%>
-                                <%--<input type="hidden" name="status" value="APPROVE"/>--%>
-                                <%--</form>--%>
-                                <%--<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"--%>
-                                <%--method="get">--%>
-                                <%--<button class="negative" type="submit">Decline</button>--%>
-                                <%--<input type="hidden" name="status" value="DENIED"/>--%>
-                                <%--</form>--%>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </c:if>
-        </table>
-    </div>
+                                <%--&lt;%&ndash;<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;method="get">&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;<button class="positive" type="submit">Approve</button>&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;<input type="hidden" name="status" value="APPROVE"/>&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;</form>&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;<form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;method="get">&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;<button class="negative" type="submit">Decline</button>&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;<input type="hidden" name="status" value="DENIED"/>&ndash;%&gt;--%>
+                                <%--&lt;%&ndash;</form>&ndash;%&gt;--%>
+                        <%--</td>--%>
+                    <%--</tr>--%>
+                <%--</c:forEach>--%>
+                <%--</tbody>--%>
+            <%--</c:if>--%>
+        <%--</table>--%>
+    <%--</div>--%>
 </c:if>
 <script type="text/javascript">
     var onOpen = function () {

@@ -131,11 +131,9 @@ public class IvisController {
 //
                 if (application != null && application.getDecision() != null) {
                     if (!application.getDecision().getStatus().equals(status)){
-                        application.getDecision().setStatus(status);
-                        application.getDecision().setDate(new Date());
-                        service.save(application);
                         EntityVersion version = new EntityVersion(application);
                         entityVersionService.save(version);
+
                         LogEvent log = logEventService.findByEntity(application).get(0);
                         log.setTimestamp(version.getTimestamp());
                         log.setAction(LogEvent.Action.MODIFY);
@@ -143,6 +141,13 @@ public class IvisController {
                         log.setId(null);
 
                         logEventService.save(log);
+
+                        application.getDecision().setStatus(status);
+                        application.getDecision().setDate(new Date());
+                        service.save(application);
+                        application.setUpdateDate(new Date());
+
+
 
                     }
 
@@ -201,6 +206,7 @@ public class IvisController {
 
 
                 if (changed) {
+
                     EntityVersion version = new EntityVersion(application);
                     version = versionService.save(version);
 
@@ -215,6 +221,11 @@ public class IvisController {
 
 
                     application.setUpdateDate(new Date());
+
+                    Decision decision = application.getDecision();
+                    decision.setDate(new Date ());
+                    decision.setStatus(Decision.Status.HANDLED);
+                    application.setDecision(decision);
                     service.save(application);
                     Iterable<ApplicationFormQuestion> savedQuestions = questionService.save(questions);
 //                    int count = 1; // dummy :)
@@ -231,7 +242,38 @@ public class IvisController {
 //        return id + ":" + status.toString();
     }
 
-    @Deprecated
+    @RequestMapping(value = "commentDecision/{id}", method = RequestMethod.POST)
+    public void addDecisionComment(HttpServletRequest request,
+                                HttpServletResponse response,
+                                @PathVariable("id") Long applicationId) throws IOException {
+
+
+        if (IvisOAuth2Utils.getAccessToken(request) != null) {
+            String commentTextarea = request.getParameter("commentTextarea");
+             if (!isEmptyOrNull(commentTextarea)) {
+                 final IvisServiceFactory ivisServiceFactory = getIvisServiceFactory(request);
+                 ApplicationService service = ivisServiceFactory.getService(ApplicationService.class);
+                 Application application = service.find(applicationId);
+                 Decision decision = application.getDecision();
+                 decision.setComment(commentTextarea);
+                 application.setDecision(decision);
+                 service.save(application);
+             }
+        }
+
+        response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/applications/show?id=" + applicationId);
+
+
+
+
+
+    }
+
+    private boolean isEmptyOrNull(String str) {
+        return str == null || str.isEmpty();
+    }
+
+        @Deprecated
     @RequestMapping(value = "/xml", method = RequestMethod.POST)
     public void importApplication(HttpServletRequest request,
                                   HttpServletResponse response,

@@ -178,7 +178,7 @@
                     <td>${app.id}</td>
                     <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm"/>
                     <td>${dateString}</td>
-                    <fmt:formatDate value="${app.createDate}" var="dateString" pattern="yyyy-MM-dd HH:mm"/>
+                    <fmt:formatDate value="${app.updateDate}" var="dateString" pattern="yyyy-MM-dd HH:mm"/>
                     <td>${dateString}</td>
                     <% Application app = (Application) pageContext.getAttribute("app");
                         String sudentName = null;
@@ -187,7 +187,7 @@
 //                            List<ApplicationFormQuestion> questions = app.getQuestionList();
 //                            if (questions != null) {
                                 String firstName = app.findQuestion("PupilPersonFirstName", true).orElse(new ApplicationFormQuestion()).getValue();
-                                String lastName = app.findQuestion("PupilPersonFirstName", true).orElse(new ApplicationFormQuestion()).getValue();
+                                String lastName = app.findQuestion("PupilPersonLastName", true).orElse(new ApplicationFormQuestion()).getValue();
 //                            ApplicationFormQuestion firstNameQuestion = app.findQuestion("PupilPerson.PupilPersonFirstName", true).orElse(new ApplicationFormQuestion()).getValue();
 //                            if (firstNameQuestion != null) {
 //                                firstName = firstNameQuestion.getValue();

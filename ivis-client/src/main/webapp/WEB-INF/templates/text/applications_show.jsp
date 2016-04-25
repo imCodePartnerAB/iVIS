@@ -140,7 +140,7 @@
             Logg
         </div>
         <div class="tab" data-tab-page-id="versionsTabPage">
-            Versions
+            Versioner
         </div>
     </div>
     <div id="applicationTabPage" class="tab-page">
@@ -190,6 +190,11 @@
                 </div>
             </div>
         </c:forEach>
+
+        <div class="buttons">
+            <a class="button positive" onclick="ivis.ui.redirectOnFirstTabByCookie();"
+               href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Redigera</a>
+        </div>
     </div>
 
     <div id="decisionTabPage" class="tab-page">
@@ -254,8 +259,22 @@
             <dl>
                 <dt>Kommentar</dt>
                 <dd>${app.decision.comment}</dd>
-                <dd><a>Lägg till kommentar</a></dd>
+                <dd><a class = "comment-link" onclick="ivis.ui.addCommentOnClick()">Lägg till kommentar</a></dd>
             </dl>
+
+            <div class="comment-area">
+
+                    <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/commentDecision/${app.id}"
+                          method="post">
+                        <textarea id="comment-textarea" name="commentTextarea"></textarea>
+
+                        <div class="buttons">
+                            <button class="positive" type="submit">Lägg till kommentar</button>
+                        </div>
+
+                    </form>
+
+            </div>
 
 
         </div>
@@ -264,12 +283,12 @@
         <table cellpadding="0" cellspacing="0">
             <thead>
             <tr>
-                <th class="ordered-by">Date</th>
-                <th>Action</th>
-                <th>User</th>
-                <th>Field name</th>
-                <th>Old value</th>
-                <th>New value</th>
+                <th class="ordered-by">Datum</th>
+                <th>åtgärd</th>
+                <th>användare</th>
+                <%--<th>Field name</th>--%>
+                <%--<th>Old value</th>--%>
+                <%--<th>New value</th>--%>
                 <th>&nbsp;</th>
             </tr>
             </thead>
@@ -282,9 +301,9 @@
                         <td>${dateString}</td>
                         <td>${app.action}</td>
                         <td>${app.user}</td>
-                        <td>${app.fieldName}</td>
-                        <td>${app.previousValue}</td>
-                        <td>${app.newValue}</td>
+                        <%--<td>${app.fieldName}</td>--%>
+                        <%--<td>${app.previousValue}</td>--%>
+                        <%--<td>${app.newValue}</td>--%>
                         <td class="buttons">
                         </td>
                     </tr>
@@ -327,7 +346,10 @@
 
                         <td class="buttons">
                             <a class="button positive"
-                               href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/version?id=${version.id}">Visa</a>
+                               target="_blank"
+                               href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/version?id=${version.id}">
+                                Visa
+                            </a>
                         </td>
 
                     </tr>
@@ -336,10 +358,7 @@
             </c:if>
         </table>
     </div>
-    <div class="buttons">
-        <a class="button positive" onclick="ivis.ui.redirectOnFirstTabByCookie();"
-           href="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/applications/edit?id=${app.id}">Edit</a>
-    </div>
+
 
 </c:if>
 <script type="text/javascript">

@@ -61,6 +61,7 @@
 
             logs = logEventService.findByEntity(app);
             versions = versionService.findByEntity(app);
+            request.setAttribute("version", version);
         } catch (UserRedirectRequiredException e) {
             IvisOAuth2Utils.setAccessToken(session, null);
             response.sendRedirect(Imcms.getServerProperties().getProperty("ClientAddress") + "/servlet/StartDoc?meta_id=" + viewing.getTextDocument().getId());
@@ -136,7 +137,7 @@
         </div>
         <div class="group">
             <div class="title">Senast ändrad</div>
-            <div class="value"><fmt:formatDate value="${app.updateDate}" pattern="yyy-MM-dd HH:mm:ss"/></div>
+            <div class="value"><fmt:formatDate value="${version.timestamp}" pattern="yyy-MM-dd HH:mm:ss"/></div>
         </div>
     </div>
     <div class="groups">
@@ -281,11 +282,11 @@
     <div id="decisionTabPage" class="tab-page">
         <div class="field" id="statusSelect">
             <dl>
-                <dt>Status</dt>
-                <dd>${app.decision.status.description}</dd>
-                <dt>Date</dt>
-                <dd>${app.decision.date}</dd>
-                <dt>Comment</dt>
+                <%--<dt>Status</dt>--%>
+                <%--<dd>${app.decision.status.description}</dd>--%>
+                <dt>Datum</dt>
+                <dd><fmt:formatDate value="${app.decision.date}" pattern="yyyy-MM-dd HH:mm:ss"/></dd>
+                <dt>Kommentar</dt>
                 <dd>${app.decision.comment}</dd>
             </dl>
             <%--<div class="buttons">--%>

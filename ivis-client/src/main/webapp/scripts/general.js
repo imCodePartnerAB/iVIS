@@ -600,6 +600,11 @@ IVis.UI.prototype =
     hideInfoAndShowBtnsChangeDecision: function() {
         $('.decision-info').hide();
         $('.decision-change').show();
+    },
+
+    addCommentOnClick: function() {
+        $('.comment-link').hide();
+        $('.comment-area').show();
     }
 
     //enableFormValidation: function(formName) {

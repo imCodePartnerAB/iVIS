@@ -433,6 +433,23 @@ input, button, textarea {
   text-decoration: none;
 }
 
+.comment-link {
+  cursor: pointer;
+}
+
+.comment-area {
+  display: none;
+}
+
+.comment-area textarea {
+  border: 1px solid #f0f0ff;
+  border-radius: 3px;
+  margin: 5px 0;
+  width: 372px;
+  height: 75px;
+  font: normal 15px 'Open Sans', sans-serif;
+}
+
 .neutral {
   color: #000;
   background: #f0f0f0;
