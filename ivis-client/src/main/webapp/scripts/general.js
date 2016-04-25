@@ -34,7 +34,7 @@ IVis.Tabs.prototype =
 
         if (currentTab.length == 0) {
             $(".tabs > .tab").first().click();
-                //.next()
+            //.next()
 
         } else {
             currentTab.click();
@@ -155,7 +155,7 @@ IVis.UI.prototype =
         this.addField(container, itemIndex, subConteinerId, "careOf", "c/o");
         this.addField(container, itemIndex, subConteinerId, "street", "Street");
         this.addField(container, itemIndex, subConteinerId, "postalCode", "Postal code")
-            .attr("data-rule-digits", "true" )
+            .attr("data-rule-digits", "true")
         this.addField(container, itemIndex, subConteinerId, "city", "City");
         this.addField(container, itemIndex, subConteinerId, "municipalityCode", "Municipality code");
     },
@@ -260,7 +260,7 @@ IVis.UI.prototype =
                 .html(items[i].description)
                 .appendTo(select);
 
-            if(value == items[i].name) {
+            if (value == items[i].name) {
                 item.attr("selected", "selected");
             }
         }
@@ -363,7 +363,7 @@ IVis.UI.prototype =
             if (slide) {
                 element.slideDown("slow");
             }
-            if(element.html().trim() == "") {
+            if (element.html().trim() == "") {
                 ivisOAuth(clientAddress + '/persons_list.jsp');
             }
         } else {
@@ -384,21 +384,21 @@ IVis.UI.prototype =
         var currentInputs = $("#" + escapedDivtId + " :input");
         currentInputs.removeAttr('disabled');
 
-        if(checkbox[0].checked) {
+        if (checkbox[0].checked) {
             $("#" + escapedparentDivtId + " :input").not(currentInputs).not(checkboxes).attr('disabled', true);
-        }else {
+        } else {
             $("#" + escapedparentDivtId + " :input").removeAttr('disabled');
         }
     },
 
-    selectRow: function(id) {
+    selectRow: function (id) {
         $("tr").removeClass("selected");
         $("tr[data-application-id='" + id + "']").addClass("selected");
     },
 
-    selectItem: function(itemName) {
+    selectItem: function (itemName) {
         var row = $("tr.selected");
-        if(row.length == 0) {
+        if (row.length == 0) {
             return;
         }
 
@@ -406,7 +406,7 @@ IVis.UI.prototype =
         window.close();
     },
 
-    displayPersonInfo: function(person, owner, itemNamePrefix, context){
+    displayPersonInfo: function (person, owner, itemNamePrefix, context) {
         var itemIdPrefix = this.escapeBrackets(itemNamePrefix);
         $("<input>").attr("id", itemIdPrefix + ".id")
             .attr("name", itemNamePrefix + ".id")
@@ -425,7 +425,7 @@ IVis.UI.prototype =
         //var container0 = $("<div>").attr("id", itemNamePrefix + ".addreses").appendTo(owner);
         var collectionCcontainer = $("<div>").attr("id", subConteinerId).appendTo(owner);
         var collection = person.addresses;
-        for(i = 0; i < collection.length; i++) {
+        for (i = 0; i < collection.length; i++) {
             var conteinerId = context.escapeBrackets(subConteinerId) + i + "Field";
             var container = $("<div>")
                 .addClass("field")
@@ -445,7 +445,7 @@ IVis.UI.prototype =
             context.addSingleField(container, collection[i].careOf, subConteinerName + "[" + i + "].careOf", "c/o");
             context.addSingleField(container, collection[i].street, subConteinerName + "[" + i + "].street", "Street");
             context.addSingleField(container, collection[i].postalCode, subConteinerName + "[" + i + "].postalCode", "Postal code")
-                .attr("data-rule-digits", "true" );
+                .attr("data-rule-digits", "true");
             context.addSingleField(container, collection[i].city, subConteinerName + "[" + i + "].city", "City");
             context.addSingleField(container, collection[i].municipalityCode, subConteinerName + "[" + i + "].municipalityCode", "Municipality code");
 
@@ -465,7 +465,7 @@ IVis.UI.prototype =
         $("<H2>").html("Phones:").appendTo(owner);
         var collectionCcontainer = $("<div>").attr("id", subConteinerId).appendTo(owner);
         var collection = person.phones;
-        for(i = 0; i < collection.length; i++) {
+        for (i = 0; i < collection.length; i++) {
             var conteinerId = context.escapeBrackets(subConteinerId) + i + "Field";
             var container = $("<div>")
                 .addClass("field")
@@ -482,7 +482,7 @@ IVis.UI.prototype =
                 .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
                 .appendTo(container);
 
-            context.addSingleField(container, collection[i].number, subConteinerName + "[" + i +"].number", "Phone")
+            context.addSingleField(container, collection[i].number, subConteinerName + "[" + i + "].number", "Phone")
                 .attr("data-rule-pattern", "\\s*((\\+([\\s-]*\\d[\\s-]*){2}|([\\s-]*\\d[\\s-]*)?)?((\\(([\\s-]*\\d[\\s-]*){3}\\))|([\\s-]*\\d[\\s-]*){3}))?([\\s-]*\\d[\\s-]*){7}");
         }
         $("<button>")
@@ -499,7 +499,7 @@ IVis.UI.prototype =
         $("<H2>").html("Emails:").appendTo(owner);
         var collectionCcontainer = $("<div>").attr("id", subConteinerId).appendTo(owner);
         var collection = person.emails;
-        for(i = 0; i < collection.length; i++) {
+        for (i = 0; i < collection.length; i++) {
             var conteinerId = context.escapeBrackets(subConteinerId) + i + "Field";
             var container = $("<div>")
                 .addClass("field")
@@ -516,7 +516,7 @@ IVis.UI.prototype =
                 .attr("onClick", "ivis.ui.removeContainer('" + conteinerId + "');")
                 .appendTo(container);
 
-            context.addSingleField(container, collection[i].address, subConteinerName + "[" + i +"].address", "Email")
+            context.addSingleField(container, collection[i].address, subConteinerName + "[" + i + "].address", "Email")
                 .attr("data-rule-email", "true");
         }
         $("<button>")
@@ -527,7 +527,7 @@ IVis.UI.prototype =
             .appendTo(collectionCcontainer);
     },
 
-    fillContactPerson: function(id) {
+    fillContactPerson: function (id) {
         var $this = this;
         var owner = $("#pupil\\.contactPersonField");
         var itemPrefix = "contactPerson";
@@ -537,7 +537,7 @@ IVis.UI.prototype =
             });
     },
 
-    addGuardian: function(id) {
+    addGuardian: function (id) {
         var $this = this;
         //var owner = $("#guardians0\\.personField");
         //var itemPrefix = "guardians0.person";
@@ -562,7 +562,7 @@ IVis.UI.prototype =
                 var checkbox = $("<div>")
                     .addClass("checkbox")
                     .appendTo(container);
-                    //.insertBefore($("#addGuardianButton .positive"));
+                //.insertBefore($("#addGuardianButton .positive"));
 
                 $("<input>")
                     .attr("id", containerId + ".solo")
@@ -574,35 +574,35 @@ IVis.UI.prototype =
                     .attr("for", containerId + ".solo")
                     .html("Solo guardian")
                     .appendTo(checkbox);
-                    //.insertBefore($("#addGuardianButton .positive"));
+                //.insertBefore($("#addGuardianButton .positive"));
 
                 $("<input>").attr("id", "guardianList" + index + ".id")
                     .attr("name", "guardianList[" + index + "].id")
                     .attr("type", "hidden")
                     .attr("value", result.id)
                     .appendTo(container);
-                    //.insertBefore($("#addGuardianButton .positive"));
+                //.insertBefore($("#addGuardianButton .positive"));
 
                 var owner = $("<div>")
                     .attr("id", containerId + ".personField")
                     .appendTo(container);
-                    //.insertBefore($("#addGuardianButton .positive"));
+                //.insertBefore($("#addGuardianButton .positive"));
 
 
                 $this.displayPersonInfo(result.person, owner, containerName + ".person", $this);
             });
     },
 
-    redirectOnFirstTabByCookie: function() {
+    redirectOnFirstTabByCookie: function () {
         $.cookie("data-tab-page-id", "applicationTabPage", {path: '/'});
     },
 
-    hideInfoAndShowBtnsChangeDecision: function() {
+    hideInfoAndShowBtnsChangeDecision: function () {
         $('.decision-info').hide();
         $('.decision-change').show();
     },
 
-    addCommentOnClick: function() {
+    addCommentOnClick: function () {
         $('.comment-link').hide();
         $('.comment-area').show();
     }
@@ -612,17 +612,65 @@ IVis.UI.prototype =
     //}
 
 
-
 };
 
 var wnd;
 function ivisOAuth(authUrl) {
     //var authUrl = "<%=IvisOAuth2Utils.getOAuth2AuthirizationUrl(client, Imcms.getServerProperties().getProperty("AuthorizationCodeHandlerUri"))%>";
-    var width = 600;
-    var height = 350;
-    var left = (screen.width / 2) - (width / 2);
-    var top = (screen.height / 2) - (height / 2);
-    wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
+    var browser = browserDetectNav();
+    if (browser[0] === 'Safari') {
+        location.href = authUrl;
+    } else {
+        var width = 600;
+        var height = 350;
+        var left = (screen.width / 2) - (width / 2);
+        var top = (screen.height / 2) - (height / 2);
+        wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
+    }
+
+    function browserDetectNav(chrAfterPoint) {
+        var
+            UA = window.navigator.userAgent,
+
+            OperaB = /Opera[ \/]+\w+\.\w+/i,
+            OperaV = /Version[ \/]+\w+\.\w+/i,
+            FirefoxB = /Firefox\/\w+\.\w+/i,
+            ChromeB = /Chrome\/\w+\.\w+/i,
+            SafariB = /Version\/\w+\.\w+/i,
+            IEB = /MSIE *\d+\.\w+/i,
+            SafariV = /Safari\/\w+\.\w+/i,
+
+            browser = new Array(),
+            browserSplit = /[ \/\.]/i,
+            OperaV = UA.match(OperaV),
+            Firefox = UA.match(FirefoxB),
+            Chrome = UA.match(ChromeB),
+            Safari = UA.match(SafariB),
+            SafariV = UA.match(SafariV),
+            IE = UA.match(IEB),
+            Opera = UA.match(OperaB);
+
+
+        if ((!Opera == "") & (!OperaV == "")) browser[0] = OperaV[0].replace(/Version/, "Opera");
+        else if (!Opera == "")    browser[0] = Opera[0];
+        else if (!IE == "") browser[0] = IE[0];
+        else if (!Firefox == "") browser[0] = Firefox[0];
+        else if (!Chrome == "") browser[0] = Chrome[0];
+        else if ((!Safari == "") && (!SafariV == "")) browser[0] = Safari[0].replace("Version", "Safari");
+
+
+        var outputData;
+
+        if (browser[0] != null) outputData = browser[0].split(browserSplit);
+        if ((chrAfterPoint == null) && (outputData != null)) {
+            chrAfterPoint = outputData[2].length;
+            outputData[2] = outputData[2].substring(0, chrAfterPoint); // берем нужное ко-во знаков
+            return (outputData);
+        }
+        else return (false);
+    }
+
+
 }
 
 //function openGuardian() {
@@ -639,9 +687,9 @@ function authComplete() {
 }
 
 function onSelectedItem(itemName, id) {
-    if(itemName == "person") {
+    if (itemName == "person") {
         ivis.ui.fillContactPerson(id);
-    }else {
+    } else {
         ivis.ui.addGuardian(id);
         //alert(itemName + ": " + id);
 
