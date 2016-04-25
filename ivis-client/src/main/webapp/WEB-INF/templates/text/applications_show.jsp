@@ -203,13 +203,13 @@
                 <div class="buttons">
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">
-                        <button class="positive leveling" type="submit">Godkänd</button>
+                        <button class="positive leveling" type="submit">Godkänn</button>
                         <input type="hidden" name="status" value="APPROVED"/>
                     </form>
 
                     <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                           method="get">
-                        <button class="negative leveling spacer" type="submit">Avslagen</button>
+                        <button class="negative leveling spacer" type="submit">avslå</button>
                         <input type="hidden" name="status" value="DENIED"/>
                     </form>
                 </div>
@@ -235,7 +235,7 @@
                     <c:if test="${app.decision.status == 'DENIED'}">
                         <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                               method="get">
-                            <button class="positive leveling spacer" type="submit">Godkänd</button>
+                            <button class="positive leveling spacer" type="submit">Godkänn</button>
                             <input type="hidden" name="status" value="APPROVED"/>
                         </form>
                     </c:if>
@@ -243,7 +243,7 @@
                     <c:if test="${app.decision.status == 'APPROVED'}">
                         <form action="<%=Imcms.getServerProperties().getProperty("ClientAddress")%>/api/content/ivis/${app.id}"
                               method="get">
-                            <button class="negative leveling spacer" type="submit">Avslagen</button>
+                            <button class="negative leveling spacer" type="submit">avslå</button>
                             <input type="hidden" name="status" value="DENIED"/>
                         </form>
                     </c:if>
