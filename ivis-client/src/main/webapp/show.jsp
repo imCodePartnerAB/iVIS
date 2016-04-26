@@ -4,7 +4,11 @@
 <html>
 <body>
 <script type="text/javascript">
-    window.opener.authComplete();
+    if (window.opener != null) {
+        window.opener.authComplete();
+    } else {
+        location.href = '/';
+    }
 </script>
 </body>
 </html>

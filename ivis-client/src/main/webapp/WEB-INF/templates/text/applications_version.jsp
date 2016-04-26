@@ -136,7 +136,7 @@
             <div class="value"><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/></div>
         </div>
         <div class="group">
-            <div class="title">Senast ändrad</div>
+            <div class="title">Version</div>
             <div class="value"><fmt:formatDate value="${version.timestamp}" pattern="yyy-MM-dd HH:mm:ss"/></div>
         </div>
     </div>
