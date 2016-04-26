@@ -60,7 +60,7 @@
             </div>
             <div class="main-menu">
                 <a class="main-menu-item" href="${clientAddress}">Ansökningar</a>
-                <a class="main-menu-item" href="${clientAddress}/pupils">Elever</a>
+                <%--<a class="main-menu-item" href="${clientAddress}/pupils">Elever</a>--%>
             </div>
         </div>
     </div>

@@ -133,17 +133,27 @@
         </div>
         <div class="group">
             <div class="title">Skapad</div>
-            <div class="value"><fmt:formatDate value="${app.createDate}" pattern="yyy-MM-dd HH:mm:ss"/></div>
+            <fmt:formatDate value="${app.createDate}" var="appCreateDate" pattern="yyy-MM-dd HH:mm:ss"/>
+            <div class="value">${appCreateDate}</div>
         </div>
         <div class="group">
             <div class="title">Version</div>
-            <div class="value"><fmt:formatDate value="${version.timestamp}" pattern="yyy-MM-dd HH:mm:ss"/></div>
+            <fmt:formatDate value="${version.timestamp}" var="versionTimestamp" pattern="yyy-MM-dd HH:mm:ss"/>
+            <div class="value">${versionTimestamp}</div>
         </div>
     </div>
     <div class="groups">
         <div class="group">
             <div class="title">Status</div>
-            <div class="value">${app.status.description}</div>
+            <c:choose>
+                <c:when test="${appCreateDate.equals(versionTimestamp)}">
+                    <div class="value">Original</div>
+                </c:when>
+
+                <c:otherwise>
+                    <div class="value">${app.status.description}</div>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="group">
             <div class="title">Reg.nr.</div>

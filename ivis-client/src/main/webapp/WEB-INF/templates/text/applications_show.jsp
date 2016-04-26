@@ -118,7 +118,15 @@
     <div class="groups">
         <div class="group">
             <div class="title">Status</div>
-            <div class="value">${app.status.description}</div>
+            <c:choose>
+                <c:when test="${versions.size() == 1}">
+                    <div class="value">Original</div>
+                </c:when>
+
+                <c:otherwise>
+                    <div class="value">${app.status.description}</div>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="group">
             <div class="title">Reg.nr.</div>

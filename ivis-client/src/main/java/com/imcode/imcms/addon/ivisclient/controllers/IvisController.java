@@ -131,24 +131,21 @@ public class IvisController {
 //
                 if (application != null && application.getDecision() != null) {
                     if (!application.getDecision().getStatus().equals(status)){
+                        Date dateNow = new Date();
+                        application.getDecision().setStatus(status);
+                        application.getDecision().setDate(dateNow);
+                        application.setUpdateDate(dateNow);
+
                         EntityVersion version = new EntityVersion(application);
                         entityVersionService.save(version);
 
                         LogEvent log = logEventService.findByEntity(application).get(0);
                         log.setTimestamp(version.getTimestamp());
                         log.setAction(LogEvent.Action.MODIFY);
-
                         log.setId(null);
-
                         logEventService.save(log);
 
-                        application.getDecision().setStatus(status);
-                        application.getDecision().setDate(new Date());
                         service.save(application);
-                        application.setUpdateDate(new Date());
-
-
-
                     }
 
                 }
