@@ -159,6 +159,11 @@
             <div class="title">Reg.nr.</div>
             <div class="value">${app.applicationForm.id}</div>
         </div>
+        <div class="group">
+            <div class="buttons">
+                <button class="positive">Skapa pdf</button>
+            </div>
+        </div>
         <div class="group" style="display: none">
             <div class="title">Handläggs av</div>
             <div class="value">${app.handledUser}</div>
