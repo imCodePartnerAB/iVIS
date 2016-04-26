@@ -203,6 +203,13 @@ public class IvisController {
 
 
                 if (changed) {
+                    Date date = new Date();
+                    application.setUpdateDate(date);
+
+                    Decision decision = application.getDecision();
+                    decision.setDate(date);
+                    decision.setStatus(Decision.Status.HANDLED);
+                    application.setDecision(decision);
 
                     EntityVersion version = new EntityVersion(application);
                     version = versionService.save(version);
@@ -216,13 +223,6 @@ public class IvisController {
                     logEventService.save(log);
 
 
-
-                    application.setUpdateDate(new Date());
-
-                    Decision decision = application.getDecision();
-                    decision.setDate(new Date ());
-                    decision.setStatus(Decision.Status.HANDLED);
-                    application.setDecision(decision);
                     service.save(application);
                     Iterable<ApplicationFormQuestion> savedQuestions = questionService.save(questions);
 //                    int count = 1; // dummy :)
