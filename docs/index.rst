@@ -5,10 +5,9 @@
 
 .. _index:
 
-Introduction
+iVIS Documentation
 ============
 
-iVIS is ...
 
 Contents
 --------
@@ -16,6 +15,7 @@ Contents
 .. toctree::
    :titlesonly:
 
+   Overview/index
    basic_concepts/index
    quick_start/index
    api/index
