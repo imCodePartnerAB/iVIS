@@ -2,18 +2,28 @@ Overview of iVIS
 =================
 
 In this article:
-    - `Introduction`_
-    - `What is this?`_
+    - `iVIS`_
+    - `Translation`_
+    - `Introduction`
+
+------------
+iVIS
+------------
+
+innovativt Verksamhetsystem i skolan.
+
+-------------
+Translation
+-------------
+
+innovative Business system in School.
 
 ------------
 Introduction
 ------------
 
-iVIS is a big module system for manage schools system.
+It is a VINNOVA-funded project to create basic conditions for the digitization of the Swedish school,
+by building a completely open school administrative system.
 
--------------
-What is this?
--------------
-
-iVIS stands for innovativt Verksamhetssystem I Skolan which translated as the Innovative Business Systems In School.
-That says it all.
+The project intends to create a school system that makes it possible for the school to develop faster,
+in a more innovative way and to move the control over the information from suppliers to the school's stakeholders.
