@@ -15,7 +15,7 @@ Contents
 .. toctree::
    :titlesonly:
 
-   Overview/index
+   overview/index
    basic_concepts/index
    quick_start/index
    api/index
