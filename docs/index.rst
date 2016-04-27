@@ -11,6 +11,7 @@ iVIS Documentation
 
 Contents
 --------
+.. include:: /common/stub-overview.txt
 
 .. toctree::
    :titlesonly:
@@ -19,3 +20,5 @@ Contents
    basic_concepts/index
    quick_start/index
    api/index
+
+.. include:: /common/contribute.txt
