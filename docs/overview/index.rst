@@ -6,15 +6,15 @@ In this article:
     - `Translation`_
     - `Introduction`_
 
-------------
+----
 iVIS
-------------
+----
 
 innovativt Verksamhetsystem i skolan.
 
--------------
+-----------
 Translation
--------------
+-----------
 
 innovative Business system in School.
 
