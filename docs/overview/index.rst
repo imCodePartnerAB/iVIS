@@ -4,7 +4,7 @@ Overview of iVIS
 In this article:
     - `iVIS`_
     - `Translation`_
-    - `Introduction`
+    - `Introduction`_
 
 ------------
 iVIS
