@@ -1,5 +1,5 @@
 Overview of iVIS
-=================
+================
 
 In this article:
     - `iVIS`_
@@ -31,6 +31,5 @@ in a more innovative way and to move the control over the information from suppl
 .. toctree::
     :titlesonly:
 
-       walkthrough
-       samples
+
 
