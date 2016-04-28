@@ -1,10 +1,6 @@
 Overview of iVIS
 =================
 
-.. toctree::
-    :titlesonly:
-
-
 In this article:
     - `iVIS`_
     - `Translation`_
@@ -31,4 +27,10 @@ by building a completely open school administrative system.
 
 The project intends to create a school system that makes it possible for the school to develop faster,
 in a more innovative way and to move the control over the information from suppliers to the school's stakeholders.
+
+.. toctree::
+    :titlesonly:
+
+       walkthrough
+       samples
 
