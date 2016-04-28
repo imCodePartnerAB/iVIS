@@ -6,7 +6,7 @@
 .. _index:
 
 iVIS Documentation
-============
+==================
 
 
 Contents
