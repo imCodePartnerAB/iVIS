@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+
+</head>
+<body>
+<input id="title"/>
+<input id="description"/>
+<button onclick="create();">Create entity</button>
+<br/> <button onclick="getAll();">Get all</button>
+
+<script>
+    function create () {
+        var incident = {
+            'title' : $('#title').val(),
+            'description' : $('#description').val()
+        };
+        $.ajax({
+            url: '/api/v1/json/incidents/',
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify(incident),
+            type: 'post',
+            success: function (result) {
+                alert(JSON.stringify(result));
+            }
+        });
+    }
+    function getAll () {
+        $.ajax({
+            url: '/api/v1/json/incidents/',
+            type: 'get',
+            success: function (result) {
+                alert(JSON.stringify(result));
+            }
+        });
+    }
+
+</script>
+
+
+</body>
+</html>
