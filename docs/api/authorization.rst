@@ -67,13 +67,21 @@ client_secret (= '{yourClientSecret}')
 redirect_uri (= '{redirectUrl}') - the same as in step 1
 grant_type = (= 'authorization_code')
 
+This necessary if you want receive token on server side (see Java example).
+
+If you want receive token in client side you need send client_id and client_secret in header of request.
+It's attached as parameter:
+Authorization (="Basic " + ConvertBase64Encoding(client_id + ":" + client_secret)).
+See JS example.
+
 As response to the redirect_uri you will receive json object with next properties:
 
 access_token (token for access to API)
 refresh_token (when token is expired, you can exchange refresh_token to new access_token, see step 3)
-expires_in (date and time until token is suitable to getting access)
+expires_in (property is a number of seconds after which the access token expires, and is no longer valid)
 
 access_token object has another properties, but trey aren't necessary for accessing to API.
+
 
 Code example **Java** using org.apache.http package
 
@@ -106,6 +114,7 @@ Code example **JS** using JQuery
    var redirectURI = "{redirectUrl}";
    var clientId = "{yourClientId}";
    var clientSecret = "{yourClientSecret}";
+   var base64IdAndSecret = btoa(clientId + ':' + clientSecret);//IE 10 and higher
    var code = location.href.split('code=')[1];//get value of parameter code
    // it's only one param, so you can use this way to get code, or write your own
 
@@ -113,15 +122,16 @@ Code example **JS** using JQuery
        url : tokenURI,
        data : {
            'code' : code,
-           'client_id' : clientId,
-           'client_secret' : clientSecret,
            'redirect_uri' : redirectURI,
            'grant_type' : 'authorization_code'
        },
+       beforeSend : function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + base64IdAndSecret);
+       },
        success : function (token) {
-                     alert(token['access_token']); //use received token
-                     alert(token['refresh_token']);
-                     alert(token['expires_in']);
+             alert(token['access_token']); //use received token
+             alert(token['refresh_token']);
+             alert(token['expires_in']);
         }
     });
 
