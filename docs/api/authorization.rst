@@ -135,12 +135,13 @@ When your token is expired you can refresh (update) it without repeating authori
 with parameters
 
 refresh_token (='{yourRefreshToken}') - is the refresh token from the step 2
-grant_type = (= 'refresh_token')
+grant_type (= 'refresh_token')
 
 Code example **Java** using org.apache.http package
 
 .. code-block:: properties
 
+   String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
    String refreshToken = "{yourRefreshToken}";
 
    List<NameValuePair> pairsPost = new LinkedList<NameValuePair>();
@@ -159,6 +160,7 @@ Code example **JS** using JQuery
 
 .. code-block:: properties
 
+   var tokenURI = "http://ivis.dev.imcode.com/oauth/token";
    var refreshToken = "{yourRefreshToken}";
 
    $.post({
