@@ -1,6 +1,7 @@
 package com.imcode.repositories;
 
 import com.imcode.entities.Person;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,4 +12,5 @@ import java.util.List;
 public interface PersonRepository extends JpaRepository<Person, Long>{
     Person findFirstByPersonalId(String personalId);
     List<Person> findByPersonalId(String personalId);
+    List<Person> findByFirstNameContainsOrLastNameContainsAllIgnoreCase (String firstName, String lastName, Sort sort);
 }

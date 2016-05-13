@@ -26,9 +26,26 @@ import java.util.List;
 @RequestMapping("/v1/{format}/incidents")
 public class IncidentRestControllerImpl extends AbstractRestController<Incident, Long, IncidentService> {
 
+    @Autowired
+    IncidentService incidentService;
+
     @Override
     public Object create(@RequestBody Incident entity, WebRequest webRequest) {
         entity.setReportDay(new Date());
         return super.create(entity, webRequest);
     }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
+    public Object findByCriteria (@RequestParam(value = "search_text") String searchText,
+                                  @RequestParam(value = "order_by") String orderBy,
+                                  WebRequest webRequest) {
+
+        if (orderBy.equals("title"))
+            return incidentService.findBySearchCriteria(searchText, orderBy);
+
+        return null;
+    }
+
+
+
 }

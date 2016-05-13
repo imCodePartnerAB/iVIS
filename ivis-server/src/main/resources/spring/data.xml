@@ -294,4 +294,17 @@
     <beans:bean class="com.imcode.controllers.converters.NotNullStringToCollectionConverter"
                 c:conversionService-ref="csvConversionService"/>
 
+    <beans:bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- max upload size in bytes -->
+        <beans:property name="maxUploadSize" value="20971520" /> <!-- 20MB -->
+
+        <!-- max size of file in memory (in bytes) -->
+        <beans:property name="maxInMemorySize" value="20971520" /> <!-- 20MB -->
+
+    </beans:bean>
+
+
+
+
 </beans:beans>
