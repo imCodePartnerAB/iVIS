@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -23,21 +24,8 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     @Autowired
     private ActivityService activityService;
 
-//    @RequestMapping(method = RequestMethod.POST)
-//    public Object create(@RequestBody Activity entity,
-//                         @RequestParam(value = "attachment") MultipartFile attachment,
-//                         WebRequest webRequest) {
-//
-//        if (!attachment.isEmpty()) {
-//            Activity activity = activityService.save(entity);
-//            IssueAttachmentFileUtil.saveActivityAttachment(activity, attachment);
-//            return activity;
-//        }
-//
-//        return null;
-//
-//    }
-
+    @Autowired
+    private ServletContext servletContext;
 
     @RequestMapping(value = "/attach/{activity_id}", method = RequestMethod.POST)
     public String setAttachment(@PathVariable("activity_id") Long activityId,
@@ -48,10 +36,9 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
         activity.setFileName(attachment.getOriginalFilename());
         activity = activityService.save(activity);
 
-
         if (!attachment.isEmpty() && activity != null) {
             IssueAttachmentFileUtil issueAttachmentFileUtil = new IssueAttachmentFileUtil();
-            issueAttachmentFileUtil.saveActivityAttachment(activity, attachment);
+            issueAttachmentFileUtil.saveActivityAttachment(activity, attachment, servletContext);
         }
 
         return activity.getFileName();
@@ -67,7 +54,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
 
         if (activity != null) {
             IssueAttachmentFileUtil issueAttachmentFileUtil = new IssueAttachmentFileUtil();
-            issueAttachmentFileUtil.saveActivityAttachmentInResponse(activity, response);
+            issueAttachmentFileUtil.saveActivityAttachmentInResponse(activity, response, servletContext);
         }
 
 

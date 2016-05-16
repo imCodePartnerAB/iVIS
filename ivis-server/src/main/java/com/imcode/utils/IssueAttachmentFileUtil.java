@@ -4,6 +4,7 @@ import com.imcode.entities.Activity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URL;
@@ -15,15 +16,8 @@ import java.util.Properties;
 public class IssueAttachmentFileUtil {
 
 
-    public void saveActivityAttachment(Activity activity, MultipartFile attachment) {
-        String filePath = generateFilePath(activity);
-
-        byte[] bytes = null;
-        try {
-            bytes = attachment.getBytes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void saveActivityAttachment(Activity activity, MultipartFile attachment, ServletContext servletContext) {
+        String filePath = generateFilePath(activity, servletContext);
 
         File dir = new File(filePath.substring(0, filePath.lastIndexOf("/")));
 
@@ -49,9 +43,9 @@ public class IssueAttachmentFileUtil {
 
     }
 
-    public void saveActivityAttachmentInResponse(Activity activity, HttpServletResponse response) {
+    public void saveActivityAttachmentInResponse(Activity activity, HttpServletResponse response, ServletContext servletContext) {
 
-        String filePath = generateFilePath(activity);
+        String filePath = generateFilePath(activity, servletContext);
 
         File initialFile = new File(filePath);
 
@@ -78,26 +72,10 @@ public class IssueAttachmentFileUtil {
 
     }
 
-    private String generateFilePath(Activity activity) {
+    private String generateFilePath(Activity activity, ServletContext servletContext) {
+        StringBuilder path = new StringBuilder(servletContext.getRealPath("/WEB-INF/"));
 
-        Properties property = new Properties();
-
-        String pathToIssues = null;
-
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("issues.properties");
-
-        try {
-
-            property.load(inputStream);
-
-            pathToIssues = property.getProperty("pathToIssues");
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        StringBuilder path = new StringBuilder(pathToIssues + "/");
+        path.append("issues/");
 
         path.append(activity.getIssue().getId());
 
