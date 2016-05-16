@@ -34,6 +34,9 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "userId"))
     private Set<User> authorizedUsers = new HashSet<>();
 
+    @OneToMany(mappedBy = "issue")
+    private Set<Incident> incidents = new HashSet<>();
+
     public String getTitle() {
         return title;
     }
@@ -72,6 +75,14 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     public void setAuthorizedUsers(Set<User> authorizedUsers) {
         this.authorizedUsers = authorizedUsers;
+    }
+
+    public Set<Incident> getIncidents() {
+        return incidents;
+    }
+
+    public void setIncidents(Set<Incident> incidents) {
+        this.incidents = incidents;
     }
 }
 
