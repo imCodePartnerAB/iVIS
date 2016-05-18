@@ -43,6 +43,8 @@
 
         String responseBody = EntityUtils.toString(responses.getEntity());
         request.setAttribute("token", responseBody);
+
+        request.getServletContext().getRequestDispatcher("/execute.jsp").forward(request, response);
     }
 %>
 <html>
@@ -51,26 +53,6 @@
 </head>
 
 <body>
-
-<script>
-    var token = JSON.parse('${token}');
-    if (token != null) {
-        document.write('access_token: ' + token['access_token'] + '<br/>');
-        document.write('refresh_token: ' + token['refresh_token'] + '<br/>');
-        document.write('expires_in: ' + token['expires_in'] + '<br/>');
-    }
-</script>
-
-<button onclick="test();">Test api in new windows with access token</button>
-
-<script>
-    function test() {
-        window.open("http://ivis.dev.imcode.com/api/v1/json/incidents?access_token=" + token['access_token'],
-        "Test", "height=500,width=500");
-    }
-</script>
-
-<br/>
 
 </body>
 </html>
