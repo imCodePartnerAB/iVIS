@@ -19,7 +19,7 @@
 
     HttpClient client = new DefaultHttpClient();
 
-    //Receive token from test.jsp
+    //Receive token from request
     String tokenJSON = (String) request.getAttribute("token");
 
     JSONObject token = new JSONObject(tokenJSON);
@@ -133,7 +133,7 @@
 
     HttpPost attachFileToActivity = new HttpPost(builder.build());
 
-    FileBody file = new FileBody(new File("/home/ruslan/Documents/IO-32_Pershiy_rozdil_Popenko_Ruslan.docx"));
+    FileBody file = new FileBody(new File("/home/ruslan/Documents/some document.docx"));
 
     MultipartEntity reqEntity = new MultipartEntity();
     reqEntity.addPart("file", file);
@@ -164,19 +164,23 @@
 
     issue.put("status", new JSONObject().put("id", 1));
 
-    issue.put("responsiblePerson", new JSONObject().put("id", 1));
+    issue.put("responsible_person", new JSONObject().put("id", 1));
 
-    JSONArray authorizedUsers = new JSONArray();
-
-    authorizedUsers.put(new JSONObject().put("id", 1));
-    authorizedUsers.put(new JSONObject().put("id", 3));
-
-    issue.put("authorizedUsers", authorizedUsers);
+    issue.put("authorized_persons", new JSONArray().put(new JSONObject().put("id", "1")));
 
     JSONArray incidents = new JSONArray();
 
-    incidents.put(new JSONObject().put("id", 1));
-    incidents.put(new JSONObject().put("id", 2));
+    JSONObject incident1 = new JSONObject();
+
+    incident1.put("id" , 4);
+
+    incident1.put("reported_by", new JSONObject().put("id", 3));
+    incident1.put("assigned_date", 1463043458000l);
+    incident1.put("assigned_by", new JSONObject().put("id", 3));
+    incident1.put("archived_date", 1463043458000l);
+    incident1.put("archived_by", new JSONObject().put("id", 3));
+
+    incidents.put(incident1);
 
     issue.put("incidents", incidents);
 

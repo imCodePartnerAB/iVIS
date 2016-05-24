@@ -14,7 +14,7 @@ public class Status extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private State state;
+    private State name;
 
     public Status() {
     }
@@ -26,11 +26,11 @@ public class Status extends AbstractIdEntity<Long> implements Serializable {
         ARCHIVED
     }
 
-    public State getState() {
-        return state;
+    public State getName() {
+        return name;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setName(State state) {
+        this.name = state;
     }
 }

@@ -11,9 +11,9 @@
 <%@ page import="org.apache.http.client.utils.URIBuilder" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
-    String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
-    String redirectURI = "http://ivis-imcms-client-demo.dev.imcode.com/test.jsp";
+    String authorizeURI = "http://localhost:8080/ivis/oauth/authorize";
+    String tokenURI = "http://localhost:8080/ivis/oauth/token";
+    String redirectURI = "http://localhost:8080/client/test.jsp";
     String clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
     String clientSecret = "secret";
     String scope = "read+write";

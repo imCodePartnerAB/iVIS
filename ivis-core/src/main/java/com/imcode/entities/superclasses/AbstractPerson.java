@@ -1,5 +1,6 @@
 package com.imcode.entities.superclasses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.interfaces.JpaContactedPerson;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
@@ -19,12 +20,15 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract class AbstractPerson extends AbstractIdEntity<Long> implements Serializable, JpaPersonalizedEntity, JpaContactedPerson {
     @Column
+    @JsonProperty("personal_id")
     private String personalId;
 
     @Column
+    @JsonProperty("first_name")
     private String firstName;
 
     @Column
+    @JsonProperty("last_name")
     private String lastName;
 
     public AbstractPerson() {

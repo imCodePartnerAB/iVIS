@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Properties;
 
 /**
@@ -89,5 +90,15 @@ public class IssueAttachmentFileUtil {
     }
 
 
+    public void deleteIfExcist(Activity activity, ServletContext servletContext) {
+        String fileName = activity.getFileName();
+        if (fileName != null) {
+            String filePath = generateFilePath(activity, servletContext);
+            File file = new File(filePath);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
+    }
 
 }

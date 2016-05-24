@@ -22,13 +22,17 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
     @Autowired
     PersonService personService;
 
+
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
     public Object findByCriteria (@RequestParam(value = "search_text") String searchText,
                                   @RequestParam(value = "order_by") String orderBy,
                                   WebRequest webRequest) {
 
-        if (orderBy.equals("lastName") || orderBy.equals("firstName"))
-            return personService.findBySearchCriteria(searchText, orderBy);
+        if (orderBy.equals("last_name") || orderBy.equals("first_name")) {
+            String validateOrderBy = orderBy.replace("_n", "N");
+            return personService.findBySearchCriteria(searchText, validateOrderBy);
+        }
+
 
         return null;
 

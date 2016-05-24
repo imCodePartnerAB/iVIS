@@ -1,6 +1,11 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
@@ -24,6 +29,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "report_day")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("reported_date")
     private Date reportDay;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
@@ -31,6 +37,12 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
             joinColumns = @JoinColumn(name = "incidentId"),
             inverseJoinColumns = @JoinColumn(name = "categoryId"))
     private Set<Category> categories = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "dbo_incident_person_cross",
+            joinColumns = @JoinColumn(name = "incidentId"),
+            inverseJoinColumns = @JoinColumn(name = "personId"))
+    private Set<Category> persons = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "statusId")
@@ -43,6 +55,47 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "issueId")
     private Issue issue;
+
+    @Column(name = "assigned_day")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("assigned_date")
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
+    private Date assignedDay;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assigned_person_id")
+    @JsonProperty("assigned_by")
+    private Person assignedBy;
+
+    @Column(name = "archived_day")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("archived_date")
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
+    private Date archivedDay;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "archived_person_id")
+    @JsonProperty("archived_by")
+    private Person archivedBy;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "reported_person_id")
+    @JsonProperty("reported_by")
+    private Person reportedBy;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "modified_person_id")
+    @JsonProperty("modified_by")
+    private Person modifiedBy;
+
+    @Column(name = "modified_day")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("modified_date")
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
+    private Date modifiedDay;
 
     public Incident() {
     }
@@ -71,18 +124,16 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         return reportDay;
     }
 
-    public void setReportDay(Date reportDay) {
-        this.reportDay = reportDay;
-    }
-
-    @JsonIgnore
     public Set<Category> getCategories() {
         return categories;
     }
 
-    @JsonIgnore
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public void setReportDay(Date reportDay) {
+        this.reportDay = reportDay;
     }
 
     public Priority getPriority() {
@@ -107,5 +158,69 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     public void setIssue(Issue issue) {
         this.issue = issue;
+    }
+
+    public Date getAssignedDay() {
+        return assignedDay;
+    }
+
+    public void setAssignedDay(Date assignedDay) {
+        this.assignedDay = assignedDay;
+    }
+
+    public Person getAssignedBy() {
+        return assignedBy;
+    }
+
+    public void setAssignedBy(Person assignedBy) {
+        this.assignedBy = assignedBy;
+    }
+
+    public Date getArchivedDay() {
+        return archivedDay;
+    }
+
+    public void setArchivedDay(Date archivedDay) {
+        this.archivedDay = archivedDay;
+    }
+
+    public Person getArchivedBy() {
+        return archivedBy;
+    }
+
+    public void setArchivedBy(Person archivedBy) {
+        this.archivedBy = archivedBy;
+    }
+
+    public Person getReportedBy() {
+        return reportedBy;
+    }
+
+    public void setReportedBy(Person reportedBy) {
+        this.reportedBy = reportedBy;
+    }
+
+    public Set<Category> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Set<Category> persons) {
+        this.persons = persons;
+    }
+
+    public Person getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(Person modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public Date getModifiedDay() {
+        return modifiedDay;
+    }
+
+    public void setModifiedDay(Date modifiedDay) {
+        this.modifiedDay = modifiedDay;
     }
 }

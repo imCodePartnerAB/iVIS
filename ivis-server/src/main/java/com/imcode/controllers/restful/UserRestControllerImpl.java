@@ -5,6 +5,7 @@ import com.imcode.entities.Person;
 import com.imcode.entities.User;
 import com.imcode.services.PupilService;
 import com.imcode.services.UserService;
+import com.imcode.utils.StaticUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -33,30 +34,20 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
 
     @RequestMapping(method = RequestMethod.GET, value = "/loggedin")
     public Object getLoggedInUser(WebRequest webRequest) {
-        User user = getCurrentUser(webRequest);
+        User user = StaticUtils.getCurrentUser(webRequest, userService);
 
         Map<String, Object> loggedInUser = new LinkedHashMap<>();
         loggedInUser.put("id", user.getId());
         Person person = user.getPerson();
         loggedInUser.put("first_name", person.getFirstName());
         loggedInUser.put("last_name", person.getLastName());
-        loggedInUser.put("rights", user.getRoleNames());
+        loggedInUser.put("roles", user.getRoles());
 
         return loggedInUser;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/current")
     public User getCurrentUser(WebRequest webRequest) {
-        User user = null;
-
-        try {
-            Authentication authentication = (Authentication) webRequest.getUserPrincipal();
-            user = (User) authentication.getPrincipal();
-            user = userService.find(user.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return user;
+        return StaticUtils.getCurrentUser(webRequest, userService);
     }
 }
