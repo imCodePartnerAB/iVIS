@@ -9,194 +9,213 @@
 </head>
 <body>
 
-<div class="testUsual">
-    <input id="path" value="/api/v1/json/">
-    <br/>
-    <br/>
-    <select id = "typeMethod">
-        <option>GET</option>
-        <option>POST</option>
-    </select>
-    <br/>
-    <br/>
-    <button id="addparameter" onclick="addParameter();">Add parameter</button>
-    <br/>
-    <br/>
-    <button id="addobject" onclick="addObject();">Add parameter object</button>
+<!--<div class="testUsual">-->
+    <!--<input id="path" value="/api/v1/json/">-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<select id = "typeMethod">-->
+        <!--<option>GET</option>-->
+        <!--<option>POST</option>-->
+    <!--</select>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<button id="addparameter" onclick="addParameter();">Add parameter</button>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<button id="addobject" onclick="addObject();">Add parameter object</button>-->
 
-    <div id="parameters">
-    </div>
-    <div id="objects">
-    </div>
-    <br/>
-    <button id="request" onclick="makeRequest();">Make request</button>
-    <br/>
-    <br/>
-    <button id="hideAndShow" onclick="hideAndShow();">Work with file</button>
-    <br/>
-    <button id="upload" style="display: none;" onclick="makeUpload();">Upload file</button>
-    <br/>
-    <br/>
-    <br/>
-    <button id="download" style="display: none;" onclick="makeDownload();">Download file</button>
-    <br/>
-    <br/>
-    <form id="formUpload" style="display: none;" action="" method="post" enctype="multipart/form-data">
-        <input type="file" class="file" name="file">
-    </form>
-    <br/>
-    <br/>
-
-
+    <!--<div id="parameters">-->
+    <!--</div>-->
+    <!--<div id="objects">-->
+    <!--</div>-->
+    <!--<br/>-->
+    <!--<button id="request" onclick="makeRequest();">Make request</button>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<button id="hideAndShow" onclick="hideAndShow();">Work with file</button>-->
+    <!--<br/>-->
+    <!--<button id="upload" style="display: none;" onclick="makeUpload();">Upload file</button>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<button id="download" style="display: none;" onclick="makeDownload();">Download file</button>-->
+    <!--<br/>-->
+    <!--<br/>-->
+    <!--<form id="formUpload" style="display: none;" action="" method="post" enctype="multipart/form-data">-->
+        <!--<input type="file" class="file" name="file">-->
+    <!--</form>-->
+    <!--<br/>-->
+    <!--<br/>-->
 
 
-</div>
+
+
+<!--</div>-->
+
+
+<!--<script>-->
+
+    <!--var numOfParam = 0;-->
+    <!--var numOfObj = 0;-->
+
+    <!--function addParameter() {-->
+        <!--numOfParam++;-->
+        <!--$('<br />').appendTo($('#parameters'));-->
+        <!--$('#parameters').append('paramName: ');-->
+        <!--$('<input />', {id : "paramName" + numOfParam}).appendTo($('#parameters'));-->
+        <!--$('#parameters').append('paramValue: ');-->
+        <!--$('<input />', {id : "paramValue" + numOfParam}).appendTo($('#parameters'));-->
+        <!--$('<br />').appendTo($('#parameters'));-->
+    <!--}-->
+
+    <!--function addObject() {-->
+        <!--numOfObj++;-->
+        <!--$('<br />').appendTo($('#objects'));-->
+        <!--$('<div />', {id : 'object' + numOfObj}).appendTo($('#objects'));-->
+        <!--$('#object' + numOfObj).append('Object name: ');-->
+        <!--$('<input />', {id : "paramName" + numOfParam}).appendTo($('#object' + numOfObj));-->
+        <!--var $button = $('<button/>');-->
+        <!--$button.text('add prop');-->
+        <!--$button.click({param1: numOfObj},addProperty);-->
+        <!--$button.appendTo($('#object' + numOfObj));-->
+    <!--}-->
+
+    <!--function addProperty(event) {-->
+        <!--var numOfObj = event.data.param1;-->
+        <!--var obj = $('#object' + numOfObj);-->
+        <!--obj.append($('<br />'));-->
+        <!--obj.append($('<br />'));-->
+        <!--obj.append('propName: ');-->
+        <!--$('<input />').appendTo(obj);-->
+        <!--obj.append('propValue: ');-->
+        <!--$('<input />').appendTo(obj);-->
+        <!--$('<br />').appendTo(obj);-->
+    <!--}-->
+
+
+    <!--function makeRequest() {-->
+        <!--var URL = $("#path").val();-->
+        <!--var typeMethod = $('#typeMethod').find(":selected").text();-->
+        <!--var data = {};-->
+
+        <!--var flag = true;-->
+        <!--var currentName;-->
+
+
+        <!--$('#parameters > input').each(function () {-->
+            <!--if (flag) {-->
+                <!--currentName = this.value;-->
+                <!--data[currentName] = "ok";-->
+                <!--flag = false;-->
+            <!--} else {-->
+                <!--data[currentName] = this.value;-->
+                <!--flag = true;-->
+            <!--}-->
+        <!--});-->
+
+        <!--$('#objects > div').each(function () {-->
+            <!--var id = $(this).attr('id');-->
+            <!--var isFirst = true;-->
+            <!--var objName = 'name';-->
+            <!--var currentPropName;-->
+            <!--var properties = {};-->
+            <!--$('#' + id + ' > input').each(function () {-->
+                <!--if(isFirst){-->
+                    <!--objName = this.value;-->
+                    <!--data[objName] = "ok";-->
+                    <!--isFirst = false;-->
+                    <!--flag = true;-->
+                <!--} else {-->
+                    <!--if (flag) {-->
+                        <!--currentPropName = this.value;-->
+                        <!--properties[currentPropName] = "ok";-->
+                        <!--flag = false;-->
+                    <!--} else {-->
+                        <!--properties[currentPropName] = this.value;-->
+                        <!--flag = true;-->
+                    <!--}-->
+                <!--}-->
+            <!--});-->
+            <!--data[objName] = properties;-->
+        <!--});-->
+
+
+
+        <!--$.ajax({-->
+            <!--url: URL,-->
+            <!--contentType : typeMethod === 'POST' ? 'application/json; charset=utf-8' : 'application/x-www-form-urlencoded; charset=UTF-8',-->
+            <!--data: typeMethod === 'POST' ? JSON.stringify(data) : data,-->
+            <!--type: typeMethod,-->
+            <!--cache: false,-->
+            <!--success: function (result) {-->
+                <!--document.write(JSON.stringify(result));-->
+            <!--}-->
+        <!--});-->
+
+
+
+    <!--}-->
+
+    <!--function hideAndShow() {-->
+        <!--$('#request').hide();-->
+        <!--$('#hideAndShow').hide();-->
+        <!--$('#addparameter').hide();-->
+        <!--$('#parameters').hide();-->
+        <!--$('#addobject').hide();-->
+        <!--$('#object').hide();-->
+        <!--$('#hideAndShow').hide();-->
+        <!--$('#upload').show();-->
+        <!--$('#download').show();-->
+        <!--$('#formUpload').show();-->
+
+    <!--}-->
+<!--</script>-->
+
+
+<!--<script>-->
+
+
+    <!--function makeUpload() {-->
+        <!--var URL = $("#path").val();-->
+        <!--var typeMethod = $('#typeMethod').find(":selected").text().toLowerCase();-->
+
+        <!--var $form = $('#formUpload');-->
+        <!--$form.attr("action", URL);-->
+        <!--$form.attr("method", typeMethod);-->
+
+        <!--$form.submit();-->
+    <!--}-->
+
+    <!--function makeDownload() {-->
+        <!--var URL = $("#path").val();-->
+
+        <!--location.href = URL;-->
+
+    <!--}-->
+
+<!--</script>-->
 
 
 <script>
-
-    var numOfParam = 0;
-    var numOfObj = 0;
-
-    function addParameter() {
-        numOfParam++;
-        $('<br />').appendTo($('#parameters'));
-        $('#parameters').append('paramName: ');
-        $('<input />', {id : "paramName" + numOfParam}).appendTo($('#parameters'));
-        $('#parameters').append('paramValue: ');
-        $('<input />', {id : "paramValue" + numOfParam}).appendTo($('#parameters'));
-        $('<br />').appendTo($('#parameters'));
-    }
-
-    function addObject() {
-        numOfObj++;
-        $('<br />').appendTo($('#objects'));
-        $('<div />', {id : 'object' + numOfObj}).appendTo($('#objects'));
-        $('#object' + numOfObj).append('Object name: ');
-        $('<input />', {id : "paramName" + numOfParam}).appendTo($('#object' + numOfObj));
-        var $button = $('<button/>');
-        $button.text('add prop');
-        $button.click({param1: numOfObj},addProperty);
-        $button.appendTo($('#object' + numOfObj));
-    }
-
-    function addProperty(event) {
-        var numOfObj = event.data.param1;
-        var obj = $('#object' + numOfObj);
-        obj.append($('<br />'));
-        obj.append($('<br />'));
-        obj.append('propName: ');
-        $('<input />').appendTo(obj);
-        obj.append('propValue: ');
-        $('<input />').appendTo(obj);
-        $('<br />').appendTo(obj);
-    }
-
-
-    function makeRequest() {
-        var URL = $("#path").val();
-        var typeMethod = $('#typeMethod').find(":selected").text();
-        var data = {};
-
-        var flag = true;
-        var currentName;
-
-
-        $('#parameters > input').each(function () {
-            if (flag) {
-                currentName = this.value;
-                data[currentName] = "ok";
-                flag = false;
-            } else {
-                data[currentName] = this.value;
-                flag = true;
-            }
-        });
-
-        $('#objects > div').each(function () {
-            var id = $(this).attr('id');
-            var isFirst = true;
-            var objName = 'name';
-            var currentPropName;
-            var properties = {};
-            $('#' + id + ' > input').each(function () {
-                if(isFirst){
-                    objName = this.value;
-                    data[objName] = "ok";
-                    isFirst = false;
-                    flag = true;
-                } else {
-                    if (flag) {
-                        currentPropName = this.value;
-                        properties[currentPropName] = "ok";
-                        flag = false;
-                    } else {
-                        properties[currentPropName] = this.value;
-                        flag = true;
-                    }
-                }
-            });
-            data[objName] = properties;
-        });
-
-
-
-        $.ajax({
-            url: URL,
-            contentType : typeMethod === 'POST' ? 'application/json; charset=utf-8' : 'application/x-www-form-urlencoded; charset=UTF-8',
-            data: typeMethod === 'POST' ? JSON.stringify(data) : data,
-            type: typeMethod,
-            cache: false,
-            success: function (result) {
-                document.write(JSON.stringify(result));
-            }
-        });
-
-
-
-    }
-
-    function hideAndShow() {
-        $('#request').hide();
-        $('#hideAndShow').hide();
-        $('#addparameter').hide();
-        $('#parameters').hide();
-        $('#addobject').hide();
-        $('#object').hide();
-        $('#hideAndShow').hide();
-        $('#upload').show();
-        $('#download').show();
-        $('#formUpload').show();
-
-    }
+    var data = {
+      "title" : "wwdwdwedwefwf",
+        //"description" : "wwefewfwefewfwefwef",
+        "categories" : [ {"id" : 1}],
+        "priority" : {"id" : 1}//,
+        //"pupils" : [ {"id" : 10}]
+    };
+    $.ajax({
+        url: 'http://localhost:8080/ivis' + '/api/v1/json/incidents',
+        contentType : 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        type: "POST",
+        cache: false,
+        success: function (result) {
+            alert(result);
+            document.write(JSON.stringify(result));
+        }
+    });
 </script>
-
-
-<script>
-
-
-    function makeUpload() {
-        var URL = $("#path").val();
-        var typeMethod = $('#typeMethod').find(":selected").text().toLowerCase();
-
-        var $form = $('#formUpload');
-        $form.attr("action", URL);
-        $form.attr("method", typeMethod);
-
-        $form.submit();
-    }
-
-    function makeDownload() {
-        var URL = $("#path").val();
-
-        location.href = URL;
-
-    }
-
-</script>
-
-
-
 
 
 </body>

@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,9 +24,11 @@ import java.util.Set;
 public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(nullable = false)
+    @NotNull(message = "title can not be null")
     private String title;
 
     @Column
+    @NotNull(message = "description can not be null")
     private String description;
 
     @Column(name = "report_day")
@@ -33,16 +37,18 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     private Date reportDay;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_incident_categories_cross",
+    @JoinTable(name = "dbo_incident_category_cross",
             joinColumns = @JoinColumn(name = "incidentId"),
             inverseJoinColumns = @JoinColumn(name = "categoryId"))
+    @Size(min = 1, message = "categories can not be null")
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_incident_person_cross",
+    @JoinTable(name = "dbo_incident_pupil_cross",
             joinColumns = @JoinColumn(name = "incidentId"),
-            inverseJoinColumns = @JoinColumn(name = "personId"))
-    private Set<Category> persons = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "pupilId"))
+    @Size(min = 1, message = "pupils can not be null")
+    private Set<Pupil> pupils = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "statusId")
@@ -50,6 +56,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "priorityId")
+    @NotNull(message = "priority can not be null")
     private Priority priority;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -76,19 +83,19 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     private Date archivedDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "archived_person_id")
+    @JoinColumn(name = "archived_user_id")
     @JsonProperty("archived_by")
-    private Person archivedBy;
+    private User archivedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reported_person_id")
+    @JoinColumn(name = "reported_user_id")
     @JsonProperty("reported_by")
-    private Person reportedBy;
+    private User reportedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "modified_person_id")
+    @JoinColumn(name = "modified_user_id")
     @JsonProperty("modified_by")
-    private Person modifiedBy;
+    private User modifiedBy;
 
     @Column(name = "modified_day")
     @Temporal(TemporalType.TIMESTAMP)
@@ -184,43 +191,43 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.archivedDay = archivedDay;
     }
 
-    public Person getArchivedBy() {
-        return archivedBy;
-    }
-
-    public void setArchivedBy(Person archivedBy) {
-        this.archivedBy = archivedBy;
-    }
-
-    public Person getReportedBy() {
-        return reportedBy;
-    }
-
-    public void setReportedBy(Person reportedBy) {
-        this.reportedBy = reportedBy;
-    }
-
-    public Set<Category> getPersons() {
-        return persons;
-    }
-
-    public void setPersons(Set<Category> persons) {
-        this.persons = persons;
-    }
-
-    public Person getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(Person modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
     public Date getModifiedDay() {
         return modifiedDay;
     }
 
     public void setModifiedDay(Date modifiedDay) {
         this.modifiedDay = modifiedDay;
+    }
+
+    public User getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(User modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public User getReportedBy() {
+        return reportedBy;
+    }
+
+    public void setReportedBy(User reportedBy) {
+        this.reportedBy = reportedBy;
+    }
+
+    public User getArchivedBy() {
+        return archivedBy;
+    }
+
+    public void setArchivedBy(User archivedBy) {
+        this.archivedBy = archivedBy;
+    }
+
+    public Set<Pupil> getPupils() {
+        return pupils;
+    }
+
+    public void setPupils(Set<Pupil> pupils) {
+        this.pupils = pupils;
     }
 }

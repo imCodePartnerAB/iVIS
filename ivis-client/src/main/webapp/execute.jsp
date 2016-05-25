@@ -14,7 +14,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    String apiProvider = "http://ivis.dev.imcode.com";
+    String apiProvider = "http://localhost:8080/ivis";
     String apiURL = null;
 
     HttpClient client = new DefaultHttpClient();
@@ -31,37 +31,37 @@
     //************************************************************
     //GetLoggedInUser example
 
-    apiURL = "/api/v1/json/users/loggedin";
-
-    URIBuilder builder = new URIBuilder(apiProvider + apiURL);
-
-    builder.addParameter("access_token", accessToken);
-
-    HttpGet getLoggedInUser = new HttpGet(builder.build());
-
-    HttpResponse responses = client.execute(getLoggedInUser);
-
-    String userJSON = EntityUtils.toString(responses.getEntity());
-
-    JSONObject user = new JSONObject(userJSON);
-
-    // do something with received object
-
-    user.getInt("id");
-
-    user.getString("first_name");
-
-    user.getString("last_name");
-
-    user.getJSONArray("rights");
-    //***********************************************************
+//    apiURL = "/api/v1/json/users/loggedin";
+//
+//    URIBuilder builder = new URIBuilder(apiProvider + apiURL);
+//
+//    builder.addParameter("access_token", accessToken);
+//
+//    HttpGet getLoggedInUser = new HttpGet(builder.build());
+//
+//    HttpResponse responses = client.execute(getLoggedInUser);
+//
+//    String userJSON = EntityUtils.toString(responses.getEntity());
+//
+//    JSONObject user = new JSONObject(userJSON);
+//
+//    // do something with received object
+//
+//    user.getInt("id");
+//
+//    user.getString("first_name");
+//
+//    user.getString("last_name");
+//
+//    user.getJSONArray("rights");
+//    //***********************************************************
 
     //************************************************************
     //SaveIncident example
 
     apiURL = "/api/v1/json/incidents";
 
-    builder = new URIBuilder(apiProvider + apiURL);
+    URIBuilder builder = new URIBuilder(apiProvider + apiURL);
 
     builder.addParameter("access_token", accessToken);
 
@@ -73,15 +73,25 @@
 
     incident.put("description", "incident title1");
 
-    incident.put("category", new JSONObject().put("id", 1));
+    JSONArray categories = new JSONArray();
+
+    categories.put(new JSONObject().put("id", 1));
+
+    incident.put("categories", categories);
 
     incident.put("priority", new JSONObject().put("id", 1));
+
+    JSONArray pupils = new JSONArray();
+
+    pupils.put(new JSONObject().put("id", 1));
+
+    incident.put("pupils", new JSONObject().put("id", 1));
 
     StringEntity input = new StringEntity(incident.toString());
     input.setContentType("application/json");
     saveIncident.setEntity(input);
 
-    responses = client.execute(saveIncident);
+    HttpResponse responses = client.execute(saveIncident);
 
     String incidentJSON = EntityUtils.toString(responses.getEntity());
 
@@ -90,7 +100,7 @@
     // see object which saved
     //*******************************************************************
 
-
+/*
     //*******************************************************************
     //SaveActivity example
 
@@ -195,6 +205,7 @@
     JSONObject savedIssue = new JSONObject(issueJSON);
 
     //*******************************************************************
+*/
 %>
 
 

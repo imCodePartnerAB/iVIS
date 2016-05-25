@@ -3,6 +3,7 @@ package com.imcode.controllers.restful;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Activity;
+import com.imcode.exceptions.MessagingException;
 import com.imcode.services.ActivityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.IssueAttachmentFileUtil;
@@ -34,7 +35,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     private UserService userService;
 
     @Override
-    public Object create(@RequestBody Activity entity, WebRequest webRequest) {
+    public Object create(@RequestBody Activity entity, WebRequest webRequest) throws MessagingException {
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtils.getCurrentUser(webRequest, userService).getPerson());
         return super.create(entity, webRequest);

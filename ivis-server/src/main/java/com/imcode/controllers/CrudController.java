@@ -1,5 +1,6 @@
 package com.imcode.controllers;
 
+import com.imcode.exceptions.MessagingException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public interface CrudController<T, ID extends Serializable> {
     //Getting list of entities
     Object getAll(WebRequest webRequest, Model model);
 
-    Object create(T entity, WebRequest webRequest);
+    Object create(T entity, WebRequest webRequest) throws MessagingException;
 
     // Updating entity
     Object update(ID id, T entity, WebRequest webRequest);

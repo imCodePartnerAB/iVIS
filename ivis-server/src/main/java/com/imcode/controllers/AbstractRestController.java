@@ -1,23 +1,25 @@
 package com.imcode.controllers;
 
+import com.imcode.exceptions.MessageOfException;
+import com.imcode.exceptions.MessagingException;
+import com.imcode.exceptions.ValidationErrorBuilder;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
-import org.springframework.beans.BeanUtils;
+import com.imcode.exceptions.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -50,7 +52,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     //Creating entity
     @RequestMapping(method = RequestMethod.POST)
 //    @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) {
+    public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) throws MessagingException {
 //        try {
             return service.save(entity);
 //        } catch (Exception e) {
@@ -138,6 +140,22 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     public void setService(SERVICE_TYPE service) {
         this.service = service;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ValidationError handleException(MethodArgumentNotValidException exception) {
+        return createValidationError(exception);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public MessageOfException messagingException(MessagingException exception) {
+        return exception.getExceptionMeassage();
+    }
+
+    private ValidationError createValidationError(MethodArgumentNotValidException e) {
+        return ValidationErrorBuilder.fromBindingErrors(e.getBindingResult());
     }
 
 //    public ErrorFactory getErrorFactory() {
