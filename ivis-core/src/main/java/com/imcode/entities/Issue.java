@@ -52,7 +52,7 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "issue")
     @Size(min = 1, message = "incidents can not be null")
-    @JsonBackReference
+//    @JsonBackReference
     private Set<Incident> incidents = new HashSet<>();
 
     @Column(name = "report_day")

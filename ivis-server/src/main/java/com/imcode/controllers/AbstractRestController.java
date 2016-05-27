@@ -9,6 +9,7 @@ import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
 import com.imcode.exceptions.ValidationError;
+import com.imcode.utils.StaticUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -78,15 +80,22 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public Object update(@PathVariable("id") ID id, @RequestBody(required = false) T entity, WebRequest webRequest) {
-//        T existsEntity = getService().find(id);
-//
-//        if (existsEntity != null) {
-//            BeanUtils.copyProperties(existsEntity, entity, "id");
-//            service.save(entity);
-//        }
-//
-//        return existsEntity;
-        return service.save(entity);
+        T existsEntity = getService().find(id);
+
+        if (existsEntity != null) {
+            try {
+                StaticUtils.nullAwareBeanCopy(existsEntity, entity);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            service.save(existsEntity);
+        }
+
+        return existsEntity;
+//        return service.save(entity);
     }
 
     //Deleting entity

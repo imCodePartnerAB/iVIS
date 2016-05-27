@@ -3,15 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Test api</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 
 </head>
 <body>
 
+<div id="jsonResponse">
+    <button onclick="hideResult();">Hide result</button>
+    <pre id="formatText">
+    </pre>
+</div>
+
 <div class="testUsual">
     URL:
-    <input id="path">
+    <select id = "path">
+        <option>/api/v1/json/users/loggedin</option>
+        <option>/api/v1/json/priorities</option>
+        <option>/api/v1/json/categories</option>
+        <option>/api/v1/json/statuses</option>
+        <option>/api/v1/json/persons</option>
+        <option>/api/v1/json/pupils</option>
+        <option>/api/v1/json/incidents</option>
+        <option>/api/v1/json/issues</option>
+        <option>/api/v1/json/activities</option>
+        <option>/api/v1/json/activities/attach</option>
+    </select>
+    <br/>
+    <br/>
+    {id}
+    <input id="idOf" value="/">
+    (if not need, not delete "/")
     <br/>
     <br/>
     HTTP Method:
@@ -41,12 +62,16 @@
 
     </form>
     <button id="downloadBtn" onclick="downloadFile();">Download file</button>
+
+
+
 </div>
 
 
 <script>
     function makeRequest() {
-        var URL = $("#path").val();
+        var URL = $('#idOf').val() == "/" ? $('#path').find(":selected").text()
+                : $('#path').find(":selected").text() + $('#idOf').val();
         var typeMethod = $('#typeMethod').find(":selected").text();
         var $jsonInput = $('#jsonInput').val();
         var data = {};
@@ -55,32 +80,23 @@
             data = $.parseJSON($jsonInput);
         }
 
-        if (typeMethod == 'POST' || typeMethod == 'PUT') {
-            $.ajax({
-                url: "/ivis" +URL,
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(data),
-                type: typeMethod,
-                dataType: "json",
-                cache: false,
-                success: function (result) {
-                    alert(JSON.stringify(result));
-                }
-            });
-        } else {
-            if ($jsonInput) {
-                location.href = "/ivis" + URL + '?' + $.param(data)
-            } else {
-                location.href = "/ivis" + URL;
+        $.ajax({
+            url: '/ivis' + URL,
+            contentType : typeMethod == 'GET' ? 'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json; charset=utf-8' ,
+            data: typeMethod == 'GET' ? data : JSON.stringify(data),
+            type: typeMethod,
+            cache: false,
+
+            success: function (result) {
+                var jsonResult = JSON.stringify(result, null, '\t');
+                $('#formatText').text(jsonResult);
+                $('#jsonResponse').show();
             }
-        }
-
-
+        });
     }
 
-
     function attachFile() {
-        var URL = $("#path").val();
+        var URL = $('#path').find(":selected").text() + $('#idOf').val();
         var typeMethod = $('#typeMethod').find(":selected").text().toLowerCase();
 
         var $form = $('#formUpload');
@@ -90,16 +106,25 @@
         $form.submit();
     }
 
+
     function downloadFile() {
-        var URL = $("#path").val();
+        var URL = $('#path').find(":selected").text() + $('#idOf').val();
         location.href = URL;
     }
 
-
-
-
+    function hideResult() {
+        $('#jsonResponse').hide();
+    }
 
 </script>
+
+<style>
+    #jsonResponse {
+        float: right;
+        display: none;
+        width: 70%;
+    }
+</style>
 
 
 </body>

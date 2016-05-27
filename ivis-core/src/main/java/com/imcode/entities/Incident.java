@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by ruslan on 29.04.16.
@@ -61,7 +62,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "issueId")
-    @JsonManagedReference
+//    @JsonManagedReference
     private Issue issue;
 
     @Column(name = "assigned_day")
@@ -169,7 +170,17 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.priority = priority;
     }
 
+    //for prevent infinite loop
     public Issue getIssue() {
+//        Set<Incident> incidents = issue.getIncidents();
+//        if (!incidents.isEmpty()) {
+//            incidents = incidents.stream()
+//                    .filter(incident -> incident.getIssue().getId().equals(this.getId()))
+//                    .peek(incident -> incident.setIssue(null))
+//                    .collect(Collectors.toSet());
+//
+//        }
+//        issue.setIncidents(incidents);
         return issue;
     }
 

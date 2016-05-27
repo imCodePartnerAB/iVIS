@@ -60,11 +60,4 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
         return null;
     }
 
-    @Override
-    public Object update(@PathVariable("id") Long aLong, @RequestBody(required = false) Incident entity, WebRequest webRequest) {
-
-        return super.update(aLong, entity, webRequest);
-    }
-
-
 }

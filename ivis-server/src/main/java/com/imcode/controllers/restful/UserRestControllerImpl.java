@@ -38,9 +38,7 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
 
         Map<String, Object> loggedInUser = new LinkedHashMap<>();
         loggedInUser.put("id", user.getId());
-        Person person = user.getPerson();
-        loggedInUser.put("first_name", person.getFirstName());
-        loggedInUser.put("last_name", person.getLastName());
+        loggedInUser.put("person", user.getPerson());
         loggedInUser.put("roles", user.getRoles());
 
         return loggedInUser;
