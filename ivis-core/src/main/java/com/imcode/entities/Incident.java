@@ -1,12 +1,12 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.imcode.entities.superclasses.AbstractIdEntity;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,7 +27,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @NotNull(message = "title can not be null")
     private String title;
 
-    @Column
+    @Column(columnDefinition = "text")
     @NotNull(message = "description can not be null")
     private String description;
 
@@ -61,6 +61,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "issueId")
+    @JsonManagedReference
     private Issue issue;
 
     @Column(name = "assigned_day")
@@ -73,6 +74,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assigned_person_id")
     @JsonProperty("assigned_by")
+    @JsonTypeId
     private Person assignedBy;
 
     @Column(name = "archived_day")
@@ -83,19 +85,19 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     private Date archivedDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "archived_user_id")
+    @JoinColumn(name = "archived_person_id")
     @JsonProperty("archived_by")
-    private User archivedBy;
+    private Person archivedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reported_user_id")
+    @JoinColumn(name = "reported_person_id")
     @JsonProperty("reported_by")
-    private User reportedBy;
+    private Person reportedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "modified_user_id")
+    @JoinColumn(name = "modified_person_id")
     @JsonProperty("modified_by")
-    private User modifiedBy;
+    private Person modifiedBy;
 
     @Column(name = "modified_day")
     @Temporal(TemporalType.TIMESTAMP)
@@ -131,6 +133,10 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         return reportDay;
     }
 
+    public void setReportDay(Date reportDay) {
+        this.reportDay = reportDay;
+    }
+
     public Set<Category> getCategories() {
         return categories;
     }
@@ -139,16 +145,12 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.categories = categories;
     }
 
-    public void setReportDay(Date reportDay) {
-        this.reportDay = reportDay;
+    public Set<Pupil> getPupils() {
+        return pupils;
     }
 
-    public Priority getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Priority priority) {
-        this.priority = priority;
+    public void setPupils(Set<Pupil> pupils) {
+        this.pupils = pupils;
     }
 
     public Status getStatus() {
@@ -157,6 +159,14 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     public Issue getIssue() {
@@ -191,43 +201,35 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.archivedDay = archivedDay;
     }
 
+    public Person getArchivedBy() {
+        return archivedBy;
+    }
+
+    public void setArchivedBy(Person archivedBy) {
+        this.archivedBy = archivedBy;
+    }
+
+    public Person getReportedBy() {
+        return reportedBy;
+    }
+
+    public void setReportedBy(Person reportedBy) {
+        this.reportedBy = reportedBy;
+    }
+
+    public Person getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(Person modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
     public Date getModifiedDay() {
         return modifiedDay;
     }
 
     public void setModifiedDay(Date modifiedDay) {
         this.modifiedDay = modifiedDay;
-    }
-
-    public User getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(User modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public User getReportedBy() {
-        return reportedBy;
-    }
-
-    public void setReportedBy(User reportedBy) {
-        this.reportedBy = reportedBy;
-    }
-
-    public User getArchivedBy() {
-        return archivedBy;
-    }
-
-    public void setArchivedBy(User archivedBy) {
-        this.archivedBy = archivedBy;
-    }
-
-    public Set<Pupil> getPupils() {
-        return pupils;
-    }
-
-    public void setPupils(Set<Pupil> pupils) {
-        this.pupils = pupils;
     }
 }

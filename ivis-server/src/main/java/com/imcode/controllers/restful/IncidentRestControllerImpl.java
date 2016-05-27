@@ -2,6 +2,7 @@ package com.imcode.controllers.restful;
 
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Incident;
+import com.imcode.entities.Issue;
 import com.imcode.entities.Status;
 import com.imcode.exceptions.MessagingException;
 import com.imcode.services.IncidentService;
@@ -37,7 +38,7 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     public Object create(@Validated @RequestBody Incident entity, WebRequest webRequest) throws MessagingException {
         try {
             entity.setReportDay(new Date());
-            entity.setReportedBy(StaticUtils.getCurrentUser(webRequest, userService));
+            entity.setReportedBy(StaticUtils.getCurrentUser(webRequest, userService).getPerson());
             List<Status> statuses = statusService.findAll();
             entity.setStatus(statuses.stream().filter(status -> status.getName().equals(Status.State.NEW)).findFirst().get());
             return super.create(entity, webRequest);
@@ -59,7 +60,11 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
         return null;
     }
 
+    @Override
+    public Object update(@PathVariable("id") Long aLong, @RequestBody(required = false) Incident entity, WebRequest webRequest) {
 
+        return super.update(aLong, entity, webRequest);
+    }
 
 
 }

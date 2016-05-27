@@ -8,6 +8,7 @@ import com.imcode.services.IssueService;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -35,7 +36,7 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     UserService userService;
 
     @Override
-    public Object create(@RequestBody Issue entity, WebRequest webRequest) {
+    public Object create(@Validated @RequestBody Issue entity, WebRequest webRequest) {
         Set<Incident> incidentsMerged = mergeIncidents(entity.getIncidents());
 
         entity.setIncidents(incidentsMerged);

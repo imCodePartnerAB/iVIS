@@ -75,7 +75,7 @@
 
     JSONArray categories = new JSONArray();
 
-    categories.put(new JSONObject().put("id", 1));
+    categories.put(new JSONObject().put("id", 12));
 
     incident.put("categories", categories);
 
