@@ -81,7 +81,7 @@
         }
 
         $.ajax({
-            url: '/ivis' + URL,
+            url: URL,
             contentType : typeMethod == 'GET' ? 'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json; charset=utf-8' ,
             data: typeMethod == 'GET' ? data : JSON.stringify(data),
             type: typeMethod,
