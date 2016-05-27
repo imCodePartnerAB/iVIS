@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -8,6 +9,8 @@ import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,18 +24,22 @@ import java.util.Set;
 public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(nullable = false)
+    @NotNull(message = "title can not be null")
     private String title;
 
-    @Column
+    @Column(columnDefinition = "text")
+    @NotNull(message = "description can not be null")
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "statusId")
+    @NotNull(message = "status can not be null")
     private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personId")
     @JsonProperty("responsible_person")
+    @NotNull(message = "responsible person can not be null")
     private Person responsiblePerson;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
@@ -40,9 +47,12 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
             joinColumns = @JoinColumn(name = "issueId"),
             inverseJoinColumns = @JoinColumn(name = "personId"))
     @JsonProperty("authorized_persons")
+    @Size(min = 1, message = "authorized persons can not be null")
     private Set<Person> authorizedPersons = new HashSet<>();
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "issue")
+    @Size(min = 1, message = "incidents can not be null")
+    @JsonBackReference
     private Set<Incident> incidents = new HashSet<>();
 
     @Column(name = "report_day")
@@ -66,6 +76,25 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date modifiedDay;
+
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "issue")
+    private Set<Activity> activities = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "dbo_issue_category_cross",
+            joinColumns = @JoinColumn(name = "issueId"),
+            inverseJoinColumns = @JoinColumn(name = "categoryId"))
+    private Set<Category> categories = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "priorityId")
+    private Priority priority;
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "dbo_issue_pupil_cross",
+            joinColumns = @JoinColumn(name = "issueId"),
+            inverseJoinColumns = @JoinColumn(name = "pupilId"))
+    private Set<Pupil> pupils = new HashSet<>();
 
     public String getTitle() {
         return title;
@@ -145,6 +174,38 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     public void setModifiedDay(Date modifiedDay) {
         this.modifiedDay = modifiedDay;
+    }
+
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public Set<Pupil> getPupils() {
+        return pupils;
+    }
+
+    public void setPupils(Set<Pupil> pupils) {
+        this.pupils = pupils;
     }
 }
 
