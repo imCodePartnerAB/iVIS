@@ -29,6 +29,13 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
     @Autowired
     private PersonService personService;
 
+    @Autowired
+    private PupilService pupilService;
+
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public Object getAllPupils(WebRequest webRequest, Model model) {
+        return pupilService.findAll();
+    }
 
     @Override
     public Object getAll(WebRequest webRequest, Model model) {
