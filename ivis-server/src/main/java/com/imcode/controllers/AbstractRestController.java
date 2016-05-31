@@ -9,8 +9,7 @@ import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
 import com.imcode.exceptions.ValidationError;
-import com.imcode.utils.StaticUtils;
-import org.springframework.beans.BeanUtils;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
@@ -84,7 +83,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
         if (existsEntity != null) {
             try {
-                StaticUtils.nullAwareBeanCopy(existsEntity, entity);
+                StaticUtls.nullAwareBeanCopy(existsEntity, entity);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

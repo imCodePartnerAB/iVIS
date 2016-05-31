@@ -6,18 +6,16 @@ import com.imcode.entities.Issue;
 import com.imcode.services.IncidentService;
 import com.imcode.services.IssueService;
 import com.imcode.services.UserService;
-import com.imcode.utils.StaticUtils;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by ruslan on 5/11/16.
@@ -42,7 +40,7 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
         entity.setIncidents(incidentsMerged);
 
         entity.setReportDay(new Date());
-        entity.setReportedBy(StaticUtils.getCurrentUser(webRequest, userService).getPerson());
+        entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
 
         Issue issue = issueService.save(entity);
 
@@ -66,7 +64,7 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
         return incidents.stream().map(incident -> {
             Incident incidentSaved = incidentService.find(incident.getId());
             try {
-                StaticUtils.nullAwareBeanCopy(incidentSaved, incident);
+                StaticUtls.nullAwareBeanCopy(incidentSaved, incident);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

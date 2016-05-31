@@ -3,7 +3,7 @@
     <parent>
         <artifactId>iVIS</artifactId>
         <groupId>com.imcode.ivis</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-core</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>

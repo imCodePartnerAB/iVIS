@@ -501,10 +501,10 @@ public class MainTest {
 //        binder.bind(pvs);
 //        System.out.println(target);
 
-//        ApplicationContext ctx = StaticUtils.getApplicationContext();
+//        ApplicationContext ctx = StaticUtls.getApplicationContext();
 //        CsvLoaderController controller = new CsvLoaderController();
 //        controller.setApplicationContext(ctx);
-//        FileUploadOptionsForm fileUploadOptionsForm = StaticUtils.loadObjectFromFile("/home/vitaly/programs/apache-tomcat-8.0.21/bin/upload/Admin/optionForm");
+//        FileUploadOptionsForm fileUploadOptionsForm = StaticUtls.loadObjectFromFile("/home/vitaly/programs/apache-tomcat-8.0.21/bin/upload/Admin/optionForm");
 //        FileOption fileOption = fileUploadOptionsForm.getFileOptionList().get(0);
 //        final Path file = Paths.get("/home/vitaly/SkypeFiles/Guardians.csv");
 //

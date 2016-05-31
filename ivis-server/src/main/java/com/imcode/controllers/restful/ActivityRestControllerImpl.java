@@ -1,17 +1,15 @@
 package com.imcode.controllers.restful;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Activity;
 import com.imcode.exceptions.MessagingException;
 import com.imcode.services.ActivityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.IssueAttachmentFileUtil;
-import com.imcode.utils.StaticUtils;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.ServletContext;
@@ -37,7 +35,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     @Override
     public Object create(@RequestBody Activity entity, WebRequest webRequest) throws MessagingException {
         entity.setReportDay(new Date());
-        entity.setReportedBy(StaticUtils.getCurrentUser(webRequest, userService).getPerson());
+        entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         return super.create(entity, webRequest);
     }
 
