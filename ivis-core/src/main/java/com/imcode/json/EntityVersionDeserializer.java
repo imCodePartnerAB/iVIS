@@ -28,13 +28,8 @@ public class EntityVersionDeserializer extends JsonDeserializer<EntityVersion> {
         JpaEntity<?> entity = null;
         try {
             entityClass = Class.forName(entityClassName);
-            String entityString =  node.get("entity").toString();
-            entityString = entityString.replaceAll("personal_id", "personalId");
-            entityString = entityString.replaceAll("first_name", "firstName");
-            entityString = entityString.replaceAll("last_name", "lastName");
             ObjectMapper mapper = new ObjectMapper();
-            //entity = (JpaEntity<?>) mapper.readValue(node.get("entity").traverse(), entityClass);
-            entity = (JpaEntity<?>) mapper.readValue(entityString, entityClass);
+            entity = (JpaEntity<?>) mapper.readValue(node.get("entity").traverse(), entityClass);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -33,13 +33,7 @@ public class Guardian extends AbstractIdEntity<Long> implements Serializable, Jp
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "guardians")
-//    @JoinTable(name = "dbo_pupil_guardians_cross",
-//            joinColumns = @JoinColumn(name = "guardianId"),
-//            inverseJoinColumns = @JoinColumn(name = "pupilId"))
-//    @JsonManagedReference("pupils-guardians")
-    @JsonBackReference//("guardians-pupils")
     private Set<Pupil> pupils = new HashSet<>();
-
 
     public Person getPerson() {
         return person;

@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.AfterSchoolCenterSchema;
 import com.imcode.entities.embed.Email;
@@ -11,6 +12,7 @@ import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.entities.superclasses.AbstractJpaDatedEntity;
 import com.imcode.entities.superclasses.AbstractPerson;
+import com.imcode.json.GuardiansSetSerializer;
 import com.imcode.services.PersonalizedService;
 import com.imcode.utils.SetListAdapter;
 import org.hibernate.annotations.LazyCollection;
@@ -60,8 +62,7 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "pupilId"),
             inverseJoinColumns = @JoinColumn(name = "guardianId"))
-    @JsonManagedReference//("guardians-pupils")
-//    @JsonBackReference("pupils-guardians")
+    @JsonSerialize(using = GuardiansSetSerializer.class)
     private Set<Guardian> guardians = new HashSet<>();
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER)
