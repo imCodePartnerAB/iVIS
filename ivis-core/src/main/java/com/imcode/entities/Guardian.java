@@ -1,6 +1,9 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
@@ -33,6 +36,8 @@ public class Guardian extends AbstractIdEntity<Long> implements Serializable, Jp
 //    @JoinTable(name = "dbo_pupil_guardians_cross",
 //            joinColumns = @JoinColumn(name = "guardianId"),
 //            inverseJoinColumns = @JoinColumn(name = "pupilId"))
+//    @JsonManagedReference("pupils-guardians")
+    @JsonBackReference//("guardians-pupils")
     private Set<Pupil> pupils = new HashSet<>();
 
 

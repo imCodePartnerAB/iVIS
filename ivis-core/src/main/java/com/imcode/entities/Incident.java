@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.imcode.entities.superclasses.AbstractIdEntity;
-import org.hibernate.annotations.Type;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by ruslan on 29.04.16.
@@ -62,7 +61,6 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "issueId")
-//    @JsonManagedReference
     private Issue issue;
 
     @Column(name = "assigned_day")
@@ -75,7 +73,6 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assigned_person_id")
     @JsonProperty("assigned_by")
-    @JsonTypeId
     private Person assignedBy;
 
     @Column(name = "archived_day")
@@ -170,7 +167,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.priority = priority;
     }
 
-    //for prevent infinite loop
+    @JsonIgnoreProperties(value = "incidents")
     public Issue getIssue() {
 //        Set<Incident> incidents = issue.getIncidents();
 //        if (!incidents.isEmpty()) {

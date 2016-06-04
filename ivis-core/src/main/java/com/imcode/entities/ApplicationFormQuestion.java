@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractSortableNamedEntity;
 
@@ -36,6 +37,7 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
         this.questionGroup = questionGroup;
     }
 
+    @JsonIgnoreProperties(value = "questions")
     public ApplicationFormQuestionGroup getQuestionGroup() {
         return questionGroup;
     }
@@ -174,6 +176,8 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
     public void setVariants(List<String> variants) {
         this.variants = variants;
     }
+
+
 
     @Override
     public boolean deepEquals(JpaEntity entity) {

@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
@@ -51,6 +52,7 @@ public class Activity extends AbstractIdEntity<Long> implements Serializable {
         this.fileName = fileName;
     }
 
+    @JsonIgnoreProperties(value = "activities")
     public Issue getIssue() {
         return issue;
     }

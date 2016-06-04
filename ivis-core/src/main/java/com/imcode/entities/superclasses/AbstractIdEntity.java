@@ -3,6 +3,7 @@ package com.imcode.entities.superclasses;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import com.imcode.entities.interfaces.JpaEntity;
 
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import java.util.Objects;
  * Created by vitaly on 13.05.15.
  */
 @MappedSuperclass
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@Id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public abstract class AbstractIdEntity<ID extends Serializable> extends AbstractAuditableEntity implements JpaEntity<ID>, Serializable{
     @Id
     @GeneratedValue

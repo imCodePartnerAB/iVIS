@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.embed.Decision;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.listners.AuditableModelListener;
@@ -26,6 +27,7 @@ public class Application extends AbstractJpaDatedEntity<Long> implements Seriali
 
     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "applicationFormId")
+    @JsonIgnoreProperties(value = "applications")
     private ApplicationForm applicationForm;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)

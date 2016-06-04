@@ -1,6 +1,8 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -52,7 +54,6 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "issue")
     @Size(min = 1, message = "incidents can not be null")
-//    @JsonBackReference
     private Set<Incident> incidents = new HashSet<>();
 
     @Column(name = "report_day")

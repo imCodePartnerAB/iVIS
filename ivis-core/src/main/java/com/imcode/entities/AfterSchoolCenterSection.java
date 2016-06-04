@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class AfterSchoolCenterSection extends AbstractNamedEntity<Long> implemen
         super(id, name);
     }
 
+    @JsonIgnoreProperties(value = {"schoolClasses", "afterSchoolCenterSections"})
     public School getSchool() {
         return school;
     }

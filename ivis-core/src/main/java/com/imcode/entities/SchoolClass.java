@@ -1,7 +1,6 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import com.imcode.entities.embed.Diary;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
@@ -71,7 +70,7 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
         this.schoolDayEnd = schoolDayEnd;
     }
 
-
+    @JsonIgnoreProperties(value = "schoolClasses")
     public School getSchool() {
         return school;
     }
@@ -96,12 +95,11 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
         this.diaries = diaries;
     }
 
-    @JsonIgnore
+
     public List<Diary> getDiaryList() {
         return new LinkedList<>(diaries);
     }
 
-    @JsonIgnore
     public void setDiaryList(List<Diary> diaries) {
         this.diaries.addAll(diaries);
     }

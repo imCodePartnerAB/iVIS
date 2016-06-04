@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import java.io.Serializable;
@@ -32,6 +33,7 @@ public class Truancy extends AbstractIdEntity<Long> implements Serializable {
         this.endDate = endDate;
     }
 
+    @JsonIgnoreProperties(value = "truancies")
     public Pupil getPupil() {
         return pupil;
     }

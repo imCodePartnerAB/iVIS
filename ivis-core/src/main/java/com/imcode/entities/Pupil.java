@@ -1,6 +1,6 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.AfterSchoolCenterSchema;
 import com.imcode.entities.embed.Email;
@@ -60,6 +60,8 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
     @JoinTable(name = "dbo_pupil_guardians_cross",
             joinColumns = @JoinColumn(name = "pupilId"),
             inverseJoinColumns = @JoinColumn(name = "guardianId"))
+    @JsonManagedReference//("guardians-pupils")
+//    @JsonBackReference("pupils-guardians")
     private Set<Guardian> guardians = new HashSet<>();
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER)
@@ -83,6 +85,7 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
         this.person = person;
     }
 
+    @JsonIgnoreProperties(value = "pupils")
     public SchoolClass getSchoolClass() {
         return schoolClass;
     }
@@ -127,6 +130,7 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
         return guardians;
     }
 
+
     public void setGuardians(Set<Guardian> guardians) {
         this.guardians = guardians;
     }
@@ -163,6 +167,7 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
         this.classPlacementTo = classPlacementTo;
     }
 
+//    @JsonIgnore
     public List<AfterSchoolCenterSchema> getSchoolCenterSchema() {
         return schoolCenterSchema;
     }

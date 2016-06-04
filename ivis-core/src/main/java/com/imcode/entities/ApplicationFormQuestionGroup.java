@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import com.imcode.entities.superclasses.AbstractSortableNamedEntity;
@@ -43,6 +44,7 @@ public class ApplicationFormQuestionGroup extends AbstractSortableNamedEntity<Lo
         this.questions = questions;
     }
 
+    @JsonIgnoreProperties(value = "questionGroups")
     public ApplicationFormStep getStep() {
         return step;
     }

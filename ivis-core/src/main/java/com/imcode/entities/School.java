@@ -23,10 +23,10 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
     private Set<ServiceTypeEnum> services;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "school", cascade = {CascadeType.REFRESH})
-//    @JsonManagedReference
     private Set<SchoolClass> schoolClasses;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "school")
+//    @JsonIgnoreProperties(value = "school")
     private Set<AfterSchoolCenterSection> afterSchoolCenterSections;
 
     public Set<ServiceTypeEnum> getServices() {
