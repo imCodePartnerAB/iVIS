@@ -22,7 +22,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_person")
-@JsonIgnoreProperties(value = "person")
+@JsonIgnoreProperties(value = "person", ignoreUnknown = true)
 public class Person extends AbstractPerson implements Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
