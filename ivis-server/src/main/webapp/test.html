@@ -81,15 +81,21 @@
         }
 
         $.ajax({
-//            url: '/ivis' + URL,
-            url: URL,
+            url: '/ivis' + URL,
+//            url: URL,
             contentType : typeMethod == 'GET' ? 'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json; charset=utf-8' ,
             data: typeMethod == 'GET' ? data : JSON.stringify(data),
             type: typeMethod,
             cache: false,
 
             success: function (result) {
-                var jsonResult = JSON.stringify(result, null, '\t');
+                var jsonResult = null;
+
+                if (typeof result == 'string') {
+                    jsonResult = JSON.stringify(JSON.parse(result), null, '\t');
+                } else {
+                    jsonResult = JSON.stringify(result, null, '\t');
+                }
                 $('#formatText').text(jsonResult);
                 $('#jsonResponse').show();
             }

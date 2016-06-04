@@ -9,6 +9,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 /**
  * Created by vitaly on 09.12.15.
@@ -20,7 +21,11 @@ public class StaticUtls {
             @Override
             public void copyProperty(Object dest, String name, Object value)
                     throws IllegalAccessException, InvocationTargetException {
-                if(value != null) {
+                if (value instanceof Collection<?>) {
+                    if (!((Collection) value).isEmpty()) {
+                        super.copyProperty(dest, name, value);
+                    }
+                } else if (value != null) {
                     super.copyProperty(dest, name, value);
                 }
             }

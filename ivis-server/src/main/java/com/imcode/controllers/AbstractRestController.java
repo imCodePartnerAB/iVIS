@@ -1,5 +1,7 @@
 package com.imcode.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imcode.exceptions.MessageOfException;
 import com.imcode.exceptions.MessagingException;
 import com.imcode.exceptions.ValidationErrorBuilder;
@@ -48,6 +50,18 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     @RequestMapping(method = RequestMethod.GET)
     public Object getAll(WebRequest webRequest, Model model) {
         List<T> result = service.findAll();
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        String collected = result.stream()
+//                .map(element -> {
+//                    try {
+//                        return mapper.writeValueAsString(element);
+//                    } catch (JsonProcessingException e) {
+//                        e.printStackTrace();
+//                    }
+//                    return null;
+//                })
+//                .collect(Collectors.joining(",", "[", "]"));
         return result;
     }
 
@@ -138,7 +152,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             }
         }
 
-        throw new UnsupportedOperationException("findByName metod not supported!");
+        throw new UnsupportedOperationException("findByName method not supported!");
     }
 
     // Getters & Setters

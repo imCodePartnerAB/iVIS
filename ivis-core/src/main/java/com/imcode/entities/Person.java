@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.embed.Address;
 import com.imcode.entities.embed.Phone;
 import com.imcode.entities.embed.Email;
@@ -21,6 +22,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @Table(name = "dbo_person")
+@JsonIgnoreProperties(value = "person")
 public class Person extends AbstractPerson implements Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
