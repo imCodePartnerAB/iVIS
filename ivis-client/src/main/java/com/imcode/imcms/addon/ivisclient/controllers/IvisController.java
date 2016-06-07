@@ -139,12 +139,6 @@ public class IvisController {
                         EntityVersion version = new EntityVersion(application);
                         entityVersionService.save(version);
 
-                        LogEvent log = logEventService.findByEntity(application).get(0);
-                        log.setTimestamp(version.getTimestamp());
-                        log.setAction(LogEvent.Action.MODIFY);
-                        log.setId(null);
-                        logEventService.save(log);
-
                         service.save(application);
                     }
 
