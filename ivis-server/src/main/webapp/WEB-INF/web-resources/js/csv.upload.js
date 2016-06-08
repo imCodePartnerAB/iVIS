@@ -37,3 +37,14 @@ function onChangeSkipFirstRow(element) {
     });
 }
 
+function addFileChooser() {
+    //add more file components if Add is clicked
+    var fileIndex = $('#fileTable tr').children().length;
+    $('#fileTable').append(
+        '<tr><td>'+
+        '   <input name="files['+ fileIndex +']" type="file" />'+
+        '</td></tr>');        
+
+}
+
+

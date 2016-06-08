@@ -101,7 +101,9 @@
         </div>
     </c:forEach>
     <br/>
-    <input type="submit" value="Finish"/>
+    <div class="buttons">
+        <input class="button positive" type="submit" value="Finish"/>
+    </div>
     <%--<script>--%>
         <%--&lt;%&ndash;var t = ${typeMapJson};&ndash;%&gt;--%>
         <%--var typeMap = {--%>

@@ -78,7 +78,7 @@ public class CsvLoaderController {
         FileUploadOptionsForm fileUploadOptionsForm = new FileUploadOptionsForm();
         fileUploadOptionsForm.setFileOptionList(fileOptionList);
 
-        if (null != files && files.size() > 0) {
+        if ( !files.stream().anyMatch(MultipartFile::isEmpty) ) {
             UploadFileManager fileManager = getUploadFileManeger(request);
             HttpSession session = request.getSession(true);
             session.setAttribute(UPLOAD_FILE_MANAGER, fileManager);
@@ -89,6 +89,8 @@ public class CsvLoaderController {
                 fileOption.setFileId(fileId);
                 fileOptionList.add(fileOption);
             }
+        } else {
+            return "csv/file_upload_step1";
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -109,7 +111,7 @@ public class CsvLoaderController {
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test(Model model, HttpServletRequest request, Principal principal) {
-        FileUploadOptionsForm optionsForm = StaticUtils.loadObjectFromFile("/home/vitaly/Загрузки/FileUploadOptionsForm.dat");
+        FileUploadOptionsForm optionsForm = StaticUtils.loadObjectFromFile("test/");
         return step3(optionsForm, model, request, principal);
     }
 
@@ -122,7 +124,7 @@ public class CsvLoaderController {
             Principal principal) {
 
         UploadFileManager uploadFileManager = getUploadFileManeger(request);
-        List<List> resultList = new ArrayList<>();
+        List<List> resultList = new LinkedList<>();
 
         for (int i = 0; i < 2; i++) {
             for (FileOption fileOption : optionsForm.getFileOptionList()) {

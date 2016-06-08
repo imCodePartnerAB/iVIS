@@ -87,7 +87,9 @@
             </table>
         </div>
     </c:forEach>
-    <br/><input type="submit" value="Next>>"/>
+    <div class="buttons">
+        <br/><input  class="button positive" type="submit" value="Next"/>
+    </div>
     <script>
         <%--var t = ${typeMapJson};--%>
         var typeMap = {

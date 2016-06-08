@@ -4,35 +4,29 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<script--%><%--src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>--%>
-<script>
-    $(document).ready(function() {
-        //add more file components if Add is clicked
-        $('#addFile').click(function() {
-            var fileIndex = $('#fileTable tr').children().length;
-            $('#fileTable').append(
-                    '<tr><td>'+
-                    '   <input name="files['+ fileIndex +']" type="file" />'+
-                    '</td></tr>');
-        });
+<spring:url value="/resources/js/csv.upload.js" var="jsCsvUpload"/>
 
-    });
-</script>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<script src=${jsCsvUpload} ></script>
+
 <h1>CSV File Upload</h1>
 
-<form:form method="post" action="csv/step2" modelAttribute="uploadForm" enctype="multipart/form-data">
+<form:form method="post" action="/csv/step2" modelAttribute="uploadForm" enctype="multipart/form-data">
 
     <p>Select files to upload. Press Add button to add more file inputs.</p>
 
-    <input id="addFile" type="button" value="Add File" />
-    <table id="fileTable">
-        <tr>
-            <td><input name="files[0]" type="file" /></td>
-        </tr>
-        <%--<tr>--%>
-            <%--<td><input name="files[1]" type="file" /></td>--%>
-        <%--</tr>--%>
-    </table>
-    <br/><input type="submit" value="Next>>" />
+    <div class="buttons">
+        <input id="addFile" class="button positive" type="button" value="Add File" onclick="addFileChooser();"/>
+        <table id="fileTable">
+            <tr>
+                <td><input name="files[0]" type="file" /></td>
+            </tr>
+                <%--<tr>--%>
+                <%--<td><input name="files[1]" type="file" /></td>--%>
+                <%--</tr>--%>
+        </table>
+        <br/><input class="button positive" type="submit" value="Next" />
+    </div>
+
 </form:form>
