@@ -97,30 +97,6 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "pupilId"))
     private Set<Pupil> pupils = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assigned_person_id")
-    @JsonProperty("assigned_by")
-    private Person assigneddBy;
-
-    @Column(name = "assigned_day")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("assigned_date")
-    @JsonSerialize(using = DateSerializer.class)
-    @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
-    private Date assignedDay;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "archived_person_id")
-    @JsonProperty("archived_by")
-    private Person archiveddBy;
-
-    @Column(name = "archived_day")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("archived_date")
-    @JsonSerialize(using = DateSerializer.class)
-    @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
-    private Date archivedDay;
-
     public String getTitle() {
         return title;
     }
@@ -233,36 +209,5 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
         this.pupils = pupils;
     }
 
-    public Person getAssigneddBy() {
-        return assigneddBy;
-    }
-
-    public void setAssigneddBy(Person assigneddBy) {
-        this.assigneddBy = assigneddBy;
-    }
-
-    public Date getAssignedDay() {
-        return assignedDay;
-    }
-
-    public void setAssignedDay(Date assignedDay) {
-        this.assignedDay = assignedDay;
-    }
-
-    public Person getArchiveddBy() {
-        return archiveddBy;
-    }
-
-    public void setArchiveddBy(Person archiveddBy) {
-        this.archiveddBy = archiveddBy;
-    }
-
-    public Date getArchivedDay() {
-        return archivedDay;
-    }
-
-    public void setArchivedDay(Date archivedDay) {
-        this.archivedDay = archivedDay;
-    }
 }
 
