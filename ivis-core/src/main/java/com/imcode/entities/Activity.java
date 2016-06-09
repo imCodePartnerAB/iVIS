@@ -53,7 +53,7 @@ public class Activity extends AbstractIdEntity<Long> implements Serializable {
         this.fileName = fileName;
     }
 
-    @JsonIgnore//Properties(value = "activities")
+    @JsonIgnoreProperties(value = "activities")
     public Issue getIssue() {
         return issue;
     }
