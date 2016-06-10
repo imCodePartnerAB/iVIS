@@ -12,6 +12,9 @@
     <button onclick="hideResult();">Hide result</button>
     <pre id="formatText">
     </pre>
+    <div id="responseText">
+
+    </div>
 </div>
 
 <div class="testUsual">
@@ -90,15 +93,33 @@
             cache: false,
 
             success: function (result) {
-                var jsonResult = null;
+                try {
+                    var jsonResult = null;
 
-                if (typeof result == 'string') {
-                    jsonResult = JSON.stringify(JSON.parse(result), null, '\t');
-                } else {
-                    jsonResult = JSON.stringify(result, null, '\t');
+                    if (typeof result == 'string') {
+                        jsonResult = JSON.stringify(JSON.parse(result), null, '\t');
+                    } else {
+                        jsonResult = JSON.stringify(result, null, '\t');
+                    }
+                    $('#formatText').text(jsonResult);
+                    $('#jsonResponse').show();
+                } catch (err) {
+                    $('#formatText').text("ERROR:\n" + err.toString());
+                    $('#formatText').css('color', 'red');
+                    $('#jsonResponse').show();
                 }
-                $('#formatText').text(jsonResult);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                var result = "ERROR:\n";
+                result += "Status: " + jqXHR.status + "(" + jqXHR.statusText + ")\n";
+
+                $('#formatText').text(result);
+                $('#formatText').css('color', 'red');
+
+                $('#responseText').html(jqXHR.responseText);
                 $('#jsonResponse').show();
+
             }
         });
     }
