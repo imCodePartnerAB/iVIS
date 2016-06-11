@@ -113,8 +113,10 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     //Deleting entity
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable("id") ID id, WebRequest webRequest) {
+    public Object delete(@PathVariable("id") ID id, WebRequest webRequest) {
+        T entity = service.find(id);
         service.delete(id);
+        return entity;
     }
 
     @SuppressWarnings("unchecked")

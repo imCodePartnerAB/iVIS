@@ -26,6 +26,6 @@ public interface CrudController<T, ID extends Serializable> {
     Object update(ID id, T entity, WebRequest webRequest);
 
     //Deleting entity
-    void delete(ID id, WebRequest webRequest);
+    Object delete(ID id, WebRequest webRequest);
 
 }
