@@ -23,13 +23,13 @@ import java.util.*;
  * Created by ruslan on 10.06.16.
  */
 public class RequestUtil {
-    private final String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
+    private String tokenURI;
     private final String clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
     private final String clientSecret = "secret";
     private final String userName = "admin";
     private final String userPassword = "pass";
 
-    private final String apiURL = "http://ivis.dev.imcode.com";
+    private String apiURL;
 
     private String jsonAccessToken;
     private JSONObject accessTokenJSONObject;
@@ -39,8 +39,9 @@ public class RequestUtil {
 
     private enum Method {GET, POST, PUT, DELETE}
 
-    public RequestUtil() {
-
+    public RequestUtil(String apiURL) {
+        this.apiURL = apiURL;
+        this.tokenURI = apiURL + "/oauth/token";
     }
 
     public void receiveAccessToken() {
@@ -231,8 +232,5 @@ public class RequestUtil {
 
 
     public static void main(String[] args) {
-        RequestUtil requestUtil = new RequestUtil();
-        requestUtil.receiveAccessToken();
-        System.out.println(requestUtil.makeRequest("/api/v1/json/categories", null, "GET"));
     }
 }

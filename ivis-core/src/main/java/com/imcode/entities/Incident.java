@@ -167,17 +167,8 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.priority = priority;
     }
 
-    @JsonIgnoreProperties(value = "incidents")
+    @JsonIgnoreProperties({"incidents", "activities"})
     public Issue getIssue() {
-//        Set<Incident> incidents = issue.getIncidents();
-//        if (!incidents.isEmpty()) {
-//            incidents = incidents.stream()
-//                    .filter(incident -> incident.getIssue().getId().equals(this.getId()))
-//                    .peek(incident -> incident.setIssue(null))
-//                    .collect(Collectors.toSet());
-//
-//        }
-//        issue.setIncidents(incidents);
         return issue;
     }
 

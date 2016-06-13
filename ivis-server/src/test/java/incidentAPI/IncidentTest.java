@@ -53,7 +53,7 @@ public class IncidentTest extends AbstractTest {
 
         incident.put("pupils", pupils);
 
-        String incidentJson = super.requestUtil.makeRequest(RequestUtil.genRelUrl(getAllURL()), incident, "POST");
+        String incidentJson = requestUtil.makeRequest(RequestUtil.genRelUrl(getAllURL()), incident, "POST");
 
         JSONObject incidentJSONObject = new JSONObject(incidentJson);
 
@@ -85,7 +85,7 @@ public class IncidentTest extends AbstractTest {
 
         incident.put("title", title);
 
-        String incidentJson = super.requestUtil.makeRequest(RequestUtil.genRelUrl(getAllURL() + "/" + savedId), incident, "PUT");
+        String incidentJson = requestUtil.makeRequest(RequestUtil.genRelUrl(getAllURL() + "/" + savedId), incident, "PUT");
 
         JSONObject incidentJSONObject = new JSONObject(incidentJson);
 

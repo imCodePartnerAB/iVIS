@@ -5,11 +5,9 @@ package incidentAPI;
 import static org.junit.Assert.*;
 import org.json.*;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runners.MethodSorters;
 import util.RequestUtil;
 
 /**
@@ -19,12 +17,9 @@ public abstract class AbstractTest {
     protected static RequestUtil requestUtil;
     protected static int savedId;
 
-    protected boolean isSaved = false;
-    protected boolean isUpdate = false;
-
     @BeforeClass
     public static void receiveAccessToken() {
-        requestUtil = new RequestUtil();
+        requestUtil = new RequestUtil("http://localhost:8080");
         requestUtil.receiveAccessToken();
     }
 
