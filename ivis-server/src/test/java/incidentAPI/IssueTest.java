@@ -2,6 +2,7 @@ package incidentAPI;
 
 import static org.junit.Assert.*;
 
+import com.sun.deploy.config.JCPStoreConfig;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -117,6 +118,37 @@ public class IssueTest extends AbstractTest {
     @Test
     @Override
     public void testUpdate() throws Exception {
-        assertTrue(true);
+        int act1 = 1;
+        int act2 = 3;
+        String title = "issue title test changed";
+
+        JSONArray activities = new JSONArray();
+
+        activities.put(new JSONObject().put("id", act1));
+        activities.put(new JSONObject().put("id", act2));
+
+        JSONObject issue = new JSONObject();
+
+        issue.put("activities", activities);
+
+        issue.put("title", title);
+
+        String issueJson = requestUtil.makeRequest(RequestUtil.genRelUrl(getAllURL() + "/" + savedId), issue, "PUT");
+
+        JSONObject issueJSONObject = new JSONObject(issueJson);
+
+        JSONArray activitiesResponse = issueJSONObject.getJSONArray("activities");
+
+        assertEquals(activitiesResponse.getJSONObject(0).getInt("id"), act1);
+        assertEquals(activitiesResponse.getJSONObject(1).getInt("id"), act2);
+
+        assertEquals(issueJSONObject.getString("title"), "issue title test changed");
+
+    }
+
+    @Override
+    public void testDelete() throws Exception {
+
+
     }
 }

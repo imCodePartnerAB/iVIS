@@ -173,10 +173,17 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return createValidationError(exception);
     }
 
+//    @ExceptionHandler
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public MessageOfException messagingException(MessagingException exception) {
+//        return exception.getExceptionMeassage();
+//    }
+
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public MessageOfException messagingException(MessagingException exception) {
-        return exception.getExceptionMeassage();
+    public MessageOfException messagingException(Exception exception) {
+        MessageOfException messagingException = new MessageOfException("Exception", exception.getMessage());
+        return messagingException;
     }
 
     private ValidationError createValidationError(MethodArgumentNotValidException e) {

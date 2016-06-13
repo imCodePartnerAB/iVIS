@@ -18,6 +18,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by ruslan on 10.06.16.
@@ -227,6 +229,17 @@ public class RequestUtil {
 
     public static String genRelUrl (String str) {
         return "/api/v1/json/" + str;
+    }
+
+    public static int getNumberFromStr(String str) {
+        Pattern pattern = Pattern.compile("[0-9]");
+        Matcher matcher = pattern.matcher(str);
+
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group(0));
+        }
+
+        return -1;
     }
 
 

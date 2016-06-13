@@ -78,7 +78,7 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date modifiedDay;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "issue")
+    @OneToMany(mappedBy = "issue")
     private Set<Activity> activities = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)

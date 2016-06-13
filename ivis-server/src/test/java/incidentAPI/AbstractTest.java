@@ -48,6 +48,8 @@ public abstract class AbstractTest {
 
         assertNotNull(jsonObject);
 
+        assertEquals(jsonObject.getInt("id"), RequestUtil.getNumberFromStr(additional()));
+
     }
 
     abstract String additional();
