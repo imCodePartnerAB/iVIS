@@ -11,4 +11,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SchemaVersionRepoImpl extends AbstractService<SchemaVersion, Long, SchemaVersionRepository> implements SchemaVersionService {
+    @Override
+    public SchemaVersion findCurrentVersion() {
+        return getRepo().findByCurrentTrue();
+    }
+
+    @Override
+    public SchemaVersion findVersion(String version) {
+        return getRepo().findByVersion(version);
+    }
 }

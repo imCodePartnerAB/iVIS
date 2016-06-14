@@ -46,5 +46,16 @@ public class StaticUtls {
         return user;
     }
 
+    public static boolean executeCmd(String command) {
+        String[] cmd = {"/bin/sh", "-c", command};
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return process != null ? true : false;
+    }
+
 
 }

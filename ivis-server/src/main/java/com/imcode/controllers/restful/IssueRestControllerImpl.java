@@ -75,9 +75,11 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     }
 
     private void saveIncidents(Set<Incident> incidents, Issue issue) {
-        incidents.stream()
+        incidentService.save(
+                incidents.stream()
                 .peek(incident -> incident.setIssue(issue))
-                .forEach(incident -> incidentService.save(incident));
+                .collect(Collectors.toSet())
+        );
     }
 
 

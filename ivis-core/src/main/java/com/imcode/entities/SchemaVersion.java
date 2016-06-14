@@ -14,7 +14,7 @@ import java.util.Date;
 @Table(name = "schema_version")
 public class SchemaVersion extends AbstractIdEntity<Long> implements Serializable {
 
-    @Column
+    @Column(unique = true)
     private String version;
 
     @Column(columnDefinition = "text")
