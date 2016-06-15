@@ -1,6 +1,7 @@
 package com.imcode.utils;
 
 import com.imcode.entities.SchemaVersion;
+import org.apache.commons.io.FileUtils;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,6 +56,7 @@ public class DatabaseWorker {
         dropCreateDB();
 
         execute(fileName, TypeSQL.SCRIPT);
+
     }
 
     public void saveVersionDumpInResponse(HttpServletResponse httpServletResponse) {
@@ -91,15 +93,25 @@ public class DatabaseWorker {
         }
 
         if (needDeleteTemp) {
-            new File(genFileNametOf(schemaVersion, TypeSQL.DUMP)).delete();
+            initialFile.delete();
         }
 
 
     }
 
+    public void deleteVersion() {
+        String fileName = genFileNametOf(schemaVersion, TypeSQL.SCRIPT);
+        String path = fileName.substring(0, fileName.lastIndexOf('/'));
+        try {
+            FileUtils.deleteDirectory(new File(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private boolean execute(String fileName, TypeSQL type) {
         String url = dataSource.getUrl();
-        String dbName = url.substring(url.lastIndexOf("/") + 1, url.length());
+        String dbName = url.substring(url.lastIndexOf('/') + 1, url.length());
 
         StringBuilder command = new StringBuilder(type.equals(TypeSQL.SCRIPT) ? "mysql" : "mysqldump");
         command.append(" -u ");

@@ -59,7 +59,7 @@ public class SchemaVersionController {
         return schemeVersionService.findCurrentVersion();
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody List<SchemaVersion> getAllSchemaVersion(WebRequest webRequest) {
         return schemeVersionService.findAll();
     }
@@ -67,14 +67,9 @@ public class SchemaVersionController {
     @RequestMapping(value = "/current/{version}", method = RequestMethod.POST)
     public @ResponseBody SchemaVersion migrateToVersion(@PathVariable("version") String version, WebRequest webRequest) {
         SchemaVersion schemaVersion = schemeVersionService.findVersion(version);
-
         if (schemaVersion.getCurrent()) {
             return schemaVersion;
         }
-
-        DatabaseWorker databaseWorker = new DatabaseWorker(dataSource, schemaVersion, servletContext);
-
-        databaseWorker.migrateToVersion();
 
         SchemaVersion currentVersion = schemeVersionService.findCurrentVersion();
         currentVersion.setCurrent(false);
@@ -82,6 +77,17 @@ public class SchemaVersionController {
 
         schemaVersion.setCurrent(true);
         schemeVersionService.save(schemaVersion);
+
+        List<SchemaVersion> schemaVersionList = schemeVersionService.findAll();
+
+        DatabaseWorker databaseWorker = new DatabaseWorker(dataSource, schemaVersion, servletContext);
+
+        databaseWorker.migrateToVersion();
+
+        schemeVersionService.findAll().stream()
+                .forEach(schema -> schemeVersionService.delete(schema.getId()));
+
+        schemeVersionService.save(schemaVersionList);
 
         return schemaVersion;
     }
@@ -105,6 +111,23 @@ public class SchemaVersionController {
         DatabaseWorker databaseWorker = new DatabaseWorker(dataSource, null, servletContext);
 
         databaseWorker.saveVersionDumpInResponse(httpServletResponse);
+
+        return new ModelAndView("redirect:/test.html");
+    }
+
+    @RequestMapping(value = "/delete/{version}", method = RequestMethod.POST)
+    public ModelAndView deleteSchemaVersion(@PathVariable("version") String version,
+                                            WebRequest webRequest) {
+
+        SchemaVersion schemaVersion = schemeVersionService.findVersion(version);
+        if (schemaVersion.getCurrent()) {
+            return new ModelAndView("redirect:/test.html");
+        }
+
+        schemeVersionService.delete(schemaVersion.getId());
+
+        DatabaseWorker databaseWorker = new DatabaseWorker(dataSource, schemaVersion, servletContext);
+        databaseWorker.deleteVersion();
 
         return new ModelAndView("redirect:/test.html");
     }
