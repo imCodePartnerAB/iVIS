@@ -47,6 +47,18 @@ public class DatabaseWorker {
 
     public void createVersionDump() {
         String fileName = genFileNametOf(schemaVersion, TypeSQL.DUMP);
+
+        File file = new File(fileName);
+
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         execute(fileName, TypeSQL.DUMP);
     }
 
