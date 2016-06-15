@@ -54,6 +54,11 @@ public class StaticUtls {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
+            process.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return process != null ? true : false;
     }
 

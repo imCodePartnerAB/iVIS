@@ -123,7 +123,7 @@ public class DatabaseWorker {
 
     private boolean execute(String fileName, TypeSQL type) {
         String url = dataSource.getUrl();
-        String dbName = url.substring(url.lastIndexOf('/') + 1, url.length());
+        String dbName = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('?'));
 
         StringBuilder command = new StringBuilder(type.equals(TypeSQL.SCRIPT) ? "mysql" : "mysqldump");
         command.append(" -u ");

@@ -93,7 +93,7 @@ public class SchemaVersionController {
     }
 
     @RequestMapping(value = "/dump/{version}", method = RequestMethod.GET)
-    public ModelAndView getVersionDump(@PathVariable("version") String version,
+    public void getVersionDump(@PathVariable("version") String version,
                                HttpServletResponse httpServletResponse,
                                WebRequest webRequest) {
         SchemaVersion schemaVersion = schemeVersionService.findVersion(version);
@@ -102,17 +102,17 @@ public class SchemaVersionController {
 
         databaseWorker.saveVersionDumpInResponse(httpServletResponse);
 
-        return new ModelAndView("redirect:/");
+//        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/dump", method = RequestMethod.GET)
-    public ModelAndView getVersionDump(HttpServletResponse httpServletResponse,
+    public void getVersionDump(HttpServletResponse httpServletResponse,
                                        WebRequest webRequest) {
         DatabaseWorker databaseWorker = new DatabaseWorker(dataSource, null, servletContext);
 
         databaseWorker.saveVersionDumpInResponse(httpServletResponse);
 
-        return new ModelAndView("redirect:/test.html");
+//        return new ModelAndView("redirect:/test.html");
     }
 
     @RequestMapping(value = "/delete/{version}", method = RequestMethod.POST)
