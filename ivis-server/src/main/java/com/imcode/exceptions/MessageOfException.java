@@ -1,31 +1,54 @@
 package com.imcode.exceptions;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by ruslan on 5/25/16.
  */
 public class MessageOfException {
-    private String title;
+    @JsonProperty("localized_message")
+    private String localizedMsg;
+    private String cause;
+    @JsonProperty("stack_trace")
+    private String stackTrace;
+    private String message;
 
-    private String exceptionMsg;
-
-    public MessageOfException(String title, String exceptionMsg) {
-        this.title = title;
-        this.exceptionMsg = exceptionMsg;
+    public MessageOfException(Exception exception) {
+        localizedMsg = exception.getLocalizedMessage();
+        cause = exception.getCause().toString();
+        stackTrace = exception.getStackTrace().toString();
+        message = exception.getMessage();
     }
 
-    public String getExceptionMsg() {
-        return exceptionMsg;
+    public String getLocalizedMsg() {
+        return localizedMsg;
     }
 
-    public void setExceptionMsg(String exceptionMsg) {
-        this.exceptionMsg = exceptionMsg;
+    public void setLocalizedMsg(String localizedMsg) {
+        this.localizedMsg = localizedMsg;
     }
 
-    public String getTitle() {
-        return title;
+    public String getCause() {
+        return cause;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCause(String cause) {
+        this.cause = cause;
+    }
+
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

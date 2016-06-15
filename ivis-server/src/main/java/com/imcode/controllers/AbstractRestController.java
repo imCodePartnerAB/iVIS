@@ -182,7 +182,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public MessageOfException messagingException(Exception exception) {
-        MessageOfException messagingException = new MessageOfException("Exception", exception.getMessage());
+        MessageOfException messagingException = new MessageOfException(exception);
         return messagingException;
     }
 
