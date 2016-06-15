@@ -118,7 +118,14 @@
                 $('#formatText').text(result);
                 $('#formatText').css('color', 'red');
 
-                $('#responseText').html(jqXHR.responseText);
+                var respText = null;
+                try {
+                    var respObject = JSON.parse(jqXHR.responseText);
+                    respText = JSON.stringify(respObject, null, '\t');
+                } catch (ex) {
+                    respText = jqXHR.responseText;
+                }
+                $('#responseText').html('<pre>' + respText + '</pre>');
                 $('#jsonResponse').show();
 
             }

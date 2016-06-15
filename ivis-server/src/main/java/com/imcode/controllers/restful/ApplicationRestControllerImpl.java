@@ -5,7 +5,7 @@ import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Person;
 import com.imcode.entities.Application;
 import com.imcode.entities.User;
-import com.imcode.exceptions.MessagingException;
+
 import com.imcode.services.ApplicationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -23,7 +23,7 @@ import java.util.Date;
 public class ApplicationRestControllerImpl extends AbstractRestController<Application, Long, ApplicationService> {
 
     @Override
-    public Object create(@RequestBody Application entity, WebRequest webRequest) throws MessagingException {
+    public Object create(@RequestBody Application entity, WebRequest webRequest) {
         Principal principal = webRequest.getUserPrincipal();
 
         if (principal instanceof User) {

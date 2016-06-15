@@ -3,7 +3,6 @@ package com.imcode.controllers.restful;
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Incident;
 import com.imcode.entities.Status;
-import com.imcode.exceptions.MessagingException;
 import com.imcode.services.IncidentService;
 import com.imcode.services.StatusService;
 import com.imcode.services.UserService;
@@ -34,17 +33,12 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     StatusService statusService;
 
     @Override
-    public Object create(@Validated @RequestBody Incident entity, WebRequest webRequest) throws MessagingException {
-        try {
-            entity.setReportDay(new Date());
-            entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
-            List<Status> statuses = statusService.findAll();
-            entity.setStatus(statuses.stream().filter(status -> status.getName().equals(Status.State.NEW)).findFirst().get());
-            return super.create(entity, webRequest);
-        } catch (Exception ex) {
-            throw new MessagingException("Requested values conflict with DB", ex.getMessage());
-        }
-
+    public Object create(@Validated @RequestBody Incident entity, WebRequest webRequest) {
+        entity.setReportDay(new Date());
+        entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
+        List<Status> statuses = statusService.findAll();
+        entity.setStatus(statuses.stream().filter(status -> status.getName().equals(Status.State.NEW)).findFirst().get());
+        return super.create(entity, webRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})

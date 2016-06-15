@@ -3,7 +3,7 @@ package com.imcode.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imcode.exceptions.MessageOfException;
-import com.imcode.exceptions.MessagingException;
+
 import com.imcode.exceptions.ValidationErrorBuilder;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.misc.errors.ErrorFactory;
@@ -68,7 +68,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     //Creating entity
     @RequestMapping(method = RequestMethod.POST)
 //    @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) throws MessagingException {
+    public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) {
 //        try {
             return service.save(entity);
 //        } catch (Exception e) {

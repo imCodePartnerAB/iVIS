@@ -2,6 +2,8 @@ package com.imcode.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
+
 /**
  * Created by ruslan on 5/25/16.
  */
@@ -16,7 +18,7 @@ public class MessageOfException {
     public MessageOfException(Exception exception) {
         localizedMsg = exception.getLocalizedMessage();
         cause = exception.getCause().toString();
-        stackTrace = exception.getStackTrace().toString();
+        stackTrace = Arrays.toString(exception.getStackTrace());
         message = exception.getMessage();
     }
 
