@@ -17,7 +17,9 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ruslan on 09.06.16.
@@ -62,6 +64,15 @@ public class SchemaVersionController {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody List<SchemaVersion> getAllSchemaVersion(WebRequest webRequest) {
         return schemeVersionService.findAll();
+    }
+
+    @RequestMapping(value = "/access", method = RequestMethod.GET)
+    public @ResponseBody Map<String, Object> getDataAccess(WebRequest webRequest) {
+        Map<String, Object> objectMap = new HashMap<>();
+        objectMap.put("URL", dataSource.getUrl());
+        objectMap.put("LOGIN", dataSource.getUsername());
+        objectMap.put("PASSWORD", dataSource.getPassword());
+        return objectMap;
     }
 
     @RequestMapping(value = "/current/{version}", method = RequestMethod.POST)
