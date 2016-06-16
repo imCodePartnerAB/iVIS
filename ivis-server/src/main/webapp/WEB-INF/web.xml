@@ -144,5 +144,11 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
+    <session-config>
+        <session-timeout>
+            90
+        </session-timeout>
+    </session-config>
+
 
 </web-app>
