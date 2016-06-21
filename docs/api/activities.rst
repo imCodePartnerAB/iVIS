@@ -3,7 +3,7 @@ Activities
 
 ``(implementation of Activity entity)``
 
-Provides following method for `API <index.html>`_ calls:
+Provides following methods for `API <index.html>`_ calls:
 
     * `Get activity`_
     * `Get activities`_

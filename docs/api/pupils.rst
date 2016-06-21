@@ -3,7 +3,7 @@ Pupils
 
 ``(implementation of Pupil entity)``
 
-Provides following method for `API <index.html>`_ calls:
+Provides following methods for `API <index.html>`_ calls:
 
     * `Get pupil`_
     * `Get pupils`_

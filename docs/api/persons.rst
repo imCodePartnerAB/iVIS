@@ -3,7 +3,7 @@ Persons
 
 ``(implementation of Person entity)``
 
-Provides following method for `API <index.html>`_ calls:
+Provides following methods for `API <index.html>`_ calls:
 
     * `Get person`_
     * `Get persons`_

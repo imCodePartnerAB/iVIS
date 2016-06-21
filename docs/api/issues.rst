@@ -3,7 +3,7 @@ Issues
 
 ``(implementation of Issue entity)``
 
-Provides following method for `API <index.html>`_ calls:
+Provides following methods for `API <index.html>`_ calls:
 
     * `Get issue`_
     * `Get issues`_

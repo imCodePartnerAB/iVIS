@@ -3,7 +3,7 @@ Incidents
 
 ``(implementation of Incident entity)``
 
-Provides following method for `API <index.html>`_  calls:
+Provides following methods for `API <index.html>`_  calls:
 
     * `Get incident`_
     * `Get incidents`_
