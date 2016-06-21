@@ -34,6 +34,7 @@ You can have access and operate with following entities
    categories
    statuses
    persons
+   users
    schools
    schoolclasses
    applications

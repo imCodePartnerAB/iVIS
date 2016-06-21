@@ -116,7 +116,7 @@ Example of response:
         {},
         ...
         {}
-    }
+    ]
 
 .. _`Get incidents list`:
 

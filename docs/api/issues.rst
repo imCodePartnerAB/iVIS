@@ -109,7 +109,7 @@ Example of response:
         {},
         ...
         {}
-    }
+    ]
 
 .. _`Get issues list`:
 
