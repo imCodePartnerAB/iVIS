@@ -29,9 +29,8 @@ Parameters response:
     *Object*
 
     *With properties:*
-
-    #. id (Number)
-    #. name (String)
+        #. id (Number)
+        #. name (String)
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
