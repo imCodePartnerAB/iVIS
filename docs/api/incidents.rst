@@ -3,11 +3,11 @@ Incidents
 
 ``(implementation of Incident entity)``
 
-Provides following method for API calls:
+Provides following method for `API <index.html>`_  calls:
 
     * `Get incident`_
     * `Get incidents`_
-    * `Get incidents list`_
+    * `Get incidents list`_ (by some criteria)
     * `Save incident`_
     * `Update incident`_
     * `Delete incident`_
@@ -103,7 +103,7 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array*
 
-.. note::
+.. seealso::
     Array consists of objects from `Get incident`_ method
 
 Example of response:
