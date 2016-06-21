@@ -82,11 +82,11 @@ with parameters
 
 code (= '{code}')
 
-client_id (= '{yourClientId}') - the same as in step 1
+client_id (= '{yourClientId}')
 
 client_secret (= '{yourClientSecret}')
 
-redirect_uri (= '{redirectUrl}') - the same as in step 1
+redirect_uri (= '{redirectUrl}')
 
 grant_type = (= 'authorization_code')
 
@@ -101,7 +101,7 @@ As response to the redirect_uri you will receive json object with next propertie
 
 access_token (token for access to API)
 
-refresh_token (when token is expired, you can exchange refresh_token to new access_token, see step 3)
+refresh_token (when token is expired, you can exchange refresh_token to new access_token, see step 2)
 
 expires_in (property is a number of seconds after which the access token expires, and is no longer valid)
 
@@ -184,7 +184,7 @@ As response to the redirect_uri you will receive json object with next propertie
 
 access_token (token for access to API)
 
-refresh_token (when token is expired, you can exchange refresh_token to new access_token, see step 3)
+refresh_token (when token is expired, you can exchange refresh_token to new access_token, see step 2)
 
 expires_in (property is a number of seconds after which the access token expires, and is no longer valid)
 
@@ -224,7 +224,7 @@ When your token is expired  you can refresh (update) it without repeating author
 
 with parameters
 
-refresh_token (='{yourRefreshToken}') - is the refresh token from the step 2
+refresh_token (='{yourRefreshToken}') - is the refresh token from the step 1
 
 grant_type (= 'refresh_token')
 
@@ -247,6 +247,7 @@ Code example **Java** using org.apache.http package
    pairsPost.add(new BasicNameValuePair("refresh_token", refreshToken));
    pairsPost.add(new BasicNameValuePair("grant_type", "refresh_token"));
    pairsPost.add(new BasicNameValuePair("client_id", client_id));
+   pairsPost.add(new BasicNameValuePair("client_secret", client_secret));
    pairsPost.add(new BasicNameValuePair("grant_type", "refresh_token"));
 
    HttpPost post = new HttpPost(tokenURI);
