@@ -1,53 +1,171 @@
-﻿ApplicationForm
-===============
+﻿ApplicationForms
+================
 
-Base URL: /api/v1/{format}/applicationforms
+``(implementation of ApplicationForm entity)``
 
-where
+Provides following methods for `API <index.html>`_ calls:
 
-{format} is 'json' or 'xml'.
+    * `Get applicationForm`_
+    * `Get applicationForms`_
+    * `Save applicationForm`_
+    * `Update applicationForm`_
+    * `Delete applicationForm`_
 
-Each request requires additional parameter access_token.
+.. _`Get applicationForm`:
 
-Create
-------
+Get applicationForm
+-------------------
 
-url: /
-method: POST
-params: entity (ApplicationForm)
+URL:
+~~~~
+    */applicationforms/{id}*
 
-Update
-------
-    
-url: /{id}
-method: PUT
-params: entity (ApplicationForm)
+Method:
+~~~~~~~
+    *GET*
 
-Delete
-------
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
 
-url: /{id}
-method: DELETE
-params:
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
 
-Find All
---------
-    
-url: /
-method: GET
-params:
-example: /api/v1/json/applicationforms?access_token={yourToken}
+    *With properties:*
+        #. id (Number)
+        #. name (String)
+        #. version (Number)
+        #. steps (Array)
+        #. applications (Array)
 
-Find One
---------
+.. note::
 
-url: /{id}
-method: GET
-params:
+    steps relates to ApplicationFormStep entity
 
-Find by Name
-------------
+    applications relates to Application entity
 
-url: /
-method: GET
-params: name (String)
+Example of response:
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+        "id":1,
+        "name":"Name",
+        "version":1,
+        "steps":[],
+        "applications":[]
+    }
+
+.. _`Get applicationForms`:
+
+Get applicationForms
+--------------------
+
+URL:
+~~~~
+    */applicationforms*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+.. seealso::
+    Array consists of objects from `Get applicationForm`_ method
+
+Example of response:
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    [
+        {},
+        {},
+        ...
+        {}
+    ]
+
+.. _`Save applicationForm`:
+
+Save applicationForm
+--------------------
+
+URL:
+~~~~
+    */applicationforms*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *With properties what you want to create, except id*
+
+.. seealso::
+    Whole properties list you can see at `Get applicationForm`_
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *On server fill id*
+
+.. _`Update applicationForms`:
+
+Update applicationForm
+----------------------
+
+URL:
+~~~~
+    */applicationforms/{id}*
+
+Method:
+~~~~~~~
+    *PUT*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *With properties what you want to update, except id*
+
+.. seealso::
+    Whole properties list you can see at `Get applicationForm`_
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+.. _`Delete applicationForms`:
+
+Delete applicationForm
+----------------------
+
+URL:
+~~~~
+    */applicationforms/{id}*
+
+Method:
+~~~~~~~
+    *DELETE*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+

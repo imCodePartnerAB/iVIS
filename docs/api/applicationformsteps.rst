@@ -1,53 +1,175 @@
-﻿ApplicationFormStep
-===================
+﻿ApplicationFormSteps
+====================
 
-Base URL: /api/v1/{format}/applicationformsteps
+``(implementation of ApplicationFormStep entity)``
 
-where
+Provides following methods for `API <index.html>`_ calls:
 
-{format} is 'json' or 'xml'.
+    * `Get applicationFormStep`_
+    * `Get applicationFormSteps`_
+    * `Save applicationFormStep`_
+    * `Update applicationFormStep`_
+    * `Delete applicationFormStep`_
 
-Each request requires additional parameter access_token.
+.. _`Get applicationFormStep`:
 
-Create
-------
+Get applicationFormStep
+-----------------------
 
-url: /
-method: POST
-params: entity (ApplicationFormStep)
+URL:
+~~~~
+    */applicationformsteps/{id}*
 
-Update
-------
-    
-url: /{id}
-method: PUT
-params: entity (ApplicationFormStep)
+Method:
+~~~~~~~
+    *GET*
 
-Delete
-------
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
 
-url: /{id}
-method: DELETE
-params:
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
 
-Find All
---------
-    
-url: /
-method: GET
-params:
-example: /api/v1/json/applicationformsteps?access_token={yourToken}
+    *With properties:*
+        #. id (Number)
+        #. name (String)
+        #. text (String)
+        #. sort_order (Number)
+        #. question_groups (Array)
+        #. application_form (Object)
 
-Find One
---------
+.. note::
 
-url: /{id}
-method: GET
-params:
+    sort_order represent unique number according to sort purpose
 
-Find by Name
-------------
+    question_groups relates to ApplicationFormStepGroup entity
 
-url: /
-method: GET
-params: name (String)
+    application_form  relates to ApplicationForm entity
+
+Example of response:
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+        "id":1,
+        "name":"Name",
+        "text":"Definition",
+        "sort_order":1,
+        "question_groups":[],
+        "application_form":{}
+    }
+
+.. _`Get applicationFormSteps`:
+
+Get applicationFormSteps
+------------------------
+
+URL:
+~~~~
+    */applicationformsteps*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+.. seealso::
+Array consists of objects from `Get applicationFormStep`_ method
+
+Example of response:
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    [
+        {},
+        {},
+        ...
+        {}
+    ]
+
+.. _`Save applicationFormStep`:
+
+Save applicationFormStep
+------------------------
+
+URL:
+~~~~
+    */applicationformsteps*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *With properties what you want to create, except id*
+
+.. seealso::
+Whole properties list you can see at `Get applicationFormStep`_
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *On server fill id*
+
+.. _`Update applicationFormSteps`:
+
+Update applicationFormStep
+--------------------------
+
+URL:
+~~~~
+    */applicationformsteps/{id}*
+
+Method:
+~~~~~~~
+    *PUT*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *With properties what you want to update, except id*
+
+.. seealso::
+Whole properties list you can see at `Get applicationFormStep`_
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+.. _`Delete applicationFormSteps`:
+
+Delete applicationFormStep
+--------------------------
+
+URL:
+~~~~
+    */applicationformsteps/{id}*
+
+Method:
+~~~~~~~
+    *DELETE*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+

@@ -1,53 +1,171 @@
 ﻿Schools
 =======
 
-Base URL: /api/v1/{format}/schools
+``(implementation of School entity)``
 
-where
+Provides following methods for `API <index.html>`_ calls:
 
-{format} is 'json' or 'xml'.
+    * `Get school`_
+    * `Get schools`_
+    * `Save school`_
+    * `Update school`_
+    * `Delete school`_
 
-Each request requires additional parameter access_token.
+.. _`Get school`:
 
-Create
-------
+Get school
+----------
 
-url: /
-method: POST
-params: entity (School)
+URL:
+~~~~
+    */schools/{id}*
 
-Update
-------
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *With properties:*
+        #. id (Number)
+        #. name (String)
+        #. school_id (String)
+        #. school_classes (Array)
+        #. after_school_center_sections (Array)
+
+.. note::
+
+    school_classes relates to SchoolClass entity
     
-url: /{id}
-method: PUT
-params: entity (School)
+    after_school_center_sections relates to afterSchoolCenterSections entity
 
-Delete
-------
+Example of response:
+~~~~~~~~~~~~~~~~~~~~
 
-url: /{id}
-method: DELETE
-params:
+.. code-block:: json
 
-Find All
---------
-    
-url: /
-method: GET
-params:
-example: /api/v1/json/schools?access_token={yourToken}
+    {
+        "id":1,
+        "name":"Name",
+        "school_id":"1111-id",
+        "school_classes":[],
+        "after_school_center_sections":[]
+    }
 
-Find One
---------
+.. _`Get schools`:
 
-url: /{id}
-method: GET
-params:
+Get schools
+-----------
 
-Find by Name
-------------
+URL:
+~~~~
+    */schools*
 
-url: /
-method: GET
-params: name (String)
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+.. seealso::
+Array consists of objects from `Get school`_ method
+
+Example of response:
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    [
+        {},
+        {},
+        ...
+        {}
+    ]
+
+.. _`Save school`:
+
+Save school
+-----------
+
+URL:
+~~~~
+    */schools*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *With properties what you want to create, except id*
+
+.. seealso::
+Whole properties list you can see at `Get school`_
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *On server fill id*
+
+.. _`Update school`:
+
+Update school
+-------------
+
+URL:
+~~~~
+    */schools/{id}*
+
+Method:
+~~~~~~~
+    *PUT*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+    *With properties what you want to update, except id*
+
+.. seealso::
+Whole properties list you can see at `Get school`_
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
+.. _`Delete  school`:
+
+Delete school
+-------------
+
+URL:
+~~~~
+    */schools/{id}*
+
+Method:
+~~~~~~~
+    *DELETE*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Object*
+
