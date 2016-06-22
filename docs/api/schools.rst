@@ -114,7 +114,7 @@ Parameters request:
     *With properties what you want to create, except id*
 
 .. seealso::
-Whole properties list you can see at `Get school`_
+    Whole properties list you can see at `Get school`_
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -142,7 +142,7 @@ Parameters request:
     *With properties what you want to update, except id*
 
 .. seealso::
-Whole properties list you can see at `Get school`_
+    Whole properties list you can see at `Get school`_
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
