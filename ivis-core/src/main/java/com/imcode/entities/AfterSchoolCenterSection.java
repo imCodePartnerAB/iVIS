@@ -28,7 +28,7 @@ public class AfterSchoolCenterSection extends AbstractNamedEntity<Long> implemen
         super(id, name);
     }
 
-    @JsonIgnoreProperties(value = {"schoolClasses", "afterSchoolCenterSections"})
+    @JsonIgnoreProperties(value = {"school_classes", "after_school_center_sections"})
     public School getSchool() {
         return school;
     }

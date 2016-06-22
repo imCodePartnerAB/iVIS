@@ -20,11 +20,13 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
     @Column
+    @JsonProperty("school_day_start")
     private Date schoolDayStart;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
     @Column
+    @JsonProperty("school_day_end")
     private Date schoolDayEnd;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
@@ -70,7 +72,7 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
         this.schoolDayEnd = schoolDayEnd;
     }
 
-    @JsonIgnoreProperties(value = "schoolClasses")
+    @JsonIgnoreProperties(value = "school_classes")
     public School getSchool() {
         return school;
     }

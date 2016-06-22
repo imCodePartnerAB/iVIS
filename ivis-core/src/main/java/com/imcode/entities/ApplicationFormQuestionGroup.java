@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import com.imcode.entities.superclasses.AbstractSortableNamedEntity;
@@ -23,6 +24,7 @@ public class ApplicationFormQuestionGroup extends AbstractSortableNamedEntity<Lo
     private List<ApplicationFormQuestion> questions = new ArrayList<>();
 
     @Column
+    @JsonProperty("question_type")
     private String questionType;
 
     @ManyToOne
@@ -44,7 +46,7 @@ public class ApplicationFormQuestionGroup extends AbstractSortableNamedEntity<Lo
         this.questions = questions;
     }
 
-    @JsonIgnoreProperties(value = "questionGroups")
+    @JsonIgnoreProperties(value = "question_groups")
     public ApplicationFormStep getStep() {
         return step;
     }

@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import java.io.Serializable;
@@ -15,14 +16,17 @@ import javax.persistence.Entity;
 public class Semester extends AbstractNamedEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "academicYearId")
+    @JsonProperty("academic_year")
     private AcademicYear academicYear;
 
     @Temporal(TemporalType.DATE)
     @Column
+    @JsonProperty("start_date")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column
+    @JsonProperty("end_date")
     private Date endDate;
 
     public Semester() {

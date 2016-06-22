@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -29,9 +30,11 @@ public class EntityVersion extends AbstractIdEntity<Long> {
     private Date timestamp;
 
     @Column(nullable = false)
+    @JsonProperty("entity_class")
     private Class<?> entityClass;
 
     @Column(nullable = false)
+    @JsonProperty("entity_id")
     private Long entityId;
 
     @Column

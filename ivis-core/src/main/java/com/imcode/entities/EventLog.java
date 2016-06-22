@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.User;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
@@ -17,6 +18,7 @@ public class EventLog extends AbstractIdEntity<Long>{
     private User user;
 
     @Column
+    @JsonProperty("date_time")
     private LocalDateTime dateTime;
 
     @Column

@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import java.io.Serializable;
@@ -19,10 +20,12 @@ public class Truancy extends AbstractIdEntity<Long> implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column
+    @JsonProperty("start_date")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column
+    @JsonProperty("end_date")
     private Date endDate;
 
     public Truancy() { }

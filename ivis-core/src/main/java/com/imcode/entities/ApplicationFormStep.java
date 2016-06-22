@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractSortableNamedEntity;
 
@@ -20,9 +21,11 @@ public class ApplicationFormStep extends AbstractSortableNamedEntity<Long> {
 
     @OrderBy("sortOrder ASC, text ASC")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "step")
+    @JsonProperty("question_groups")
     private List<ApplicationFormQuestionGroup> questionGroups = new ArrayList<>();
 
     @ManyToOne
+    @JsonProperty("application_form")
     private ApplicationForm applicationForm;
 
     public String getText() {

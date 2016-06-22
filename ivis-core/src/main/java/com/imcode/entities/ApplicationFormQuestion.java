@@ -1,6 +1,7 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractSortableNamedEntity;
 
@@ -100,6 +101,7 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
     private String value;
 
     @Column
+    @JsonProperty("multi_values")
     private Boolean multiValues = Boolean.FALSE;
 
     @Column(name = "valuez")
@@ -110,15 +112,18 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
 //    private Class<? extends Serializable> valueType = String.class;
 
     @Column(nullable = false)
+    @JsonProperty("multi_variants")
     private Boolean multiVariants = Boolean.FALSE;
 
     @Convert(converter = ListToStringConverter.class)
     private List<String> variants = new ArrayList<>();
 
     @Column
+    @JsonProperty("question_type")
     private String questionType;
 
     @ManyToOne
+    @JsonProperty("question_group")
     private ApplicationFormQuestionGroup questionGroup;
 
     public String getText() {

@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
@@ -25,9 +26,11 @@ public class LogEvent extends AbstractIdEntity<Long> {
     private Date timestamp;
 
     @Column(nullable = false)
+    @JsonProperty("entity_class_name")
     private String entityClassName;
 
     @Column(nullable = false)
+    @JsonProperty("entity_id")
     private Long entityId;
 
     @Column(nullable = false)
@@ -35,12 +38,15 @@ public class LogEvent extends AbstractIdEntity<Long> {
     private Action action;
 
     @Column
+    @JsonProperty("field_name")
     private String fieldName;
 
     @Column
+    @JsonProperty("previous_value")
     private String previousValue;
 
     @Column
+    @JsonProperty("new_value")
     private String newValue;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
