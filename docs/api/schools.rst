@@ -80,7 +80,7 @@ Parameters response:
     *Array*
 
 .. seealso::
-Array consists of objects from `Get school`_ method
+    Array consists of objects from `Get school`_ method
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
