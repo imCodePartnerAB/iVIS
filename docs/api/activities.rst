@@ -82,7 +82,7 @@ Parameters response:
     *Array*
 
 .. seealso::
-    Array consists of objects from `Get activities`_ method
+    Array consists of objects from `Get activity`_ method
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
