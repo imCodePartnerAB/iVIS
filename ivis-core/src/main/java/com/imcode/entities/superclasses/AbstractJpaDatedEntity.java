@@ -1,5 +1,6 @@
 package com.imcode.entities.superclasses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.interfaces.JpaDatedEntity;
 import com.imcode.entities.listners.DatedEntityListner;
 
@@ -15,10 +16,12 @@ import java.util.Date;
 public abstract class AbstractJpaDatedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements Serializable, JpaDatedEntity<ID> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(updatable = false)
+    @JsonProperty("create_date")
     protected Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(insertable = false)
+    @JsonProperty("update_date")
     protected Date updateDate;
 
     public AbstractJpaDatedEntity() {

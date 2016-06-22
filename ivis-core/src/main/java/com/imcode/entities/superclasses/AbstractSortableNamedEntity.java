@@ -1,5 +1,6 @@
 package com.imcode.entities.superclasses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.interfaces.JpaNamedEntity;
 import com.imcode.entities.interfaces.JpaSortableEntity;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract class AbstractSortableNamedEntity<ID extends Serializable> extends AbstractNamedEntity<ID> implements JpaSortableEntity<AbstractSortableNamedEntity>{
     @Column
+    @JsonProperty("sort_order")
     protected Integer sortOrder;
 
     public AbstractSortableNamedEntity() {
