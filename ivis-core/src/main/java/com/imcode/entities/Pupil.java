@@ -45,7 +45,7 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
 
     @Temporal(TemporalType.DATE)
     @Column
-    @JsonProperty("class_placement_from")
+    @JsonProperty("class_placement_to")
     private Date classPlacementTo;
 
     @ManyToOne(fetch = FetchType.EAGER)
