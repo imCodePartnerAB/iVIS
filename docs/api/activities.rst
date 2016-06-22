@@ -161,7 +161,7 @@ Parameters request:
 .. note::
     Max file size can not be more than 20 Mb
 
-    When you upload file -> on server fill file_name property with appropriate activity
+    When you upload file -> on server fill file_name property in appropriate activity
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
