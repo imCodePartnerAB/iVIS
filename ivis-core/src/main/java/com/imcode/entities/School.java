@@ -15,6 +15,7 @@ import java.util.Set;
 @Table(name = "dbo_school")
 public class School extends AbstractNamedEntity<Long> implements Serializable {
     @Column
+    @JsonProperty("school_id")
     private String schoolId;
 
     @ElementCollection
