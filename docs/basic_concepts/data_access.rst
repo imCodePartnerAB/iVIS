@@ -6,7 +6,7 @@ Data access layer in iVIS implemented using JPA standard
 
 All tables present as mapping of entities.
 Tables have prefix "dbo_" that means database object,
-except of authorization tables
+Except of authorization tables
 (it relate with ideological considerations).
 
 **Database diagram** :download:`download <../images/databaseDiagram.gif>`.
@@ -15,194 +15,194 @@ JPA classes located in *com.imcode.entities* of ivis-core module in iVIS project
 
 **Class diagram** :download:`download <../images/classDiagram.png>`.
 
-**JPA entities diagram** :download:`download <../images/jpaEnitiesDiagram.png>`.
+**JPA entities diagram** :download:`download <../images/jpaEntitiesDiagram.png>`.
 
 Relations in DB also implement by JPA standard.
 
 .. note::
 
-    embeddables have not id, because they can not exist without entity
+    embeddables have not got id, because they can not exist without entity
 
-List of all tables and description:
------------------------------------
+LIST OF ALL TABLES AND DESCRIPTION
+----------------------------------
 
 dbo_academic_year
 ~~~~~~~~~~~~~~~~~
-represents AcademicYear entity
+Represents AcademicYear entity
 
 dbo_activity
 ~~~~~~~~~~~~
-represents Activity entity
+Represents Activity entity
 
 dbo_after_school_center_section
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents AfterSchoolCenterSection entity
+Represents AfterSchoolCenterSection entity
 
 dbo_app_role
 ~~~~~~~~~~~~
-represents ApplicationRole entity
+Represents ApplicationRole entity
 
 dbo_application
 ~~~~~~~~~~~~~~~
-represents Application entity
+Represents Application entity
 
 dbo_application_form
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents ApplicationForm entity
+Represents ApplicationForm entity
 
 dbo_application_form_question
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents ApplicationFormQuestion entity
+Represents ApplicationFormQuestion entity
 
 dbo_application_form_question_group
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents ApplicationFormQuestionGroup entity
+Represents ApplicationFormQuestionGroup entity
 
 dbo_application_form_step
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents ApplicationFormStep entity
+Represents ApplicationFormStep entity
 
 dbo_category
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Category entity
+Represents Category entity
 
 dbo_contact_person
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents ContactPerson entity
+Represents ContactPerson entity
 
 dbo_contact_person_address
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Address embeddable for ContactPerson
+Represents Address embeddable for ContactPerson
 
 dbo_contact_person_email
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Email embeddable for ContactPerson
+Represents Email embeddable for ContactPerson
 
 dbo_contact_person_phone
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Phone embeddable for ContactPerson
+Represents Phone embeddable for ContactPerson
 
 dbo_entity_version
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents EntityVersion entity
+Represents EntityVersion entity
 
 dbo_guardian
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Guardian entity
+Represents Guardian entity
 
 dbo_incident
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Incident entity
+Represents Incident entity
 
 dbo_incident_category_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between Incident and Category entities
+Represents many to many relation between Incident and Category entities
 
 dbo_incident_person_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between Incident and Person entities
+Represents many to many relation between Incident and Person entities
 
 dbo_incident_pupil_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between Incident and Pupil entities
+Represents many to many relation between Incident and Pupil entities
 
 dbo_issue
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Issue entity
+Represents Issue entity
 
 dbo_issue_category_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between Issue and Category entities
+Represents many to many relation between Issue and Category entities
 
 dbo_issue_pupil_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between Issue and Pupil entities
+Represents many to many relation between Issue and Pupil entities
 
 dbo_issues_authorized_persons_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between Issue and Person entities
+Represents many to many relation between Issue and Person entities
 
 dbo_log_event
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents LogEvent entity
+Represents LogEvent entity
 
 dbo_person
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Person entity
+Represents Person entity
 
 dbo_person_address
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Address embeddable in Person
+Represents Address embeddable in Person
 
 dbo_person_email
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Email embeddable in Person
+Represents Email embeddable in Person
 
 dbo_person_phone
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Phone embeddable in Person
+Represents Phone embeddable in Person
 
 dbo_priority
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Priority entity
+Represents Priority entity
 
 dbo_pupil
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Pupil entity
+Represents Pupil entity
 
 dbo_pupil_after_school_center_schema
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents AfterSchoolCenterSchema embeddable in Pupil
+Represents AfterSchoolCenterSchema embeddable in Pupil
 
 dbo_pupil_guardians_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between Pupil and Guardian entities
+Represents many to many relation between Pupil and Guardian entities
 
 dbo_role
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Role entity
+Represents Role entity
 
 dbo_school
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents School entity
+Represents School entity
 
 dbo_school_class
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents SchoolClass entity
+Represents SchoolClass entity
 
 dbo_school_class_diaries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Diary embeddable in SchoolClass
+Represents Diary embeddable in SchoolClass
 
 dbo_school_service_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents ServiceTypeEnum element collection, which equals embeddable in School
+Represents ServiceTypeEnum element collection, which equals embeddable in School
 
 dbo_school_transport
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents SchoolTransport entity
+Represents SchoolTransport entity
 
 dbo_semester
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Semester entity
+Represents Semester entity
 
 dbo_status
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Status entity
+Represents Status entity
 
 dbo_truancy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents Truancy entity
+Represents Truancy entity
 
 dbo_user
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents User entity
+Represents User entity
 
 dbo_user_roles_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between User and Role entities
+Represents many to many relation between User and Role entities
 
-Authorization tables:
+AUTHORIZATION TABLES
 ---------------------
 
 oauth_access_token
@@ -213,28 +213,28 @@ oauth_refresh_token
 
 dbo_oauth_client_details
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents JpaClientDetails entity
+Represents JpaClientDetails entity
 
 dbo_oauth_client_additional_info
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-element collection in JpaClientDetails
+Element collection in JpaClientDetails
 
 dbo_oauth_client_garant_types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-element collection in JpaClientDetails
+Element collection in JpaClientDetails
 
 dbo_oauth_client_redirect_uris
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-element collection in JpaClientDetails
+Element collection in JpaClientDetails
 
 dbo_oauth_client_resources
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-element collection in JpaClientDetails
+Element collection in JpaClientDetails
 
 dbo_oauth_client_roles_cross
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-represents many to many relation between JpaClientDetails and Role entities
+Represents many to many relation between JpaClientDetails and Role entities
 
 dbo_oauth_client_scope
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-element collection in JpaClientDetails
+Element collection in JpaClientDetails
