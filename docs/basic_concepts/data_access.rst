@@ -21,7 +21,7 @@ Relations in DB also implement by JPA standard.
 
 .. note::
 
-    embeddables have not got id, because they can not exist without entity
+    embeddables have not got id. Because they can not exist without entity
 
 LIST OF ALL TABLES AND DESCRIPTION
 ----------------------------------
