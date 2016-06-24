@@ -39,7 +39,8 @@ It class mapped on tables
     * dbo_oauth_client_redirect_uris
     * dbo_oauth_client_resources
     * dbo_oauth_client_roles_cross
-    * dbo_oauth_client_scope
+
+:download:`Tables diagram <../images/clientTables.png>`
 
 **Service** layer represent interface is
 `IvisClientDetailsService
@@ -63,11 +64,15 @@ class for persist access token.
 
 It class mapped on table *oauth_access_token*
 
+.. image:: /images/oauth_access_tokenDiagram.png
+
 `RefreshToken
 <https://github.com/imCodePartnerAB/iVIS/blob/fe37e74bf8af36c3908ffea80e65d6f7313c24be/ivis-core/src/main/java/com/imcode/entities/oauth2/RefreshToken.java>`_
 class for persist refresh token.
 
 It class mapped on table *oauth_refresh_token*
+
+.. image:: /images/oauth_refresh_tokenDiagram.png
 
 **Service and controller** represented by
 `JdbcTokenStore
