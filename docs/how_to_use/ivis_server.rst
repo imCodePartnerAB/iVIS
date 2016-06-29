@@ -113,7 +113,7 @@ Number of seconds after which the refresh token expires, and is no longer valid.
 
 .. note::
 
-    Recommendation: refresh token validity must be longer than access.
+    Refresh token validity must be longer than access.
 
 .. seealso::
 
