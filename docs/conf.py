@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'iVIS'
-copyright = u'2015, Dmitry Sikorsky'
-author = u'Dmitry Sikorsky'
+copyright = u'2016, ImCodePartnerAB'
+author = u'Dmitry Sikorsky, Ruslan Popenko'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
