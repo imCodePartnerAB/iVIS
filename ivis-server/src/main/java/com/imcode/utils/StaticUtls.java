@@ -47,7 +47,7 @@ public class StaticUtls {
     }
 
     public static boolean executeCmd(String command) {
-        String[] cmd = {"/bin/sh", "-c", command};
+        String[] cmd = {"/bin/bash", "-c", command};
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(cmd);
@@ -59,7 +59,7 @@ public class StaticUtls {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return process != null ? true : false;
+        return process.exitValue() == 0;
     }
 
 
