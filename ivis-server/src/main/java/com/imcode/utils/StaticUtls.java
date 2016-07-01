@@ -50,7 +50,7 @@ public class StaticUtls {
         String[] cmd = {"/bin/bash", "-c", command};
         Process process = null;
         try {
-            process = Runtime.getRuntime().exec(cmd);
+            process = new ProcessBuilder(cmd).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,7 +59,25 @@ public class StaticUtls {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         return process.exitValue() == 0;
+    }
+
+    public static Process executeCmdConfig(String command, String config) {
+        String[] cmd = {config, "-c", command};
+        Process process = null;
+        try {
+            process = new ProcessBuilder(cmd).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            process.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return process;
     }
 
 

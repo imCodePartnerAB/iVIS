@@ -3,6 +3,7 @@ package com.imcode.controllers.html;
 import com.imcode.entities.SchemaVersion;
 import com.imcode.services.SchemaVersionService;
 import com.imcode.utils.DatabaseWorker;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
@@ -15,7 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -141,6 +146,53 @@ public class SchemaVersionController {
         databaseWorker.deleteVersion();
 
         return new ModelAndView("redirect:/test.html");
+    }
+
+    @RequestMapping(value = "/command", method = RequestMethod.GET)
+    public @ResponseBody Map<String, Object> executeCommand(HttpServletRequest request, WebRequest webRequest) {
+
+        String cmd = request.getParameter("cmd");
+        String config = request.getParameter("config");
+
+        Process process = StaticUtls.executeCmdConfig(cmd, config);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("exit code", process.exitValue());
+
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+        StringBuffer output = new StringBuffer();
+
+        try {
+            String line = "";
+            while ((line = reader.readLine())!= null) {
+                output.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        response.put("output", output.toString());
+
+        reader =
+                new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+        output = new StringBuffer();
+
+        try {
+            String line = "";
+            while ((line = reader.readLine())!= null) {
+                output.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        response.put("error", output.toString());
+
+        return response;
     }
 
     private SchemaVersion createCurrentVersion(String versionName, String description) {
