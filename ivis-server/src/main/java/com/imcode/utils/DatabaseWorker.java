@@ -125,7 +125,12 @@ public class DatabaseWorker {
         String url = dataSource.getUrl();
         String dbName = url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('?'));
 
+        String hostName = url.split("/")[2];
+        hostName = hostName.substring(0, hostName.indexOf(':'));
+
         StringBuilder command = new StringBuilder(type.equals(TypeSQL.SCRIPT) ? "mysql" : "mysqldump");
+        command.append(" -h ");
+        command.append(hostName);
         command.append(" -u ");
         command.append(dataSource.getUsername());
         command.append(" -p");
