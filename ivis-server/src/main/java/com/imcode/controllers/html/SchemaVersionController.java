@@ -121,6 +121,19 @@ public class SchemaVersionController {
 //        return new ModelAndView("redirect:/");
     }
 
+    @RequestMapping(value = "/script/{version}", method = RequestMethod.GET)
+    public void getVersionScript(@PathVariable("version") String version,
+                               HttpServletResponse httpServletResponse,
+                               WebRequest webRequest) {
+        SchemaVersion schemaVersion = schemeVersionService.findVersion(version);
+
+        DatabaseWorker databaseWorker = new DatabaseWorker(dataSource, schemaVersion, servletContext);
+
+        databaseWorker.saveVersionScriptInResponse(httpServletResponse);
+
+//        return new ModelAndView("redirect:/");
+    }
+
     @RequestMapping(value = "/dump", method = RequestMethod.GET)
     public void getVersionDump(HttpServletResponse httpServletResponse,
                                        WebRequest webRequest) {

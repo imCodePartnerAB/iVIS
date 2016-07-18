@@ -7,6 +7,7 @@ import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
+import com.imcode.utils.StaticUtls;
 import com.imcode.validators.UserValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +114,8 @@ public class UserController {
             return model;
         }
 
+        StaticUtls.encodeUserPassword(user);
+
         userService.save(user);
 
         model.setViewName("redirect:/users");
@@ -169,6 +172,9 @@ public class UserController {
             String[] fieldExceptions = user.getPassword().isEmpty() ? new String[]{"id", "password", "confirmPassword"} : new String[]{"id"};
 
             BeanUtils.copyProperties(user, persistUser, fieldExceptions);
+
+            StaticUtls.encodeUserPassword(persistUser);
+
             userService.save(persistUser);
             model.setViewName("redirect:/users");
 

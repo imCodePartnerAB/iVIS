@@ -111,6 +111,33 @@ public class DatabaseWorker {
 
     }
 
+    public void saveVersionScriptInResponse(HttpServletResponse httpServletResponse) {
+        String fileName = genFileNametOf(schemaVersion, TypeSQL.SCRIPT);
+
+        File initialFile = new File(fileName);
+
+        httpServletResponse.setContentType("application/force-download");
+        httpServletResponse.setContentLength((int) initialFile.length());
+        httpServletResponse.setHeader("Content-Transfer-Encoding", "binary");
+        httpServletResponse.setHeader("Content-Disposition","attachment; filename=\"" + initialFile.getName() + "\"");
+
+        InputStream targetStream = null;
+
+        try {
+            targetStream = new BufferedInputStream(new FileInputStream(initialFile));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            FileCopyUtils.copy(targetStream, httpServletResponse.getOutputStream());
+            httpServletResponse.flushBuffer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void deleteVersion() {
         String fileName = genFileNametOf(schemaVersion, TypeSQL.SCRIPT);
         String path = fileName.substring(0, fileName.lastIndexOf('/'));

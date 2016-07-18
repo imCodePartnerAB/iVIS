@@ -169,6 +169,8 @@
               <authentication-provider user-service-ref="clientDetailsUserService" />
        </authentication-manager>
 
+       <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
        <authentication-manager alias="authenticationManager"
                                xmlns="http://www.springframework.org/schema/security">
               <authentication-provider user-service-ref="userServiceRepoImpl">
@@ -177,6 +179,7 @@
                      <!--&lt;!&ndash;<user name="admin" password="pass" authorities="ROLE_USER" />&ndash;&gt;-->
                      <!--&lt;!&ndash;<user name="user1" password="1111" authorities="ROLE_USER" />&ndash;&gt;-->
                      <!--&lt;!&ndash;</user-service>&ndash;&gt;-->
+                     <password-encoder ref="encoder"/>
               </authentication-provider>
        </authentication-manager>
 

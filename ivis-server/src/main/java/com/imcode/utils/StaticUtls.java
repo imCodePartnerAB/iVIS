@@ -5,6 +5,7 @@ import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.*;
@@ -78,6 +79,14 @@ public class StaticUtls {
         }
 
         return process;
+    }
+
+    public static void encodeUserPassword(User user) {
+        String password = user.getPassword();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePassword = encoder.encode(password);
+        user.setPassword(encodePassword);
+        user.setConfirmPassword(encodePassword);
     }
 
 
