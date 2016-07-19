@@ -15,16 +15,16 @@ import javax.persistence.Entity;
 @Table(name = "dbo_truancy")
 public class Truancy extends AbstractIdEntity<Long> implements Serializable {
     @ManyToOne
-    @JoinColumn(name = "pupilId")
+    @JoinColumn(name = "pupil_id")
     private Pupil pupil;
 
     @Temporal(TemporalType.DATE)
-    @Column
+    @Column(name = "start_date")
     @JsonProperty("start_date")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
-    @Column
+    @Column(name = "end_date")
     @JsonProperty("end_date")
     private Date endDate;
 

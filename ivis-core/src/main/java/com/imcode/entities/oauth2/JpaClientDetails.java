@@ -41,25 +41,25 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ownerId")
+    @JoinColumn(name = "owner_id")
     @org.codehaus.jackson.annotate.JsonProperty("client_owner")
     @com.fasterxml.jackson.annotation.JsonProperty("client_owner")
     private User owner;
 
-    @Column
+    @Column(name = "client_secret")
     @org.codehaus.jackson.annotate.JsonProperty("client_secret")
     @com.fasterxml.jackson.annotation.JsonProperty("client_secret")
     private String clientSecret;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "dbo_oauth_client_scope", joinColumns = @JoinColumn(name = "clientId"))
+    @CollectionTable(name = "dbo_oauth_client_scope", joinColumns = @JoinColumn(name = "client_id"))
     @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private Set<String> scope = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "dbo_oauth_client_resources",joinColumns = @JoinColumn(name = "clientId"))
-    @Column(name = "resourceId")
+    @CollectionTable(name = "dbo_oauth_client_resources",joinColumns = @JoinColumn(name = "client_id"))
+    @Column(name = "resource_id")
     @org.codehaus.jackson.annotate.JsonProperty("resource_ids")
     @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
     @com.fasterxml.jackson.annotation.JsonProperty("resource_ids")
@@ -67,8 +67,8 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     private Set<String> resourceIds = Collections.emptySet();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "dbo_oauth_client_garant_types",joinColumns = @JoinColumn(name = "clientId"))
-    @Column(name = "authorizedGrantType")
+    @CollectionTable(name = "dbo_oauth_client_grant_types",joinColumns = @JoinColumn(name = "client_id"))
+    @Column(name = "authorized_grant_type")
     @org.codehaus.jackson.annotate.JsonProperty("authorized_grant_types")
     @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
     @com.fasterxml.jackson.annotation.JsonProperty("authorized_grant_types")
@@ -76,7 +76,8 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     private Set<String> authorizedGrantTypes = Collections.emptySet();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "dbo_oauth_client_redirect_uris",joinColumns = @JoinColumn(name = "clientId"))
+    @CollectionTable(name = "dbo_oauth_client_redirect_uris",joinColumns = @JoinColumn(name = "client_id"))
+    @Column(name = "registered_redirect_uris")
     @org.codehaus.jackson.annotate.JsonProperty("redirect_uri")
     @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
     @com.fasterxml.jackson.annotation.JsonProperty("redirect_uri")
@@ -92,16 +93,16 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, targetEntity = ClientRole.class)
     @JoinTable(name = "dbo_oauth_client_roles_cross",
-            joinColumns = @JoinColumn(name = "clientId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<ClientRole> authorities;
 
-    @Column
+    @Column(name = "access_token_validity_seconds")
     @org.codehaus.jackson.annotate.JsonProperty("access_token_validity")
     @com.fasterxml.jackson.annotation.JsonProperty("access_token_validity")
     private Integer accessTokenValiditySeconds;
 
-    @Column
+    @Column(name = "refresh_token_validity_seconds")
     @org.codehaus.jackson.annotate.JsonProperty("refresh_token_validity")
     @com.fasterxml.jackson.annotation.JsonProperty("refresh_token_validity")
     private Integer refreshTokenValiditySeconds;
@@ -109,7 +110,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
     @MapKeyColumn(name = "name", length = 100)
     @Column(name = "value")
-    @CollectionTable(name = "dbo_oauth_client_additional_info",joinColumns = @JoinColumn(name = "clientId"))
+    @CollectionTable(name = "dbo_oauth_client_additional_info",joinColumns = @JoinColumn(name = "client_id"))
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
     private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();

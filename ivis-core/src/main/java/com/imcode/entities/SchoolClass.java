@@ -19,25 +19,25 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
-    @Column
+    @Column(name = "school_day_start")
     @JsonProperty("school_day_start")
     private Date schoolDayStart;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
-    @Column
+    @Column(name = "school_day_end")
     @JsonProperty("school_day_end")
     private Date schoolDayEnd;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinColumn(name = "school")
+    @JoinColumn(name = "school_id")
     private School school;
 
     @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
     private Set<Pupil> pupils;
 
     @ElementCollection
-    @CollectionTable(name = "dbo_school_class_diaries", joinColumns = @JoinColumn(name = "ownerId"))
+    @CollectionTable(name = "dbo_school_class_diaries", joinColumns = @JoinColumn(name = "owner_id"))
     @OrderBy("dayOfWeek")
     private Set<Diary> diaries;
 

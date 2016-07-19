@@ -29,11 +29,11 @@ public class EntityVersion extends AbstractIdEntity<Long> {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
-    @Column(nullable = false)
+    @Column(name = "entity_class", nullable = false)
     @JsonProperty("entity_class")
     private Class<?> entityClass;
 
-    @Column(nullable = false)
+    @Column(name = "entity_id", nullable = false)
     @JsonProperty("entity_id")
     private Long entityId;
 

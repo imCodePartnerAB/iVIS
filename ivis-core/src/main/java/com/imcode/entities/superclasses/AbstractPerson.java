@@ -19,15 +19,15 @@ import java.util.Objects;
 //@Table(name = "dbo_person")
 @MappedSuperclass
 public abstract class AbstractPerson extends AbstractIdEntity<Long> implements Serializable, JpaPersonalizedEntity, JpaContactedPerson {
-    @Column
+    @Column(name = "personal_id")
     @JsonProperty("personal_id")
     private String personalId;
 
-    @Column
+    @Column(name = "first_name")
     @JsonProperty("first_name")
     private String firstName;
 
-    @Column
+    @Column(name = "last_name")
     @JsonProperty("last_name")
     private String lastName;
 

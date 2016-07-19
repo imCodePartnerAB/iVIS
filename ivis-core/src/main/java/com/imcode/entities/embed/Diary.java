@@ -23,17 +23,17 @@ public class Diary {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true)
+    @Column(name = "day_of_week", unique = true)
     private DayOfWeek dayOfWeek;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
-    @Column
+    @Column(name = "start_time")
     private Date startTime;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
     @Temporal(TemporalType.TIME)
-    @Column
+    @Column(name = "end_time")
     private Date endTime;
 
     public DayOfWeek getDayOfWeek() {

@@ -14,16 +14,17 @@ import javax.persistence.*;
 @Embeddable
 public class AfterSchoolCenterSchema implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "afrerSchoolSectionId")
+    @JoinColumn(name = "after_school_section_id")
     private AfterSchoolCenterSection afrerSchoolSection;
 
+    @Column(name = "day_of_week")
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
-    @Column
+    @Column(name = "use_before_school")
     private Boolean useBeforeSchool = false;
 
-    @Column
+    @Column(name = "use_after_school")
     private Boolean useAfterSchool = false;
 
 

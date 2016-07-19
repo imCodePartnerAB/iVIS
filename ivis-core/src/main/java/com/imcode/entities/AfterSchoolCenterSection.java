@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Table(name = "dbo_after_school_center_section")
 public class AfterSchoolCenterSection extends AbstractNamedEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "schoolId")
+    @JoinColumn(name = "school_id")
     private School school;
 
     public AfterSchoolCenterSection() {

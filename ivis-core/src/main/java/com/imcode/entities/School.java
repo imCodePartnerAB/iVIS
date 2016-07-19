@@ -14,13 +14,13 @@ import java.util.Set;
 @Entity
 @Table(name = "dbo_school")
 public class School extends AbstractNamedEntity<Long> implements Serializable {
-    @Column
+    @Column(name = "school_id")
     @JsonProperty("school_id")
     private String schoolId;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
-    @JoinTable(name = "dbo_school_service_cross")
+    @JoinTable(name = "dbo_school_service_cross", joinColumns = @JoinColumn(name = "school_id"))
     private Set<ServiceTypeEnum> services;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "school", cascade = {CascadeType.REFRESH})

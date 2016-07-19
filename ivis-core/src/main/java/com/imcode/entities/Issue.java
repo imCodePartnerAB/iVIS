@@ -34,20 +34,20 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "statusId")
+    @JoinColumn(name = "status_id")
     @NotNull(message = "status can not be null")
     private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "personId")
+    @JoinColumn(name = "person_id")
     @JsonProperty("responsible_person")
     @NotNull(message = "responsible person can not be null")
     private Person responsiblePerson;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_issues_authorized_persons_cross",
-            joinColumns = @JoinColumn(name = "issueId"),
-            inverseJoinColumns = @JoinColumn(name = "personId"))
+            joinColumns = @JoinColumn(name = "issue_id"),
+            inverseJoinColumns = @JoinColumn(name = "person_id"))
     @JsonProperty("authorized_persons")
     @Size(min = 1, message = "authorized persons can not be null")
     private Set<Person> authorizedPersons = new HashSet<>();
@@ -83,18 +83,18 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_issue_category_cross",
-            joinColumns = @JoinColumn(name = "issueId"),
-            inverseJoinColumns = @JoinColumn(name = "categoryId"))
+            joinColumns = @JoinColumn(name = "issue_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "priorityId")
+    @JoinColumn(name = "priority_id")
     private Priority priority;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_issue_pupil_cross",
-            joinColumns = @JoinColumn(name = "issueId"),
-            inverseJoinColumns = @JoinColumn(name = "pupilId"))
+            joinColumns = @JoinColumn(name = "issue_id"),
+            inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     private Set<Pupil> pupils = new HashSet<>();
 
     public String getTitle() {

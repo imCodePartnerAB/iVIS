@@ -30,43 +30,43 @@ import javax.persistence.Entity;
 @Table(name = "dbo_pupil")
 public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPersonalizedEntity {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "personId")
+    @JoinColumn(name = "person_id")
     private Person person = new Person();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "contactPersonId")
+    @JoinColumn(name = "contact_person_id")
     @JsonProperty("contact_person")
     private Person contactPerson;
 
     @Temporal(TemporalType.DATE)
-    @Column
+    @Column(name = "class_placement_from")
     @JsonProperty("class_placement_from")
     private Date classPlacementFrom;
 
     @Temporal(TemporalType.DATE)
-    @Column
+    @Column(name = "class_placement_to")
     @JsonProperty("class_placement_to")
     private Date classPlacementTo;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "schoolClassId")
+    @JoinColumn(name = "school_class_id")
     @JsonProperty("school_class")
     private SchoolClass schoolClass;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "schoolId")
+    @JoinColumn(name = "school_id")
     private School school;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "academicYearId")
+    @JoinColumn(name = "academic_year_id")
     @JsonProperty("academic_year")
     private AcademicYear academicYear;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_pupil_guardians_cross",
-            joinColumns = @JoinColumn(name = "pupilId"),
-            inverseJoinColumns = @JoinColumn(name = "guardianId"))
+            joinColumns = @JoinColumn(name = "pupil_id"),
+            inverseJoinColumns = @JoinColumn(name = "guardian_id"))
     @JsonSerialize(using = GuardiansSetSerializer.class)
     private Set<Guardian> guardians = new HashSet<>();
 
@@ -74,14 +74,14 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
     private Set<Truancy> truancies = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "afterSchoolCenterSectionId")
+    @JoinColumn(name = "after_school_center_section_id")
     @JsonProperty("after_school_center_section")
     private AfterSchoolCenterSection afterSchoolCenterSection;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_pupil_after_school_center_schema",
-            joinColumns = @JoinColumn(name = "ownerId"), uniqueConstraints = @UniqueConstraint(columnNames = {"ownerId", "afrerSchoolSectionId", "dayOfWeek"}))
+            joinColumns = @JoinColumn(name = "owner_id"), uniqueConstraints = @UniqueConstraint(columnNames = {"owner_id", "after_school_section_id", "day_of_week"}))
     @JsonProperty("school_center_schema")
     private List<AfterSchoolCenterSchema> schoolCenterSchema = new ArrayList<>();
 

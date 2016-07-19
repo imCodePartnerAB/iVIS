@@ -14,10 +14,10 @@ import java.io.Serializable;
 //@Table(name = "dbo_address")
 @Embeddable
 public class Address extends ContactInformation<AddressTypeEnum> implements Serializable {
-    @Column
+    @Column(name = "postal_code")
     private Integer postalCode;
 
-    @Column
+    @Column(name = "municipality_code")
     private String municipalityCode;
 
     @Column(length = 50)
@@ -32,7 +32,7 @@ public class Address extends ContactInformation<AddressTypeEnum> implements Seri
 //    @Column
 //    private String propertyDescription;
 
-    @Column
+    @Column(name = "care_of")
     private String careOf;
 
 //    @Column

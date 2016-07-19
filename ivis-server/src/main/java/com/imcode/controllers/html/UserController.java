@@ -67,6 +67,7 @@ public class UserController {
         }
 
         model.setViewName("users/edit");
+        user.setPassword("");
         model.addObject(user);
         model.addObject(roleService.findAll());
 

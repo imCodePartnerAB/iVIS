@@ -23,7 +23,7 @@ public class ApplicationFormQuestionGroup extends AbstractSortableNamedEntity<Lo
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "questionGroup")
     private List<ApplicationFormQuestion> questions = new ArrayList<>();
 
-    @Column
+    @Column(name = "question_type")
     @JsonProperty("question_type")
     private String questionType;
 

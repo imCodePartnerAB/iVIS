@@ -100,7 +100,7 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
     @Column
     private String value;
 
-    @Column
+    @Column(name = "multi_values")
     @JsonProperty("multi_values")
     private Boolean multiValues = Boolean.FALSE;
 
@@ -111,18 +111,19 @@ public class ApplicationFormQuestion extends AbstractSortableNamedEntity<Long> i
 //    @Column(nullable = false)
 //    private Class<? extends Serializable> valueType = String.class;
 
-    @Column(nullable = false)
+    @Column(name = "multi_variants", nullable = false)
     @JsonProperty("multi_variants")
     private Boolean multiVariants = Boolean.FALSE;
 
     @Convert(converter = ListToStringConverter.class)
     private List<String> variants = new ArrayList<>();
 
-    @Column
+    @Column(name = "question_type")
     @JsonProperty("question_type")
     private String questionType;
 
     @ManyToOne
+    @JoinColumn(name = "question_group_id")
     @JsonProperty("question_group")
     private ApplicationFormQuestionGroup questionGroup;
 

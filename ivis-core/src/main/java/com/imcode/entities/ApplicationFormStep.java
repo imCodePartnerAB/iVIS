@@ -25,6 +25,7 @@ public class ApplicationFormStep extends AbstractSortableNamedEntity<Long> {
     private List<ApplicationFormQuestionGroup> questionGroups = new ArrayList<>();
 
     @ManyToOne
+    @JoinColumn(name = "application_form_id")
     @JsonProperty("application_form")
     private ApplicationForm applicationForm;
 

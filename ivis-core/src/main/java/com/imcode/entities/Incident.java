@@ -38,29 +38,29 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_incident_category_cross",
-            joinColumns = @JoinColumn(name = "incidentId"),
-            inverseJoinColumns = @JoinColumn(name = "categoryId"))
+            joinColumns = @JoinColumn(name = "incident_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     @Size(min = 1, message = "categories can not be null")
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_incident_pupil_cross",
-            joinColumns = @JoinColumn(name = "incidentId"),
-            inverseJoinColumns = @JoinColumn(name = "pupilId"))
+            joinColumns = @JoinColumn(name = "incident_id"),
+            inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     @Size(min = 1, message = "pupils can not be null")
     private Set<Pupil> pupils = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "statusId")
+    @JoinColumn(name = "status_id")
     private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "priorityId")
+    @JoinColumn(name = "priority_id")
     @NotNull(message = "priority can not be null")
     private Priority priority;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "issueId")
+    @JoinColumn(name = "issue_id")
     private Issue issue;
 
     @Column(name = "assigned_day")

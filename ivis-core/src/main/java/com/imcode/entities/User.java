@@ -36,16 +36,16 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     private Boolean enabled = true;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "personId")
+    @JoinColumn(name = "person_id")
     private Person person;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_user_roles_cross",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "roleId"))
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @Column
+    @Column(name = "saml2_id")
     private String saml2Id;
 
     public User() {

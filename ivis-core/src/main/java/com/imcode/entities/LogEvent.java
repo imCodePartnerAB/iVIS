@@ -25,11 +25,11 @@ public class LogEvent extends AbstractIdEntity<Long> {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
-    @Column(nullable = false)
+    @Column(name = "entity_class_name", nullable = false)
     @JsonProperty("entity_class_name")
     private String entityClassName;
 
-    @Column(nullable = false)
+    @Column(name = "entity_id", nullable = false)
     @JsonProperty("entity_id")
     private Long entityId;
 
@@ -37,20 +37,20 @@ public class LogEvent extends AbstractIdEntity<Long> {
     @Enumerated(EnumType.STRING)
     private Action action;
 
-    @Column
+    @Column(name = "field_name")
     @JsonProperty("field_name")
     private String fieldName;
 
-    @Column
+    @Column(name = "previous_value")
     @JsonProperty("previous_value")
     private String previousValue;
 
-    @Column
+    @Column(name = "new_value")
     @JsonProperty("new_value")
     private String newValue;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
 //    @Column

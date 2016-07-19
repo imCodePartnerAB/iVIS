@@ -27,23 +27,23 @@ public class Person extends AbstractPerson implements Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
-    @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "ownerId"))
+    @CollectionTable(name = "dbo_person_address", joinColumns = @JoinColumn(name = "owner_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "typeKey", length = 50)
+    @MapKeyColumn(name = "type_key", length = 50)
     private Map<AddressTypeEnum, Address> addresses = new EnumMap<>(AddressTypeEnum.class);
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
-    @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "ownerId"))
+    @CollectionTable(name = "dbo_person_email", joinColumns = @JoinColumn(name = "owner_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "typeKey", length = 50)
+    @MapKeyColumn(name = "type_key", length = 50)
     private Map<CommunicationTypeEnum, Email> emails = new EnumMap<>(CommunicationTypeEnum.class);
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
-    @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "ownerId"))
+    @CollectionTable(name = "dbo_person_phone", joinColumns = @JoinColumn(name = "owner_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "typeKey", length = 50)
+    @MapKeyColumn(name = "type_key", length = 50)
     private Map<CommunicationTypeEnum, Phone> phones = new EnumMap<>(CommunicationTypeEnum.class);
 
     public Person() {

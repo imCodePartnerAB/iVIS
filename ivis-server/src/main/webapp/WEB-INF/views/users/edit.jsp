@@ -28,7 +28,7 @@
             <form:label path="password">
                 Password*
             </form:label>
-            <form:input path="password" id="password" cssErrorClass="error" value="encrypt"/>
+            <form:input path="password" id="password" cssErrorClass="error"/>
             <form:errors path="password" cssClass="error-description"/>
         </div>
         <%--<div class="field">--%>

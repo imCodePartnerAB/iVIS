@@ -26,36 +26,36 @@ import java.util.Set;
 public class ContactPerson extends AbstractPerson implements Serializable, JpaPersonalizedEntity {
     public static final String TABLE_SUFFIX = "contact_person";
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "personId")
+    @JoinColumn(name = "person_id")
 //    @Transient
     private Person person;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_pupil_guardians_cross",
-            joinColumns = @JoinColumn(name = "guardianId"),
-            inverseJoinColumns = @JoinColumn(name = "pupilId"))
+            joinColumns = @JoinColumn(name = "guardian_id"),
+            inverseJoinColumns = @JoinColumn(name = "pupil_id"))
     private Set<Pupil> pupils;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
-    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_address", joinColumns = @JoinColumn(name = "ownerId"))
+    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_address", joinColumns = @JoinColumn(name = "owner_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "typeKey", length = 50)
+    @MapKeyColumn(name = "type_key", length = 50)
     private Map<AddressTypeEnum, Address> addresses = new EnumMap<>(AddressTypeEnum.class);
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
-    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_email", joinColumns = @JoinColumn(name = "ownerId"))
+    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_email", joinColumns = @JoinColumn(name = "owner_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "typeKey", length = 50)
+    @MapKeyColumn(name = "type_key", length = 50)
     private Map<CommunicationTypeEnum, Email> emails = new EnumMap<>(CommunicationTypeEnum.class);
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
-    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_phone", joinColumns = @JoinColumn(name = "ownerId"))
+    @CollectionTable(name = "dbo_" + TABLE_SUFFIX + "_phone", joinColumns = @JoinColumn(name = "owner_id"))
     @MapKeyEnumerated(EnumType.STRING)
-    @MapKeyColumn(name = "typeKey", length = 50)
+    @MapKeyColumn(name = "type_key", length = 50)
     private Map<CommunicationTypeEnum, Phone> phones = new EnumMap<>(CommunicationTypeEnum.class);
 
 

@@ -24,15 +24,16 @@ public class JpaAccessToken implements Serializable, OAuth2AccessToken {
     @Column
     private Date expiration;
 
-    @Column
+    @Column(name = "token_type")
     private String tokenType = BEARER_TYPE.toLowerCase();
 
     @Basic()
+    @Column(name = "refresh_token")
     private JpaRefreshToken refreshToken;
 //    private OAuth2RefreshToken refreshToken;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "dbo_oauth_token_scope", joinColumns = @JoinColumn(name = "tokenId"))
+    @CollectionTable(name = "dbo_oauth_token_scope", joinColumns = @JoinColumn(name = "token_id"))
     private Set<String> scope;
 
     @Transient

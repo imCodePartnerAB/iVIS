@@ -28,7 +28,7 @@ import javax.persistence.Table;
 @Table(name = "dbo_guardian")
 public class Guardian extends AbstractIdEntity<Long> implements Serializable, JpaPersonalizedEntity {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "personId")
+    @JoinColumn(name = "person_id")
     private Person person = new Person();
 
     @LazyCollection(LazyCollectionOption.FALSE)

@@ -19,12 +19,12 @@ public class Activity extends AbstractIdEntity<Long> implements Serializable {
     @Column
     private String description;
 
-    @Column
+    @Column(name = "file_name")
     @JsonProperty("file_name")
     private String fileName;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "issueId")
+    @JoinColumn(name = "issue_id")
     private Issue issue;
 
     @Column(name = "report_day")

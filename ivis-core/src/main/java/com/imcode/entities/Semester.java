@@ -15,17 +15,17 @@ import javax.persistence.Entity;
 @Table(name = "dbo_semester")
 public class Semester extends AbstractNamedEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "academicYearId")
+    @JoinColumn(name = "academic_year_id")
     @JsonProperty("academic_year")
     private AcademicYear academicYear;
 
     @Temporal(TemporalType.DATE)
-    @Column
+    @Column(name = "start_date")
     @JsonProperty("start_date")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
-    @Column
+    @Column(name = "end_date")
     @JsonProperty("end_date")
     private Date endDate;
 
