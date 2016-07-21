@@ -52,9 +52,6 @@
         <form:checkboxes path="scope" items="${scopeList}" cssErrorClass="error" cssClass="check-box" />
         <form:errors path="scope" cssClass="error-description"/>
     </div>
-    <div class="validation-error-authorized">
-        Please choose one variant of Authorized Grant Types*
-    </div>
     <div class="field">
         <form:label path="authorizedGrantTypes">
             Authorized Grant Types*
@@ -71,9 +68,6 @@
     <form:input path="registeredRedirectUri" cssErrorClass="error"/>
         <form:errors path="registeredRedirectUri" cssClass="error-description"/>
     </div>
-    <div class="validation-error-roles">
-        Please choose one variant of Roles*
-    </div>
     <div class="checkbox">
         <form:label path="roles">
             Roles*
@@ -82,10 +76,6 @@
                          cssClass="check-box" itemValue="id" />
         <form:errors path="roles" cssClass="error-description"/>
     </div>
-
-    <div class="validation-error-access-token">
-        Must be natural number
-    </div>
     <div class="field">
     <form:label path="accessTokenValiditySeconds">
     Access Token Validity(sec)*
@@ -93,10 +83,6 @@
     <form:input path="accessTokenValiditySeconds" id="accessTokenValiditySeconds"/>
     <div>
     <form:errors path="accessTokenValiditySeconds" cssClass="error"/>
-    </div>
-
-    <div class="validation-error-refresh-token">
-        Must be natural number
     </div>
     <div class="field">
     <form:label path="refreshTokenValiditySeconds">
@@ -108,7 +94,7 @@
     </div>
 
     <div class="buttons">
-        <button class="positive" type="submit" onclick="return validate();">Save</button>
+        <button class="positive" type="submit">Save</button>
         <a class="button neutral" href="${backUrl}">Back</a>
     </div>
 </form:form>

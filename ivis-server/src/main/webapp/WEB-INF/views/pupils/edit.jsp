@@ -25,7 +25,7 @@
         <%--Logg--%>
     <%--</div>--%>
 <%--</div>--%>
-<form:form modelAttribute="entity" id="entityUpdateForm" method="post">
+<form:form modelAttribute="entity" id="pupilUpdateForm" method="post">
     <div id="entity.pupil.personField">
     <c:set var="personPath" value="person"/>
     <c:set var="person" value="${entity.person}"/>

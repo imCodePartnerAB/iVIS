@@ -184,28 +184,9 @@ input, button {
   font: normal 15px 'Open Sans', sans-serif;
 }
 
-.validation-error-authorized {
+.error {
   color: red;
-  font-size: 12px;
-  display: none;
-}
-
-.validation-error-roles {
-  color: red;
-  font-size: 12px;
-  display: none;
-}
-
-.validation-error-access-token {
-  color: red;
-  font-size: 12px;
-  display: none;
-}
-
-.validation-error-refresh-token {
-  color: red;
-  font-size: 12px;
-  display: none;
+  font-size: 14px;
 }
 
 .field {

@@ -7,7 +7,7 @@
 <spring:url value="${mainPath}" var="mainUrl"/>
 <spring:url value="${mainPath}" var="backUrl"/>
 <h1>Edit School</h1>
-<form:form modelAttribute="entity" id="entityUpdateForm" method="post">
+<form:form modelAttribute="entity" id="schoolUpdateForm" method="post">
     <%--<c:if test="${not empty message}">--%>
     <%--<div id="message" class="${message.type}">${message.message}</div>--%>
     <%--</c:if>--%>
