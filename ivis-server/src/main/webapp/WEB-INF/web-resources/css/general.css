@@ -341,6 +341,12 @@ input, button {
   width: 372px;
 }
 
+.registration-form{
+  margin: 0 auto 0;
+  padding-top: 0;
+  width: 372px;
+}
+
 .login-pop-up-form {
   margin: 0 auto 0;
   padding-top: 20px;

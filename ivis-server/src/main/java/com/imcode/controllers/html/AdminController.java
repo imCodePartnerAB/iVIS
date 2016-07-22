@@ -15,7 +15,13 @@
  */
 package com.imcode.controllers.html;
 
+import com.imcode.entities.Person;
+import com.imcode.entities.User;
+import com.imcode.entities.embed.Email;
+import com.imcode.entities.embed.Phone;
 import com.imcode.oauth2.IvisClientDetailsService;
+import com.imcode.services.PersonService;
+import com.imcode.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -38,6 +44,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Collection;
@@ -63,6 +70,12 @@ public class AdminController {
 
 	@Value("${Hibernate.dialect}")
 	private String test;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private PersonService personService;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
 //
@@ -157,6 +170,47 @@ public class AdminController {
 		} else {
 			model.setViewName("security/login");
 		}
+
+		return model;
+	}
+
+	@RequestMapping("/registration")
+	public ModelAndView registration(WebRequest webRequest, ModelAndView model) {
+		User user = new User();
+		model.addObject(user);
+		model.setViewName("security/registration");
+		return model;
+	}
+
+	@RequestMapping("/registration/do")
+	public ModelAndView registrationNotConfirmed(@ModelAttribute("user") User user,
+												 @RequestParam("firstName") String firstName,
+												 @RequestParam("lastName") String lastName,
+												 @RequestParam("email") String email,
+												 @RequestParam("contactPhone") String contactPhone,
+												 WebRequest webRequest, ModelAndView model) {
+
+		user.setVerified(false);
+		Person person = new Person();
+
+
+		person.setFirstName(firstName);
+		person.setLastName(lastName);
+
+		Email emailForPersist = new Email();
+		emailForPersist.setValue(email);
+		person.setEmail(emailForPersist);
+
+		Phone phone = new Phone();
+		phone.setValue(contactPhone);
+		person.setPhone(phone);
+
+		user.setPerson(person);
+
+		personService.save(person);
+		userService.save(user);
+
+		model.setViewName("security/login");
 
 		return model;
 	}

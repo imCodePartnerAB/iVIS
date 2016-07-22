@@ -33,7 +33,7 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     private String confirmPassword = DEFAULT_PASSWORD;
 
     @Column
-    private Boolean enabled = true;
+    private Boolean enabled = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
@@ -47,6 +47,21 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     @Column(name = "saml2_id")
     private String saml2Id;
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+    @Column
+    private Boolean verified = false;
 
     public User() {
     }

@@ -71,6 +71,12 @@
     <definition name="security/login_popup" extends="simple">
         <put-attribute name="content" value="/WEB-INF/views/security/loginPopup.jsp"/>
     </definition>
+    <definition name="security/registration" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/views/security/registration.jsp"/>
+    </definition>
+    <definition name="security/restore_password" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/views/security/restore_password.jsp"/>
+    </definition>
     <!--Admin/Oauth2-->
     <definition name="access_confirmation" extends="simple">
         <put-attribute name="content" value="/WEB-INF/views/security/oauth2/accessConfirmation.jsp"/>
