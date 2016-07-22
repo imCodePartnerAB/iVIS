@@ -210,7 +210,7 @@ public class AdminController {
 		personService.save(person);
 		userService.save(user);
 
-		model.setViewName("security/login");
+		model.setViewName("redirect:/login");
 
 		return model;
 	}
