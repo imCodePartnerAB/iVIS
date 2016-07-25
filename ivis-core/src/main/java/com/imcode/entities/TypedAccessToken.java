@@ -10,18 +10,35 @@ import java.util.Date;
 /**
  * Created by ruslan on 25.07.16.
  */
-public abstract class AbstractToken extends AbstractIdEntity<Long> implements Serializable {
+public abstract class TypedAccessToken extends AbstractIdEntity<Long> implements Serializable {
 
     @Column
-    protected String token;
+    private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
-    protected User user;
+    private User user;
 
     @Column(name = "expiry_day")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date expiryDate;
+    private Date expiryDate;
+
+    @Column(name = "token_type")
+    @Enumerated(EnumType.STRING)
+    private TokenType tokenType;
+
+    public enum TokenType {
+        VERIFICATION("Verification token"), PASSWORD_RESET("Password reset token");
+        private final String description;
+
+        TokenType(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
 
     public String getToken() {
         return token;
@@ -47,4 +64,11 @@ public abstract class AbstractToken extends AbstractIdEntity<Long> implements Se
         this.expiryDate = expiryDate;
     }
 
+    public TokenType getTokenType() {
+        return tokenType;
+    }
+
+    public void setTokenType(TokenType tokenType) {
+        this.tokenType = tokenType;
+    }
 }

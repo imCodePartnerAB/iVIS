@@ -1,6 +1,6 @@
 package com.imcode.utils;
 
-import com.imcode.entities.AbstractToken;
+import com.imcode.entities.TypedAccessToken;
 import com.imcode.entities.User;
 import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -93,7 +93,7 @@ public class StaticUtls {
         user.setConfirmPassword(encodePassword);
     }
 
-    public static void genToken(AbstractToken token, User user, int expiration) {
+    public static void genToken(TypedAccessToken token, User user, int expiration) {
         token.setToken(UUID.randomUUID().toString());
         token.setUser(user);
         token.setExpiryDate(calculateExpiryDate(expiration));

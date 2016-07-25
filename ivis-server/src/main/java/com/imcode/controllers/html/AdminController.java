@@ -22,6 +22,7 @@ import com.imcode.entities.embed.Phone;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.PersonService;
 import com.imcode.services.UserService;
+import com.imcode.services.VerificationTokenService;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,9 @@ public class AdminController {
 
 	@Autowired
 	private JavaMailSender mailSender;
+
+	@Autowired
+	private VerificationTokenService verificationTokenService;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
 //
