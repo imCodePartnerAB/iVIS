@@ -1,4 +1,4 @@
-package com.imcode;
+package com.imcode.entities;
 
 import com.imcode.entities.User;
 import com.imcode.entities.superclasses.AbstractIdEntity;

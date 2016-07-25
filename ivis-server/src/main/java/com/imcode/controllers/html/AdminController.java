@@ -185,16 +185,6 @@ public class AdminController {
 		User user = new User();
 		model.addObject(user);
 		model.setViewName("security/registration");
-
-		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
-
-		String to = "ruslanpopenko@ukr.net";
-		String subject = "Tested mail subject";
-		String text = "teested mail text!!!!";
-
-		mailSenderUtil.createMessage(to, subject, text);
-		mailSenderUtil.sendMessage();
-
 		return model;
 	}
 
@@ -225,6 +215,15 @@ public class AdminController {
 
 		personService.save(person);
 		userService.save(user);
+
+		String to = email;
+		String subject = "Registration confirmation in iVIS";
+		String text = "Thank you, " + user.getUsername() + " for registration in iVIS."
+				+ " Please follow link to confirm registration: " ;
+
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		mailSenderUtil.createMessage(to, subject, text);
+		mailSenderUtil.sendMessage();
 
 		model.setViewName("redirect:/login");
 

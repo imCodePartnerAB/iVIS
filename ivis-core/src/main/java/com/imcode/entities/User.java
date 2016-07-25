@@ -49,10 +49,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column(name = "saml2_id")
     private String saml2Id;
 
-    @Column(name = "registration_access_token")
-    @Lob
-    private OAuth2AccessToken registrationAccessToken;
-
     @Column
     private Boolean verified = false;
 
@@ -215,11 +211,5 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         System.out.println(roles.contains(roleAdmin));
     }
 
-    public OAuth2AccessToken getRegistrationAccessToken() {
-        return registrationAccessToken;
-    }
 
-    public void setRegistrationAccessToken(OAuth2AccessToken registrationAccessToken) {
-        this.registrationAccessToken = registrationAccessToken;
-    }
 }

@@ -1,7 +1,5 @@
 package com.imcode.entities;
 
-import com.imcode.AbstractToken;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
