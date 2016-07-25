@@ -16,13 +16,17 @@
 package com.imcode.controllers.html;
 
 import com.imcode.entities.Person;
+import com.imcode.entities.OnceTimeAccessToken;
+import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
+import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.PersonService;
+import com.imcode.services.OnceTimeAccessTokenService;
+import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
-import com.imcode.services.VerificationTokenService;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,27 +38,18 @@ import org.springframework.security.access.AccessDeniedException;
 //import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.jws.soap.SOAPBinding;
-import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controller for resetting the token store for testing purposes.
@@ -79,13 +74,19 @@ public class AdminController {
 	private UserService userService;
 
 	@Autowired
+	private RoleService roleService;
+
+	@Autowired
 	private PersonService personService;
 
 	@Autowired
 	private JavaMailSender mailSender;
 
 	@Autowired
-	private VerificationTokenService verificationTokenService;
+	private OnceTimeAccessTokenService onceTimeAccessTokenService;
+
+	@Value("${Server.name}")
+	private String serverName;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
 //
@@ -217,13 +218,15 @@ public class AdminController {
 
 		StaticUtls.encodeUserPassword(user);
 
-		personService.save(person);
-		userService.save(user);
+		OnceTimeAccessToken token = OnceTimeAccessToken.genToken(user, 60 * 24, OnceTimeAccessToken.TokenType.VERIFICATION);
+		onceTimeAccessTokenService.save(token);
+
+		String link = StaticUtls.genLinkForTypedAccessToken(token, serverName);
 
 		String to = email;
 		String subject = "Registration confirmation in iVIS";
 		String text = "Thank you, " + user.getUsername() + " for registration in iVIS."
-				+ " Please follow link to confirm registration: " ;
+				+ " Please follow link to confirm registration: " + link;
 
 		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
 		mailSenderUtil.createMessage(to, subject, text);
@@ -234,7 +237,71 @@ public class AdminController {
 		return model;
 	}
 
-	@RequestMapping({"/", "/home", "index"})
+	@RequestMapping("/registration/confirm")
+	public ModelAndView registrationConfirm(@PathVariable("access") String access,
+											@PathVariable("id") Long id,
+											WebRequest webRequest,
+											ModelAndView model) {
+
+		OnceTimeAccessToken accessToken = onceTimeAccessTokenService.find(id);
+
+		String cause = null;
+		if (accessToken == null) {
+			cause = "You haven't access rights";
+			model.addObject(cause);
+			model.setViewName("redirect:/registration/failed");
+			return model;
+		} else if (!accessToken.getToken().equals(access)) {
+			cause = "Your access rights is wrong";
+			model.addObject(cause);
+			model.setViewName("redirect:/registration/failed");
+			return model;
+		} else if (accessToken.isExpired()) {
+			cause = "Your access rights is expired";
+			model.addObject(cause);
+			model.setViewName("redirect:/registration/failed");
+			return model;
+		} else if (accessToken.getUsed()) {
+			cause = "Your access rights is used";
+			model.addObject(cause);
+			model.setViewName("redirect:/registration/failed");
+			return model;
+		}
+
+		User user = (User) accessToken.getUser();
+
+		user.setEnabled(true);
+
+		Role roleUser = roleService.findFirstByName("ROLE_USER");
+		Set<Role> roles = new HashSet<>();
+		roles.add(roleUser);
+		user.setRoles(roles);
+
+		personService.save(user.getPerson());
+
+		userService.save(user);
+
+		accessToken.setUsed(true);
+
+		onceTimeAccessTokenService.save(accessToken);
+
+		String to = user.getPerson().getEmails().get(CommunicationTypeEnum.HOME).getValue();
+		String subject = "Registration complete success";
+		String text = "Now you, " + user.getUsername() + " can use iVIS system."
+				+ " You can log in " + serverName + "/login using your username and password.";
+
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		mailSenderUtil.createMessage(to, subject, text);
+		mailSenderUtil.sendMessage();
+
+		model.setViewName("redirect:/registration/success");
+
+		return model;
+
+	}
+
+
+		@RequestMapping({"/", "/home", "index"})
 	public String home() {
 		return "default";
 	}

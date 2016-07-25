@@ -1,23 +1,27 @@
 package com.imcode.entities;
 
-import com.imcode.entities.User;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by ruslan on 25.07.16.
  */
-public abstract class TypedAccessToken extends AbstractIdEntity<Long> implements Serializable {
+@Entity
+@Table(name = "dbo_once_time_access_token")
+public class OnceTimeAccessToken extends AbstractIdEntity<Long> implements Serializable {
 
     @Column
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
-    private User user;
+    @Column(name = "not_persist_user")
+    @Lob
+    private Serializable user;
 
     @Column(name = "expiry_day")
     @Temporal(TemporalType.TIMESTAMP)
@@ -26,6 +30,9 @@ public abstract class TypedAccessToken extends AbstractIdEntity<Long> implements
     @Column(name = "token_type")
     @Enumerated(EnumType.STRING)
     private TokenType tokenType;
+
+    @Column
+    private Boolean used = false;
 
     public enum TokenType {
         VERIFICATION("Verification token"), PASSWORD_RESET("Password reset token");
@@ -48,11 +55,11 @@ public abstract class TypedAccessToken extends AbstractIdEntity<Long> implements
         this.token = token;
     }
 
-    public User getUser() {
+    public Serializable getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Serializable user) {
         this.user = user;
     }
 
@@ -70,5 +77,35 @@ public abstract class TypedAccessToken extends AbstractIdEntity<Long> implements
 
     public void setTokenType(TokenType tokenType) {
         this.tokenType = tokenType;
+    }
+
+    public Boolean getUsed() {
+        return used;
+    }
+
+    public void setUsed(Boolean used) {
+        this.used = used;
+    }
+
+    public static OnceTimeAccessToken genToken(User user, int expiration, OnceTimeAccessToken.TokenType type) {
+        OnceTimeAccessToken token = new OnceTimeAccessToken();
+
+        token.setToken(UUID.randomUUID().toString());
+        token.setUser(user);
+        token.setExpiryDate(calculateExpiryDate(expiration));
+        token.setTokenType(type);
+
+        return token;
+    }
+
+    private static Date calculateExpiryDate(int expiryTimeInMinutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
+    }
+
+    public boolean isExpired() {
+        return expiryDate.after(new Date()) ;
     }
 }

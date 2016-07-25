@@ -49,19 +49,8 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column(name = "saml2_id")
     private String saml2Id;
 
-    @Column
-    private Boolean verified = false;
-
     public Boolean getEnabled() {
         return enabled;
-    }
-
-    public Boolean getVerified() {
-        return verified;
-    }
-
-    public void setVerified(Boolean verified) {
-        this.verified = verified;
     }
 
     public User() {

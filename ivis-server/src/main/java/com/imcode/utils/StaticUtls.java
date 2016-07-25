@@ -1,20 +1,18 @@
 package com.imcode.utils;
 
-import com.imcode.entities.TypedAccessToken;
+import com.imcode.entities.OnceTimeAccessToken;
 import com.imcode.entities.User;
 import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * Created by vitaly on 09.12.15.
@@ -93,18 +91,24 @@ public class StaticUtls {
         user.setConfirmPassword(encodePassword);
     }
 
-    public static void genToken(TypedAccessToken token, User user, int expiration) {
-        token.setToken(UUID.randomUUID().toString());
-        token.setUser(user);
-        token.setExpiryDate(calculateExpiryDate(expiration));
+    public static String genLinkForTypedAccessToken(OnceTimeAccessToken token, String host) {
+
+        URIBuilder uriBuilder = null;
+        String uri = null;
+
+        try {
+            uriBuilder = new URIBuilder(host + "/registration/confirm");
+            uriBuilder.addParameter("access", token.getToken());
+            uriBuilder.addParameter("id", token.getId() + "");
+            uri = uriBuilder.build().toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return uri;
+
     }
 
-    private static Date calculateExpiryDate(int expiryTimeInMinutes) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Timestamp(cal.getTime().getTime()));
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-        return new Date(cal.getTime().getTime());
-    }
 
 
 
