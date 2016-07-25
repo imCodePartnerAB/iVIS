@@ -22,10 +22,13 @@ import com.imcode.entities.embed.Phone;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.PersonService;
 import com.imcode.services.UserService;
+import com.imcode.utils.MailSenderUtil;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.AccessDeniedException;
 //import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -76,6 +79,9 @@ public class AdminController {
 
 	@Autowired
 	private PersonService personService;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
 //
@@ -179,33 +185,43 @@ public class AdminController {
 		User user = new User();
 		model.addObject(user);
 		model.setViewName("security/registration");
+
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+
+		String to = "ruslanpopenko@ukr.net";
+		String subject = "Tested mail subject";
+		String text = "teested mail text!!!!";
+
+		mailSenderUtil.createMessage(to, subject, text);
+		mailSenderUtil.sendMessage();
+
 		return model;
 	}
 
 	@RequestMapping("/registration/do")
-	public ModelAndView registrationNotConfirmed(@ModelAttribute("user") User user,
+	public ModelAndView registrationDo(@ModelAttribute("user") User user,
 												 @RequestParam("firstName") String firstName,
 												 @RequestParam("lastName") String lastName,
 												 @RequestParam("email") String email,
 												 @RequestParam("contactPhone") String contactPhone,
 												 WebRequest webRequest, ModelAndView model) {
 
-		user.setVerified(false);
 		Person person = new Person();
-
 
 		person.setFirstName(firstName);
 		person.setLastName(lastName);
 
-		Email emailForPersist = new Email();
-		emailForPersist.setValue(email);
-		person.setEmail(emailForPersist);
+		Email emailPerson = new Email();
+		emailPerson.setValue(email);
+		person.setEmail(emailPerson);
 
 		Phone phone = new Phone();
 		phone.setValue(contactPhone);
 		person.setPhone(phone);
 
 		user.setPerson(person);
+
+		StaticUtls.encodeUserPassword(user);
 
 		personService.save(person);
 		userService.save(user);

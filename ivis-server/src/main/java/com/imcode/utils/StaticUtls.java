@@ -1,16 +1,26 @@
 package com.imcode.utils;
 
+import com.imcode.AbstractToken;
 import com.imcode.entities.User;
 import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.token.AuthenticationKeyGenerator;
+import org.springframework.security.oauth2.provider.token.DefaultAuthenticationKeyGenerator;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by vitaly on 09.12.15.
@@ -88,6 +98,20 @@ public class StaticUtls {
         user.setPassword(encodePassword);
         user.setConfirmPassword(encodePassword);
     }
+
+    public static void genToken(OAuth2AccessToken accessToken) {
+
+
+    }
+
+    private static Date calculateExpiryDate(int expiryTimeInMinutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        return new Date(cal.getTime().getTime());
+    }
+
+
 
 
 }
