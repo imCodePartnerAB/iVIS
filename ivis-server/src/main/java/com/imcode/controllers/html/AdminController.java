@@ -237,9 +237,9 @@ public class AdminController {
 		return model;
 	}
 
-	@RequestMapping("/registration/confirm")
-	public ModelAndView registrationConfirm(@PathVariable("access") String access,
-											@PathVariable("id") Long id,
+	@RequestMapping(value = "/registration/confirm", method = RequestMethod.GET)
+	public ModelAndView registrationConfirm(@RequestParam("access") String access,
+											@RequestParam("id") Long id,
 											WebRequest webRequest,
 											ModelAndView model) {
 
@@ -261,7 +261,9 @@ public class AdminController {
 		roles.add(roleUser);
 		user.setRoles(roles);
 
-		personService.save(user.getPerson());
+		Person person = personService.save(user.getPerson());
+
+		user.setPerson(person);
 
 		userService.save(user);
 

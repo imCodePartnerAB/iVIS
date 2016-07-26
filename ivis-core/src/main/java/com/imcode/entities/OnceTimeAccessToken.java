@@ -106,6 +106,6 @@ public class OnceTimeAccessToken extends AbstractIdEntity<Long> implements Seria
     }
 
     public boolean isExpired() {
-        return expiryDate.after(new Date()) ;
+        return new Date().after(expiryDate) ;
     }
 }

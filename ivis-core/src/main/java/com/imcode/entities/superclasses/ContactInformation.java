@@ -6,12 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
 /**
  * Created by vitaly on 01.12.15.
  */
 @MappedSuperclass
-public abstract class ContactInformation<T extends Enum<T>> implements MutableAddressValue<T> {
+public abstract class ContactInformation<T extends Enum<T>> implements MutableAddressValue<T>, Serializable {
     @Enumerated(EnumType.STRING)
     protected T type;
 
