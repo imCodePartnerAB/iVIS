@@ -1,10 +1,13 @@
 $(document).ready(function () {
     if ($('#registrationForm').length) {
 
+        //name attribute watch
         $.validator.addMethod("checkUnique", function (value, element, param) {
 
             var flag = false;
-
+            var propertyName = element.getAttribute("name");
+            var data = {};
+            data[propertyName] = value;
             $.ajax(
                 {
                     url: param,
@@ -12,7 +15,7 @@ $(document).ready(function () {
                     type: "GET",
                     cache: false,
                     async: false,
-                    data: {email: value},
+                    data: data,
                     success: function (data) {
                         flag = data;
                     }
