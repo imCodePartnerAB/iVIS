@@ -91,7 +91,7 @@ $(document).ready(function () {
                 },
 
                 confirmPassword: {
-                    required: "Password is required",
+                    required: "Confirm password is required",
                     minlength: "Minimum must be {0} characters",
                     equalTo: "Password and confirmation do not match"
                 },

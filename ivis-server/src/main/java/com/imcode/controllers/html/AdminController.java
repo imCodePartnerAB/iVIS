@@ -323,6 +323,11 @@ public class AdminController {
 
 	}
 
+	@RequestMapping("/restore_password")
+	public ModelAndView restorePassword(WebRequest webRequest, ModelAndView model) {
+		model.setViewName("security/restore_password");
+		return model;
+	}
 
 	@RequestMapping({"/", "/home", "index"})
 	public String home() {
