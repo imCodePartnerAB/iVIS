@@ -13,7 +13,7 @@
     
     <c:if test="${empty permission}">
 
-        <form id="restorePasswordFormEmail" action="/restore_password/email">
+        <form id="restorePasswordFormEmail" action="/restore_password/email" method="post">
             <div class="field">
                 <label>
                     Enter email
@@ -28,27 +28,29 @@
 
     </c:if>
 
-    <c:if test="${not empty permission}">
+    <c:if test="${permission.equals('allow')}">
 
-        <form id="restorePasswordFormDo" action="/restore_password/do">
+        <form:form action="/restore_password/do" commandName="user" id="restorePasswordFormDo" method="post">
             <div class="field">
-                <label>
-                    Password
-                </label>
-                <input id="password" name="password"/>
+                <form:label path="password">
+                    Password*
+                </form:label>
+                <form:password path="password" id="password" cssErrorClass="error"/>
+                <form:errors path="password" cssClass="error-description"/>
             </div>
 
             <div class="field">
-                <label>
-                    Confirm password
-                </label>
-                <input id="confirmPassword" name="confirmPassword"/>
+                <form:label path="confirmPassword">
+                    Confirm password*
+                </form:label>
+                <form:password path="confirmPassword" id="confirmPassword" cssErrorClass="error"/>
+                <form:errors path="confirmPassword" cssClass="error-description"/>
             </div>
 
             <div class="buttons">
                 <button type="submit" class="positive" name="changePassword">Change password</button>
             </div>
-        </form>
+        </form:form>
 
     </c:if>
 

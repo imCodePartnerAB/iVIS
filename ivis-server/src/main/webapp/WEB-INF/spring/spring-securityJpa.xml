@@ -134,7 +134,7 @@
         <intercept-url pattern="/acs/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <intercept-url pattern="/registration/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-        <intercept-url pattern="/restore_password" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/restore_password/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <!--<intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
         <intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
         <!--<intercept-url pattern="/aсs/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->

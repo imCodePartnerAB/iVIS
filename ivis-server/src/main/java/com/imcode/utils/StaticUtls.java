@@ -91,13 +91,12 @@ public class StaticUtls {
         user.setConfirmPassword(encodePassword);
     }
 
-    public static String genLinkForTypedAccessToken(OnceTimeAccessToken token, String host) {
+    public static String genLinkConfirmationForOnceTimeAccessToken(OnceTimeAccessToken token, String host, String action) {
 
-        URIBuilder uriBuilder = null;
         String uri = null;
 
         try {
-            uriBuilder = new URIBuilder(host + "/registration/confirm");
+            URIBuilder uriBuilder = new URIBuilder(host + "/"+ action + "/confirm");
             uriBuilder.addParameter("access", token.getToken());
             uriBuilder.addParameter("id", token.getId() + "");
             uri = uriBuilder.build().toString();
@@ -107,6 +106,23 @@ public class StaticUtls {
 
         return uri;
 
+    }
+
+    public static String checkOnceTimeAccessToken(OnceTimeAccessToken accessToken, String access) {
+
+        String message = null;
+
+        if (accessToken == null) {
+            message = "You haven't access rights";
+        } else if (!accessToken.getToken().equals(access)) {
+            message = "Your access rights is wrong";
+        } else if (accessToken.isExpired()) {
+            message = "Your access rights is expired";
+        } else if (accessToken.getUsed()) {
+            message = "Your access rights is used";
+        }
+
+        return message;
     }
 
 

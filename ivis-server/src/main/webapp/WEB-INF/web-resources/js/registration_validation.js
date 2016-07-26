@@ -4,10 +4,6 @@ $(document).ready(function () {
         //name attribute watch
         $.validator.addMethod("checkUnique", function (value, element, param) {
 
-            if (element.className.indexOf("error") != -1) {
-                return true;
-            }
-
             var flag = false;
             var propertyName = element.getAttribute("name");
             var data = {};

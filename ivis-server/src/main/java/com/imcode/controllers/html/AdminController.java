@@ -29,7 +29,6 @@ import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
-import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -222,7 +221,7 @@ public class AdminController {
 		OnceTimeAccessToken token = OnceTimeAccessToken.genToken(user, 60 * 24, OnceTimeAccessToken.TokenType.VERIFICATION);
 		onceTimeAccessTokenService.save(token);
 
-		String link = StaticUtls.genLinkForTypedAccessToken(token, serverName);
+		String link = StaticUtls.genLinkConfirmationForOnceTimeAccessToken(token, serverName, "registration");
 
 		String to = email;
 		String subject = "Registration confirmation in iVIS";
@@ -246,24 +245,8 @@ public class AdminController {
 
 		OnceTimeAccessToken accessToken = onceTimeAccessTokenService.find(id);
 
-		String message = null;
-		if (accessToken == null) {
-			message = "You haven't access rights";
-			model.addObject(message);
-			model.setViewName("redirect:/oauth_error");
-			return model;
-		} else if (!accessToken.getToken().equals(access)) {
-			message = "Your access rights is wrong";
-			model.addObject(message);
-			model.setViewName("redirect:/oauth_error");
-			return model;
-		} else if (accessToken.isExpired()) {
-			message = "Your access rights is expired";
-			model.addObject(message);
-			model.setViewName("redirect:/oauth_error");
-			return model;
-		} else if (accessToken.getUsed()) {
-			message = "Your access rights is used";
+		String message = StaticUtls.checkOnceTimeAccessToken(accessToken, access);
+		if (message != null) {
 			model.addObject(message);
 			model.setViewName("redirect:/oauth_error");
 			return model;
@@ -327,6 +310,76 @@ public class AdminController {
 	public ModelAndView restorePassword(WebRequest webRequest, ModelAndView model) {
 		model.setViewName("security/restore_password");
 		return model;
+	}
+
+	@RequestMapping("/restore_password/email")
+	public ModelAndView restorePasswordEmail(@RequestParam("email") String email,
+											 WebRequest webRequest,
+											 ModelAndView model) {
+
+		User userByEmail = userService.findByEmail(email);
+
+		OnceTimeAccessToken accessToken = OnceTimeAccessToken.genToken(
+				userByEmail,
+				60 * 24,
+				OnceTimeAccessToken.TokenType.PASSWORD_RESET
+		);
+		onceTimeAccessTokenService.save(accessToken);
+
+		String link = StaticUtls.genLinkConfirmationForOnceTimeAccessToken(accessToken, serverName, "restore_password");
+
+		String to = email;
+		String subject = "Restore password in iVIS";
+		String text = "Hello, " + userByEmail.getUsername() + ". For restore password in iVIS"
+				+ " please follow link  " + link;
+
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		mailSenderUtil.createMessage(to, subject, text);
+		mailSenderUtil.sendMessage();
+
+		model.setViewName("redirect:/login");
+
+		return model;
+	}
+
+	@RequestMapping(value = "/restore_password/confirm", method = RequestMethod.GET)
+	public ModelAndView restorePasswordConfirm(@RequestParam("access") String access,
+											   @RequestParam("id") Long id,
+											   WebRequest webRequest,
+											   ModelAndView model
+											 	) {
+
+		OnceTimeAccessToken accessToken = onceTimeAccessTokenService.find(id);
+
+		String message = StaticUtls.checkOnceTimeAccessToken(accessToken, access);
+		if (message != null) {
+			model.addObject(message);
+			model.setViewName("redirect:/oauth_error");
+			return model;
+		}
+
+		accessToken.setUsed(true);
+
+		onceTimeAccessTokenService.save(accessToken);
+
+		User user = (User) accessToken.getUser();
+		model.addObject(user);
+
+		String permision = "allow";
+		model.addObject(permision);
+
+		model.setViewName("/security/restore_password");
+
+		return model;
+	}
+
+	@RequestMapping(value = "/restore_password/emailunique", method = RequestMethod.GET)
+	public @ResponseBody Boolean restorePasswordEmailCheck(@RequestParam("email") String email,
+														WebRequest webRequest,
+														ModelAndView model) {
+
+		return registrationEmailCheck(email, webRequest, model);
+
 	}
 
 	@RequestMapping({"/", "/home", "index"})
