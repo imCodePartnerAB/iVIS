@@ -28,30 +28,32 @@
 
     </c:if>
 
-    <c:if test="${permission.equals('allow')}">
+    <%--<c:if test="${permission.equals('allow')}">--%>
+    <c:if test="${not empty user}">
 
-        <form:form action="/restore_password/do" commandName="user" id="restorePasswordFormDo" method="post">
+        <form id="restorePasswordFormDo" action="/restore_password/do" method="post">
+
             <div class="field">
-                <form:label path="password">
+                <label>
                     Password*
-                </form:label>
-                <form:password path="password" id="password" cssErrorClass="error"/>
-                <form:errors path="password" cssClass="error-description"/>
+                </label>
+                <input id="password" name="password"/>
             </div>
 
             <div class="field">
-                <form:label path="confirmPassword">
-                    Confirm password*
-                </form:label>
-                <form:password path="confirmPassword" id="confirmPassword" cssErrorClass="error"/>
-                <form:errors path="confirmPassword" cssClass="error-description"/>
+                <label>
+                    Password*
+                </label>
+                <input id="confirmPassword" name="confirmPassword"/>
             </div>
+
+            <input type="hidden" id="userId" name="userId" value="${user.id}"/>
+
 
             <div class="buttons">
                 <button type="submit" class="positive" name="changePassword">Change password</button>
             </div>
-        </form:form>
-
+        </form>
     </c:if>
 
     <label>After submitting check email</label>

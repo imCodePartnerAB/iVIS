@@ -365,14 +365,36 @@ public class AdminController {
 		onceTimeAccessTokenService.save(accessToken);
 
 		User user = (User) accessToken.getUser();
-		model.addObject(user);
+		model.addObject("user", user);
 
-		String permision = "allow";
-		model.addObject(permision);
-
-		model.setViewName("/security/restore_password");
+		model.setViewName("security/restore_password");
 
 		return model;
+	}
+
+	@RequestMapping(value = "/restore_password/do", method = RequestMethod.POST)
+	public ModelAndView restorePasswordDo(@RequestParam("password") String password,
+										  @RequestParam("userId") Long userId,
+										  WebRequest webRequest,
+										  ModelAndView model) {
+
+		User user = userService.find(userId);
+		user.setPassword(password);
+		StaticUtls.encodeUserPassword(user);
+		userService.save(user);
+
+		String to = user.getPerson().getEmails().get(CommunicationTypeEnum.HOME).getValue();
+		String subject = "Restore password in iVIS";
+		String text = "Hello, " + user.getUsername() + ". Your password has bean changed.";
+
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		mailSenderUtil.createMessage(to, subject, text);
+		mailSenderUtil.sendMessage();
+
+		model.setViewName("redirect:/login");
+
+		return model;
+
 	}
 
 	@RequestMapping(value = "/restore_password/emailunique", method = RequestMethod.GET)
