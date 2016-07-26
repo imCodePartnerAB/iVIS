@@ -34,6 +34,12 @@ public class UserServiceRepoImpl extends AbstractPersonalizedEntityService<User,
 ////        return null;
 //    }
 
+
+    @Override
+    public User findByEmail(String email) {
+        return getRepo().findByEmail(email);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getRepo().findByUsername(username);

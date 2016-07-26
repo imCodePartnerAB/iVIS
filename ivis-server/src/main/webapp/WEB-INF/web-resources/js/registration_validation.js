@@ -1,12 +1,39 @@
 $(document).ready(function () {
     if ($('#registrationForm').length) {
+
+        $.validator.addMethod("checkUnique", function (value, element, param) {
+
+            var flag = false;
+
+            $.ajax(
+                {
+                    url: param,
+                    contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
+                    type: "GET",
+                    cache: false,
+                    async: false,
+                    data: {email: value},
+                    success: function (data) {
+                        flag = data;
+                    }
+                }
+            );
+
+            return flag;
+
+            }
+        );
+
+
+
         $('#registrationForm').validate({
 
             rules: {
 
                 username: {
                     required: true,
-                    minlength: 4
+                    minlength: 4,
+                    checkUnique: "/registration/usernameunique"
                 },
 
                 password: {
@@ -32,7 +59,8 @@ $(document).ready(function () {
 
                 email: {
                     required: true,
-                    email: true
+                    email: true,
+                    checkUnique: "/registration/emailunique"
                 },
 
                 contactPhone: {
@@ -46,7 +74,8 @@ $(document).ready(function () {
 
                 username: {
                     required: "Name is required",
-                    minlength: "Minimum must be {0} characters"
+                    minlength: "Minimum must be {0} characters",
+                    checkUnique: "Username not unique"
                 },
 
                 password: {
@@ -72,7 +101,8 @@ $(document).ready(function () {
 
                 email: {
                     required: "Email is required",
-                    email: "Enter valid email"
+                    email: "Enter valid email",
+                    checkUnique: "Email not unique"
                 },
 
                 contactPhone: {

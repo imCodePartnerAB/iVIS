@@ -13,6 +13,13 @@ public interface UserRepository extends PersonalizedRepository<User> {
 
     User findBySaml2Id(String saml2Id);
 
+    @Query(value = "SELECT * FROM dbo_user u " +
+            "INNER JOIN dbo_person p ON u.person_id = p.id " +
+            "INNER JOIN dbo_person_email e ON e.owner_id = p.id " +
+            "WHERE e.value = ?1",
+            nativeQuery = true)
+    User findByEmail(String email);
+
 //    User findByPerson(Person person);
 
 //    @Query("select u from User u where u.person.personalId = :id")

@@ -29,6 +29,7 @@ import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -245,26 +246,26 @@ public class AdminController {
 
 		OnceTimeAccessToken accessToken = onceTimeAccessTokenService.find(id);
 
-		String cause = null;
+		String message = null;
 		if (accessToken == null) {
-			cause = "You haven't access rights";
-			model.addObject(cause);
-			model.setViewName("redirect:/registration/failed");
+			message = "You haven't access rights";
+			model.addObject(message);
+			model.setViewName("redirect:/oauth_error");
 			return model;
 		} else if (!accessToken.getToken().equals(access)) {
-			cause = "Your access rights is wrong";
-			model.addObject(cause);
-			model.setViewName("redirect:/registration/failed");
+			message = "Your access rights is wrong";
+			model.addObject(message);
+			model.setViewName("redirect:/oauth_error");
 			return model;
 		} else if (accessToken.isExpired()) {
-			cause = "Your access rights is expired";
-			model.addObject(cause);
-			model.setViewName("redirect:/registration/failed");
+			message = "Your access rights is expired";
+			model.addObject(message);
+			model.setViewName("redirect:/oauth_error");
 			return model;
 		} else if (accessToken.getUsed()) {
-			cause = "Your access rights is used";
-			model.addObject(cause);
-			model.setViewName("redirect:/registration/failed");
+			message = "Your access rights is used";
+			model.addObject(message);
+			model.setViewName("redirect:/oauth_error");
 			return model;
 		}
 
@@ -294,14 +295,36 @@ public class AdminController {
 		mailSenderUtil.createMessage(to, subject, text);
 		mailSenderUtil.sendMessage();
 
-		model.setViewName("redirect:/registration/success");
+		model.setViewName("redirect:/login");
 
 		return model;
 
 	}
 
+	@RequestMapping(value = "/registration/emailunique", method = RequestMethod.GET)
+	public @ResponseBody Boolean registrationEmailCheck(@RequestParam("email") String email,
+														WebRequest webRequest,
+														ModelAndView model) {
 
-		@RequestMapping({"/", "/home", "index"})
+		User userByEmail = userService.findByEmail(email);
+
+		return userByEmail == null;
+
+	}
+
+	@RequestMapping(value = "/registration/usernameunique", method = RequestMethod.GET)
+	public @ResponseBody Boolean registrationUsernameCheck(@RequestParam("username") String username,
+														WebRequest webRequest,
+														ModelAndView model) {
+
+		User userByName = userService.findByUsername(username);
+
+		return userByName == null;
+
+	}
+
+
+	@RequestMapping({"/", "/home", "index"})
 	public String home() {
 		return "default";
 	}

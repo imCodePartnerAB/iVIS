@@ -16,5 +16,9 @@ public interface UserService extends GenericService<User, Long>, UserDetailsServ
 
     default User getCurrentUser() { return null; }
 
+    default User findByEmail(String email) {
+        return null;
+    }
+
 //    public boolean checkAutorisation(String login, String pwd);
 }
