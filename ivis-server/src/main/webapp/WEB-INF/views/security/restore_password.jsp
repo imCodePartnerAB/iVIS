@@ -11,7 +11,7 @@
 
     <h1>iVIS Restore Password Page</h1>
     
-    <c:if test="${empty permission}">
+    <c:if test="${empty user}">
 
         <form id="restorePasswordFormEmail" action="/restore_password/email" method="post">
             <div class="field">
@@ -37,14 +37,14 @@
                 <label>
                     Password*
                 </label>
-                <input id="password" name="password"/>
+                <input id="password" name="password" type="password"/>
             </div>
 
             <div class="field">
                 <label>
                     Password*
                 </label>
-                <input id="confirmPassword" name="confirmPassword"/>
+                <input id="confirmPassword" name="confirmPassword" type="password"/>
             </div>
 
             <input type="hidden" id="userId" name="userId" value="${user.id}"/>
