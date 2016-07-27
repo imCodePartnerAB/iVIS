@@ -47,6 +47,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.*;
@@ -83,7 +84,7 @@ public class AdminController {
 	private JavaMailSender mailSender;
 
 	@Autowired
-	private OnceTimeAccessTokenService onceTimeAccessTokenService;
+	public OnceTimeAccessTokenService onceTimeAccessTokenService;
 
 	@Value("${Server.name}")
 	private String serverName;
@@ -314,7 +315,7 @@ public class AdminController {
 		return model;
 	}
 
-	@RequestMapping("/restore_password/email")
+	@RequestMapping(value = "/restore_password/email", method = RequestMethod.POST)
 	public ModelAndView restorePasswordEmail(@RequestParam("email") String email,
 											 WebRequest webRequest,
 											 ModelAndView model) {
@@ -419,6 +420,14 @@ public class AdminController {
 						principal.getName(), user));
 			}
 		}
+	}
+
+	@PostConstruct
+	public void deleteExpiredOrUsedOnceTimeAccessTokens() {
+
+		List<OnceTimeAccessToken> onceTimeAccessTokens = onceTimeAccessTokenService.selectExpiredOrUsedTokens();
+		onceTimeAccessTokenService.delete(onceTimeAccessTokens);
+
 	}
 
 //	/**

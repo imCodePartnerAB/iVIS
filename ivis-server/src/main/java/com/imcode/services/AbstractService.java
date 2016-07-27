@@ -65,6 +65,11 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
         return repo.save(entities);
     }
 
+    @Override
+    @Transactional
+    public void delete(Iterable<T> entities) {
+        repo.delete(entities);
+    }
 
     public REPOSITORY_TYPE getRepo() {
         return repo;

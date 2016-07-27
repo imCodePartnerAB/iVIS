@@ -17,5 +17,9 @@ public interface GenericService<T, ID> {
 
     void delete(ID id);
 
+    default void delete(Iterable<T> entities) {
+
+    }
+
     List<T> findAll();
 }
