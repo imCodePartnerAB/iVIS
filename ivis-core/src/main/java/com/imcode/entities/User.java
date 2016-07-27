@@ -49,6 +49,7 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column(name = "saml2_id")
     private String saml2Id;
 
+    @JsonIgnore
     public Boolean getEnabled() {
         return enabled;
     }
