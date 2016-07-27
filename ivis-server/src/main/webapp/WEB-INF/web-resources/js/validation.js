@@ -344,7 +344,8 @@ $(document).ready(function () {
 
                 oldPassword: {
                     required: true,
-                    minlength: 8
+                    minlength: 8,
+                    checkUserPassword: true
                 },
 
                 password: {
@@ -364,8 +365,9 @@ $(document).ready(function () {
             messages: {
 
                 oldPassword: {
-                    required: true,
-                    minlength: 8
+                    required: "Old password is required",
+                    minlength: "Minimum must be {0} characters",
+                    checkUserPassword: "Old password does not match"
                 },
 
                 password: {
@@ -382,10 +384,7 @@ $(document).ready(function () {
             }
 
         });
-
     }
-
-
 });
 
 function selectAndHideOptions(idSelect, optionValues) {

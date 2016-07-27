@@ -74,7 +74,6 @@ public class UserController {
         }
 
         model.setViewName("users/edit");
-        user.setPassword("");
         model.addObject(user);
         model.addObject(roleService.findAll());
 
@@ -209,6 +208,7 @@ public class UserController {
 
         user.setPassword(password);
         StaticUtls.encodeUserPassword(user);
+
         userService.save(user);
 
         String to = user.getPerson().getEmails().get(CommunicationTypeEnum.HOME).getValue();

@@ -75,6 +75,12 @@
                 </label>
                 <input id="confirmPassword" name="confirmPassword" type="password"/>
             </div>
+
+            <div class="buttons">
+                <button class="positive" type="submit">Save</button>
+            </div>
+
+            Check email for details
         </form>
     </sec:authorize>
 
