@@ -42,7 +42,7 @@
 
             <div class="field">
                 <label>
-                    Password*
+                    Confirm password*
                 </label>
                 <input id="confirmPassword" name="confirmPassword" type="password"/>
             </div>

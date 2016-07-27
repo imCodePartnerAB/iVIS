@@ -6,6 +6,7 @@ import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.context.request.WebRequest;
 
@@ -123,6 +124,16 @@ public class StaticUtls {
         }
 
         return message;
+    }
+
+    public static Boolean checkUserPasswordMatch(User user, String password) {
+
+        String userEncodedPassword = user.getPassword();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        return encoder.matches(password, userEncodedPassword);
+
     }
 
 

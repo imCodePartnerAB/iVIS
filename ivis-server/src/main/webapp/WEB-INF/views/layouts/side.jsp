@@ -43,15 +43,15 @@
     <div class="user-ph">
         <div class="user">
             <div class="box">
-                <div class="full-name">
-                    <sec:authorize access="isAuthenticated()">
+                <sec:authorize access="isAuthenticated()">
+                    <div class="full-name">
                         <sec:authentication property="principal.username"/>
-                    </sec:authorize>
-                </div>
-                <div class="user-menu">
-                    <a class="user-menu-item" href="/changepassword">${labelChangePassword}</a>
-                    <a class="user-menu-item" href="${logoutUrl}">${labelLogout}</a>
-                </div>
+                    </div>
+                    <div class="user-menu">
+                        <a class="user-menu-item" href="/users/<sec:authentication property="principal.id"/>?form">${labelChangePassword}</a>
+                        <a class="user-menu-item" href="${logoutUrl}">${labelLogout}</a>
+                    </div>
+                </sec:authorize>
             </div>
         </div>
     </div>

@@ -5,15 +5,19 @@ import com.imcode.controllers.html.form.Message;
 import com.imcode.controllers.html.form.MessageType;
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
+import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
+import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.UserValidator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -43,6 +47,9 @@ public class UserController {
 
     @Autowired
     MessageSource messageSource;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     //    Shows the list of users
     @RequestMapping(method = RequestMethod.GET)
@@ -195,5 +202,42 @@ public class UserController {
 //        return "redirect:/users";
     }
 
+    @RequestMapping(value = "/{id}", params = "passwordchange", method = RequestMethod.POST)
+    public ModelAndView passwordChange(@PathVariable("id") User user,
+                               @RequestParam("password") String password,
+                               ModelAndView model)  {
+
+        user.setPassword(password);
+        StaticUtls.encodeUserPassword(user);
+        userService.save(user);
+
+        String to = user.getPerson().getEmails().get(CommunicationTypeEnum.HOME).getValue();
+        String subject = "Change password in iVIS";
+        String text = "Hello, " + user.getUsername() + ". Your password has bean changed.";
+
+        MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+        mailSenderUtil.createMessage(to, subject, text);
+        mailSenderUtil.sendMessage();
+
+        model.setViewName("redirect:/logout.do");
+
+        return model;
     }
+
+
+
+    @RequestMapping(value = "/{id}", params = "checkpassword", method = RequestMethod.GET)
+    public @ResponseBody Boolean checkPassword(@PathVariable("id") User user,
+                                               @RequestParam("checkpassword") String password) {
+
+        String userEncodedPassword = user.getPassword();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        return encoder.matches(password, userEncodedPassword);
+
+    }
+
+
+}
 

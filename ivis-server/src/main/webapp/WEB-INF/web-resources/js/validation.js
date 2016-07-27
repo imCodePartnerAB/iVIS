@@ -198,7 +198,7 @@ $(document).ready(function () {
                 },
 
                 confirmPassword: {
-                    required: "Password is required",
+                    required: "Confirm password is required",
                     minlength: "Minimum must be {0} characters",
                     equalTo: "Password and confirmation do not match"
                 },
@@ -267,6 +267,7 @@ $(document).ready(function () {
     if ($('#pupilUpdateForm').length) {
 
         $('#pupilUpdateForm').validate({
+
             rules: {
 
                 "person.personalId": {
@@ -308,6 +309,80 @@ $(document).ready(function () {
 
 
         });
+    }
+
+    if ($("#userChangePasswordForm").length) {
+
+        $.validator.addMethod("checkUserPassword", function (value, element, param) {
+
+            var flag = false;
+            var data = {};
+            var link = $("#userChangePasswordForm").attr("action");
+            data["checkpassword"] = value;
+            $.ajax(
+                {
+                    url: link.substring(0, link.indexOf("?")),
+                    contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
+                    type: "GET",
+                    cache: false,
+                    async: false,
+                    data: data,
+                    success: function (data) {
+                        flag = data;
+                    }
+                }
+            );
+
+            return flag;
+
+            }
+        );
+
+        $('#userChangePasswordForm').validate({
+
+            rules: {
+
+                oldPassword: {
+                    required: true,
+                    minlength: 8
+                },
+
+                password: {
+                    required: true,
+                    minlength: 8
+                },
+
+                confirmPassword: {
+                    required: true,
+                    minlength: 8,
+                    equalTo: "#password"
+                }
+
+
+            },
+
+            messages: {
+
+                oldPassword: {
+                    required: true,
+                    minlength: 8
+                },
+
+                password: {
+                    required: "Password is required",
+                    minlength: "Minimum must be {0} characters"
+                },
+
+                confirmPassword: {
+                    required: "Confirm password is required",
+                    minlength: "Minimum must be {0} characters",
+                    equalTo: "Password and confirmation do not match"
+                }
+
+            }
+
+        });
+
     }
 
 
