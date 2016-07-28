@@ -16,12 +16,10 @@ import java.util.Date;
 public abstract class AbstractJpaDatedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements Serializable, JpaDatedEntity<ID> {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date", updatable = false)
-    @JsonProperty("create_date")
     protected Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_date", insertable = false)
-    @JsonProperty("update_date")
     protected Date updateDate;
 
     public AbstractJpaDatedEntity() {

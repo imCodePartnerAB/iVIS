@@ -1,5 +1,7 @@
 package imcode.services.restful;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
@@ -14,6 +16,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
@@ -145,7 +149,14 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     }
 
     protected OAuth2RestTemplate getRestTemplate() {
-        return new OAuth2RestTemplate(getClient(), getClientContext());
+        OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(getClient(), getClientContext());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
+        MappingJackson2HttpMessageConverter messageConverter = new  MappingJackson2HttpMessageConverter(objectMapper);
+        List<HttpMessageConverter<?>> converters = new LinkedList<HttpMessageConverter<?>>();
+        converters.add(messageConverter);
+        oAuth2RestTemplate.setMessageConverters(converters);
+        return oAuth2RestTemplate;
     }
 
 

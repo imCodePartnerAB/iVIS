@@ -24,7 +24,6 @@ public class ApplicationFormQuestionGroup extends AbstractSortableNamedEntity<Lo
     private List<ApplicationFormQuestion> questions = new ArrayList<>();
 
     @Column(name = "question_type")
-    @JsonProperty("question_type")
     private String questionType;
 
     @ManyToOne

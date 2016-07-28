@@ -21,12 +21,10 @@ public class ApplicationFormStep extends AbstractSortableNamedEntity<Long> {
 
     @OrderBy("sortOrder ASC, text ASC")
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "step")
-    @JsonProperty("question_groups")
     private List<ApplicationFormQuestionGroup> questionGroups = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "application_form_id")
-    @JsonProperty("application_form")
     private ApplicationForm applicationForm;
 
     public String getText() {

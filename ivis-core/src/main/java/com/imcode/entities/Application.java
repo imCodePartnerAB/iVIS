@@ -29,21 +29,17 @@ public class Application extends AbstractJpaDatedEntity<Long> implements Seriali
     @ManyToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "application_form_id")
     @JsonIgnoreProperties(value = "applications")
-    @JsonProperty("application_form")
     private ApplicationForm applicationForm;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "submitted_user_id")
-    @JsonProperty("submitted_user")
     private User submittedUser;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "regarding_user_id")
-    @JsonProperty("regarding_user")
     private User regardingUser;
 
     @Column(name = "registration_number")
-    @JsonProperty("registration_number")
     private Long registrationNumber;
 
     @Embedded
@@ -51,7 +47,6 @@ public class Application extends AbstractJpaDatedEntity<Long> implements Seriali
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "handled_user_id")
-    @JsonProperty("handled_user")
     private Person handledUser;
 
 

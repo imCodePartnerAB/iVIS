@@ -33,7 +33,6 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "report_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("reported_date")
     private Date reportDay;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
@@ -65,41 +64,34 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "assigned_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("assigned_date")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date assignedDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assigned_person_id")
-    @JsonProperty("assigned_by")
     private Person assignedBy;
 
     @Column(name = "archived_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("archived_date")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date archivedDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "archived_person_id")
-    @JsonProperty("archived_by")
     private Person archivedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reported_person_id")
-    @JsonProperty("reported_by")
     private Person reportedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "modified_person_id")
-    @JsonProperty("modified_by")
     private Person modifiedBy;
 
     @Column(name = "modified_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("modified_date")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date modifiedDay;

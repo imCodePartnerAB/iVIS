@@ -30,11 +30,9 @@ public class EntityVersion extends AbstractIdEntity<Long> {
     private Date timestamp;
 
     @Column(name = "entity_class", nullable = false)
-    @JsonProperty("entity_class")
     private Class<?> entityClass;
 
     @Column(name = "entity_id", nullable = false)
-    @JsonProperty("entity_id")
     private Long entityId;
 
     @Column

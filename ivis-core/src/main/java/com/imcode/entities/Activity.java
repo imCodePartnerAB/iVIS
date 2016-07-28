@@ -20,7 +20,6 @@ public class Activity extends AbstractIdEntity<Long> implements Serializable {
     private String description;
 
     @Column(name = "file_name")
-    @JsonProperty("file_name")
     private String fileName;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -29,12 +28,10 @@ public class Activity extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "report_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("reported_date")
     private Date reportDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reported_person_id")
-    @JsonProperty("reported_by")
     private Person reportedBy;
 
     public String getDescription() {

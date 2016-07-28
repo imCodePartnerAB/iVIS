@@ -16,17 +16,14 @@ import javax.persistence.Entity;
 public class Semester extends AbstractNamedEntity<Long> implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "academic_year_id")
-    @JsonProperty("academic_year")
     private AcademicYear academicYear;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date")
-    @JsonProperty("start_date")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date")
-    @JsonProperty("end_date")
     private Date endDate;
 
     public Semester() {

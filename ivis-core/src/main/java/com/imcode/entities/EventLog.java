@@ -18,7 +18,6 @@ public class EventLog extends AbstractIdEntity<Long>{
     private User user;
 
     @Column
-    @JsonProperty("date_time")
     private LocalDateTime dateTime;
 
     @Column

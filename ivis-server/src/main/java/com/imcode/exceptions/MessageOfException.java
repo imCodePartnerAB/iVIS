@@ -8,10 +8,8 @@ import java.util.Arrays;
  * Created by ruslan on 5/25/16.
  */
 public class MessageOfException {
-    @JsonProperty("localized_message")
     private String localizedMsg;
     private String cause;
-    @JsonProperty("stack_trace")
     private String stackTrace;
     private String message;
 

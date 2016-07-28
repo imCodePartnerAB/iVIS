@@ -20,12 +20,10 @@ public class Truancy extends AbstractIdEntity<Long> implements Serializable {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date")
-    @JsonProperty("start_date")
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date")
-    @JsonProperty("end_date")
     private Date endDate;
 
     public Truancy() { }

@@ -17,7 +17,6 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract class AbstractSortableNamedEntity<ID extends Serializable> extends AbstractNamedEntity<ID> implements JpaSortableEntity<AbstractSortableNamedEntity>{
     @Column(name = "sort_order")
-    @JsonProperty("sort_order")
     protected Integer sortOrder;
 
     public AbstractSortableNamedEntity() {

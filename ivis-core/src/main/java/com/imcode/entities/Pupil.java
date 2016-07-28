@@ -35,22 +35,18 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contact_person_id")
-    @JsonProperty("contact_person")
     private Person contactPerson;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "class_placement_from")
-    @JsonProperty("class_placement_from")
     private Date classPlacementFrom;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "class_placement_to")
-    @JsonProperty("class_placement_to")
     private Date classPlacementTo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "school_class_id")
-    @JsonProperty("school_class")
     private SchoolClass schoolClass;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -59,7 +55,6 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "academic_year_id")
-    @JsonProperty("academic_year")
     private AcademicYear academicYear;
 
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -75,14 +70,12 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "after_school_center_section_id")
-    @JsonProperty("after_school_center_section")
     private AfterSchoolCenterSection afterSchoolCenterSection;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     @CollectionTable(name = "dbo_pupil_after_school_center_schema",
             joinColumns = @JoinColumn(name = "owner_id"), uniqueConstraints = @UniqueConstraint(columnNames = {"owner_id", "after_school_section_id", "day_of_week"}))
-    @JsonProperty("school_center_schema")
     private List<AfterSchoolCenterSchema> schoolCenterSchema = new ArrayList<>();
 
     public Person getPerson() {

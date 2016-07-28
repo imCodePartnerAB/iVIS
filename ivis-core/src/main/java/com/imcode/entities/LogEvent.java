@@ -26,11 +26,9 @@ public class LogEvent extends AbstractIdEntity<Long> {
     private Date timestamp;
 
     @Column(name = "entity_class_name", nullable = false)
-    @JsonProperty("entity_class_name")
     private String entityClassName;
 
     @Column(name = "entity_id", nullable = false)
-    @JsonProperty("entity_id")
     private Long entityId;
 
     @Column(nullable = false)
@@ -38,15 +36,12 @@ public class LogEvent extends AbstractIdEntity<Long> {
     private Action action;
 
     @Column(name = "field_name")
-    @JsonProperty("field_name")
     private String fieldName;
 
     @Column(name = "previous_value")
-    @JsonProperty("previous_value")
     private String previousValue;
 
     @Column(name = "new_value")
-    @JsonProperty("new_value")
     private String newValue;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)

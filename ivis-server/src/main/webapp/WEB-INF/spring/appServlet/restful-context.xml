@@ -23,14 +23,17 @@
     <!--<mvc:annotation-driven/>-->
     <mvc:annotation-driven content-negotiation-manager="cnManager">
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jacksonObjectMapper"/>
+            </bean>
             <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter"
                   p:marshaller-ref="castorMarshaller" p:unmarshaller-ref="castorMarshaller"/>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-
-
+    <bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" >
+        <property name="propertyNamingStrategy" value="CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"/>
+    </bean>
 
     <bean id="cnManager" class="com.imcode.spring.ContentNegotiationManagerFactoryBean">
         <property name="favorPathExtension" value="true"/>

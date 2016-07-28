@@ -40,7 +40,6 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
-    @JsonProperty("responsible_person")
     @NotNull(message = "responsible person can not be null")
     private Person responsiblePerson;
 
@@ -48,7 +47,6 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
     @JoinTable(name = "dbo_issues_authorized_persons_cross",
             joinColumns = @JoinColumn(name = "issue_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
-    @JsonProperty("authorized_persons")
     @Size(min = 1, message = "authorized persons can not be null")
     private Set<Person> authorizedPersons = new HashSet<>();
 
@@ -58,22 +56,18 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "report_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("reported_date")
     private Date reportDay;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reported_person_id")
-    @JsonProperty("reported_by")
     private Person reportedBy;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "modified_person_id")
-    @JsonProperty("modified_by")
     private Person modifiedBy;
 
     @Column(name = "modified_day")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonProperty("modified_date")
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     private Date modifiedDay;
