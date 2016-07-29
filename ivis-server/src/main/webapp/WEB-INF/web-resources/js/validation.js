@@ -159,6 +159,8 @@ $(document).ready(function () {
 
     if ($('#userUpdateForm').length) {
 
+        $("#password").val("");
+
         $('#userUpdateForm').validate({
             rules: {
 
