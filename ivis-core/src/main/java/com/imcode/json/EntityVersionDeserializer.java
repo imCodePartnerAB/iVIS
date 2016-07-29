@@ -29,6 +29,7 @@ public class EntityVersionDeserializer extends JsonDeserializer<EntityVersion> {
         try {
             entityClass = Class.forName(entityClassName);
             ObjectMapper mapper = new ObjectMapper();
+            mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
             entity = (JpaEntity<?>) mapper.readValue(node.get("entity").traverse(), entityClass);
         } catch (Exception e) {
             throw new RuntimeException(e);

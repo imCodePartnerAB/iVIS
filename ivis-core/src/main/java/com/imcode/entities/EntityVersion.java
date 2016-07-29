@@ -1,12 +1,11 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.json.EntityVersionDeserializer;
+import com.imcode.json.EntityVersionSerializer;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -21,6 +20,7 @@ import java.util.Date;
  * @since Dec 11, 2012
  */
 @JsonDeserialize(using = EntityVersionDeserializer.class)
+@JsonSerialize(using = EntityVersionSerializer.class)
 @Entity
 @Table(name = "dbo_entity_version")
 public class EntityVersion extends AbstractIdEntity<Long> {

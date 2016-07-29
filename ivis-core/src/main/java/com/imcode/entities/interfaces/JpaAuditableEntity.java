@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ import java.util.Map;
  */
 //@MappedSuperclass
 //@EntityListeners(AuditableModelListener.class)
-public interface JpaAuditableEntity {
+public interface JpaAuditableEntity extends Serializable {
     Map<String, Object> getLoadedValues();
 
     void setLoadedValues(Map<String, Object> loadedValues);
