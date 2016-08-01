@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.imcode.entities.embed.RestMethod;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
@@ -22,8 +23,7 @@ public class ServiceMethod extends AbstractNamedEntity<Long> implements Serializ
     @JoinColumn(name = "entity_service_information_id")
     private EntityServiceInformation entityServiceInformation;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rest_method_id")
+    @Embedded
     private RestMethod restMethod;
 
     public String getReturnParameter() {

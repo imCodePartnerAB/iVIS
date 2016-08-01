@@ -1,7 +1,6 @@
-package com.imcode.entities;
+package com.imcode.entities.embed;
 
 import com.imcode.entities.enums.RequestMethod;
-import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,9 +8,11 @@ import java.io.Serializable;
 /**
  * Created by ruslan on 01.08.16.
  */
-@Entity
-@Table(name = "dbo_entity_rest_method")
-public class RestMethod extends AbstractNamedEntity<Long> implements Serializable {
+@Embeddable
+public class RestMethod implements Serializable {
+
+    @Column(name = "rest_name")
+    private String restName;
 
     @Column
     private String url;
@@ -20,8 +21,13 @@ public class RestMethod extends AbstractNamedEntity<Long> implements Serializabl
     @Enumerated(EnumType.STRING)
     private RequestMethod requestMethod;
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "restMethod")
-    private ServiceMethod serviceMethod;
+    public String getRestName() {
+        return restName;
+    }
+
+    public void setRestName(String restName) {
+        this.restName = restName;
+    }
 
     public String getUrl() {
         return url;
@@ -37,13 +43,5 @@ public class RestMethod extends AbstractNamedEntity<Long> implements Serializabl
 
     public void setRequestMethod(RequestMethod requestMethod) {
         this.requestMethod = requestMethod;
-    }
-
-    public ServiceMethod getServiceMethod() {
-        return serviceMethod;
-    }
-
-    public void setServiceMethod(ServiceMethod serviceMethod) {
-        this.serviceMethod = serviceMethod;
     }
 }
