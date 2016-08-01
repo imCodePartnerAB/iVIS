@@ -23,7 +23,7 @@ public class EntityServiceInformation extends AbstractIdEntity<Long> implements 
     private Class<?> restServiceImplClass;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "entityServiceInformation")
-    private Set<ServiceMethod> serviceMethods;
+    private Set<EntityServiceMethod> entityServiceMethods;
 
     public Class<?> getEntityClass() {
         return entityClass;
@@ -49,11 +49,11 @@ public class EntityServiceInformation extends AbstractIdEntity<Long> implements 
         this.restServiceImplClass = restServiceImplClass;
     }
 
-    public Set<ServiceMethod> getServiceMethods() {
-        return serviceMethods;
+    public Set<EntityServiceMethod> getEntityServiceMethods() {
+        return entityServiceMethods;
     }
 
-    public void setServiceMethods(Set<ServiceMethod> serviceMethods) {
-        this.serviceMethods = serviceMethods;
+    public void setEntityServiceMethods(Set<EntityServiceMethod> EntityServiceMethods) {
+        this.entityServiceMethods = EntityServiceMethods;
     }
 }

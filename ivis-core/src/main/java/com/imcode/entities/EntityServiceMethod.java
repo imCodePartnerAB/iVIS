@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "dbo_entity_service_method")
-public class ServiceMethod extends AbstractNamedEntity<Long> implements Serializable {
+public class EntityServiceMethod extends AbstractNamedEntity<Long> implements Serializable {
 
     @Column(name = "return_parameter")
     private String returnParameter;

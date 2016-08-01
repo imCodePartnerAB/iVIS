@@ -422,14 +422,6 @@ public class AdminController {
 		}
 	}
 
-	@PostConstruct
-	public void deleteExpiredOrUsedOnceTimeAccessTokens() {
-
-		List<OnceTimeAccessToken> onceTimeAccessTokens = onceTimeAccessTokenService.selectExpiredOrUsedTokens();
-		onceTimeAccessTokenService.delete(onceTimeAccessTokens);
-
-	}
-
 //	/**
 //	 * @param userApprovalHandler the userApprovalHandler to set
 //	 */
