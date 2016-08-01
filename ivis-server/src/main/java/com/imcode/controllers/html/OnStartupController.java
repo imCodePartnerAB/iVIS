@@ -1,13 +1,8 @@
 package com.imcode.controllers.html;
 
-import com.imcode.entities.EntityProviderInformation;
 import com.imcode.entities.OnceTimeAccessToken;
-import com.imcode.entities.EntityProviderMethod;
 import com.imcode.entities.embed.RestMethod;
-import com.imcode.services.EntityProviderInformationService;
 import com.imcode.services.OnceTimeAccessTokenService;
-import com.imcode.services.EntityProviderMethodService;
-import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
