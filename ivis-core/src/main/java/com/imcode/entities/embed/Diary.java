@@ -3,6 +3,7 @@ package com.imcode.entities.embed;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -12,7 +13,7 @@ import java.util.Date;
  * Created by vitaly on 22.06.15.
  */
 @Embeddable
-public class Diary {
+public class Diary implements Serializable {
     public Diary() {
     }
 
