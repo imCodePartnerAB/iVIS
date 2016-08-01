@@ -5,6 +5,9 @@ import com.imcode.entities.User;
 import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.http.client.utils.URIBuilder;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +17,11 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by vitaly on 09.12.15.
@@ -135,6 +143,8 @@ public class StaticUtls {
         return encoder.matches(password, userEncodedPassword);
 
     }
+
+
 
 
 

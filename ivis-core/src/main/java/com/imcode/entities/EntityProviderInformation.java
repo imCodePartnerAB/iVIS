@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "dbo_entity_service_information")
-public class EntityServiceInformation extends AbstractIdEntity<Long> implements Serializable{
+public class EntityProviderInformation extends AbstractIdEntity<Long> implements Serializable{
 
     @Column(name = "entity_class")
     private Class<?> entityClass;
@@ -23,7 +23,7 @@ public class EntityServiceInformation extends AbstractIdEntity<Long> implements 
     private Class<?> restServiceImplClass;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "entityServiceInformation")
-    private Set<EntityServiceMethod> entityServiceMethods;
+    private Set<EntityProviderMethod> entityProviderMethods;
 
     public Class<?> getEntityClass() {
         return entityClass;
@@ -49,11 +49,11 @@ public class EntityServiceInformation extends AbstractIdEntity<Long> implements 
         this.restServiceImplClass = restServiceImplClass;
     }
 
-    public Set<EntityServiceMethod> getEntityServiceMethods() {
-        return entityServiceMethods;
+    public Set<EntityProviderMethod> getEntityProviderMethods() {
+        return entityProviderMethods;
     }
 
-    public void setEntityServiceMethods(Set<EntityServiceMethod> EntityServiceMethods) {
-        this.entityServiceMethods = EntityServiceMethods;
+    public void setEntityProviderMethods(Set<EntityProviderMethod> entityProviderMethods) {
+        this.entityProviderMethods = entityProviderMethods;
     }
 }
