@@ -1,6 +1,6 @@
 package com.imcode.entities;
 
-import com.imcode.entities.enums.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMethod;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;

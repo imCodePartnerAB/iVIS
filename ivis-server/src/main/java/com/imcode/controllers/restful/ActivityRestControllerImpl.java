@@ -62,7 +62,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
 
 
     @RequestMapping(value = "/attach/{activity_id}", method = RequestMethod.GET)
-    public void gatAttachment(@PathVariable("activity_id") Long activityId,
+    public void getAttachment(@PathVariable("activity_id") Long activityId,
                               HttpServletResponse response,
                               WebRequest webRequest) {
 
