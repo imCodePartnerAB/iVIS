@@ -19,8 +19,30 @@ public class EntityRestProviderInformation extends AbstractIdEntity<Long> implem
     @Column(name = "rest_controller_class")
     private Class<?> restControllerClass;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "entityRestProviderInfo")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "entityRestProviderInformation")
     private Set<MethodRestProviderForEntity> entityProviderMethods;
 
+    public String getEntityClass() {
+        return entityClass;
+    }
 
+    public void setEntityClass(String entityClass) {
+        this.entityClass = entityClass;
+    }
+
+    public Class<?> getRestControllerClass() {
+        return restControllerClass;
+    }
+
+    public void setRestControllerClass(Class<?> restControllerClass) {
+        this.restControllerClass = restControllerClass;
+    }
+
+    public Set<MethodRestProviderForEntity> getEntityProviderMethods() {
+        return entityProviderMethods;
+    }
+
+    public void setEntityProviderMethods(Set<MethodRestProviderForEntity> entityProviderMethods) {
+        this.entityProviderMethods = entityProviderMethods;
+    }
 }

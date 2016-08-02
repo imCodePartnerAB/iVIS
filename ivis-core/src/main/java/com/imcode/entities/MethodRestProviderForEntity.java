@@ -18,7 +18,7 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
     @ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
     @MapKeyColumn(name = "name", length = 100)
     @Column(name = "type")
-    @CollectionTable(name = "dbo_method_in_parameter", joinColumns = @JoinColumn(name = "dbo_method_rest_provider_id"))
+    @CollectionTable(name = "dbo_method_in_parameters", joinColumns = @JoinColumn(name = "method_id"))
     private Map<String, String> inParameters = new LinkedHashMap<String, String>();
 
     @Column(name = "out_parameter")
@@ -73,5 +73,9 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
 
     public void setEntityRestProviderInformation(EntityRestProviderInformation entityRestProviderInformation) {
         this.entityRestProviderInformation = entityRestProviderInformation;
+    }
+
+    public void addInParameters(String name, String type) {
+        inParameters.put(name, type);
     }
 }
