@@ -1,5 +1,6 @@
 package com.imcode.entities.oauth2;
 
+import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
 import com.imcode.oauth2.IvisClientDetails;
@@ -114,6 +115,12 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
     private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "dbo_client_allowed_methods",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "method_id"))
+    private Set<MethodRestProviderForEntity> allowedMethods = new HashSet<>();
 
     public JpaClientDetails() {
     }
@@ -366,6 +373,17 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
         this.additionalInformation.put(key, value);
     }
 
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Set<MethodRestProviderForEntity> getAllowedMethods() {
+        return allowedMethods;
+    }
+
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public void setAllowedMethods(Set<MethodRestProviderForEntity> allowedMethods) {
+        this.allowedMethods = allowedMethods;
+    }
 
     @Override
     public String getName() {
