@@ -1,8 +1,10 @@
 package com.imcode.controllers.html;
 
-import com.imcode.controllers.restful.ActivityRestControllerImpl;
+import com.imcode.entities.EntityRestProviderInformation;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.OnceTimeAccessToken;
+import com.imcode.services.EntityRestProviderInformationService;
+import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.OnceTimeAccessTokenService;
 import com.imcode.utils.ControllerReflectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by ruslan on 01.08.16.
@@ -25,6 +28,12 @@ public class OnStartupController {
     @Autowired
     public OnceTimeAccessTokenService onceTimeAccessTokenService;
 
+    @Autowired
+    private MethodRestProviderForEntityService methodRestProviderForEntityService;
+
+    @Autowired
+    private EntityRestProviderInformationService entityRestProviderInformationService;
+
     @PostConstruct
     public void deleteExpiredOrUsedOnceTimeAccessTokens() {
         List<OnceTimeAccessToken> onceTimeAccessTokens = onceTimeAccessTokenService.selectExpiredOrUsedTokens();
@@ -32,17 +41,30 @@ public class OnStartupController {
     }
 
     @PostConstruct
-    public void persistAllEntityServicesAndMethods() {
+    public void updateInformationAboutServices() {
 
-    }
+        methodRestProviderForEntityService.deleteAll();
+        entityRestProviderInformationService.deleteAll();
 
-    @RequestMapping(value = "/reflect", method = RequestMethod.GET)
-    public void reflectionTest(WebRequest webRequest) {
-        ControllerReflectionUtil.getAllClassesFromPackage("com.imcode.controllers.restful");
-        ControllerReflectionUtil util = new ControllerReflectionUtil(ActivityRestControllerImpl.class);
-        Set<Method> methodsWithRequestMappingAnnotation = util.getMethodsWithRequestMappingAnnotation();
-        MethodRestProviderForEntity methodRestProviderForEntity = util.buildPersistenceMethodOf(methodsWithRequestMappingAnnotation.stream().findFirst().get());
-        System.out.println();
+        Set<Class<?>> restControllerClasses = ControllerReflectionUtil
+                .getAllClassesFromPackage(ControllerReflectionUtil.REST_CONTROLLERS_PACKAGE);
+
+        for (Class<?> clazz : restControllerClasses) {
+            ControllerReflectionUtil util = new ControllerReflectionUtil(clazz);
+
+            EntityRestProviderInformation entityRestProviderInformation = new EntityRestProviderInformation();
+            entityRestProviderInformation.setRestControllerClass(clazz);
+            entityRestProviderInformation.setEntityClass(util.getEntityClass());
+            EntityRestProviderInformation savedInfo =
+                    entityRestProviderInformationService.save(entityRestProviderInformation);
+
+            Set<Method> methods = util.getMethodsWithRequestMappingAnnotation();
+            Set<MethodRestProviderForEntity> methodsForPersist = methods.stream()
+                    .map(method -> util.buildPersistenceMethodOf(method, savedInfo))
+                    .collect(Collectors.toSet());
+            methodRestProviderForEntityService.save(methodsForPersist);
+
+        }
     }
 
 

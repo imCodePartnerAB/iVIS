@@ -11,4 +11,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EntityRestProviderInformationRepoImpl extends AbstractService<EntityRestProviderInformation, Long, EntityRestProviderInformationRepository> implements EntityRestProviderInformationService {
+
+    @Override
+    public void deleteAll() {
+        getRepo().deleteAll();
+    }
 }

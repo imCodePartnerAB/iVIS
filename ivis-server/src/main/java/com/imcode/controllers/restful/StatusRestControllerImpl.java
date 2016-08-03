@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/v1/{format}/statuses")
-public class StatusRestController extends AbstractRestController<Status, Long, StatusService> {
+public class StatusRestControllerImpl extends AbstractRestController<Status, Long, StatusService> {
 }
