@@ -381,3 +381,7 @@ input, button {
   padding-top: 20px;
   width: 372px;
 }
+
+.non-display {
+  display: none;
+}

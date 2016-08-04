@@ -55,6 +55,9 @@ public class UserController {
     private JavaMailSender mailSender;
 
     @Autowired
+    private EntityRestProviderInformationService entityRestProviderInformationService;
+
+    @Autowired
     private MethodRestProviderForEntityService methodRestProviderForEntityService;
     //    Shows the list of users
     @RequestMapping(method = RequestMethod.GET)
@@ -116,6 +119,7 @@ public class UserController {
         model.setViewName("users/permissions");
         model.addObject(user);
         model.addObject(methodRestProviderForEntityService.findAll());
+        model.addObject(entityRestProviderInformationService.findAll());
 
         return model;
     }
