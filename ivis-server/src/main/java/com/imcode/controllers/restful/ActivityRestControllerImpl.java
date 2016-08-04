@@ -39,8 +39,8 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
         return super.create(entity, webRequest);
     }
 
-    @RequestMapping(value = "/attach/{activity_id}", method = RequestMethod.POST)
-    public String setAttachment(@PathVariable("activity_id") Long activityId,
+    @RequestMapping(value = "/attach/{id}", method = RequestMethod.POST)
+    public String setAttachment(@PathVariable("id") Long activityId,
                               @RequestParam("file") CommonsMultipartFile attachment,
                               WebRequest webRequest) {
         IssueAttachmentFileUtil issueAttachmentFileUtil = new IssueAttachmentFileUtil();
@@ -61,8 +61,8 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     }
 
 
-    @RequestMapping(value = "/attach/{activity_id}", method = RequestMethod.GET)
-    public void getAttachment(@PathVariable("activity_id") Long activityId,
+    @RequestMapping(value = "/attach/{id}", method = RequestMethod.GET)
+    public void getAttachment(@PathVariable("id") Long activityId,
                               HttpServletResponse response,
                               WebRequest webRequest) {
 

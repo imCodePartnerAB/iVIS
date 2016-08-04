@@ -78,4 +78,16 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
     public void addInParameters(String name, String type) {
         inParameters.put(name, type);
     }
+
+    public boolean match(String urlCheck, String methodCheck) {
+
+        String patternForUrl = urlCheck.replaceFirst("\\{format\\}", "(xml|json)");
+
+        if (patternForUrl.matches("(.*)\\{(\\w+)\\}(.*)")) {
+            patternForUrl = patternForUrl.replaceFirst("\\{id\\}", "^[1-9]\\d*$");
+        }
+
+        return urlCheck.matches(patternForUrl) && methodCheck.equals(requestMethod.toString());
+
+    }
 }

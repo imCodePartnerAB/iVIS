@@ -7,13 +7,11 @@ import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
@@ -45,6 +43,17 @@ public class ControllerReflectionUtil {
         genAndSetControllerPathAndEntityName();
     }
 
+    public MethodRestProviderForEntity buildPersistenceMethodOf(Method method, EntityRestProviderInformation savedInfo) {
+        MethodRestProviderForEntity methodForPersist = new MethodRestProviderForEntity();
+        methodForPersist.setEntityRestProviderInformation(savedInfo);
+        methodForPersist.setName(getNameOf(method));
+        methodForPersist.setUrl(controllerPath + getUrlOf(method));
+        methodForPersist.setRequestMethod(getRequestMethodOf(method));
+        methodForPersist.setInParameters(getInParametersOf(method));
+        methodForPersist.setOutParameter(getOutParameterOf(method));
+        return methodForPersist;
+    }
+
     public Set<Method> getMethodsWithRequestMappingAnnotation() {
         Set<Method> declaredMethods = getAllMethodFromContrllerAndSuperClass();
         Set<Method> requestMapping = declaredMethods.stream()
@@ -63,7 +72,7 @@ public class ControllerReflectionUtil {
 
     private void genAndSetControllerPathAndEntityName() {
         String simpleName = controllerClass.getSimpleName();
-        if (simpleName.indexOf("RestControllerImpl") == -1) {
+        if (!simpleName.contains("RestControllerImpl")) {
             System.out.println();
         }
         entityName = simpleName.substring(0, simpleName.indexOf("RestControllerImpl"));
@@ -94,17 +103,6 @@ public class ControllerReflectionUtil {
         return allClasses;
     }
 
-    public MethodRestProviderForEntity buildPersistenceMethodOf(Method method, EntityRestProviderInformation savedInfo) {
-        MethodRestProviderForEntity methodForPersist = new MethodRestProviderForEntity();
-        methodForPersist.setEntityRestProviderInformation(savedInfo);
-        methodForPersist.setName(getNameOf(method));
-        methodForPersist.setUrl(controllerPath + getUrlOf(method));
-        methodForPersist.setRequestMethod(getRequestMethodOf(method));
-        methodForPersist.setInParameters(getInParametersOf(method));
-        methodForPersist.setOutParameter(getOutParameterOf(method));
-        return methodForPersist;
-    }
-
     private String getNameOf(Method method) {
         return method.getName();
     }
@@ -113,7 +111,7 @@ public class ControllerReflectionUtil {
         Set<String> values = new HashSet<>();
         Collections.addAll(values, AnnotationUtils.findAnnotation(method, RequestMapping.class).value());
         Optional<String> url = values.stream()
-                .filter(value -> value.indexOf("/") != -1)
+                .filter(value -> value.contains("/"))
                 .findFirst();
         return url.isPresent() ? url.get() : "";
     }
@@ -131,15 +129,60 @@ public class ControllerReflectionUtil {
         return IntStream
                 .range(0, method.getParameterCount() - 1)
                 .mapToObj(i -> new MethodParameter(method, i))
-                .filter(methodParameter -> methodParameter.hasParameterAnnotation(PathVariable.class) ||
-                        methodParameter.hasParameterAnnotation(RequestParam.class))
-                .collect(Collectors.toMap(methodParameter -> allParameterNames[methodParameter.getParameterIndex()],
-                        methodParameter -> GenericTypeResolver.resolveParameterType(methodParameter, controllerClass).getSimpleName()));
+                .filter(methodParameter -> methodParameter.hasParameterAnnotation(PathVariable.class)
+                        || methodParameter.hasParameterAnnotation(RequestParam.class)
+                        || methodParameter.hasParameterAnnotation(RequestBody.class))
+                .collect(Collectors.toMap(methodParameter -> resolveMethodParameterName(methodParameter, allParameterNames),
+                        methodParameter -> resolveMethodParameterType(methodParameter)));
 
     }
 
+    private String resolveMethodParameterName(MethodParameter methodParameter, String[] allParameterNames) {
+
+        if (methodParameter.hasParameterAnnotation(PathVariable.class)) {
+            String value = methodParameter.getParameterAnnotation(PathVariable.class).value();
+            return value.isEmpty() ? allParameterNames[methodParameter.getParameterIndex()] : value;
+        } else if (methodParameter.hasParameterAnnotation(RequestParam.class)) {
+            String value = methodParameter.getParameterAnnotation(RequestParam.class).value();
+            return value.isEmpty() ? allParameterNames[methodParameter.getParameterIndex()] : value;
+        }
+
+        if (resolveMethodParameterType(methodParameter).equals(entityName)) {
+            return StringUtils.uncapitalize(entityName);
+        }
+
+        return inPluralForm(StringUtils.uncapitalize(entityName));
+
+    }
+
+    private String resolveMethodParameterType(MethodParameter methodParameter) {
+        String methodTypeSimpleName = methodParameter.getParameterType().getSimpleName();
+        switch (methodTypeSimpleName) {
+
+            case "Serializable":
+                return "Long";
+
+            case "Iterable":
+                return "List<" + entityName + ">";
+
+            case "Object":
+                return entityName;
+
+            case "JpaEntity":
+                return entityName;
+
+            default:
+                return methodTypeSimpleName;
+
+        }
+    }
+
     private String entityNameToLowerCaseInPluralForm(String entityName) {
-        StringBuilder modifiedEntityName = new StringBuilder(entityName.toLowerCase());
+        return inPluralForm(entityName.toLowerCase());
+    }
+
+    private String inPluralForm(String word) {
+        StringBuilder modifiedEntityName = new StringBuilder(word);
         char lastLater = modifiedEntityName.charAt(modifiedEntityName.length() - 1);
         switch (lastLater) {
             case 'y': {
@@ -157,6 +200,7 @@ public class ControllerReflectionUtil {
         }
         return modifiedEntityName.toString();
     }
+
 
     private String genReturnTypeByMethodName(String methodName) {
         boolean isMatch = methodName.matches("(?i)(.*)" + entityNameToLowerCaseInPluralForm(entityName)
