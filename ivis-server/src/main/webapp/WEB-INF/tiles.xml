@@ -45,6 +45,10 @@
         <put-attribute name="content" value="/WEB-INF/views/users/edit.jsp"/>
     </definition>
 
+    <definition name="users/permissions" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/users/permissions.jsp"/>
+    </definition>
+
 
     <!--Schools-->
     <definition name="schools/list" extends="default">

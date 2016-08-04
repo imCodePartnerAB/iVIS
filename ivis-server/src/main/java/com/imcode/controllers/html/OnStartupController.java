@@ -3,9 +3,13 @@ package com.imcode.controllers.html;
 import com.imcode.entities.EntityRestProviderInformation;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.OnceTimeAccessToken;
+import com.imcode.entities.User;
+import com.imcode.entities.oauth2.JpaClientDetails;
+import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.EntityRestProviderInformationService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.OnceTimeAccessTokenService;
+import com.imcode.services.UserService;
 import com.imcode.utils.ControllerReflectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,12 @@ public class OnStartupController {
     @Autowired
     private EntityRestProviderInformationService entityRestProviderInformationService;
 
+    @Autowired
+    private IvisClientDetailsService clientDetailsService;
+
+    @Autowired
+    private UserService userService;
+
     @PostConstruct
     public void deleteExpiredOrUsedOnceTimeAccessTokens() {
         List<OnceTimeAccessToken> onceTimeAccessTokens = onceTimeAccessTokenService.selectExpiredOrUsedTokens();
@@ -42,6 +52,9 @@ public class OnStartupController {
 
     @PostConstruct
     public void updateInformationAboutServices() {
+
+
+        methodRestProviderForEntityService.deleteRelations();
 
         methodRestProviderForEntityService.deleteAll();
         entityRestProviderInformationService.deleteAll();

@@ -3,9 +3,12 @@ package com.imcode.controllers.html;
 import com.imcode.controllers.html.exceptions.NotFoundException;
 import com.imcode.controllers.html.form.Message;
 import com.imcode.controllers.html.form.MessageType;
+import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.CommunicationTypeEnum;
+import com.imcode.services.EntityRestProviderInformationService;
+import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
@@ -51,6 +54,8 @@ public class UserController {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Autowired
+    private MethodRestProviderForEntityService methodRestProviderForEntityService;
     //    Shows the list of users
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView list(ModelAndView model, Authentication authentication) {
@@ -92,6 +97,25 @@ public class UserController {
         if (roleUser != null) {
             user.setAuthorities(roleUser);
         }
+
+        return model;
+    }
+
+    //    Show the PERMISSION form
+    @RequestMapping(value = "/{id}", params = "perm", method = RequestMethod.GET)
+    public ModelAndView permissionForm(@PathVariable("id") User user,
+                                   ModelAndView model,
+                                   WebRequest webRequest,
+                                   Locale locale) {
+
+        if (user == null) {
+            model.setViewName("clients/list");
+            throw new NotFoundException();
+        }
+
+        model.setViewName("users/permissions");
+        model.addObject(user);
+        model.addObject(methodRestProviderForEntityService.findAll());
 
         return model;
     }
@@ -225,6 +249,15 @@ public class UserController {
     }
 
 
+    @RequestMapping(value = "/permit", method = RequestMethod.POST)
+    public ModelAndView userPermissions (ModelAndView modelAndView,
+                                         WebRequest webRequest) {
+
+
+        return modelAndView;
+    }
+
+
 
     @RequestMapping(value = "/{id}", params = "checkpassword", method = RequestMethod.GET)
     public @ResponseBody Boolean checkPassword(@PathVariable("id") User user,
@@ -237,6 +270,7 @@ public class UserController {
         return encoder.matches(password, userEncodedPassword);
 
     }
+
 
 
 }

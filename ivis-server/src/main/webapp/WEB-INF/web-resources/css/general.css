@@ -280,6 +280,16 @@ input, button {
   color: #fff;
 }
 
+.orange-btn {
+  background: #ff9700;
+  border-bottom: 3px solid #cb5b5a !important;
+  color: #fff;
+}
+
+.orange-btn:hover {
+  background: #ffb403;
+}
+
 .negative:hover {
   background: #d16160;
 }

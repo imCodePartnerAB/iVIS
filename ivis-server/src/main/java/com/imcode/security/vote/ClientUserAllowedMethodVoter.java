@@ -17,7 +17,9 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.web.FilterInvocation;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Set;
 
@@ -116,7 +118,7 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
             return result;
         }
 
-        String requestMethod = fi.getHttpRequest().getMethod();
+        HttpServletRequest httpRequest = fi.getHttpRequest();
 
         OAuth2Authentication oauth2Authentication = (OAuth2Authentication) authentication;
         OAuth2Request clientAuthentication = oauth2Authentication.getOAuth2Request();
@@ -131,7 +133,8 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
 
         result = ACCESS_GRANTED;
 
-        if (availableMethodsForClient.stream().anyMatch(methodRestProviderForEntity -> methodRestProviderForEntity.match(requestUrl, requestMethod))) {
+        if (availableMethodsForClient.stream().anyMatch(methodRestProviderForEntity ->
+                isMethodMatch(methodRestProviderForEntity, requestUrl, httpRequest))) {
             return result;
         }
 
@@ -145,6 +148,27 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
         Set<MethodRestProviderForEntity> allowedMethodsForOwner = clientDetails.getOwner().getAllowedMethods();
         allowedMethodsForClient.retainAll(allowedMethodsForOwner);
         return allowedMethodsForClient;
+    }
+
+    private boolean isMethodMatch(MethodRestProviderForEntity methodRestProviderForEntity, String urlCheck, HttpServletRequest request) {
+
+        String patternForUrl = methodRestProviderForEntity.getUrl().replaceFirst("\\{format\\}", "(xml|json)");
+
+        if (patternForUrl.matches("(.*)\\{(\\w+)\\}(.*)")) {
+            patternForUrl = patternForUrl.replaceFirst("\\{id\\}", "^[1-9]\\d*$");
+        }
+
+        String methodCheck = request.getMethod();
+        String requestMethod = methodRestProviderForEntity.getRequestMethod().toString();
+
+        Set<String> inParameters = methodRestProviderForEntity.getInParameters().keySet();
+
+        inParameters.remove("id");
+
+        return urlCheck.matches(patternForUrl)
+                && methodCheck.equals(requestMethod)
+                && (inParameters.isEmpty() ? true : inParameters.stream().allMatch(parameter -> request.getAttribute(parameter) != null));
+
     }
 
 }
