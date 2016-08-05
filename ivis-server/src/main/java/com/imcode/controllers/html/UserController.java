@@ -77,7 +77,7 @@ public class UserController {
                                    Locale locale) {
 
         if (user == null) {
-            model.setViewName("clients/list");
+            model.setViewName("users/list");
             throw new NotFoundException();
 //            model.addObject(new Message(MessageType.ERROR, messageSource.getMessage("entity.notFoundById", new Object[]{User.class.getSimpleName(), id}, locale)));
         }
@@ -113,7 +113,7 @@ public class UserController {
                                    Locale locale) {
 
         if (user == null) {
-            model.setViewName("clients/list");
+            model.setViewName("users/list");
             throw new NotFoundException();
         }
 
@@ -121,6 +121,7 @@ public class UserController {
         model.addObject(user);
         model.addObject(methodRestProviderForEntityService.findAll());
         model.addObject(entityRestProviderInformationService.findAll());
+        model.addObject("specify", "user");
 
         return model;
     }

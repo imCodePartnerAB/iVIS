@@ -2,11 +2,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<spring:url value="/users" var="backUrl"/>
 
-<h1>Permissions of user</h1>
+<h1>Permissions of ${specify}</h1>
 
-<form:form modelAttribute="user" class="user-permissions-form" method="post">
+<form:form modelAttribute="${specify}" class="${specify}-permissions-form" method="post">
 
     <div class="field">
         <label>Service method provided by entities:</label>
@@ -61,7 +60,7 @@
 
     <div class="buttons">
         <button class="positive" type="submit">Save</button>
-        <a class="button neutral" href="${backUrl}">Back</a>
+        <a class="button neutral" onclick="history.back()">Back</a>
     </div>
 
 </form:form>
@@ -79,4 +78,5 @@
 
     });
 </script>
+
 

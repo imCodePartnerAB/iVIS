@@ -1,5 +1,6 @@
 package com.imcode.controllers.html;
 
+import com.imcode.controllers.html.exceptions.NotFoundException;
 import com.imcode.controllers.html.form.Message;
 import com.imcode.controllers.html.form.MessageType;
 import com.imcode.entities.User;
@@ -7,6 +8,8 @@ import com.imcode.entities.enums.AuthorizedGrantType;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ClientRoleService;
+import com.imcode.services.EntityRestProviderInformationService;
+import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.UserService;
 import com.imcode.validators.JpaClientDetailsValidator;
 import org.slf4j.Logger;
@@ -44,6 +47,12 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
     @Autowired
     private JpaClientDetailsValidator clientValidator;
+
+    @Autowired
+    private EntityRestProviderInformationService entityRestProviderInformationService;
+
+    @Autowired
+    private MethodRestProviderForEntityService methodRestProviderForEntityService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAll(WebRequest webRequest, Model model, Authentication principal) {
@@ -141,6 +150,26 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
         client.setOwner((User) authentication.getPrincipal());
         model.addObject("client", client);
         model.setViewName("clients/edit");
+
+        return model;
+    }
+
+    //    Show the PERMISSION form
+    @RequestMapping(value = "/{id}", params = "perm", method = RequestMethod.GET)
+    public ModelAndView permissionForm(@PathVariable("id") String id, ModelAndView model, WebRequest webRequest, Authentication principal) {
+
+        JpaClientDetails clientDetails = clientDetailsService.findOne(id);
+
+        if (clientDetails == null) {
+            model.setViewName("clients/list");
+            throw new NotFoundException();
+        }
+
+        model.addObject("client", clientDetails);
+        model.setViewName("clients/permissions");
+        model.addObject(methodRestProviderForEntityService.findAll());
+        model.addObject(entityRestProviderInformationService.findAll());
+        model.addObject("specify", "client");
 
         return model;
     }
