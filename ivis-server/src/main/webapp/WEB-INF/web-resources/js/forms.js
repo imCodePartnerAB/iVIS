@@ -31,3 +31,8 @@ function showOrHideElementByLabel(spanArrow) {
         $(label).find(">:first-child").css('transform', 'rotate(135deg)');
     }
 };
+
+function checkAllMethodsOfEntity(checkbox) {
+    var entityDivId = checkbox.getAttribute("for");
+    $('#' + entityDivId).find("input[type='checkbox']").prop("checked", $(checkbox).is(":checked"));
+}

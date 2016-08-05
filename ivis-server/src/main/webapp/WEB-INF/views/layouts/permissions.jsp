@@ -14,6 +14,7 @@
         <div class="field">
             <label for="entity${info.id}">
                 <span class="arrow" onclick="showOrHideElementByLabel(this);"></span>${info.entityClass}
+                <input type="checkbox" onclick="checkAllMethodsOfEntity(this);" for="entity${info.id}"/>
             </label>
         </div>
         <div id="entity${info.id}" class="non-display indent">
