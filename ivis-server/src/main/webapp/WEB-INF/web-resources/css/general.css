@@ -216,6 +216,11 @@ input, button {
   width: 372px;
 }
 
+.field label input {
+  margin-top: 10px;
+  width: auto;
+}
+
 .field .error {
   background: #fcf7f7;
   border-color: #cb5b5a;
@@ -385,3 +390,22 @@ input, button {
 .non-display {
   display: none;
 }
+
+.arrow {
+  position: relative;
+  top: 1pt;
+  content: "";
+  display: inline-block;
+  /* By using an em scale, the arrows will size with the font */
+  width: 0.4em;
+  height: 0.4em;
+  border-right: 0.2em solid #a4cb5a;
+  border-top: 0.2em solid #a4cb5a;
+  transform: rotate(45deg);
+  margin-right: 0.5em;
+}
+
+.indent {
+  margin-left: 20px;
+}
+

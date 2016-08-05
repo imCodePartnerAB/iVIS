@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.jws.soap.SOAPBinding;
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -204,9 +205,18 @@ public class UserController {
                 throw new NotFoundException();
             }
 
-            String[] fieldExceptions = user.getPassword().isEmpty() ? new String[]{"id", "password", "confirmPassword"} : new String[]{"id"};
+//            String[] fieldExceptions = user.getPassword().isEmpty() ? new String[]{"id", "password", "confirmPassword"} : new String[]{"id"};
 
-            BeanUtils.copyProperties(user, persistUser, fieldExceptions);
+//            BeanUtils.copyProperties(user, persistUser, fieldExceptions);
+
+
+            try {
+                StaticUtls.nullAwareBeanCopy(persistUser, user);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
 
             StaticUtls.encodeUserPassword(persistUser);
 

@@ -19,3 +19,15 @@ function deleteElementRest(url, id, callback) {
         }
     )
 };
+
+function showOrHideElementByLabel(spanArrow) {
+    var label = spanArrow.parentElement;
+    var $element = $("#" + label.getAttribute("for"));
+    if($element.is(":visible")) {
+        $element.hide();
+        $(label).find(">:first-child").css('transform', 'rotate(45deg)');
+    } else {
+        $element.show();
+        $(label).find(">:first-child").css('transform', 'rotate(135deg)');
+    }
+};
