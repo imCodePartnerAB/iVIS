@@ -208,8 +208,7 @@ public class UserController {
 
 //            String[] fieldExceptions = user.getPassword().isEmpty() ? new String[]{"id", "password", "confirmPassword"} : new String[]{"id"};
 
-//            BeanUtils.copyProperties(user, persistUser, fieldExceptions);
-
+//            BeanUtils.copyProperties(user, persistUser, fieldExceptions);\
 
             try {
                 StaticUtls.nullAwareBeanCopy(persistUser, user);
@@ -219,7 +218,9 @@ public class UserController {
                 e.printStackTrace();
             }
 
-            StaticUtls.encodeUserPassword(persistUser);
+            if (user.getPassword() != null) {
+                StaticUtls.encodeUserPassword(persistUser);
+            }
 
             userService.save(persistUser);
             model.setViewName("redirect:/users");

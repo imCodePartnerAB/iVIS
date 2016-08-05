@@ -75,7 +75,7 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     }
 
 //    Updating exists client
-    @RequestMapping(value = "/{clientId}", params = "form", method = RequestMethod.POST)
+    @RequestMapping(value = "/{clientId}", method = RequestMethod.POST)
     public ModelAndView update(@PathVariable("clientId") String clientId,
                          @ModelAttribute("client") @Valid JpaClientDetails client,
                          BindingResult bindingResult,
