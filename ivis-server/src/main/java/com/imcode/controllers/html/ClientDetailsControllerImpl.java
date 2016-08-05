@@ -11,6 +11,7 @@ import com.imcode.services.ClientRoleService;
 import com.imcode.services.EntityRestProviderInformationService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.UserService;
+import com.imcode.utils.StaticUtls;
 import com.imcode.validators.JpaClientDetailsValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Controller
@@ -110,7 +112,16 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
             return model;
         }
-        BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
+//        BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
+
+        try {
+            StaticUtls.nullAwareBeanCopy(persistentClient, client);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
         clientDetailsService.updateClientDetails(persistentClient);
 
         model.setViewName("redirect:/clients");

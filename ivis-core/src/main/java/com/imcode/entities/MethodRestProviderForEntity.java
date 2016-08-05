@@ -75,19 +75,20 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
         this.entityRestProviderInformation = entityRestProviderInformation;
     }
 
-    public void addInParameters(String name, String type) {
-        inParameters.put(name, type);
-    }
+    //Check equals without id
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public boolean match(String urlCheck, String methodCheck) {
+        MethodRestProviderForEntity that = (MethodRestProviderForEntity) o;
 
-        String patternForUrl = urlCheck.replaceFirst("\\{format\\}", "(xml|json)");
-
-        if (patternForUrl.matches("(.*)\\{(\\w+)\\}(.*)")) {
-            patternForUrl = patternForUrl.replaceFirst("\\{id\\}", "^[1-9]\\d*$");
-        }
-
-        return urlCheck.matches(patternForUrl) && methodCheck.equals(requestMethod.toString());
+        if (!inParameters.equals(that.inParameters)) return false;
+        if (!outParameter.equals(that.outParameter)) return false;
+        if (!url.equals(that.url)) return false;
+        if (requestMethod != that.requestMethod) return false;
+        if (!name.equals(that.name)) return false;
+        return entityRestProviderInformation.equals(that.entityRestProviderInformation);
 
     }
 }

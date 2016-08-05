@@ -70,6 +70,10 @@ public class ControllerReflectionUtil {
         return ENTITY_PACKAGE + "." + entityName;
     }
 
+    public String getEntityName() {
+        return entityName;
+    }
+
     private void genAndSetControllerPathAndEntityName() {
         String simpleName = controllerClass.getSimpleName();
         if (!simpleName.contains("RestControllerImpl")) {

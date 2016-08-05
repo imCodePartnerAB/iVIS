@@ -45,4 +45,17 @@ public class EntityRestProviderInformation extends AbstractIdEntity<Long> implem
     public void setEntityProviderMethods(Set<MethodRestProviderForEntity> entityProviderMethods) {
         this.entityProviderMethods = entityProviderMethods;
     }
+
+    //Check equals without id
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EntityRestProviderInformation that = (EntityRestProviderInformation) o;
+
+        if (!entityClass.equals(that.entityClass)) return false;
+        return restControllerClass.equals(that.restControllerClass);
+
+    }
 }

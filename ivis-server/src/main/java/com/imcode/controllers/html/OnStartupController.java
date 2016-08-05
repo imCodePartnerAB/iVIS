@@ -53,6 +53,8 @@ public class OnStartupController {
     @PostConstruct
     public void updateInformationAboutServices() {
 
+        List<User> allUsers = userService.findAll();
+        List<JpaClientDetails> allClients = clientDetailsService.findAll();
 
         methodRestProviderForEntityService.deleteRelations();
 
@@ -67,7 +69,7 @@ public class OnStartupController {
 
             EntityRestProviderInformation entityRestProviderInformation = new EntityRestProviderInformation();
             entityRestProviderInformation.setRestControllerClass(clazz);
-            entityRestProviderInformation.setEntityClass(util.getEntityClass());
+            entityRestProviderInformation.setEntityClass(util.getEntityName());
             EntityRestProviderInformation savedInfo =
                     entityRestProviderInformationService.save(entityRestProviderInformation);
 
@@ -78,6 +80,43 @@ public class OnStartupController {
             methodRestProviderForEntityService.save(methodsForPersist);
 
         }
+
+        List<MethodRestProviderForEntity> allMethods = methodRestProviderForEntityService.findAll();
+
+        for (User user : allUsers) {
+            Set<MethodRestProviderForEntity> allowedMethods = user.getAllowedMethods();
+            Set<MethodRestProviderForEntity> methodsOfUser = allowedMethods.stream()
+                    .mapToInt(allMethods::indexOf)
+                    .filter(i -> i != -1)
+                    .mapToObj(allMethods::get)
+                    .collect(Collectors.toSet());
+            if (methodsOfUser != null) {
+                if (!methodsOfUser.isEmpty()) {
+                    user.setAllowedMethods(methodsOfUser);
+                    userService.save(user);
+                }
+            }
+        }
+
+        for (JpaClientDetails client : allClients) {
+            Set<MethodRestProviderForEntity> allowedMethods = client.getAllowedMethods();
+            Set<MethodRestProviderForEntity> methodsOfClient = allowedMethods.stream()
+                    .mapToInt(allMethods::indexOf)
+                    .filter(i -> i != -1)
+                    .mapToObj(allMethods::get)
+                    .collect(Collectors.toSet());
+            if (methodsOfClient != null) {
+                if (!methodsOfClient.isEmpty()) {
+                    client.setAllowedMethods(methodsOfClient);
+                    clientDetailsService.updateClientDetails(client);
+                }
+            }
+        }
+
+
+
+
+
     }
 
 

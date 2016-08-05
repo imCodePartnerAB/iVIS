@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by ruslan on 01.08.16.
  */
-public interface MethodRestProviderForEntityRepository extends JpaRepository<MethodRestProviderForEntity, Long> {
+public interface MethodRestProviderForEntityRepository extends NamedRepository<MethodRestProviderForEntity> {
 
     @Modifying(clearAutomatically = true)
     @Query(value = "TRUNCATE TABLE dbo_user_allowed_methods", nativeQuery = true
