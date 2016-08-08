@@ -71,10 +71,19 @@
 
         $("input[id^='allowedMethods']").each(function (index, element) {
 
+            $(element).click(function () {
+                var entityDivId = this.parentElement.parentElement.parentElement.id;
+                var $checkboxGroup = $("#" + entityDivId + " :input");
+                var $checkboxGroupChecked = $("#" + entityDivId + " :input:checked");
+                $("input[for='" + entityDivId + "']").prop("checked", $checkboxGroup.length == $checkboxGroupChecked.length);
+            });
+
             var idOfMethod = "method" + element.getAttribute("value");
             $("label[for='" + idOfMethod + "']").append(element);
             $("label[for='" + element.id + "']").parent().remove();
 
+            $(element).trigger("click");
+            $(element).trigger("click");
         });
 
     });
