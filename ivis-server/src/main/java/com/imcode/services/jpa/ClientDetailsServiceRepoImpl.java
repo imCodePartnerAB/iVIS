@@ -1,5 +1,6 @@
 package com.imcode.services.jpa;
 
+import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
@@ -112,5 +113,10 @@ public class ClientDetailsServiceRepoImpl implements IvisClientDetailsService {
     @Transactional(readOnly = true)
     public JpaClientDetails findOne(String clientId) {
         return clietnDetailsRepository.findOne(clientId);
+    }
+
+    @Override
+    public Boolean isMethodAllowed(String clientId, MethodRestProviderForEntity method) {
+        return clietnDetailsRepository.isMethodAllowed(method, clientId);
     }
 }

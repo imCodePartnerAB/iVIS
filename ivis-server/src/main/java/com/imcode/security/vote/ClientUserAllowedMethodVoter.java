@@ -3,6 +3,8 @@ package com.imcode.security.vote;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.oauth2.JpaClientDetails;
+import com.imcode.oauth2.IvisClientDetailsService;
+import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.jpa.ClientDetailsServiceRepoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -39,7 +43,10 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
 
     @Autowired
     @Qualifier("clientDetailsServiceRepoImpl")
-    private ClientDetailsService clientDetailsService;
+    private IvisClientDetailsService clientDetailsService;
+
+    @Autowired
+    private MethodRestProviderForEntityService methodRestProviderForEntityService;
 
     private boolean clientAuthoritiesAreScopes = true;
 
@@ -49,7 +56,7 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
      * @param clientDetailsService the client details service (mandatory)
      */
     public void setClientDetailsService(ClientDetailsService clientDetailsService) {
-        this.clientDetailsService = clientDetailsService;
+        this.clientDetailsService = (IvisClientDetailsService) clientDetailsService;
     }
 
     /**
@@ -107,10 +114,6 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
 
         int result = ACCESS_ABSTAIN;
 
-        if (!(authentication instanceof OAuth2Authentication)) {
-            return result;
-        }
-
         FilterInvocation fi = (FilterInvocation) object;
         String requestUrl = fi.getRequestUrl();
 
@@ -118,57 +121,80 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
             return result;
         }
 
+        if (!(authentication instanceof OAuth2Authentication)) {
+            return result;
+        }
+
         HttpServletRequest httpRequest = fi.getHttpRequest();
+
+        requestUrl = requestUrl.replaceFirst("/api/v1/(json|xml)/", "/api/v1/{format}/");
+        requestUrl = requestUrl.replaceFirst("/\\d+", "/{id}");
+        RequestMethod requestMethod = RequestMethod.valueOf(httpRequest.getMethod());
+
+        List<MethodRestProviderForEntity> byUrlAndRequestMethod = methodRestProviderForEntityService.findByUrlAndRequestMethod(
+                requestUrl.contains("?") ? requestUrl.substring(0, requestUrl.indexOf("?")) : requestUrl, requestMethod
+        );
+
+        Set httpParameters = httpRequest.getParameterMap().keySet();
+        Set keySet = httpRequest.getParameterMap().keySet();
+        byUrlAndRequestMethod.stream().filter(methodRestProviderForEntity ->
+            methodRestProviderForEntity.getInParameters().keySet().stream().allMatch(keySet::contains));
 
         OAuth2Authentication oauth2Authentication = (OAuth2Authentication) authentication;
         OAuth2Request clientAuthentication = oauth2Authentication.getOAuth2Request();
-        JpaClientDetails client = (JpaClientDetails) clientDetailsService.loadClientByClientId(clientAuthentication.getClientId());
-        Set<MethodRestProviderForEntity> availableMethodsForClient = availableMethodsForClient(client);
+        String clientId = clientAuthentication.getClientId();
 
-        result = ACCESS_DENIED;
 
-        if (availableMethodsForClient.isEmpty()) {
-            return result;
-        }
 
-        result = ACCESS_GRANTED;
 
-        if (availableMethodsForClient.stream().anyMatch(methodRestProviderForEntity ->
-                isMethodMatch(methodRestProviderForEntity, requestUrl, httpRequest))) {
-            return result;
-        }
 
-        result = ACCESS_DENIED;
-
+//        JpaClientDetails client = (JpaClientDetails) clientDetailsService.loadClientByClientId(clientAuthentication.getClientId());
+//        Set<MethodRestProviderForEntity> availableMethodsForClient = availableMethodsForClient(client);
+//
+//        result = ACCESS_GRANTED;//ACCESS_DENIED;
+//
+//        if (availableMethodsForClient.isEmpty()) {
+//            return result;
+//        }
+//
+//        result = ACCESS_GRANTED;//ACCESS_GRANTED;
+//
+//        if (availableMethodsForClient.stream().anyMatch(methodRestProviderForEntity ->
+//                isMethodMatch(methodRestProviderForEntity, requestUrl, httpRequest))) {
+//            return result;
+//        }
+//
+//        result = ACCESS_GRANTED;//ACCESS_DENIED;
+//
         return result;
     }
 
-    private Set<MethodRestProviderForEntity> availableMethodsForClient(JpaClientDetails clientDetails) {
-        Set<MethodRestProviderForEntity> allowedMethodsForClient = clientDetails.getAllowedMethods();
-        Set<MethodRestProviderForEntity> allowedMethodsForOwner = clientDetails.getOwner().getAllowedMethods();
-        allowedMethodsForClient.retainAll(allowedMethodsForOwner);
-        return allowedMethodsForClient;
-    }
-
-    private boolean isMethodMatch(MethodRestProviderForEntity methodRestProviderForEntity, String urlCheck, HttpServletRequest request) {
-
-        String patternForUrl = methodRestProviderForEntity.getUrl().replaceFirst("\\{format\\}", "(xml|json)");
-
-        if (patternForUrl.matches("(.*)\\{(\\w+)\\}(.*)")) {
-            patternForUrl = patternForUrl.replaceFirst("\\{id\\}", "^[1-9]\\d*$");
-        }
-
-        String methodCheck = request.getMethod();
-        String requestMethod = methodRestProviderForEntity.getRequestMethod().toString();
-
-        Set<String> inParameters = methodRestProviderForEntity.getInParameters().keySet();
-
-        inParameters.remove("id");
-
-        return urlCheck.matches(patternForUrl)
-                && methodCheck.equals(requestMethod)
-                && (inParameters.isEmpty() ? true : inParameters.stream().allMatch(parameter -> request.getAttribute(parameter) != null));
-
-    }
+//    private Set<MethodRestProviderForEntity> availableMethodsForClient(JpaClientDetails clientDetails) {
+//        Set<MethodRestProviderForEntity> allowedMethodsForClient = clientDetails.getAllowedMethods();
+//        Set<MethodRestProviderForEntity> allowedMethodsForOwner = clientDetails.getOwner().getAllowedMethods();
+//        allowedMethodsForClient.retainAll(allowedMethodsForOwner);
+//        return allowedMethodsForClient;
+//    }
+//
+//    private boolean isMethodMatch(MethodRestProviderForEntity methodRestProviderForEntity, String urlCheck, HttpServletRequest request) {
+//
+//        String patternForUrl = methodRestProviderForEntity.getUrl().replaceFirst("\\{format\\}", "(xml|json)");
+//
+//        if (patternForUrl.matches("(.*)\\{(\\w+)\\}(.*)")) {
+//            patternForUrl = patternForUrl.replaceFirst("\\{id\\}", "^[1-9]\\d*$");
+//        }
+//
+//        String methodCheck = request.getMethod();
+//        String requestMethod = methodRestProviderForEntity.getRequestMethod().toString();
+//
+//        Set<String> inParameters = methodRestProviderForEntity.getInParameters().keySet();
+//
+//        inParameters.remove("id");
+//
+//        return urlCheck.matches(patternForUrl)
+//                && methodCheck.equals(requestMethod)
+//                && (inParameters.isEmpty() ? true : inParameters.stream().allMatch(parameter -> request.getAttribute(parameter) != null));
+//
+//    }
 
 }

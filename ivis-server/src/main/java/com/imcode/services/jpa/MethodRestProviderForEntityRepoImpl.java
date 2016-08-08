@@ -7,6 +7,9 @@ import com.imcode.services.AbstractService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 /**
  * Created by ruslan on 01.08.16.
@@ -25,5 +28,11 @@ public class MethodRestProviderForEntityRepoImpl extends AbstractNamedService<Me
     public void deleteRelations() {
         getRepo().deleteRelationsWithUser();
         getRepo().deleteRelationsWithClient();
+    }
+
+    @Transactional
+    @Override
+    public List<MethodRestProviderForEntity> findByUrlAndRequestMethod(String url, RequestMethod requestMethod) {
+        return getRepo().findByUrlAndRequestMethod(url, requestMethod);
     }
 }

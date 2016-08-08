@@ -112,15 +112,21 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
             return model;
         }
-//        BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
 
-        try {
-            StaticUtls.nullAwareBeanCopy(persistentClient, client);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        if (webRequest.getParameter("perm") == null) {
+            BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
+        } else {
+            persistentClient.setAllowedMethods(client.getAllowedMethods());
         }
+
+
+//        try {
+//            StaticUtls.nullAwareBeanCopy(persistentClient, client);
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
 
         clientDetailsService.updateClientDetails(persistentClient);
 
