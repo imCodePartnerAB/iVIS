@@ -114,35 +114,35 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
 
         int result = ACCESS_ABSTAIN;
 
-        FilterInvocation fi = (FilterInvocation) object;
-        String requestUrl = fi.getRequestUrl();
-
-        if (!(requestUrl.matches("/api/v1/(json|xml)/(.*)"))) {
-            return result;
-        }
-
-        if (!(authentication instanceof OAuth2Authentication)) {
-            return result;
-        }
-
-        HttpServletRequest httpRequest = fi.getHttpRequest();
-
-        requestUrl = requestUrl.replaceFirst("/api/v1/(json|xml)/", "/api/v1/{format}/");
-        requestUrl = requestUrl.replaceFirst("/\\d+", "/{id}");
-        RequestMethod requestMethod = RequestMethod.valueOf(httpRequest.getMethod());
-
-        List<MethodRestProviderForEntity> byUrlAndRequestMethod = methodRestProviderForEntityService.findByUrlAndRequestMethod(
-                requestUrl.contains("?") ? requestUrl.substring(0, requestUrl.indexOf("?")) : requestUrl, requestMethod
-        );
-
-        Set httpParameters = httpRequest.getParameterMap().keySet();
-        Set keySet = httpRequest.getParameterMap().keySet();
-        byUrlAndRequestMethod.stream().filter(methodRestProviderForEntity ->
-            methodRestProviderForEntity.getInParameters().keySet().stream().allMatch(keySet::contains));
-
-        OAuth2Authentication oauth2Authentication = (OAuth2Authentication) authentication;
-        OAuth2Request clientAuthentication = oauth2Authentication.getOAuth2Request();
-        String clientId = clientAuthentication.getClientId();
+//        FilterInvocation fi = (FilterInvocation) object;
+//        String requestUrl = fi.getRequestUrl();
+//
+//        if (!(requestUrl.matches("/api/v1/(json|xml)/(.*)"))) {
+//            return result;
+//        }
+//
+//        if (!(authentication instanceof OAuth2Authentication)) {
+//            return result;
+//        }
+//
+//        HttpServletRequest httpRequest = fi.getHttpRequest();
+//
+//        requestUrl = requestUrl.replaceFirst("/api/v1/(json|xml)/", "/api/v1/{format}/");
+//        requestUrl = requestUrl.replaceFirst("/\\d+", "/{id}");
+//        RequestMethod requestMethod = RequestMethod.valueOf(httpRequest.getMethod());
+//
+//        List<MethodRestProviderForEntity> byUrlAndRequestMethod = methodRestProviderForEntityService.findByUrlAndRequestMethod(
+//                requestUrl.contains("?") ? requestUrl.substring(0, requestUrl.indexOf("?")) : requestUrl, requestMethod
+//        );
+//
+//        Set httpParameters = httpRequest.getParameterMap().keySet();
+//        Set keySet = httpRequest.getParameterMap().keySet();
+//        byUrlAndRequestMethod.stream().filter(methodRestProviderForEntity ->
+//            methodRestProviderForEntity.getInParameters().keySet().stream().allMatch(keySet::contains));
+//
+//        OAuth2Authentication oauth2Authentication = (OAuth2Authentication) authentication;
+//        OAuth2Request clientAuthentication = oauth2Authentication.getOAuth2Request();
+//        String clientId = clientAuthentication.getClientId();
 
 
 
