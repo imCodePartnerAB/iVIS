@@ -1,5 +1,5 @@
-How to use
-==========
+Use cases
+=========
 
 .. toctree::
     :titlesonly:

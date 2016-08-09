@@ -20,6 +20,6 @@ Contents
    basic_concepts/index
    quick_start/index
    api/index
-   how_to_use/index
+   use_cases/index
 
 .. include:: /common/contribute.txt
