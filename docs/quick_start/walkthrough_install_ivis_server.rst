@@ -75,9 +75,55 @@ Run application
 
 In Terminal(Ctrl+ALt+T) input following commands
 
+.. code-block:: bash
+
     cd /home/../iVIS #path to iVIS project directory
 
     mvn clean install -DskipTests
+
+Go to project folder (/home/../iVIS/ivis-server/target).
+
+Find there file iVIS.war, rename to ivis.war.
+
+Copy file to directory where you download Tomcat (/home/../apache-tomcat-{version}/webapps).
+
+If you have process on port 8080 you must kill it by input following command in Terminal
+
+.. code-block:: bash
+
+    fuser -k 8080/tcp
+
+Then go to Tomcat folder (/home/../apache-tomcat-{version}/bin).
+
+Run Tomcat by input following command in Terminal.
+
+.. code-block:: bash
+
+    cd  /home/../apache-tomcat-{version}/bin
+
+    chmod +x startup.sh
+
+    ./startup.sh
+
+Open in your browser http://localhost:8080/ivis .
+
+Login: admin
+Password: password
+
+If you see this image, everything is good, congratulations!
+
+.. image:: /images/ivisServerStartPage.png
+
+Shutdown Tomcat by input following command in Terminal.
+
+.. code-block:: bash
+
+    cd  /home/../apache-tomcat-{version}/bin
+
+    chmod +x shutdown.sh
+
+    ./shutdown.sh
+
 
 
 

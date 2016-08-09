@@ -55,7 +55,9 @@ Install Maven
 Download Tomcat server
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Current stable version is `8.54 <http://apache.ip-connect.vn.ua/tomcat/tomcat-8/v8.5.4/bin/apache-tomcat-8.5.4.tar.gz/>`_
+We recommends download `8 version <https://tomcat.apache.org/download-80.cgi/>`_
+
+Extract Tomcat folder from archive, in place what you want.
 
 
 
