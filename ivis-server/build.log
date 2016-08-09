@@ -1,2 +1,3 @@
 
 process-webapp-sources:
+     [copy] Copying 19 files to /home/ruslan/IdeaProject/iVIS/ivis-server/target/ivis-server/WEB-INF
