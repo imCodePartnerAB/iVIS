@@ -1,4 +1,4 @@
-Data Access layer
+Data Access Layer
 =================
 
 Data access layer in iVIS implemented using JPA standard
