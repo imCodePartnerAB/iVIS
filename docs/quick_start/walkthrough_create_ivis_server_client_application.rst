@@ -7,12 +7,12 @@ _____________
 First of all you need install iVIS server. Visit `this page </en/latest/quick_start/walkthrough_install_ivis_server.html>`_
 for details. When you have working iVIS server we can continue.
 
-This client based on imCMS.
+This client is based on imCMS.
 
 Database configuration
 ----------------------
 
-In the Terminal (Ctrl+ALt+T) input following commands to create the database:
+In the Terminal (Ctrl+ALt+T) execute following commands to create the database:
 
 .. code-block:: bash
 
@@ -20,9 +20,9 @@ In the Terminal (Ctrl+ALt+T) input following commands to create the database:
 
     CREATE DATABASE db_ivis_info;
 
-Download file :download:`dump_db_ivis_info.sql <../files/dump_db_ivis_info.sql>`
+Download file :download:`dump_db_ivis_info.sql <../files/dump_db_ivis_info.sql>`.
 
-In the Terminal(Ctrl+ALt+T) execute following command to run dump file:
+In the Terminal (Ctrl+ALt+T) execute following command to run dump file:
 
 .. code-block:: bash
 
@@ -47,11 +47,15 @@ Run Tomcat by executing following command in the Terminal:
 
     ./startup.sh
 
-Open in your browser http://localhost:8080/client.
+Open iVIS Сlient in your browser: http://localhost:8080/client.
 
 Login: admin
 
 Password: password
+
+.. note::
+    Default installations of the iVIS Server and iVIS Client have configured client in the database.
+    You can read more about it `here </en/latest/api/authorization.html>`_.
 
 If you see this image, everything is good, congratulations!
 

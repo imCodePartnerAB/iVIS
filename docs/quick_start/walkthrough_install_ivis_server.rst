@@ -115,6 +115,10 @@ Login: admin
 
 Password: password
 
+.. note::
+    Default installations of the iVIS Server have configured user and person related in the database.
+    You can read more about it `here </en/latest/api/authorization.html>`_.
+
 If you see this image, everything is good, congratulations!
 
 .. image:: /images/ivisServerStartPage.png
