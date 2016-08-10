@@ -77,7 +77,7 @@ Put file :download:`import.sql <../files/import.sql>` into *ivis-server/src/main
 Run application
 ---------------
 
-In the Terminal(Ctrl+ALt+T) execute following commands:
+In the Terminal (Ctrl+ALt+T) execute following commands:
 
 .. code-block:: bash
 
