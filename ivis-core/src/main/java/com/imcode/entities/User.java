@@ -49,12 +49,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column(name = "saml2_id")
     private String saml2Id;
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_user_allowed_methods",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "method_id"))
-    private Set<MethodRestProviderForEntity> allowedMethods = new HashSet<>();
-
     @JsonIgnore
     public Boolean getEnabled() {
         return enabled;
@@ -194,15 +188,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @JsonIgnore
     public Set<String> getRoleNames() {
         return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
-    }
-
-    @JsonIgnore
-    public Set<MethodRestProviderForEntity> getAllowedMethods() {
-        return allowedMethods;
-    }
-
-    public void setAllowedMethods(Set<MethodRestProviderForEntity> allowedMethods) {
-        this.allowedMethods = allowedMethods;
     }
 
     public static void main(String[] args) {

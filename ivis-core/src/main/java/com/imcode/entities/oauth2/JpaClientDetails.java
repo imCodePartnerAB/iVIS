@@ -116,12 +116,6 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonIgnore
     private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
 
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_client_allowed_methods",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "method_id"))
-    private Set<MethodRestProviderForEntity> allowedMethods = new HashSet<>();
-
     public JpaClientDetails() {
     }
 
@@ -371,18 +365,6 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonAnySetter
     public void addAdditionalInformation(String key, Object value) {
         this.additionalInformation.put(key, value);
-    }
-
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public Set<MethodRestProviderForEntity> getAllowedMethods() {
-        return allowedMethods;
-    }
-
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public void setAllowedMethods(Set<MethodRestProviderForEntity> allowedMethods) {
-        this.allowedMethods = allowedMethods;
     }
 
     @Override
