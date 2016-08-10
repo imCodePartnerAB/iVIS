@@ -6,12 +6,12 @@ _____________
 
 *To install iVIS server you need*:
 
- * `Git <https://git-scm.com//>`_
- * `iVIS project <https://github.com/imCodePartnerAB/iVIS/>`_
- * `Java <https://www.oracle.com/java/>`_
- * `MySQL database <http://www.mysql.com/>`_
- * `Maven <https://maven.apache.org/>`_
- * `Tomcat server <https://tomcat.apache.org//>`_
+ * `Git <https://git-scm.com//>`_;
+ * `iVIS project <https://github.com/imCodePartnerAB/iVIS/>`_;
+ * `Java <https://www.oracle.com/java/>`_;
+ * `MySQL database <http://www.mysql.com/>`_;
+ * `Maven <https://maven.apache.org/>`_;
+ * `Tomcat server <https://tomcat.apache.org//>`_.
 
 For detailed instructions of installing this components visit `this page </en/latest/quick_start/installation.html>`_.
 
@@ -19,10 +19,10 @@ Project structure
 -----------------
 
 iVIS maven project from GitHub consist of 4 modules:
-    #. *ivis-core* - entities and service interfaces for them
-    #. *ivis-sdk* - sdk for easier work with API
-    #. *ivis-server* - iVIS server, where is implemented all logic of site
-    #. *ivis-client* - an example of iVIS client based on imCMS
+    #. *ivis-core* - entities and service interfaces for them;
+    #. *ivis-sdk* - sdk for easier work with API;
+    #. *ivis-server* - iVIS server, where is implemented all logic of site;
+    #. *ivis-client* - an example of iVIS client based on imCMS.
 
 Git configuration
 -----------------
@@ -35,11 +35,11 @@ Clone project from GitHub repository:
 
     git clone https://github.com/imCodePartnerAB/iVIS.git
 
-First of all you need switch to branch of latest changes.
+First of all you need switch to the branch of the latest changes.
 
-Current branch is NewApplicationFormArchitect
+This branch is NewApplicationFormArchitect
 
-In Terminal(Ctrl+ALt+T) input following commands
+Run following commands in the Terminal for that:
 
 .. code-block:: bash
 
@@ -50,7 +50,7 @@ In Terminal(Ctrl+ALt+T) input following commands
 Database configuration
 ----------------------
 
-In Terminal(Ctrl+ALt+T) input following commands for create database
+In the Terminal (Ctrl+ALt+T) input following commands to create the database:
 
 .. code-block:: bash
 
@@ -60,12 +60,12 @@ In Terminal(Ctrl+ALt+T) input following commands for create database
 
 Edit file **server.properties** from *ivis-server/src/main/webapp/WEB-INF* following
 
-    * User [#]_
-    * Password [#]_
-    * JdbcUrl [#]_
-    * Hibernate.hbm2ddl [#]_
-    * Hibernate.dialect [#]_
-    * Server.name [#]_
+    * User [#]_;
+    * Password [#]_;
+    * JdbcUrl [#]_;
+    * Hibernate.hbm2ddl [#]_;
+    * Hibernate.dialect [#]_;
+    * Server.name [#]_;
 
 .. [#] **username** of database (default *root*)
 .. [#] **password** of database
@@ -75,12 +75,12 @@ Edit file **server.properties** from *ivis-server/src/main/webapp/WEB-INF* follo
 .. [#] for mysql is *org.hibernate.dialect.MySQL5InnoDBDialect*
 .. [#] **host** of server (default *http://localhost:8080*)
 
-Put file :download:`import.sql <../files/import.sql>` into *ivis-server/src/main/resources*
+Put file :download:`import.sql <../files/import.sql>` into *ivis-server/src/main/resources*.
 
 Run application
 ---------------
 
-In Terminal(Ctrl+ALt+T) input following commands
+In Terminal(Ctrl+ALt+T) execute following commands:
 
 .. code-block:: bash
 
@@ -94,7 +94,7 @@ Find there file iVIS.war, rename to ivis.war.
 
 Copy file to directory where you download Tomcat (/home/../apache-tomcat-{version}/webapps).
 
-If you have process on port 8080 you must kill it by input following command in Terminal
+If you have process on port 8080 you must kill it by executing following command in the Terminal:
 
 .. code-block:: bash
 
@@ -102,7 +102,7 @@ If you have process on port 8080 you must kill it by input following command in 
 
 Then go to Tomcat folder (/home/../apache-tomcat-{version}/bin).
 
-Run Tomcat by input following command in Terminal.
+Run Tomcat by executing following command in the Terminal:
 
 .. code-block:: bash
 
@@ -112,16 +112,17 @@ Run Tomcat by input following command in Terminal.
 
     ./startup.sh
 
-Open in your browser http://localhost:8080/ivis .
+Open the iVIS Server administration console in your browser: http://localhost:8080/ivis.
 
 Login: admin
+
 Password: password
 
 If you see this image, everything is good, congratulations!
 
 .. image:: /images/ivisServerStartPage.png
 
-Shutdown Tomcat by input following command in Terminal.
+Shutdown Tomcat by executing following command in the Terminal:
 
 .. code-block:: bash
 
