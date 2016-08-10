@@ -13,19 +13,19 @@ in the Spring Security filter chain in order to implement OAuth 2.0 Authorizatio
     * Authorization Endpoint is used to service requests for authorization (URL: /oauth/authorize)
     * Token Endpoint is used to service requests for access token (URL: /oauth/token)
 
-Detail describe you can see at `this link <http://projects.spring.io/spring-security-oauth/docs/oauth2.html>`_
+You can find details `here <http://projects.spring.io/spring-security-oauth/docs/oauth2.html>`_.
 
 Authorization and tokens management processes
 ---------------------------------------------
 
-Authorization process based on `Information about client`_
+Authorization process is based on `Information about the client`_
 
-And tokens management based on `Tokens flow`_
+And tokens management is based on `Tokens flow`_
 
 Interaction between them provide Spring Security, which need configure.
 
-Information about client
-~~~~~~~~~~~~~~~~~~~~~~~~
+Information about the client
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For **data access** responsible
 `JpaClientDetails
