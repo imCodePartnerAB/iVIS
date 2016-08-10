@@ -18,10 +18,10 @@ For detailed instructions of installing this components visit `this page </en/la
 Project structure
 -----------------
 
-iVIS maven project from GitHub consist of 4 modules:
+iVIS maven project from GitHub consists of 4 modules:
     #. *ivis-core* - entities and service interfaces for them;
-    #. *ivis-sdk* - sdk for easier work with API;
-    #. *ivis-server* - iVIS server, where is implemented all logic of site;
+    #. *ivis-sdk* - sdk for easier work with the API;
+    #. *ivis-server* - iVIS server, implementation of the application logic;
     #. *ivis-client* - an example of iVIS client based on imCMS.
 
 Git configuration
@@ -35,11 +35,7 @@ Clone project from GitHub repository:
 
     git clone https://github.com/imCodePartnerAB/iVIS.git
 
-First of all you need switch to the branch of the latest changes.
-
-This branch is NewApplicationFormArchitect
-
-Run following commands in the Terminal for that:
+First of all you need switch to the branch of the latest changes. This branch is NewApplicationFormArchitect. Run following commands in the Terminal for that:
 
 .. code-block:: bash
 
@@ -58,7 +54,7 @@ In the Terminal (Ctrl+ALt+T) input following commands to create the database:
 
     CREATE DATABASE {databaseName}; #{databaseName} - database name
 
-Edit file **server.properties** from *ivis-server/src/main/webapp/WEB-INF* following
+Edit file **server.properties** from *ivis-server/src/main/webapp/WEB-INF* in the next way:
 
     * User [#]_;
     * Password [#]_;
@@ -80,7 +76,7 @@ Put file :download:`import.sql <../files/import.sql>` into *ivis-server/src/main
 Run application
 ---------------
 
-In Terminal(Ctrl+ALt+T) execute following commands:
+In the Terminal(Ctrl+ALt+T) execute following commands:
 
 .. code-block:: bash
 
