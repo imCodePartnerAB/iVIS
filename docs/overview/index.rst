@@ -5,7 +5,6 @@ Overview of iVIS
    :titlesonly:
 
 iVIS innovativt Verksamhetsystem i skolan
------------------------------------------
 
 It is a VINNOVA-funded project to create basic conditions for the digitization of the Swedish school,
 by building a completely open school administrative system.
