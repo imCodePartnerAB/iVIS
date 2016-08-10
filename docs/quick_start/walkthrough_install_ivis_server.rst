@@ -1,5 +1,9 @@
 Walkthrough: Install iVIS Server
 ================================
+
+Prerequisites
+_____________
+
 *For install iVIS server you need*:
 
  * `Git <https://git-scm.com//>`_

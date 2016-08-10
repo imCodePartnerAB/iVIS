@@ -17,8 +17,8 @@ Contents
    :titlesonly:
 
    overview/index
-   basic_concepts/index
    quick_start/index
+   basic_concepts/index
    api/index
    use_cases/index
 

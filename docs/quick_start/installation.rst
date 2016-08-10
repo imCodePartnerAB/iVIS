@@ -55,9 +55,11 @@ Install Maven
 Download Tomcat server
 ~~~~~~~~~~~~~~~~~~~~~~
 
-We recommends download `8 version <https://tomcat.apache.org/download-80.cgi/>`_
+You can download from official `site <https://tomcat.apache.org//>`_
 
-Extract Tomcat folder from archive, in place what you want.
+Or use it :download:`apache-tomcat-8.5.4.tar.gz <../files/apache-tomcat-8.5.4.tar.gz>`.
+
+Extract Tomcat folder from archive in place what you want.
 
 
 
