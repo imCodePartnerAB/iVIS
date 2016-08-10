@@ -19,10 +19,11 @@ Project structure
 -----------------
 
 iVIS maven project from GitHub consists of 4 modules:
-    #. *ivis-core* - entities and service interfaces for them;
-    #. *ivis-sdk* - sdk for easier work with the API;
-    #. *ivis-server* - iVIS server, implementation of the application logic;
-    #. *ivis-client* - an example of iVIS client based on imCMS.
+
+    #. ivis-core - entities and service interfaces for them;
+    #. ivis-sdk - sdk for easier work with the API;
+    #. ivis-server - iVIS server, implementation of the application logic;
+    #. ivis-client - an example of iVIS client based on imCMS.
 
 Git configuration
 -----------------
