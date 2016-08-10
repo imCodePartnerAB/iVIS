@@ -1,4 +1,4 @@
-﻿Software installation
+﻿Software Installation
 =====================
 
 Process will be describe in Ubuntu Terminal (Ctrl+Alt+T), and all following code you need input there.
@@ -9,15 +9,6 @@ Install Git
 .. code-block:: bash
 
     sudo apt-get install git-all
-
-Clone project from GitHub repository
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: bash
-
-    cd /home/username/directory #Directory in what you want to clone project
-
-    git clone https://github.com/imCodePartnerAB/iVIS.git
 
 Install Java
 ~~~~~~~~~~~~
@@ -55,11 +46,11 @@ Install Maven
 Download Tomcat server
 ~~~~~~~~~~~~~~~~~~~~~~
 
-You can download from official `site <https://tomcat.apache.org//>`_
+You can download it from the `official site <https://tomcat.apache.org//>`_
 
-Or use it :download:`apache-tomcat-8.5.4.tar.gz <../files/apache-tomcat-8.5.4.tar.gz>`.
+Or use this one: :download:`apache-tomcat-8.5.4.tar.gz <../files/apache-tomcat-8.5.4.tar.gz>`.
 
-Extract Tomcat folder from archive in place what you want.
+Extract Tomcat folder from the archive in the location you want.
 
 
 

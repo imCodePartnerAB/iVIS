@@ -4,7 +4,7 @@ Walkthrough: Install iVIS Server
 Prerequisites
 _____________
 
-*For install iVIS server you need*:
+*To install iVIS server you need*:
 
  * `Git <https://git-scm.com//>`_
  * `iVIS project <https://github.com/imCodePartnerAB/iVIS/>`_
@@ -13,12 +13,7 @@ _____________
  * `Maven <https://maven.apache.org/>`_
  * `Tomcat server <https://tomcat.apache.org//>`_
 
-For details instruction of install this components visit page:
-
-.. toctree::
-    :titlesonly:
-
-    installation
+For detailed instructions of installing this components visit `this page </en/latest/quick_start/installation.html>`_.
 
 Project structure
 -----------------
@@ -31,6 +26,14 @@ iVIS maven project from GitHub consist of 4 modules:
 
 Git configuration
 -----------------
+
+Clone project from GitHub repository:
+
+.. code-block:: bash
+
+    cd /home/username/directory #Directory in what you want to clone project
+
+    git clone https://github.com/imCodePartnerAB/iVIS.git
 
 First of all you need switch to branch of latest changes.
 
