@@ -17,8 +17,4 @@ public interface ClietnDetailsRepository extends JpaRepository<JpaClientDetails,
 
     List<JpaClientDetails> findByOwner(User owner);
 
-    @Query("select case when ((:method member of c.owner.allowedMethods) AND (:method member of c.allowedMethods)) " +
-            "then true else false end " +
-            "from JpaClientDetails c where c.clientId = :clientId")
-    Boolean isMethodAllowed(@Param("method") MethodRestProviderForEntity method, @Param("clientId") String clientId);
 }

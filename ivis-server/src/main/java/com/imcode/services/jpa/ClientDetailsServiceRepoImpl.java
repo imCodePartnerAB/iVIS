@@ -115,8 +115,4 @@ public class ClientDetailsServiceRepoImpl implements IvisClientDetailsService {
         return clietnDetailsRepository.findOne(clientId);
     }
 
-    @Override
-    public Boolean isMethodAllowed(String clientId, MethodRestProviderForEntity method) {
-        return clietnDetailsRepository.isMethodAllowed(method, clientId);
-    }
 }

@@ -20,8 +20,6 @@ public interface IvisClientDetailsService extends ClientDetailsService, ClientRe
 
     JpaClientDetails findOne(String clientId);
 
-    Boolean isMethodAllowed(String clientId, MethodRestProviderForEntity method);
-
 //    JpaClientDetails save(JpaClientDetails clientDetails);
 
 
