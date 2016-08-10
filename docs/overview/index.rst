@@ -4,7 +4,7 @@ Overview of iVIS
 .. toctree::
    :titlesonly:
 
-iVIS innovativt Verksamhetsystem i skolan
+iVIS is innovative business system for schools. `Here <http://ivis.se//>`_ you can get more information.
 
 It is a VINNOVA-funded project to create basic conditions for the digitization of the Swedish school,
 by building a completely open school administrative system.
