@@ -1,20 +1,15 @@
-iVIS server
-===========
+iVIS Server Configuration
+=========================
 
-iVIS server requires to manage clients, users, schools, pupils of iVIS system.
+    * `Create or edit iVIS client`_
 
-Explanation for not understandable parts.
-
-    * `Create/Edit iVIS client`_
-
-.. _`Create/Edit iVIS client`:
+.. _`Create or edit iVIS client`:
 
 Create/Edit iVIS client
 -----------------------
 
-Clients require you get access to system data.
-
-Page for this purpose is
+Client is any client application that connects to the iVIS Server and works with data.
+To create a client go to the clients list and click Create button.
 
 .. image:: /images/ivisClient.png
 
@@ -72,10 +67,6 @@ This section allows choose ways for obtain access token for client
 .. envvar:: implicit
 
     About this you can read at `Implicit Grant <https://tools.ietf.org/html/rfc6749#section-4.2>`_
-
-.. envvar:: refresh_token
-
-    About this you can read at `Refreshing an Access Token <https://tools.ietf.org/html/rfc6749#section-6>`_
 
 .. envvar:: client_credentials
 
