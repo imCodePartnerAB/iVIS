@@ -4,18 +4,15 @@ Walkthrough: Create iVIS Server Client Application
 Prerequisites
 _____________
 
+First of all you need install iVIS server. Visit `this page </en/latest/quick_start/walkthrough_install_ivis_server.html>`_
+for details. When you have working iVIS server we can continue.
+
 This client based on imCMS.
-
-First of all you need install iVIS server.
-
-For details visit `this page </en/latest/quick_start/walkthrough_install_ivis_server.html>`_ .
-
-If you run iVIS server, than can continue, otherwise you can't move on.
 
 Database configuration
 ----------------------
 
-In Terminal(Ctrl+ALt+T) input following commands for create database
+In the Terminal (Ctrl+ALt+T) input following commands to create the database:
 
 .. code-block:: bash
 
@@ -25,7 +22,7 @@ In Terminal(Ctrl+ALt+T) input following commands for create database
 
 Download file :download:`dump_db_ivis_info.sql <../files/dump_db_ivis_info.sql>`
 
-In Terminal(Ctrl+ALt+T) input following command for run dump file on database
+In the Terminal(Ctrl+ALt+T) execute following command to run dump file:
 
 .. code-block:: bash
 
@@ -40,7 +37,7 @@ Find there file ivis-client.war, rename to client.war.
 
 Copy file to directory where you download Tomcat (/home/../apache-tomcat-{version}/webapps).
 
-Run Tomcat by input following command in Terminal.
+Run Tomcat by executing following command in the Terminal:
 
 .. code-block:: bash
 
@@ -50,16 +47,17 @@ Run Tomcat by input following command in Terminal.
 
     ./startup.sh
 
-Open in your browser http://localhost:8080/client .
+Open in your browser http://localhost:8080/client.
 
 Login: admin
+
 Password: password
 
 If you see this image, everything is good, congratulations!
 
 .. image:: /images/ivisClientStartPage.png
 
-Shutdown Tomcat by input following command in Terminal.
+Shutdown Tomcat by executing following command in the Terminal.
 
 .. code-block:: bash
 
