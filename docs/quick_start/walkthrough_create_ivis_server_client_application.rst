@@ -8,7 +8,7 @@ This client based on imCMS.
 
 First of all you need install iVIS server.
 
-For details visit this `page </en/latest/quick_start/walkthrough_install_ivis_server.html/>`_ .
+For details visit this `page </en/latest/quick_start/walkthrough_install_ivis_server.html>`_ .
 
 If you run iVIS server, than can continue, otherwise you can't move on.
 
