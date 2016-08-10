@@ -1,11 +1,9 @@
 Data Access Layer
 =================
 
-Data access layer in iVIS implemented using JPA standard
-(ORM provider Hibernate).
+Data access layer in iVIS is implemented using standard JPA (using Hibernate as ORM provider).
 
-All tables present as mapping of entities.
-Tables have prefix "dbo_" that means database object,
+All entities are mapped to the corresponding tables. All tables (except authorization ones) have prefix "dbo_" that means "database object".
 Except of authorization tables
 (it relate with ideological considerations).
 
@@ -17,11 +15,11 @@ JPA classes located in *com.imcode.entities* of ivis-core module in iVIS project
 
 **JPA entities diagram** :download:`download <../images/jpaEntitiesDiagram.png>`.
 
-Relations in DB also implement by JPA standard.
+Relations in DB also are implement by standard JPA.
 
 .. note::
 
-    embeddables have not got id. Because they can not exist without entity
+    Embedded entities don't have id and cann't exist without parent entity.
 
 LIST OF ALL TABLES AND DESCRIPTION
 ----------------------------------
