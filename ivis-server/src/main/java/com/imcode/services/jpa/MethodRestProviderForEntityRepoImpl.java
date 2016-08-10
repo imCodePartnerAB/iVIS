@@ -23,16 +23,4 @@ public class MethodRestProviderForEntityRepoImpl extends AbstractNamedService<Me
         getRepo().deleteAll();
     }
 
-    @Transactional
-    @Override
-    public void deleteRelations() {
-        getRepo().deleteRelationsWithUser();
-        getRepo().deleteRelationsWithClient();
-    }
-
-    @Transactional
-    @Override
-    public List<MethodRestProviderForEntity> findByUrlAndRequestMethod(String url, RequestMethod requestMethod) {
-        return getRepo().findByUrlAndRequestMethod(url, requestMethod);
-    }
 }

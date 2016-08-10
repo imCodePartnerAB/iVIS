@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.imcode.entities.oauth2.JpaClientDetails;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
@@ -34,6 +35,14 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "entity_rest_provider_info_id")
     private EntityRestProviderInformation entityRestProviderInformation;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id")
+    private JpaClientDetails clientDetails;
 
     public Map<String, String> getInParameters() {
         return inParameters;
@@ -73,5 +82,21 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
 
     public void setEntityRestProviderInformation(EntityRestProviderInformation entityRestProviderInformation) {
         this.entityRestProviderInformation = entityRestProviderInformation;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public JpaClientDetails getClientDetails() {
+        return clientDetails;
+    }
+
+    public void setClientDetails(JpaClientDetails clientDetails) {
+        this.clientDetails = clientDetails;
     }
 }

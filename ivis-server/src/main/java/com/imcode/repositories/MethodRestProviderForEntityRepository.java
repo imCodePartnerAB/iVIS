@@ -15,20 +15,8 @@ import java.util.Set;
  */
 public interface MethodRestProviderForEntityRepository extends NamedRepository<MethodRestProviderForEntity> {
 
-    @Modifying(clearAutomatically = true)
-    @Query(value = "TRUNCATE TABLE dbo_user_allowed_methods", nativeQuery = true
-    )
-    void deleteRelationsWithUser();
-
-    @Modifying(clearAutomatically = true)
-    @Query(value = "TRUNCATE TABLE dbo_client_allowed_methods", nativeQuery = true
-    )
-    void deleteRelationsWithClient();
-
     @Override
     @Query("select method from MethodRestProviderForEntity method order by method.entityRestProviderInformation.entityClass")
     List<MethodRestProviderForEntity> findAll();
-
-    List<MethodRestProviderForEntity> findByUrlAndRequestMethod(String url, RequestMethod requestMethod);
 
 }

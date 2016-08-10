@@ -12,8 +12,4 @@ public interface MethodRestProviderForEntityService extends GenericService<Metho
 
     void deleteAll();
 
-    void deleteRelations();
-
-    List<MethodRestProviderForEntity> findByUrlAndRequestMethod(String url, RequestMethod requestMethod);
-
 }
