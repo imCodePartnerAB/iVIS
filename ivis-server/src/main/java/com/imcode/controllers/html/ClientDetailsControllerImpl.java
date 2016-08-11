@@ -3,6 +3,7 @@ package com.imcode.controllers.html;
 import com.imcode.controllers.html.exceptions.NotFoundException;
 import com.imcode.controllers.html.form.Message;
 import com.imcode.controllers.html.form.MessageType;
+import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
 import com.imcode.entities.oauth2.JpaClientDetails;
@@ -11,6 +12,7 @@ import com.imcode.services.ClientRoleService;
 import com.imcode.services.EntityRestProviderInformationService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.UserService;
+import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.JpaClientDetailsValidator;
 import org.slf4j.Logger;
@@ -32,6 +34,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/clients")
@@ -113,25 +117,11 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
             return model;
         }
 
-        if (webRequest.getParameter("perm") == null) {
-            BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
-        } else {
-//            persistentClient.setAllowedMethods(client.getAllowedMethods());
-        }
-
-
-//        try {
-//            StaticUtls.nullAwareBeanCopy(persistentClient, client);
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
+        BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
 
         clientDetailsService.updateClientDetails(persistentClient);
 
         model.setViewName("redirect:/clients");
-
 
         return model;
     }
@@ -187,7 +177,8 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
         model.addObject(methodRestProviderForEntityService.findAll());
         model.addObject(entityRestProviderInformationService.findAll());
         model.addObject("specify", "client");
-
+        model.addObject("allowedMethods",
+                new CollectionTransferUtil<>(methodRestProviderForEntityService.findAllowedMethodsByClientId(id)));
         return model;
     }
 
@@ -246,4 +237,21 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
         model.setViewName("redirect:/clients");
         return model;
     }
+
+    @RequestMapping(value = "/{id}", params = "permit", method = RequestMethod.POST)
+    public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
+                                      @PathVariable("id") String clientId,
+                                      ModelAndView model) {
+        Collection<String> idOfMethods = allowedMethods.getCollection();
+        JpaClientDetails client = clientDetailsService.findOne(clientId);
+        Set<MethodRestProviderForEntity> collectedMethods = idOfMethods.stream()
+                .map(id -> methodRestProviderForEntityService.find(Long.parseLong(id)))
+                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.setClientDetails(client))
+                .collect(Collectors.toSet());
+        methodRestProviderForEntityService.save(collectedMethods);
+        model.setViewName("redirect:/clients");
+        return model;
+    }
+
+
 }

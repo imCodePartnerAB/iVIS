@@ -12,4 +12,6 @@ public interface MethodRestProviderForEntityService extends GenericService<Metho
 
     void deleteAll();
 
+    List<MethodRestProviderForEntity> findAllowedMethodsByClientId(String id);
+
 }

@@ -5,7 +5,7 @@
 
 <h1>Permissions of ${specify}</h1>
 
-<form:form action="${specify}s/${identifier}" class="${specify}-permissions-form" method="post">
+<form:form modelAttribute="allowedMethods" action="${identifier}?permit" class="${specify}-permissions-form" method="post">
 
     <div class="field">
         <label>Service method provided by entities:</label>
@@ -56,7 +56,7 @@
     </c:forEach>
 
 
-    <form:checkboxes path="allowedMethods" items="${methodRestProviderForEntityList}" itemLabel="name" cssErrorClass="error"
+    <form:checkboxes path="collection" items="${methodRestProviderForEntityList}" itemLabel="name" cssErrorClass="error"
                      cssClass="check-box"/>
 
     <div class="buttons">
@@ -69,7 +69,7 @@
 <script>
     $(document).ready(function () {
 
-        $("input[id^='allowedMethods']").each(function (index, element) {
+        $("input[id^='collection']").each(function (index, element) {
 
             $(element).click(function () {
                 var entityDivId = this.parentElement.parentElement.parentElement.id;
