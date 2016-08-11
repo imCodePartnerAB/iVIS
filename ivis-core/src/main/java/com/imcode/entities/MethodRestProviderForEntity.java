@@ -99,4 +99,19 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
     public void setClientDetails(JpaClientDetails clientDetails) {
         this.clientDetails = clientDetails;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MethodRestProviderForEntity that = (MethodRestProviderForEntity) o;
+
+        if (inParameters != null ? !inParameters.equals(that.inParameters) : that.inParameters != null) return false;
+        if (outParameter != null ? !outParameter.equals(that.outParameter) : that.outParameter != null) return false;
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        if (requestMethod != that.requestMethod) return false;
+        return true;
+
+    }
 }

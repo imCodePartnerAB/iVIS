@@ -84,27 +84,32 @@ public class OnStartupController {
         for (EntityRestProviderInformation info : allInfo) {
 
             EntityRestProviderInformation persistInfoByEntityClass = entityRestProviderInformationService.findByEntityClass(info.getEntityClass());
-            Set<MethodRestProviderForEntity> entityProviderMethods = info.getEntityProviderMethods();
 
-            for (MethodRestProviderForEntity entityProviderMethod : entityProviderMethods) {
-                Optional<MethodRestProviderForEntity> methodForCheckOptional = persistInfoByEntityClass
-                        .getEntityProviderMethods().stream()
-                        .filter(method -> entityProviderMethod.getName().equals(method.getName()))
-                        .findFirst();
-                if (methodForCheckOptional.isPresent()) {
-                    MethodRestProviderForEntity methodForCheck = methodForCheckOptional.get();
-                    if (methodForCheck.equals(entityProviderMethod)) {
-                        entityProviderMethod.setId(null);
-                        try {
-                            StaticUtls.nullAwareBeanCopy(methodForCheck, entityProviderMethod);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
+            if (persistInfoByEntityClass != null) {
+                Set<MethodRestProviderForEntity> entityProviderMethods = info.getEntityProviderMethods();
+
+                for (MethodRestProviderForEntity entityProviderMethod : entityProviderMethods) {
+                    Optional<MethodRestProviderForEntity> methodForCheckOptional = persistInfoByEntityClass
+                            .getEntityProviderMethods().stream()
+                            .filter(method -> entityProviderMethod.getName().equals(method.getName()))
+                            .findFirst();
+                    if (methodForCheckOptional.isPresent()) {
+                        MethodRestProviderForEntity methodForCheck = methodForCheckOptional.get();
+                        if (methodForCheck.equals(entityProviderMethod)) {
+                            entityProviderMethod.setId(null);
+                            entityProviderMethod.setEntityRestProviderInformation(persistInfoByEntityClass);
+                            try {
+                                StaticUtls.nullAwareBeanCopy(methodForCheck, entityProviderMethod);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
+                            methodRestProviderForEntityService.save(methodForCheck);
                         }
-                        methodRestProviderForEntityService.save(methodForCheck);
                     }
                 }
+
             }
 
         }
