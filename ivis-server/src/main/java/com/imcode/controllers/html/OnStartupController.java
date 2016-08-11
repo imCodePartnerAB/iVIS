@@ -11,6 +11,7 @@ import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.OnceTimeAccessTokenService;
 import com.imcode.services.UserService;
 import com.imcode.utils.ControllerReflectionUtil;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by ruslan on 01.08.16.
@@ -53,10 +56,7 @@ public class OnStartupController {
     @PostConstruct
     public void updateInformationAboutServices() {
 
-        List<User> allUsers = userService.findAll();
-        List<JpaClientDetails> allClients = clientDetailsService.findAll();
-
-        methodRestProviderForEntityService.deleteRelations();
+        List<EntityRestProviderInformation> allInfo = entityRestProviderInformationService.findAll();
 
         methodRestProviderForEntityService.deleteAll();
         entityRestProviderInformationService.deleteAll();
@@ -81,39 +81,33 @@ public class OnStartupController {
 
         }
 
-        List<MethodRestProviderForEntity> allMethods = methodRestProviderForEntityService.findAll();
+        for (EntityRestProviderInformation info : allInfo) {
 
-        for (User user : allUsers) {
-            Set<MethodRestProviderForEntity> allowedMethods = user.getAllowedMethods();
-            Set<MethodRestProviderForEntity> methodsOfUser = allowedMethods.stream()
-                    .mapToInt(allMethods::indexOf)
-                    .filter(i -> i != -1)
-                    .mapToObj(allMethods::get)
-                    .collect(Collectors.toSet());
-            if (methodsOfUser != null) {
-                if (!methodsOfUser.isEmpty()) {
-                    user.setAllowedMethods(methodsOfUser);
-                    userService.save(user);
+            EntityRestProviderInformation persistInfoByEntityClass = entityRestProviderInformationService.findByEntityClass(info.getEntityClass());
+            Set<MethodRestProviderForEntity> entityProviderMethods = info.getEntityProviderMethods();
+
+            for (MethodRestProviderForEntity entityProviderMethod : entityProviderMethods) {
+                Optional<MethodRestProviderForEntity> methodForCheckOptional = persistInfoByEntityClass
+                        .getEntityProviderMethods().stream()
+                        .filter(method -> entityProviderMethod.getName().equals(method.getName()))
+                        .findFirst();
+                if (methodForCheckOptional.isPresent()) {
+                    MethodRestProviderForEntity methodForCheck = methodForCheckOptional.get();
+                    if (methodForCheck.equals(entityProviderMethod)) {
+                        entityProviderMethod.setId(null);
+                        try {
+                            StaticUtls.nullAwareBeanCopy(methodForCheck, entityProviderMethod);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                        methodRestProviderForEntityService.save(methodForCheck);
+                    }
                 }
             }
+
         }
-
-        for (JpaClientDetails client : allClients) {
-            Set<MethodRestProviderForEntity> allowedMethods = client.getAllowedMethods();
-            Set<MethodRestProviderForEntity> methodsOfClient = allowedMethods.stream()
-                    .mapToInt(allMethods::indexOf)
-                    .filter(i -> i != -1)
-                    .mapToObj(allMethods::get)
-                    .collect(Collectors.toSet());
-            if (methodsOfClient != null) {
-                if (!methodsOfClient.isEmpty()) {
-                    client.setAllowedMethods(methodsOfClient);
-                    clientDetailsService.updateClientDetails(client);
-                }
-            }
-        }
-
-
 
 
 

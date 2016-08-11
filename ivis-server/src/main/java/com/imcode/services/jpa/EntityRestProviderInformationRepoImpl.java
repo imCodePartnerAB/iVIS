@@ -1,6 +1,7 @@
 package com.imcode.services.jpa;
 
 import com.imcode.entities.EntityRestProviderInformation;
+import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.repositories.EntityRestProviderInformationRepository;
 import com.imcode.services.AbstractService;
 import com.imcode.services.EntityRestProviderInformationService;
@@ -16,4 +17,10 @@ public class EntityRestProviderInformationRepoImpl extends AbstractService<Entit
     public void deleteAll() {
         getRepo().deleteAll();
     }
+
+    @Override
+    public EntityRestProviderInformation findByEntityClass(String entityClass) {
+        return getRepo().findByEntityClass(entityClass);
+    }
+
 }

@@ -116,7 +116,7 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
         if (webRequest.getParameter("perm") == null) {
             BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
         } else {
-            persistentClient.setAllowedMethods(client.getAllowedMethods());
+//            persistentClient.setAllowedMethods(client.getAllowedMethods());
         }
 
 
@@ -182,7 +182,7 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
             throw new NotFoundException();
         }
 
-        model.addObject("client", clientDetails);
+        model.addObject("identifier", id);
         model.setViewName("clients/permissions");
         model.addObject(methodRestProviderForEntityService.findAll());
         model.addObject(entityRestProviderInformationService.findAll());

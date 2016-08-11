@@ -5,7 +5,7 @@
 
 <h1>Permissions of ${specify}</h1>
 
-<form:form modelAttribute="${specify}" class="${specify}-permissions-form" method="post">
+<form:form action="${specify}s/${identifier}" class="${specify}-permissions-form" method="post">
 
     <div class="field">
         <label>Service method provided by entities:</label>
