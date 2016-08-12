@@ -244,11 +244,16 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
                                       ModelAndView model) {
         Collection<String> idOfMethods = allowedMethods.getCollection();
         JpaClientDetails client = clientDetailsService.findOne(clientId);
-        Set<MethodRestProviderForEntity> collectedMethods = idOfMethods.stream()
-                .map(id -> methodRestProviderForEntityService.find(Long.parseLong(id)))
-                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.setClientDetails(client))
-                .collect(Collectors.toSet());
-        methodRestProviderForEntityService.save(collectedMethods);
+        List<MethodRestProviderForEntity> allowedMethodsByClientId = methodRestProviderForEntityService.findAllowedMethodsByClientId(clientId);
+        allowedMethodsByClientId.forEach(method -> {
+            if (idOfMethods.contains(method.getId().toString())) {
+                method.setClientDetails(client);
+                methodRestProviderForEntityService.save(method);
+            } else {
+                method.setClientDetails(null);
+                methodRestProviderForEntityService.save(method);
+            }
+        });
         model.setViewName("redirect:/clients");
         return model;
     }

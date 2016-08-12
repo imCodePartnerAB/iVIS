@@ -11,6 +11,7 @@ import com.imcode.services.EntityRestProviderInformationService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
+import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.UserValidator;
@@ -32,10 +33,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.jws.soap.SOAPBinding;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -117,12 +116,13 @@ public class UserController {
             throw new NotFoundException();
         }
 
+        model.addObject("identifier", user.getId());
         model.setViewName("users/permissions");
-        model.addObject(user);
         model.addObject(methodRestProviderForEntityService.findAll());
         model.addObject(entityRestProviderInformationService.findAll());
         model.addObject("specify", "user");
-
+        model.addObject("allowedMethods",
+                new CollectionTransferUtil<>(methodRestProviderForEntityService.findAllowedMethodsByUserId(user.getId())));
         return model;
     }
 
@@ -268,16 +268,6 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/permit", method = RequestMethod.POST)
-    public ModelAndView userPermissions (ModelAndView modelAndView,
-                                         WebRequest webRequest) {
-
-
-        return modelAndView;
-    }
-
-
-
     @RequestMapping(value = "/{id}", params = "checkpassword", method = RequestMethod.GET)
     public @ResponseBody Boolean checkPassword(@PathVariable("id") User user,
                                                @RequestParam("checkpassword") String password) {
@@ -288,6 +278,26 @@ public class UserController {
 
         return encoder.matches(password, userEncodedPassword);
 
+    }
+
+    @RequestMapping(value = "/{id}", params = "permit", method = RequestMethod.POST)
+    public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
+                                      @PathVariable("id") Long userId,
+                                      ModelAndView model) {
+        Collection<String> idOfMethods = allowedMethods.getCollection();
+        User user = userService.find(userId);
+        List<MethodRestProviderForEntity> allowedMethodsByUserId = methodRestProviderForEntityService.findAllowedMethodsByUserId(userId);
+        allowedMethodsByUserId.forEach(method -> {
+                    if (idOfMethods.contains(method.getId().toString())) {
+                        method.setUser(user);
+                        methodRestProviderForEntityService.save(method);
+                    } else {
+                        method.setUser(null);
+                        methodRestProviderForEntityService.save(method);
+                    }
+                });
+        model.setViewName("redirect:/clients");
+        return model;
     }
 
 

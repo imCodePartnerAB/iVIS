@@ -21,4 +21,6 @@ public interface MethodRestProviderForEntityRepository extends NamedRepository<M
 
     List<MethodRestProviderForEntity> findByClientDetails_ClientId(String clientId);
 
+    List<MethodRestProviderForEntity> findByUser_Id(Long id);
+
 }

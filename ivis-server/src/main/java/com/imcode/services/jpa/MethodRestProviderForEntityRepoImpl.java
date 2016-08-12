@@ -24,4 +24,9 @@ public class MethodRestProviderForEntityRepoImpl extends AbstractNamedService<Me
     public List<MethodRestProviderForEntity> findAllowedMethodsByClientId(String id) {
         return getRepo().findByClientDetails_ClientId(id);
     }
+
+    @Override
+    public List<MethodRestProviderForEntity> findAllowedMethodsByUserId(Long id) {
+        return getRepo().findByUser_Id(id);
+    }
 }

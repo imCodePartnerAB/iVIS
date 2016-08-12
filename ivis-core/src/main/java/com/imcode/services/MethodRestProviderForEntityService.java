@@ -14,4 +14,6 @@ public interface MethodRestProviderForEntityService extends GenericService<Metho
 
     List<MethodRestProviderForEntity> findAllowedMethodsByClientId(String id);
 
+    List<MethodRestProviderForEntity> findAllowedMethodsByUserId(Long id);
+
 }
