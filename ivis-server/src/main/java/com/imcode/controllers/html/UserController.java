@@ -287,11 +287,13 @@ public class UserController {
                 .peek(methodRestProviderForEntity -> methodRestProviderForEntity.deleteUser(userId))
                 .forEach(methodRestProviderForEntityService::save);
 
-        idOfMethods.stream()
-                .map(Long::parseLong)
-                .map(methodRestProviderForEntityService::find)
-                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addUser(user))
-                .forEach(methodRestProviderForEntityService::save);
+        if (idOfMethods != null) {
+            idOfMethods.stream()
+                    .map(Long::parseLong)
+                    .map(methodRestProviderForEntityService::find)
+                    .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addUser(user))
+                    .forEach(methodRestProviderForEntityService::save);
+        }
 
         model.setViewName("redirect:/users");
         return model;

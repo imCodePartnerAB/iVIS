@@ -247,11 +247,13 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
                 .peek(methodRestProviderForEntity -> methodRestProviderForEntity.deleteClient(clientId))
                 .forEach(methodRestProviderForEntityService::save);
 
-        idOfMethods.stream()
-                .map(Long::parseLong)
-                .map(methodRestProviderForEntityService::find)
-                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addClient(client))
-                .forEach(methodRestProviderForEntityService::save);
+        if (idOfMethods != null) {
+            idOfMethods.stream()
+                    .map(Long::parseLong)
+                    .map(methodRestProviderForEntityService::find)
+                    .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addClient(client))
+                    .forEach(methodRestProviderForEntityService::save);
+        }
 
         model.setViewName("redirect:/clients");
         return model;

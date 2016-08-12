@@ -58,6 +58,8 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
             return result;
         }
 
+        result = ACCESS_DENIED;
+
         if (!(authentication instanceof OAuth2Authentication)) {
             return result;
         }
@@ -69,8 +71,6 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
         Long userId = ((User) oauth2Authentication.getUserAuthentication().getPrincipal()).getId();
 
         MethodRestProviderForEntity methodDetermine = determineMethod(requestUrl, httpRequest, clientId, userId);
-
-        result = ACCESS_DENIED;
 
         if (methodDetermine == null) return result;
 
