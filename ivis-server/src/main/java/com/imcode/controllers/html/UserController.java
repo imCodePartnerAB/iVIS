@@ -293,7 +293,7 @@ public class UserController {
                 .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addUser(user))
                 .forEach(methodRestProviderForEntityService::save);
 
-        model.setViewName("redirect:/clients");
+        model.setViewName("redirect:/users");
         return model;
     }
 
