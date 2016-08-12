@@ -96,15 +96,17 @@ public class OnStartupController {
                     if (methodForCheckOptional.isPresent()) {
                         MethodRestProviderForEntity methodForCheck = methodForCheckOptional.get();
                         if (methodForCheck.equals(entityProviderMethod)) {
-                            entityProviderMethod.setId(null);
-                            entityProviderMethod.setEntityRestProviderInformation(persistInfoByEntityClass);
-                            try {
-                                StaticUtls.nullAwareBeanCopy(methodForCheck, entityProviderMethod);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            }
+
+                            Set<User> users = entityProviderMethod.getUsers().stream()
+                                    .peek(user -> new User().setId(user.getId()))
+                                    .collect(Collectors.toSet());
+                            methodForCheck.setUsers(users);
+
+                            Set<JpaClientDetails> clients = entityProviderMethod.getClients().stream()
+                                    .peek(clientDetails -> new JpaClientDetails().setClientId(clientDetails.getClientId()))
+                                    .collect(Collectors.toSet());
+                            methodForCheck.setClients(clients);
+
                             methodRestProviderForEntityService.save(methodForCheck);
                         }
                     }

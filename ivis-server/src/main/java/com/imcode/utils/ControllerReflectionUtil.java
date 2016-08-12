@@ -18,6 +18,9 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,6 +61,7 @@ public class ControllerReflectionUtil {
         Set<Method> declaredMethods = getAllMethodFromContrllerAndSuperClass();
         Set<Method> requestMapping = declaredMethods.stream()
                 .filter(method -> AnnotationUtils.findAnnotation(method, RequestMapping.class) != null)
+                .filter(distinctByKey(Method::getName))
                 .collect(Collectors.toSet());
         return requestMapping;
     }
@@ -212,5 +216,12 @@ public class ControllerReflectionUtil {
         return isMatch ? "List<" + entityName + ">" : entityName;
     }
 
+    private <T> Predicate<T> distinctByKey(Function<? super T,Object> keyExtractor) {
+        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
 
 }
+
+
