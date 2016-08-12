@@ -19,8 +19,8 @@ public interface MethodRestProviderForEntityRepository extends NamedRepository<M
     @Query("select method from MethodRestProviderForEntity method order by method.entityRestProviderInformation.entityClass")
     List<MethodRestProviderForEntity> findAll();
 
-    List<MethodRestProviderForEntity> findByClientDetails_ClientId(String clientId);
+    List<MethodRestProviderForEntity> findByClients_ClientId(String clientId);
 
-    List<MethodRestProviderForEntity> findByUser_Id(Long id);
+    List<MethodRestProviderForEntity> findByUsers_Id(Long id);
 
 }

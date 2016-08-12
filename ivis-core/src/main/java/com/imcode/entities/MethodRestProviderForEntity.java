@@ -6,8 +6,10 @@ import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by ruslan on 01.08.16.
@@ -36,13 +38,17 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
     @JoinColumn(name = "entity_rest_provider_info_id")
     private EntityRestProviderInformation entityRestProviderInformation;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "dbo_method_rest_provider_for_entity_user_cross",
+            joinColumns = @JoinColumn(name = "method_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id")
-    private JpaClientDetails clientDetails;
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @JoinTable(name = "dbo_method_rest_provider_for_entity_client_cross",
+            joinColumns = @JoinColumn(name = "method_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_id"))
+    private Set<JpaClientDetails> clients = new HashSet<>();
 
     public Map<String, String> getInParameters() {
         return inParameters;
@@ -84,20 +90,36 @@ public class MethodRestProviderForEntity extends AbstractNamedEntity<Long> imple
         this.entityRestProviderInformation = entityRestProviderInformation;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
-    public JpaClientDetails getClientDetails() {
-        return clientDetails;
+    public Set<JpaClientDetails> getClients() {
+        return clients;
     }
 
-    public void setClientDetails(JpaClientDetails clientDetails) {
-        this.clientDetails = clientDetails;
+    public void setClients(Set<JpaClientDetails> clients) {
+        this.clients = clients;
+    }
+
+    public void addUser(User user) {
+        this.users.add(user);
+    }
+
+    public void deleteUser(Long userId) {
+        this.users.removeIf(user -> user.getId().equals(userId));
+    }
+
+    public void addClient(JpaClientDetails clientDetails) {
+        this.clients.add(clientDetails);
+    }
+
+    public void deleteClient(String clientId) {
+        this.clients.removeIf(clientDetails -> clientDetails.getClientId().equals(clientId));
     }
 
     @Override

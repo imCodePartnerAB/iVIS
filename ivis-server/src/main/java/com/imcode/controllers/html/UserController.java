@@ -1,8 +1,6 @@
 package com.imcode.controllers.html;
 
 import com.imcode.controllers.html.exceptions.NotFoundException;
-import com.imcode.controllers.html.form.Message;
-import com.imcode.controllers.html.form.MessageType;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
@@ -15,14 +13,11 @@ import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.UserValidator;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -30,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.jws.soap.SOAPBinding;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -284,18 +278,21 @@ public class UserController {
     public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
                                       @PathVariable("id") Long userId,
                                       ModelAndView model) {
-        Collection<String> idOfMethods = allowedMethods.getCollection();
+
         User user = userService.find(userId);
+        Collection<String> idOfMethods = allowedMethods.getCollection();
         List<MethodRestProviderForEntity> allowedMethodsByUserId = methodRestProviderForEntityService.findAllowedMethodsByUserId(userId);
-        allowedMethodsByUserId.forEach(method -> {
-                    if (idOfMethods.contains(method.getId().toString())) {
-                        method.setUser(user);
-                        methodRestProviderForEntityService.save(method);
-                    } else {
-                        method.setUser(null);
-                        methodRestProviderForEntityService.save(method);
-                    }
-                });
+
+        allowedMethodsByUserId.stream()
+                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.deleteUser(userId))
+                .forEach(methodRestProviderForEntityService::save);
+
+        idOfMethods.stream()
+                .map(Long::parseLong)
+                .map(methodRestProviderForEntityService::find)
+                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addUser(user))
+                .forEach(methodRestProviderForEntityService::save);
+
         model.setViewName("redirect:/clients");
         return model;
     }

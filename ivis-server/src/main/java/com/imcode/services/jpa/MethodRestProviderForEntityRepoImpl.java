@@ -22,11 +22,11 @@ public class MethodRestProviderForEntityRepoImpl extends AbstractNamedService<Me
 
     @Override
     public List<MethodRestProviderForEntity> findAllowedMethodsByClientId(String id) {
-        return getRepo().findByClientDetails_ClientId(id);
+        return getRepo().findByClients_ClientId(id);
     }
 
     @Override
     public List<MethodRestProviderForEntity> findAllowedMethodsByUserId(Long id) {
-        return getRepo().findByUser_Id(id);
+        return getRepo().findByUsers_Id(id);
     }
 }

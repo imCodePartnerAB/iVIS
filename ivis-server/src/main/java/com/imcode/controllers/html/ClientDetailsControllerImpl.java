@@ -13,7 +13,6 @@ import com.imcode.services.EntityRestProviderInformationService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.CollectionTransferUtil;
-import com.imcode.utils.StaticUtls;
 import com.imcode.validators.JpaClientDetailsValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,10 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/clients")
@@ -242,18 +238,21 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
                                       @PathVariable("id") String clientId,
                                       ModelAndView model) {
-        Collection<String> idOfMethods = allowedMethods.getCollection();
+
         JpaClientDetails client = clientDetailsService.findOne(clientId);
-        List<MethodRestProviderForEntity> allowedMethodsByClientId = methodRestProviderForEntityService.findAllowedMethodsByClientId(clientId);
-        allowedMethodsByClientId.forEach(method -> {
-            if (idOfMethods.contains(method.getId().toString())) {
-                method.setClientDetails(client);
-                methodRestProviderForEntityService.save(method);
-            } else {
-                method.setClientDetails(null);
-                methodRestProviderForEntityService.save(method);
-            }
-        });
+        Collection<String> idOfMethods = allowedMethods.getCollection();
+        List<MethodRestProviderForEntity> allowedMethodsByUserId = methodRestProviderForEntityService.findAllowedMethodsByClientId(clientId);
+
+        allowedMethodsByUserId.stream()
+                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.deleteClient(clientId))
+                .forEach(methodRestProviderForEntityService::save);
+
+        idOfMethods.stream()
+                .map(Long::parseLong)
+                .map(methodRestProviderForEntityService::find)
+                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addClient(client))
+                .forEach(methodRestProviderForEntityService::save);
+
         model.setViewName("redirect:/clients");
         return model;
     }
