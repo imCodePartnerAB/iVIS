@@ -1,11 +1,13 @@
 package com.imcode.security.vote;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.jpa.ClientDetailsServiceRepoImpl;
+import com.imcode.utils.ControllerReflectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -22,10 +24,7 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object> {
 
@@ -93,15 +92,49 @@ public class ClientUserAllowedMethodVoter implements AccessDecisionVoter<Object>
 
         Set parametersKeys = httpRequest.getParameterMap().keySet();
 
+        String copyOfRequestUrl = requestUrl;
+
         Optional<MethodRestProviderForEntity> method = allowedMethods.stream()
                 .filter(methodRestProviderForEntity -> {
-                    Set<String> keySet = methodRestProviderForEntity.getInParameters().keySet();
-                    return (keySet.isEmpty() && parametersKeys.isEmpty()) || keySet.stream().allMatch(parametersKeys::contains);
+                    Map<String, String> inParameters = methodRestProviderForEntity.getInParameters();
+                    boolean empty = inParameters.isEmpty();
+                    return inParameters
+                            .entrySet().stream()
+                            .allMatch(entry -> checkInParameter(entry,
+                                    httpRequest,
+                                    copyOfRequestUrl,
+                                    methodRestProviderForEntity.getEntityRestProviderInformation().getEntityClass(),
+                                    empty
+                            ));
                 })
                 .findFirst();
 
         return method.isPresent() ? method.get() : null;
 
+    }
+
+    private boolean checkInParameter(Map.Entry<String, String> entry, HttpServletRequest httpRequest, String requestUrl, String entityClass, boolean empty) {
+        String paramName = entry.getKey();
+        String paramType = entry.getValue();
+
+        switch (paramType) {
+
+            case "Long" :
+                return requestUrl.contains("/{id}");
+
+            case "String" :
+                return httpRequest.getAttribute(paramName) != null;
+
+            default:
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.readValue(httpRequest.getReader(), Class.forName(ControllerReflectionUtil.ENTITY_PACKAGE + "." + entityClass));
+                    return true;
+                } catch (Exception e) {
+                    return empty;
+                }
+
+        }
     }
 
 }

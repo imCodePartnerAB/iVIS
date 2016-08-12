@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
 public class ControllerReflectionUtil {
 
     private static final String API_PATH = "/api/v1/{format}";
-    private static final String ENTITY_PACKAGE = "com.imcode.entities";
+    public static final String ENTITY_PACKAGE = "com.imcode.entities";
     public static final String REST_CONTROLLERS_PACKAGE = "com.imcode.controllers.restful";
 
     private Class<?> controllerClass;
@@ -170,8 +170,8 @@ public class ControllerReflectionUtil {
             case "Serializable":
                 return "Long";
 
-            case "Iterable":
-                return "List<" + entityName + ">";
+//            case "Iterable":
+//                return "List<" + entityName + ">";
 
             case "Object":
                 return entityName;

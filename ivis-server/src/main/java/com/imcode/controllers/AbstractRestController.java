@@ -77,17 +77,17 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 //        }
     }
 
-    @RequestMapping(value = "/bulk", method = RequestMethod.POST)
-    public @ResponseBody Object sava(@RequestBody Iterable<T> entities, WebRequest webRequest, @RequestParam(required = false) Boolean full) {
-        Iterable<T> result = service.save(entities);
-
-        if (Boolean.FALSE.equals(full)) {
-            List<ID> ids = StreamSupport.stream(result.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
-            return ids;
-        }
-
-        return result;
-    }
+//    @RequestMapping(value = "/bulk", method = RequestMethod.POST)
+//    public @ResponseBody Object sava(@RequestBody Iterable<T> entities, WebRequest webRequest, @RequestParam(required = false) Boolean full) {
+//        Iterable<T> result = service.save(entities);
+//
+//        if (Boolean.FALSE.equals(full)) {
+//            List<ID> ids = StreamSupport.stream(result.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
+//            return ids;
+//        }
+//
+//        return result;
+//    }
 
 
     // Updating entity
