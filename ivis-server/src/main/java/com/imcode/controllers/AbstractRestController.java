@@ -77,17 +77,17 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 //        }
     }
 
-//    @RequestMapping(value = "/bulk", method = RequestMethod.POST)
-//    public @ResponseBody Object sava(@RequestBody Iterable<T> entities, WebRequest webRequest, @RequestParam(required = false) Boolean full) {
-//        Iterable<T> result = service.save(entities);
-//
-//        if (Boolean.FALSE.equals(full)) {
-//            List<ID> ids = StreamSupport.stream(result.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
-//            return ids;
-//        }
-//
-//        return result;
-//    }
+    @RequestMapping(value = "/saveall", method = RequestMethod.POST)
+    public @ResponseBody Object saveAll(@RequestBody Iterable<T> entities, WebRequest webRequest, @RequestParam(required = false) Boolean full) {
+        Iterable<T> result = service.save(entities);
+
+        if (Boolean.FALSE.equals(full)) {
+            List<ID> ids = StreamSupport.stream(result.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
+            return ids;
+        }
+
+        return result;
+    }
 
 
     // Updating entity
@@ -120,7 +120,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET, params = {"name"})
+//    @RequestMapping(method = RequestMethod.GET, params = {"name"})
     public Object getByName(WebRequest webRequest, Model model,
                          @RequestParam("name") String name,
                          @RequestParam(value = "first", required = false) Boolean firstOnly) {
@@ -140,7 +140,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
+//    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
     public Object getByPersonalId(@RequestParam("personalId") String personId,
                                   @RequestParam(value = "first", required = false) Boolean firstOnly) {
 

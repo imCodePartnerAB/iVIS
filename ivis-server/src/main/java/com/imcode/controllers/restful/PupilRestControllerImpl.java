@@ -59,6 +59,12 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
         return pupilList;
     }
 
+    @Override
+    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
+    public Object getByPersonalId(@RequestParam("personalId") String personId, @RequestParam(value = "first", required = false) Boolean firstOnly) {
+        return super.getByPersonalId(personId, firstOnly);
+    }
+
     private Person getPerson(WebRequest webRequest) {
         Person person = null;
 

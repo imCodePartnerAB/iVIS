@@ -195,7 +195,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     public Iterable<T> save(Iterable<T> entities) {
         RestServiceRequest request = getCreateRequest();
         List<T> result = new LinkedList<>();
-        String uri = request.getAddress() + "/bulk";
+        String uri = request.getAddress() + "/saveall";
         HttpMethod method = request.getMethod();
         RestTemplate restTemplate = getRestTemplate();
         ParameterizedTypeReference<List<T>> typeReference = getListTypeReference();

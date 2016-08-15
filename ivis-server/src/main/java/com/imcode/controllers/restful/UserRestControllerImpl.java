@@ -7,6 +7,7 @@ import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
@@ -39,5 +40,11 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
     @RequestMapping(method = RequestMethod.GET, value = "/current")
     public User getCurrentUser(WebRequest webRequest) {
         return StaticUtls.getCurrentUser(webRequest, userService);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
+    public Object getByPersonalId(@RequestParam("personalId") String personId, @RequestParam(value = "first", required = false) Boolean firstOnly) {
+        return super.getByPersonalId(personId, firstOnly);
     }
 }
