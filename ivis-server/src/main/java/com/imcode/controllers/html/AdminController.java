@@ -86,7 +86,7 @@ public class AdminController {
 	@Autowired
 	public OnceTimeAccessTokenService onceTimeAccessTokenService;
 
-	@Value("${Hostname}")
+	@Value("${Server.name}")
 	private String serverName;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
