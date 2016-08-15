@@ -39,7 +39,6 @@
         <beans:property name="locations">
             <beans:list>
                 <beans:value>/WEB-INF/server.properties</beans:value>
-                <beans:value>/WEB-INF/email.properties</beans:value>
                 <!--<beans:value>classpath:server.properties</beans:value>-->
             </beans:list>
         </beans:property>
@@ -307,10 +306,10 @@
 
     <beans:bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <!-- SMTP settings -->
-        <beans:property name="host" value="${mail.smtp.host}" />
-        <beans:property name="port" value="${mail.smtp.port}" />
-        <beans:property name="username" value="${mail.smtp.username}" />
-        <beans:property name="password" value="${mail.smtp.password}" />
+        <beans:property name="host" value="${Mail.smtp.host}" />
+        <beans:property name="port" value="${Mail.smtp.port}" />
+        <beans:property name="username" value="${Mail.smtp.username}" />
+        <beans:property name="password" value="${Mail.smtp.password}" />
 
         <beans:property name="javaMailProperties">
             <!-- additional properties specific mailTo JavaMail -->
