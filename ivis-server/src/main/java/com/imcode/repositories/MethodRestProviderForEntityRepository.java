@@ -23,9 +23,9 @@ public interface MethodRestProviderForEntityRepository extends NamedRepository<M
 
     List<MethodRestProviderForEntity> findByUsers_Id(Long id);
 
-    Set<MethodRestProviderForEntity> findByUrlAndRequestMethodAndClients_ClientIdAndUsers_Id(
-            String url,
-            RequestMethod requestMethod,
+    MethodRestProviderForEntity findByNameAndEntityRestProviderInformation_EntityClassAndClients_ClientIdAndUsers_Id(
+            String name,
+            String entityName,
             String clientId,
             Long id
     );

@@ -35,6 +35,10 @@
         <property name="propertyNamingStrategy" value="CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"/>
     </bean>
 
+    <mvc:interceptors>
+        <bean class="com.imcode.security.interceptors.AccessApiInterceptor"/>
+    </mvc:interceptors>
+
     <bean id="cnManager" class="com.imcode.spring.ContentNegotiationManagerFactoryBean">
         <property name="favorPathExtension" value="true"/>
         <property name="ignoreAcceptHeader" value="true" />

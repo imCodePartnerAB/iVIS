@@ -193,7 +193,6 @@
                 <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
                 <bean class="org.springframework.security.access.vote.RoleVoter" />
                 <bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
-                <bean class="com.imcode.security.vote.ClientUserAllowedMethodVoter" />
             </list>
         </constructor-arg>
     </bean>
