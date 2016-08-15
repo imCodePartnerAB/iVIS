@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
 public class ControllerReflectionUtil {
 
     private static final String API_PATH = "/api/v1/{format}";
-    public static final String ENTITY_PACKAGE = "com.imcode.entities";
+    private static final String ENTITY_PACKAGE = "com.imcode.entities";
     public static final String REST_CONTROLLERS_PACKAGE = "com.imcode.controllers.restful";
 
     private Class<?> controllerClass;
@@ -168,16 +168,16 @@ public class ControllerReflectionUtil {
         switch (methodTypeSimpleName) {
 
             case "Serializable":
-                return "Long";
+                return "Number";
 
-//            case "Iterable":
-//                return "List<" + entityName + ">";
+            case "Iterable":
+                return "Array(" + entityName + ")";
 
             case "Object":
-                return entityName;
+                return "Object(" + entityName + ")";
 
             case "JpaEntity":
-                return entityName;
+                return "Object(" + entityName + ")";
 
             default:
                 return methodTypeSimpleName;
@@ -213,7 +213,7 @@ public class ControllerReflectionUtil {
     private String genReturnTypeByMethodName(String methodName) {
         boolean isMatch = methodName.matches("(?i)(.*)" + entityNameToLowerCaseInPluralForm(entityName)
                 + "(.*)" + "|((?i).*)all(.*)");
-        return isMatch ? "List<" + entityName + ">" : entityName;
+        return isMatch ? "Array(" + entityName + ")" : "Object(" + entityName + ")";
     }
 
     private <T> Predicate<T> distinctByKey(Function<? super T,Object> keyExtractor) {
