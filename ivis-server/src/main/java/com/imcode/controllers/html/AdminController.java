@@ -84,16 +84,16 @@ public class AdminController {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@Value("${Mail.smtp.from.address}")
+	@Value("${mail.smtp.from.address}")
 	private String fromAddress;
 
-	@Value("${Mail.smtp.from.username}")
+	@Value("${mail.smtp.from.username}")
 	private String fromUsername;
 
 	@Autowired
 	public OnceTimeAccessTokenService onceTimeAccessTokenService;
 
-	@Value("${Server.name}")
+	@Value("${server.name}")
 	private String serverName;
 
 //	private SparklrUserApprovalHandler userApprovalHandler;
