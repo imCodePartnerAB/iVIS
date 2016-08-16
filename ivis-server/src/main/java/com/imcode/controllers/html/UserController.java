@@ -14,6 +14,7 @@ import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
@@ -47,6 +48,12 @@ public class UserController {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Value("${Mail.smtp.from.address}")
+    private String fromAddress;
+
+    @Value("${Mail.smtp.from.username}")
+    private String fromUsername;
 
     @Autowired
     private EntityRestProviderInformationService entityRestProviderInformationService;
@@ -252,7 +259,7 @@ public class UserController {
         String subject = "Change password in iVIS";
         String text = "Hello, " + user.getUsername() + ". Your password has bean changed.";
 
-        MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+        MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false, fromAddress, fromUsername);
         mailSenderUtil.createMessage(to, subject, text);
         mailSenderUtil.sendMessage();
 

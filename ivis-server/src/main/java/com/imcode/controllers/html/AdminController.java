@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.AccessDeniedException;
 //import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -82,6 +83,12 @@ public class AdminController {
 
 	@Autowired
 	private JavaMailSender mailSender;
+
+	@Value("${Mail.smtp.from.address}")
+	private String fromAddress;
+
+	@Value("${Mail.smtp.from.username}")
+	private String fromUsername;
 
 	@Autowired
 	public OnceTimeAccessTokenService onceTimeAccessTokenService;
@@ -229,7 +236,7 @@ public class AdminController {
 		String text = "Thank you, " + user.getUsername() + " for registration in iVIS."
 				+ " Please follow link to confirm registration: " + link;
 
-		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false, fromAddress, fromUsername);
 		mailSenderUtil.createMessage(to, subject, text);
 		mailSenderUtil.sendMessage();
 
@@ -277,7 +284,7 @@ public class AdminController {
 		String text = "Now you, " + user.getUsername() + " can use iVIS system."
 				+ " You can log in " + serverName + "/login using your username and password.";
 
-		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false, fromAddress, fromUsername);
 		mailSenderUtil.createMessage(to, subject, text);
 		mailSenderUtil.sendMessage();
 
@@ -336,7 +343,7 @@ public class AdminController {
 		String text = "Hello, " + userByEmail.getUsername() + ". For restore password in iVIS"
 				+ " please follow link  " + link;
 
-		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false, fromAddress, fromUsername);
 		mailSenderUtil.createMessage(to, subject, text);
 		mailSenderUtil.sendMessage();
 
@@ -388,7 +395,7 @@ public class AdminController {
 		String subject = "Restore password in iVIS";
 		String text = "Hello, " + user.getUsername() + ". Your password has bean changed.";
 
-		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false);
+		MailSenderUtil mailSenderUtil = new MailSenderUtil(mailSender, false, false, fromAddress, fromUsername);
 		mailSenderUtil.createMessage(to, subject, text);
 		mailSenderUtil.sendMessage();
 

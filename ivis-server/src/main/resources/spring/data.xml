@@ -316,13 +316,16 @@
             <beans:props>
                 <beans:prop key="mail.transport.protocol">smtp</beans:prop>
                 <beans:prop key="mail.smtp.auth">true</beans:prop>
-                <beans:prop key="mail.smtp.starttls.enable">true</beans:prop>
+                <!--<beans:prop key="mail.smtp.user">${Mail.smtp.username}</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.submitter">${Mail.smtp.submitter}</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.from"></beans:prop>-->
+                <!--<beans:prop key="mail.smtp.starttls.enable">true</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.ssl.enable">false</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.ssl.checkserveridentity">false</beans:prop>-->
                 <beans:prop key="mail.debug">true</beans:prop>
+
             </beans:props>
         </beans:property>
     </beans:bean>
-
-
-
 
 </beans:beans>
