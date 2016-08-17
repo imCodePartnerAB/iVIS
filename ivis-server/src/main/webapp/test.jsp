@@ -165,7 +165,7 @@
             var clientId = $("#client-id").val();
             var clientSecret = $("#client-secret").val();
             var base64IdAndSecret = btoa(clientId + ':' + clientSecret);
-            var tokenURI = "http://localhost:8080/oauth/token";
+            var tokenURI = "http://ivis.dev.imcode.com/oauth/token";
             $.ajax({
                 url : tokenURI,
                 type: "POST",
