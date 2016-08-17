@@ -5,6 +5,7 @@ import com.imcode.entities.User;
 import com.imcode.services.MethodRestProviderForEntityService;
 import org.apache.commons.httpclient.util.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedClientException;
@@ -30,6 +31,14 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication instanceof OAuth2Authentication)) {
+
+            if (authentication instanceof UsernamePasswordAuthenticationToken) {
+                User principal = (User) authentication.getPrincipal();
+                if (principal.hasRoles("ROLE_ADMIN")) {
+                    return true;
+                }
+            }
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }

@@ -613,64 +613,68 @@ IVis.UI.prototype =
 
 
 };
-function browserDetectNav(chrAfterPoint) {
-    var
-        UA = window.navigator.userAgent,
-
-        OperaB = /Opera[ \/]+\w+\.\w+/i,
-        OperaV = /Version[ \/]+\w+\.\w+/i,
-        FirefoxB = /Firefox\/\w+\.\w+/i,
-        ChromeB = /Chrome\/\w+\.\w+/i,
-        SafariB = /Version\/\w+\.\w+/i,
-        IEB = /MSIE *\d+\.\w+/i,
-        SafariV = /Safari\/\w+\.\w+/i,
-
-        browser = new Array(),
-        browserSplit = /[ \/\.]/i,
-        OperaV = UA.match(OperaV),
-        Firefox = UA.match(FirefoxB),
-        Chrome = UA.match(ChromeB),
-        Safari = UA.match(SafariB),
-        SafariV = UA.match(SafariV),
-        IE = UA.match(IEB),
-        Opera = UA.match(OperaB);
-
-
-    if ((!Opera == "") & (!OperaV == "")) browser[0] = OperaV[0].replace(/Version/, "Opera");
-    else if (!Opera == "")    browser[0] = Opera[0];
-    else if (!IE == "") browser[0] = IE[0];
-    else if (!Firefox == "") browser[0] = Firefox[0];
-    else if (!Chrome == "") browser[0] = Chrome[0];
-    else if ((!Safari == "") && (!SafariV == "")) browser[0] = Safari[0].replace("Version", "Safari");
-
-
-    var outputData;
-
-    if (browser[0] != null) outputData = browser[0].split(browserSplit);
-    if ((chrAfterPoint == null) && (outputData != null)) {
-        chrAfterPoint = outputData[2].length;
-        outputData[2] = outputData[2].substring(0, chrAfterPoint);
-        return (outputData);
-    }
-    else return (false);
-}
+// function browserDetectNav(chrAfterPoint) {
+//     var
+//         UA = window.navigator.userAgent,
+//
+//         OperaB = /Opera[ \/]+\w+\.\w+/i,
+//         OperaV = /Version[ \/]+\w+\.\w+/i,
+//         FirefoxB = /Firefox\/\w+\.\w+/i,
+//         ChromeB = /Chrome\/\w+\.\w+/i,
+//         SafariB = /Version\/\w+\.\w+/i,
+//         IEB = /MSIE *\d+\.\w+/i,
+//         SafariV = /Safari\/\w+\.\w+/i,
+//
+//         browser = new Array(),
+//         browserSplit = /[ \/\.]/i,
+//         OperaV = UA.match(OperaV),
+//         Firefox = UA.match(FirefoxB),
+//         Chrome = UA.match(ChromeB),
+//         Safari = UA.match(SafariB),
+//         SafariV = UA.match(SafariV),
+//         IE = UA.match(IEB),
+//         Opera = UA.match(OperaB);
+//
+//
+//     if ((!Opera == "") & (!OperaV == "")) browser[0] = OperaV[0].replace(/Version/, "Opera");
+//     else if (!Opera == "")    browser[0] = Opera[0];
+//     else if (!IE == "") browser[0] = IE[0];
+//     else if (!Firefox == "") browser[0] = Firefox[0];
+//     else if (!Chrome == "") browser[0] = Chrome[0];
+//     else if ((!Safari == "") && (!SafariV == "")) browser[0] = Safari[0].replace("Version", "Safari");
+//
+//
+//     var outputData;
+//
+//     if (browser[0] != null) outputData = browser[0].split(browserSplit);
+//     if ((chrAfterPoint == null) && (outputData != null)) {
+//         chrAfterPoint = outputData[2].length;
+//         outputData[2] = outputData[2].substring(0, chrAfterPoint);
+//         return (outputData);
+//     }
+//     else return (false);
+// }
 
 var wnd;
 function ivisOAuth(authUrl) {
     //var authUrl = "<%=IvisOAuth2Utils.getOAuth2AuthirizationUrl(client, Imcms.getServerProperties().getProperty("AuthorizationCodeHandlerUri"))%>";
-    var browser = browserDetectNav();
-    if (browser[0] === 'Safari') {
-        location.href = authUrl;
-    } else {
-        var width = 600;
-        var height = 350;
-        var left = (screen.width / 2) - (width / 2);
-        var top = (screen.height / 2) - (height / 2);
-        wnd = window.open(authUrl, "newwinow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
-    }
+    // var browser = browserDetectNav();
+    // if (browser[0] === 'Safari') {
+    //     location.href = authUrl;
+    // } else {
 
-
-
+    var width = 600;
+    var height = 350;
+    var left = (screen.width / 2) - (width / 2);
+    var top = (screen.height / 2) - (height / 2);
+    var $button = $("<button/>");
+    $("body").append($button);
+    $($button).click(function () {
+        wnd = window.open(authUrl, "newWindow", "left=" + left + ", top=" + top + ", width=" + width + ", height=" + height + ", menubar=0, status=0, resizable=0, scrollbars=0");
+    });
+    $($button).click();
+    $button.hide();
+    // }
 
 }
 
@@ -684,13 +688,13 @@ function ivisOAuth(authUrl) {
 
 
 function authComplete() {
-    var browser = browserDetectNav();
-    if (browser[0] !== 'Safari') {
-        wnd.close();
-        location.reload();
-    } else {
-        location.href = '/';
-    }
+    // var browser = browserDetectNav();
+    // if (browser[0] !== 'Safari') {
+    wnd.close();
+    location.reload();
+    // } else {
+    //     location.href = '/';
+    // }
 
 }
 
