@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Date;
@@ -26,7 +27,9 @@ import java.util.Date;
 public class ApplicationRestControllerImpl extends AbstractRestController<Application, Long, ApplicationService> {
 
     @Override
-    public Object create(@RequestBody @Valid Application entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+    public Object create(@RequestBody @Valid Application entity,
+                         HttpServletResponse response,
+                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
         Principal principal = webRequest.getUserPrincipal();
 
         if (principal instanceof User) {
@@ -37,16 +40,18 @@ public class ApplicationRestControllerImpl extends AbstractRestController<Applic
 
 //        entity.setSubmitDate(new Date());
 
-        return super.create(entity, bindingResult, webRequest);
+        return super.create(entity, response, bindingResult, webRequest);
     }
 
     @Override
-    public Object update(@PathVariable("id") Long aLong, @RequestBody(required = false) Application entity, WebRequest webRequest) {
+    public Object update(@PathVariable("id") Long aLong,
+                         HttpServletResponse response,
+                         @RequestBody(required = false) Application entity, WebRequest webRequest) {
         if (entity.getId()!=null && entity.getLoadedValues() == null) {
             Application attachetEntity = getService().find(entity.getId());
                 entity.setLoadedValues(attachetEntity.getLoadedValues());
         }
 
-        return super.update(aLong, entity, webRequest);
+        return super.update(aLong, response, entity, webRequest);
     }
 }

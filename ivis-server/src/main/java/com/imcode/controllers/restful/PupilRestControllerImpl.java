@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
     }
 
     @Override
-    public Object getAll(WebRequest webRequest, Model model) {
+    public Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) {
         Object pupilList = new ArrayList<>();
         User user = getUser(webRequest);
 

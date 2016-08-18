@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,9 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     StatusService statusService;
 
     @Override
-    public Object create(@RequestBody @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+    public Object create(@RequestBody @Valid Incident entity,
+                         HttpServletResponse response,
+                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
         new GenericValidator(true, "reportDay", "reportedBy", "status").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
@@ -48,7 +51,7 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
                         .findFirst()
                         .get()
         );
-        return super.create(entity, bindingResult, webRequest);
+        return super.create(entity, response, bindingResult, webRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})

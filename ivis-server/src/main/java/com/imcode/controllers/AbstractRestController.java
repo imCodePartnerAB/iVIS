@@ -50,33 +50,24 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     // Getting entity by id
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Object get(@PathVariable("id") ID id, WebRequest webRequest) {
-        return service.find(id);
+    public Object get(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) {
+        T entity = service.find(id);
+        return entity;
     }
 
     //Getting list of entities
     @RequestMapping(method = RequestMethod.GET)
-    public Object getAll(WebRequest webRequest, Model model) {
+    public Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) {
         List<T> result = service.findAll();
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        String collected = result.stream()
-//                .map(element -> {
-//                    try {
-//                        return mapper.writeValueAsString(element);
-//                    } catch (JsonProcessingException e) {
-//                        e.printStackTrace();
-//                    }
-//                    return null;
-//                })
-//                .collect(Collectors.joining(",", "[", "]"));
         return result;
     }
 
     //Creating entity
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object create(@RequestBody @Valid T entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+    public @ResponseBody Object create(@RequestBody @Valid T entity,
+                                       HttpServletResponse response,
+                                       BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
         new GenericValidator(true, "id").invoke(entity, bindingResult);
 
@@ -85,7 +76,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     @RequestMapping(value = "/saveall", method = RequestMethod.POST)
-    public @ResponseBody Object saveAll(@RequestBody Iterable<T> entities, WebRequest webRequest, @RequestParam(required = false) Boolean full) {
+    public @ResponseBody Object saveAll(@RequestBody Iterable<T> entities,
+                                        HttpServletResponse response,
+                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) {
         Iterable<T> result = service.save(entities);
 
         if (Boolean.FALSE.equals(full)) {
@@ -99,7 +92,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Object update(@PathVariable("id") ID id, @RequestBody(required = false) T entity, WebRequest webRequest) {
+    public Object update(@PathVariable("id") ID id, HttpServletResponse response, @RequestBody(required = false) T entity, WebRequest webRequest) {
         T existsEntity = getService().find(id);
 
         if (existsEntity != null) {
@@ -120,7 +113,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     //Deleting entity
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Object delete(@PathVariable("id") ID id, WebRequest webRequest) {
+    public Object delete(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) {
         T entity = service.find(id);
         service.delete(id);
         return entity;
@@ -142,7 +135,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             }
         }
 
-        throw new UnsupportedOperationException("findByName metod not supported!");
+        throw new UnsupportedOperationException("findByName method not supported!");
 
     }
 
@@ -178,7 +171,6 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        String objectName = binder.getObjectName();
         binder.setValidator(new GenericValidator(getFieldsConstraints()));
     }
 

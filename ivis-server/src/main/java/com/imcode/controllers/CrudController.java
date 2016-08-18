@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
 
 /**
@@ -17,17 +18,25 @@ import java.io.Serializable;
 public interface CrudController<T, ID extends Serializable> {
 
     // Getting entity by id
-    Object get(ID id, WebRequest webRequest);
+    Object get(ID id, HttpServletResponse response, WebRequest webRequest);
 
     //Getting list of entities
-    Object getAll(WebRequest webRequest, Model model);
+    Object getAll(WebRequest webRequest, HttpServletResponse response, Model model);
 
-    Object create(T entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException;
+    Object create(T entity,
+                  HttpServletResponse response,
+                  BindingResult bindingResult,
+                  WebRequest webRequest) throws MethodArgumentNotValidException;
 
     // Updating entity
-    Object update(ID id, T entity, WebRequest webRequest);
+    Object update(ID id,
+                  HttpServletResponse response,
+                  T entity,
+                  WebRequest webRequest);
 
     //Deleting entity
-    Object delete(ID id, WebRequest webRequest);
+    Object delete(ID id,
+                  HttpServletResponse response,
+                  WebRequest webRequest);
 
 }

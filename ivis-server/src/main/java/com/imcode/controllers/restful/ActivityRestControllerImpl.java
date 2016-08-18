@@ -43,11 +43,13 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     private UserService userService;
 
     @Override
-    public Object create(@RequestBody @Valid Activity entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+    public Object create(@RequestBody @Valid Activity entity,
+                         HttpServletResponse response,
+                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
         new GenericValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
-        return super.create(entity, bindingResult, webRequest);
+        return super.create(entity, response, bindingResult, webRequest);
     }
 
     @RequestMapping(value = "/attach/{id}", method = RequestMethod.POST)

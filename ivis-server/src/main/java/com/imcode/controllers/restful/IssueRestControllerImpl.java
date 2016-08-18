@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
@@ -39,7 +40,9 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     UserService userService;
 
     @Override
-    public Object create(@RequestBody @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+    public Object create(@RequestBody @Valid Issue entity,
+                         HttpServletResponse response,
+                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
         new GenericValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
 
