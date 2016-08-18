@@ -7,9 +7,11 @@ import com.imcode.services.IncidentService;
 import com.imcode.services.StatusService;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -35,7 +37,8 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     StatusService statusService;
 
     @Override
-    public Object create(@RequestBody @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) {
+    public Object create(@RequestBody @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+        new GenericValidator(true, "reportDay", "reportedBy", "status").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         List<Status> statuses = statusService.findAll();

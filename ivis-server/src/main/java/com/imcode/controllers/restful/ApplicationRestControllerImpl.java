@@ -10,6 +10,7 @@ import com.imcode.services.ApplicationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import java.util.Date;
 public class ApplicationRestControllerImpl extends AbstractRestController<Application, Long, ApplicationService> {
 
     @Override
-    public Object create(@RequestBody @Valid Application entity, BindingResult bindingResult, WebRequest webRequest) {
+    public Object create(@RequestBody @Valid Application entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
         Principal principal = webRequest.getUserPrincipal();
 
         if (principal instanceof User) {

@@ -76,9 +76,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     //Creating entity
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object create(@RequestBody @Valid T entity, BindingResult bindingResult, WebRequest webRequest) {
+    public @ResponseBody Object create(@RequestBody @Valid T entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
-        ValidationUtils.invokeValidator(new GenericValidator("id"), entity, bindingResult);
+        new GenericValidator(true, "id").invoke(entity, bindingResult);
 
         return service.save(entity);
 

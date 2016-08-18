@@ -12,6 +12,7 @@ import com.imcode.validators.GenericValidator.Constraint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -42,8 +43,8 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     private UserService userService;
 
     @Override
-    public Object create(@RequestBody @Valid Activity entity, BindingResult bindingResult, WebRequest webRequest) {
-        ValidationUtils.invokeValidator(new GenericValidator("reportDay", "reportedBy"), entity, bindingResult);
+    public Object create(@RequestBody @Valid Activity entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+        new GenericValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         return super.create(entity, bindingResult, webRequest);

@@ -1,8 +1,10 @@
 package com.imcode.validators;
 
 import com.imcode.entities.superclasses.AbstractIdEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.*;
 
@@ -27,12 +29,15 @@ public class GenericValidator implements Validator {
         this.fieldsConstraints = fieldsConstraints;
     }
 
-    public GenericValidator(String ... nullFields) {
+    public GenericValidator(boolean isNull, String ... nullFields) {
 
         fieldsConstraints = new HashMap<>();
 
         for (String nullField : nullFields) {
-            buildField(fieldsConstraints, nullField, new AbstractMap.SimpleEntry<>(Constraint.NULL, null));
+            buildField(fieldsConstraints, nullField, new AbstractMap.SimpleEntry<>(
+                    isNull ? Constraint.NULL : Constraint.NOT_NULL_OR_EMPTY,
+                    null
+            ));
         }
 
     }
@@ -97,6 +102,13 @@ public class GenericValidator implements Validator {
             constraintsResult.put(constraint.getKey(), constraint.getValue());
         }
         fields.put(name, constraintsResult);
+    }
+
+    public void invoke(Object entity, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        validate(entity, bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
     }
 
     private void checkNotNullOrEmpty(Errors errors, String field) {

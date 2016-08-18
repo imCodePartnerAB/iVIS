@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -38,9 +39,9 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     UserService userService;
 
     @Override
-    public Object create(@RequestBody @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) {
+    public Object create(@RequestBody @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
-        ValidationUtils.invokeValidator(new GenericValidator("reportDay", "reportedBy"), entity, bindingResult);
+        new GenericValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
 
         Set<Incident> incidentsMerged = mergeIncidents(entity.getIncidents());
 
