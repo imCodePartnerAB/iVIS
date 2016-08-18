@@ -8,11 +8,13 @@ import com.imcode.services.StatusService;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -33,12 +35,17 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     StatusService statusService;
 
     @Override
-    public Object create(@Validated @RequestBody Incident entity, WebRequest webRequest) {
+    public Object create(@RequestBody @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) {
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         List<Status> statuses = statusService.findAll();
-        entity.setStatus(statuses.stream().filter(status -> status.getName().equals(Status.State.NEW)).findFirst().get());
-        return super.create(entity, webRequest);
+        entity.setStatus(
+                statuses.stream()
+                        .filter(status -> status.getName().equals(Status.State.NEW))
+                        .findFirst()
+                        .get()
+        );
+        return super.create(entity, bindingResult, webRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})

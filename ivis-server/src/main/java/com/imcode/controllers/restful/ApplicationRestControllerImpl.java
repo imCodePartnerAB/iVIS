@@ -9,12 +9,14 @@ import com.imcode.entities.User;
 import com.imcode.services.ApplicationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Date;
 
@@ -23,7 +25,7 @@ import java.util.Date;
 public class ApplicationRestControllerImpl extends AbstractRestController<Application, Long, ApplicationService> {
 
     @Override
-    public Object create(@RequestBody Application entity, WebRequest webRequest) {
+    public Object create(@RequestBody @Valid Application entity, BindingResult bindingResult, WebRequest webRequest) {
         Principal principal = webRequest.getUserPrincipal();
 
         if (principal instanceof User) {
@@ -34,7 +36,7 @@ public class ApplicationRestControllerImpl extends AbstractRestController<Applic
 
 //        entity.setSubmitDate(new Date());
 
-        return super.create(entity, webRequest);
+        return super.create(entity, bindingResult, webRequest);
     }
 
     @Override

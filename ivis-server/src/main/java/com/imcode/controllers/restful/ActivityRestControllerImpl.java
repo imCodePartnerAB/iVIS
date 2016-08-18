@@ -7,14 +7,23 @@ import com.imcode.services.ActivityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.IssueAttachmentFileUtil;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
+import com.imcode.validators.GenericValidator.Constraint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Date;
+import java.util.Map;
+
+import static com.imcode.validators.GenericValidator.*;
 
 /**
  * Created by ruslan on 5/12/16.
@@ -33,10 +42,11 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     private UserService userService;
 
     @Override
-    public Object create(@RequestBody Activity entity, WebRequest webRequest) {
+    public Object create(@RequestBody @Valid Activity entity, BindingResult bindingResult, WebRequest webRequest) {
+        ValidationUtils.invokeValidator(new GenericValidator("reportDay", "reportedBy"), entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
-        return super.create(entity, webRequest);
+        return super.create(entity, bindingResult, webRequest);
     }
 
     @RequestMapping(value = "/attach/{id}", method = RequestMethod.POST)
@@ -76,5 +86,26 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
 
     }
 
-
+//    @Override
+//    protected Map<String, Map<GenericValidator.Constraint, String>> getFieldsConstraints() {
+//        Map<String, Map<Constraint, String>> fields = super.getFieldsConstraints();
+//
+//        buildField(fields, "description",
+//                new SimpleEntry<>(Constraint.NOT_NULL_OR_EMPTY, null),
+//                new SimpleEntry<>(Constraint.MAX, "5"),
+//                new SimpleEntry<>(Constraint.MIN, "78"),
+//                new SimpleEntry<>(Constraint.REGEX, EMAIL_PATTERN),
+//                new SimpleEntry<>(Constraint.REGEX, URL_PATTERN)
+//        );
+//
+//        buildField(fields, "issue",
+//                new SimpleEntry<>(Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        buildField(fields, "id",
+//                new SimpleEntry<>(Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        return fields;
+//    }
 }

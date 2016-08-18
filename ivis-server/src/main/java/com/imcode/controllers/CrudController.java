@@ -2,6 +2,7 @@ package com.imcode.controllers;
 
 
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,7 +21,7 @@ public interface CrudController<T, ID extends Serializable> {
     //Getting list of entities
     Object getAll(WebRequest webRequest, Model model);
 
-    Object create(T entity, WebRequest webRequest);
+    Object create(T entity, BindingResult bindingResult, WebRequest webRequest);
 
     // Updating entity
     Object update(ID id, T entity, WebRequest webRequest);

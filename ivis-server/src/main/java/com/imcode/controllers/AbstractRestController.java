@@ -12,17 +12,25 @@ import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
 import com.imcode.exceptions.ValidationError;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -67,14 +75,13 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     //Creating entity
     @RequestMapping(method = RequestMethod.POST)
-//    @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object create(@RequestBody T entity, WebRequest webRequest) {
-//        try {
-            return service.save(entity);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw e;
-//        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody Object create(@RequestBody @Valid T entity, BindingResult bindingResult, WebRequest webRequest) {
+
+        ValidationUtils.invokeValidator(new GenericValidator("id"), entity, bindingResult);
+
+        return service.save(entity);
+
     }
 
     @RequestMapping(value = "/saveall", method = RequestMethod.POST)
@@ -167,11 +174,30 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         this.service = service;
     }
 
+    //Validation
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        String objectName = binder.getObjectName();
+        binder.setValidator(new GenericValidator(getFieldsConstraints()));
+    }
+
+    //must be overriding
+    protected Map<String, Map<GenericValidator.Constraint, String>>  getFieldsConstraints() {
+        Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
+        return constraints;
+    }
+
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ValidationError handleException(MethodArgumentNotValidException exception) {
         return createValidationError(exception);
     }
+
+    private ValidationError createValidationError(MethodArgumentNotValidException e) {
+        return ValidationErrorBuilder.fromBindingErrors(e.getBindingResult());
+    }
+
 
 //    @ExceptionHandler
 //    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -184,10 +210,6 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     public MessageOfException messagingException(Exception exception) {
         MessageOfException messagingException = new MessageOfException(exception);
         return messagingException;
-    }
-
-    private ValidationError createValidationError(MethodArgumentNotValidException e) {
-        return ValidationErrorBuilder.fromBindingErrors(e.getBindingResult());
     }
 
 //    public ErrorFactory getErrorFactory() {

@@ -7,11 +7,15 @@ import com.imcode.services.IncidentService;
 import com.imcode.services.IssueService;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Set;
@@ -34,7 +38,10 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     UserService userService;
 
     @Override
-    public Object create(@Validated @RequestBody Issue entity, WebRequest webRequest) {
+    public Object create(@RequestBody @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) {
+
+        ValidationUtils.invokeValidator(new GenericValidator("reportDay", "reportedBy"), entity, bindingResult);
+
         Set<Incident> incidentsMerged = mergeIncidents(entity.getIncidents());
 
         entity.setIncidents(incidentsMerged);
