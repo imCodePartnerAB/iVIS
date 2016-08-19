@@ -1,4 +1,54 @@
+<%@ page import="org.apache.http.client.utils.URIBuilder" %>
+<%@ page import="org.apache.http.NameValuePair" %>
+<%@ page import="java.util.LinkedList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.apache.http.message.BasicNameValuePair" %>
+<%@ page import="org.apache.http.client.methods.HttpPost" %>
+<%@ page import="org.apache.http.client.entity.UrlEncodedFormEntity" %>
+<%@ page import="org.apache.http.client.HttpClient" %>
+<%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
+<%@ page import="org.apache.http.HttpResponse" %>
+<%@ page import="org.apache.http.util.EntityUtils" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+<%
+    String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
+    String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
+    String redirectURI = "http://ivis.dev.imcode.com/test.jsp";
+    String clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
+    String clientSecret = "secret";
+    String scope = "read+write";
+
+    if (request.getParameter("code") == null) {
+        URIBuilder builder = new URIBuilder(authorizeURI);
+        builder.addParameter("response_type", "code");
+        builder.addParameter("client_id", clientId);
+        builder.addParameter("redirect_uri", redirectURI);
+        builder.addParameter("display", "popup");
+        builder.addParameter("scope", scope);
+        String path = builder.build().toString();
+        response.sendRedirect(path);
+    } else {
+        List<NameValuePair> pairsPost = new LinkedList<NameValuePair>();
+        pairsPost.add(new BasicNameValuePair("code", request.getParameter("code")));
+        pairsPost.add(new BasicNameValuePair("client_id", clientId));
+        pairsPost.add(new BasicNameValuePair("client_secret", clientSecret));
+        pairsPost.add(new BasicNameValuePair("redirect_uri", redirectURI));
+        pairsPost.add(new BasicNameValuePair("grant_type", "authorization_code"));
+
+        HttpPost post = new HttpPost(tokenURI);
+        post.setEntity(new UrlEncodedFormEntity(pairsPost));
+
+        HttpClient client = new DefaultHttpClient();
+        HttpResponse responses = client.execute(post);
+
+        String responseBody = EntityUtils.toString(responses.getEntity());
+        request.setAttribute("token", responseBody);
+
+    }
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,6 +143,15 @@
                 data = $.parseJSON($jsonInput);
             }
 
+            var accessToken = $.parseJSON('${token}');
+            var access_token = accessToken["access_token"];
+
+            if (typeMethod == 'GET') {
+                data["access_token"] = access_token;
+            } else {
+                URL += "?access_token=" + access_token;
+            }
+
             $.ajax({
 //            url: '/ivis' + URL,
                 url: URL,
@@ -161,30 +220,34 @@
             $('#jsonResponse').hide();
         }
 
-        function getAccessToken() {
-            var clientId = $("#client-id").val();
-            var clientSecret = $("#client-secret").val();
-            var base64IdAndSecret = btoa(clientId + ':' + clientSecret);
-            var tokenURI = "http://ivis.dev.imcode.com/oauth/token";
-            $.ajax({
-                url : tokenURI,
-                type: "POST",
-                data : {
-                    'grant_type' : 'client_credentials'
-                },
-                beforeSend : function (xhr) {
-                    xhr.setRequestHeader ("Authorization", "Basic " + base64IdAndSecret);
-                },
-                success : function (token) {
-                    $(".access-token-for-client").append("<br>Access token: " + token["access_token"]);
-                    $(".access-token-for-client").append("<br>Expires in: " + token["expires_in"]);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-
-            });
-        }
+//        function getAccessToken() {
+//            var clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
+//            var clientSecret = "secret";
+//            var base64IdAndSecret = btoa(clientId + ':' + clientSecret);
+//            var tokenURI = "http://ivis.dev.imcode.com/oauth/token";
+//            var accessToken = null;
+//            $.ajax({
+//                url : tokenURI,
+//                type: "POST",
+//                data : {
+//                    'grant_type' : 'client_credentials'
+//                },
+//                async: false,
+//                cache: false,
+//                beforeSend : function (xhr) {
+//                    xhr.setRequestHeader ("Authorization", "Basic " + base64IdAndSecret);
+//                },
+//                success : function (token) {
+//                    accessToken = token["access_token"];
+//                },
+//                error: function (error) {
+//                    console.log(error);
+//                }
+//
+//            });
+//
+//            return accessToken;
+//        }
 
     </script>
 
@@ -196,20 +259,20 @@
         }
     </style>
 
-    <br>
-    Get access token for client
+    <%--<br>--%>
+    <%--Get access token for client--%>
 
-    <br>
-    <div class="access-token-for-client">
-        Client id:
-        <input id="client-id">
-        <br>
-        Client secret:
-        <input id="client-secret">
-        <br>
-        <button onclick="getAccessToken();">Get access token for client</button>
-        <br>
-    </div>
+    <%--<br>--%>
+    <%--<div class="access-token-for-client">--%>
+        <%--Client id:--%>
+        <%--<input id="client-id">--%>
+        <%--<br>--%>
+        <%--Client secret:--%>
+        <%--<input id="client-secret">--%>
+        <%--<br>--%>
+        <%--<button onclick="getAccessToken();">Get access token for client</button>--%>
+        <%--<br>--%>
+    <%--</div>--%>
 
 
 </sec:authorize>

@@ -1,16 +1,14 @@
 package com.imcode.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.imcode.exceptions.MessageOfException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
-import com.imcode.exceptions.ValidationErrorBuilder;
 import com.imcode.entities.interfaces.JpaEntity;
+import com.imcode.exceptions.factories.ErrorBuilder;
+import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
-import com.imcode.exceptions.ValidationError;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +16,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -182,13 +180,33 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     @ExceptionHandler
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ValidationError handleException(MethodArgumentNotValidException exception) {
-        return createValidationError(exception);
+    public GeneralError handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+        return ErrorBuilder.buildValidationError(exception.getBindingResult());
     }
 
-    private ValidationError createValidationError(MethodArgumentNotValidException e) {
-        return ValidationErrorBuilder.fromBindingErrors(e.getBindingResult());
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public GeneralError handleJsonMappingException(JsonMappingException exception) {
+        return ErrorBuilder.buildJsonMappingException(exception);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public GeneralError handlePersistenceException(PersistenceException exception) {
+        return ErrorBuilder.buildDatabasePersistenceError(exception);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public GeneralError handleException(Exception exception) {
+        return ErrorBuilder.buildUncaughtException(exception);
+    }
+
+
+
+//    private ValidationError createValidationError(MethodArgumentNotValidException e) {
+//        return ValidationErrorBuilder.fromBindingErrors(e.getBindingResult());
+//    }
 
 
 //    @ExceptionHandler
@@ -197,12 +215,12 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 //        return exception.getExceptionMeassage();
 //    }
 
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public MessageOfException messagingException(Exception exception) {
-        MessageOfException messagingException = new MessageOfException(exception);
-        return messagingException;
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public MessageOfException messagingException(Exception exception) {
+//        MessageOfException messagingException = new MessageOfException(exception);
+//        return messagingException;
+//    }
 
 //    public ErrorFactory getErrorFactory() {
 //        return errorFactory;

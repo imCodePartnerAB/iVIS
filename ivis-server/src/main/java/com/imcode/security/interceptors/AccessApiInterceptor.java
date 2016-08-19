@@ -32,13 +32,6 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
 
         if (!(authentication instanceof OAuth2Authentication)) {
 
-            if (authentication instanceof UsernamePasswordAuthenticationToken) {
-                User principal = (User) authentication.getPrincipal();
-                if (principal.hasRoles("ROLE_ADMIN")) {
-                    return true;
-                }
-            }
-
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
@@ -57,7 +50,7 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         MethodRestProviderForEntity allowedMethod = methodRestProviderForEntityService.findAllowedMethod(methodName, entityName, clientId, userId);
 
         if (allowedMethod == null) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }
 
