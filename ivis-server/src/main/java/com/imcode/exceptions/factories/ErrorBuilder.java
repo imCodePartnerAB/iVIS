@@ -64,11 +64,11 @@ public class ErrorBuilder {
         switch (errorCode) {
 
             case GeneralError.DATABASE_PERSISTENCE_EC:
-                message = "Database persistence error";
+                message = "Database level error";
                 break;
 
             case GeneralError.JSON_MAPPING_EC:
-                message = "JSON mapping error";
+                message = "JSON level error";
                 break;
 
             case GeneralError.UNCAUGHT_EC:

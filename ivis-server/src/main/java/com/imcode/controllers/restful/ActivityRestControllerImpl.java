@@ -45,7 +45,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     @Override
     public Object create(@RequestBody @Valid Activity entity,
                          HttpServletResponse response,
-                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+                         BindingResult bindingResult, WebRequest webRequest) throws Exception {
         new GenericValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());

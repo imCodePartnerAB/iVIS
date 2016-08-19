@@ -40,7 +40,7 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     @Override
     public Object create(@RequestBody @Valid Incident entity,
                          HttpServletResponse response,
-                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+                         BindingResult bindingResult, WebRequest webRequest) throws Exception {
         new GenericValidator(true, "reportDay", "reportedBy", "status").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());

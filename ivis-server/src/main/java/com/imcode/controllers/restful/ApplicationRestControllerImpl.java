@@ -29,7 +29,7 @@ public class ApplicationRestControllerImpl extends AbstractRestController<Applic
     @Override
     public Object create(@RequestBody @Valid Application entity,
                          HttpServletResponse response,
-                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+                         BindingResult bindingResult, WebRequest webRequest) throws Exception {
         Principal principal = webRequest.getUserPrincipal();
 
         if (principal instanceof User) {
@@ -46,7 +46,7 @@ public class ApplicationRestControllerImpl extends AbstractRestController<Applic
     @Override
     public Object update(@PathVariable("id") Long aLong,
                          HttpServletResponse response,
-                         @RequestBody(required = false) Application entity,
+                         @RequestBody(required = false) @Valid Application entity,
                          BindingResult bindingResult,
                          WebRequest webRequest) throws Exception {
         if (entity.getId()!=null && entity.getLoadedValues() == null) {
