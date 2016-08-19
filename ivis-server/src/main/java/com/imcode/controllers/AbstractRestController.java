@@ -1,30 +1,18 @@
 package com.imcode.controllers;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.exceptions.factories.ErrorBuilder;
 import com.imcode.exceptions.wrappers.GeneralError;
-import com.imcode.misc.errors.Error;
-import com.imcode.misc.errors.ErrorFactory;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.MethodParameter;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.util.ReflectionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.ui.Model;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,8 +20,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -74,7 +60,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody Object create(@RequestBody @Valid T entity,
                                        HttpServletResponse response,
-                                       BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+                                       BindingResult bindingResult, WebRequest webRequest) throws Exception {
 
         new GenericValidator(true, "id").invoke(entity, bindingResult);
 
@@ -86,13 +72,15 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     public @ResponseBody Object saveAll(@RequestBody Iterable<T> entities,
                                         HttpServletResponse response,
                                         BindingResult bindingResult,
-                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) throws MethodArgumentNotValidException {
+                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
         Iterable<T> result = service.save(entities);
 
         Iterator<T> iterator = result.iterator();
 
         while (iterator.hasNext()) {
-            new GenericValidator(true, "id").invoke(iterator.next(), bindingResult);
+            T next = iterator.next();
+            new GenericValidator(getFieldsConstraints()).invoke(next, bindingResult);
+            new GenericValidator(true, "id").invoke(next, bindingResult);
         }
 
         if (Boolean.FALSE.equals(full)) {
@@ -106,34 +94,38 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Object update(@PathVariable("id") ID id, HttpServletResponse response, @RequestBody(required = false) T entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Object update(@PathVariable("id") ID id, HttpServletResponse response, @RequestBody(required = false) @Valid T entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
         T existsEntity = getService().find(id);
+
+        if (existsEntity == null) {
+            bindingResult.reject(null, "Try update non exist entity");
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
 
         new GenericValidator(true, "id").invoke(entity, bindingResult);
 
         boolean isCopied = false;
-        if (existsEntity != null) {
-            try {
-                isCopied =  StaticUtls.nullAwareBeanCopy(existsEntity, entity);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            if (isCopied) {
-                return service.save(existsEntity);
-            } else {
-                StaticUtls.checkNullAndSetNoContent(null, response);
-            }
+
+        try {
+            isCopied = StaticUtls.nullAwareBeanCopy(existsEntity, entity);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        if (isCopied) {
+            existsEntity = service.save(existsEntity);
+        } else {
+            StaticUtls.checkNullAndSetNoContent(null, response);
         }
 
-        return null;
+        return existsEntity;
 
     }
 
     //Deleting entity
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Object delete(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws MethodArgumentNotValidException {
+    public Object delete(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
         T entity = service.find(id);
         if (entity == null) {
             BindingResult bindingResult = new BeanPropertyBindingResult(entity, "entity");
@@ -155,9 +147,13 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             NamedService<T> namedService = (NamedService<T>) service;
 
             if (firstOnly == null || !firstOnly) {
-                return namedService.findByName(name);
+                List<T> byName = namedService.findByName(name);
+                StaticUtls.checkNullAndSetNoContent(byName, response);
+                return byName;
             } else {
-                return namedService.findFirstByName(name);
+                T firstByName = namedService.findFirstByName(name);
+                StaticUtls.checkNullAndSetNoContent(firstByName, response);
+                return firstByName;
             }
         }
 
@@ -176,9 +172,13 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             PersonalizedService<T> personalizedService = (PersonalizedService<T>) service;
 
             if (firstOnly == null || !firstOnly) {
-                return personalizedService.findByPersonalId(personId);
+                List<T> byPersonalId = personalizedService.findByPersonalId(personId);
+                StaticUtls.checkNullAndSetNoContent(byPersonalId, response);
+                return byPersonalId;
             } else {
-                return personalizedService.findFirstByPersonalId(personId);
+                T firstByPersonalId = personalizedService.findFirstByPersonalId(personId);
+                StaticUtls.checkNullAndSetNoContent(firstByPersonalId, response);
+                return firstByPersonalId;
             }
         }
 

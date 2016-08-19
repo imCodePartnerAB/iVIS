@@ -150,7 +150,7 @@ public class StaticUtls {
 
     }
 
-    public static void checkNullAndSetNoContent(Object object, HttpServletResponse response) throws IllegalAccessException {
+    public static void checkNullAndSetNoContent(Object object, HttpServletResponse response) {
 
         if (object == null) {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
