@@ -11,6 +11,7 @@
 <%@ page import="org.apache.http.util.EntityUtils" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+<sec:authorize access="hasRole('ROLE_ADMIN')">
 <%
     String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
     String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
@@ -59,7 +60,6 @@
 </head>
 <body>
 
-<sec:authorize access="hasRole('ROLE_ADMIN')">
     <div id="jsonResponse">
         <button onclick="hideResult();">Hide result</button>
         <pre id="formatText">
