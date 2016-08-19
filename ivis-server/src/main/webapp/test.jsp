@@ -200,7 +200,8 @@
         }
 
         function attachFile() {
-            var URL = $('#path').find(":selected").text() + $('#idOf').val();
+            var accessToken = $.parseJSON('${token}');
+            var URL = $('#path').find(":selected").text() + $('#idOf').val() + "?access_token=" + accessToken["access_token"];
             var typeMethod = $('#typeMethod').find(":selected").text().toLowerCase();
 
             var $form = $('#formUpload');
