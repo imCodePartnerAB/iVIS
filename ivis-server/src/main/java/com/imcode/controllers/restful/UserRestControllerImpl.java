@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -44,7 +45,10 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId, @RequestParam(value = "first", required = false) Boolean firstOnly) {
-        return super.getByPersonalId(personId, firstOnly);
+    public Object getByPersonalId(@RequestParam("personalId") String personId,
+                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+                                  HttpServletResponse response
+    ) {
+        return super.getByPersonalId(personId, firstOnly, response);
     }
 }

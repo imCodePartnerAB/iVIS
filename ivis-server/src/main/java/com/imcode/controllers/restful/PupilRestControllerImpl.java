@@ -62,8 +62,11 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId, @RequestParam(value = "first", required = false) Boolean firstOnly) {
-        return super.getByPersonalId(personId, firstOnly);
+    public Object getByPersonalId(@RequestParam("personalId") String personId,
+                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+                                  HttpServletResponse response
+    ) {
+        return super.getByPersonalId(personId, firstOnly, response);
     }
 
     private Person getPerson(WebRequest webRequest) {

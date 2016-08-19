@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/v1/{format}/persons")
 public class PersonRestControllerImpl extends AbstractRestController<Person, Long, PersonService> {
@@ -40,7 +42,10 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId, @RequestParam(value = "first", required = false) Boolean firstOnly) {
-        return super.getByPersonalId(personId, firstOnly);
+    public Object getByPersonalId(@RequestParam("personalId") String personId,
+                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+                                  HttpServletResponse response
+    ) {
+        return super.getByPersonalId(personId, firstOnly, response);
     }
 }

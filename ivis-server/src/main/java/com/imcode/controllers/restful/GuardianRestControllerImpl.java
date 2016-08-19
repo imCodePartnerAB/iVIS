@@ -8,13 +8,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/v1/{format}/guardians")
 public class GuardianRestControllerImpl extends AbstractRestController<Guardian, Long, GuardianService> {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId, @RequestParam(value = "first", required = false) Boolean firstOnly) {
-        return super.getByPersonalId(personId, firstOnly);
+    public Object getByPersonalId(@RequestParam("personalId") String personId,
+                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+                                  HttpServletResponse response
+    ) {
+        return super.getByPersonalId(personId, firstOnly, response);
     }
 }
