@@ -13,7 +13,11 @@ import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -178,27 +183,43 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return constraints;
     }
 
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public GeneralError handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        return ErrorBuilder.buildValidationError(exception.getBindingResult());
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public GeneralError handleException(MethodArgumentNotValidException exception) {
+//        return ErrorBuilder.buildValidationError(exception.getBindingResult());
+//    }
+//
+//    @ExceptionHandler(JsonMappingException.class)
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public GeneralError handleException(JsonMappingException exception) {
+//        return ErrorBuilder.buildJsonMappingException(exception);
+//    }
+//
+//    @ExceptionHandler(PersistenceException.class)
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public GeneralError handleException(JpaSystemException exception) {
+//        return ErrorBuilder.buildDatabasePersistenceError(exception);
+//    }
 
-    @ExceptionHandler
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public GeneralError handleJsonMappingException(JsonMappingException exception) {
-        return ErrorBuilder.buildJsonMappingException(exception);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public GeneralError handlePersistenceException(PersistenceException exception) {
-        return ErrorBuilder.buildDatabasePersistenceError(exception);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(value = HttpStatus.CONFLICT)
     public GeneralError handleException(Exception exception) {
+
+        if (exception instanceof MethodArgumentNotValidException) {
+
+            BindingResult bindingResult = ((MethodArgumentNotValidException) exception).getBindingResult();
+            return ErrorBuilder.buildValidationError(bindingResult);
+
+        } else if (exception instanceof DataAccessException) {
+
+            return ErrorBuilder.buildDatabasePersistenceError(exception);
+
+        } else if (exception instanceof HttpMessageConversionException) {
+
+            return ErrorBuilder.buildJsonMappingException(exception);
+
+        }
+
         return ErrorBuilder.buildUncaughtException(exception);
     }
 

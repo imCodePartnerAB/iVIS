@@ -3,8 +3,10 @@ package com.imcode.exceptions.factories;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.imcode.exceptions.wrappers.GeneralError;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.Errors;
 
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -33,49 +35,49 @@ public class ErrorBuilder {
         return generalError;
     }
 
-    public static GeneralError buildDatabasePersistenceError(PersistenceException persistenceException) {
+    public static GeneralError buildDatabasePersistenceError(Exception e) {
 
-        GeneralError generalError = new GeneralError();
-
-        generalError.setErrorCode(GeneralError.DATABASE_PERSISTENCE_EC);
-
-        generalError.setErrorMessage("Database persistence error");
-
-        String cause = persistenceException.getCause().toString();
-
-        cause = cause.replaceAll("javax\\.persistence\\.PersistenceException: org\\.hibernate\\.exception\\.", "");
-
-        List<String> errorDescription = Arrays.asList(cause);
-        generalError.setErrorDescription(errorDescription);
-
-        return generalError;
+        return buildException(e, GeneralError.DATABASE_PERSISTENCE_EC);
 
     }
 
-    public static GeneralError buildJsonMappingException(JsonMappingException e) {
+    public static GeneralError buildJsonMappingException(Exception e) {
 
-        GeneralError generalError = new GeneralError();
-
-        generalError.setErrorCode(GeneralError.JSON_MAPPING_EC);
-
-        generalError.setErrorMessage("JSON Mapping error");
-
-        String cause = e.getCause().toString();
-
-        List<String> errorDescription = Arrays.asList(cause);
-        generalError.setErrorDescription(errorDescription);
-
-        return generalError;
+        return buildException(e, GeneralError.JSON_MAPPING_EC);
 
     }
 
     public static GeneralError buildUncaughtException(Exception e) {
 
+        return buildException(e, GeneralError.UNCAUGHT_EC);
+
+    }
+
+    private static GeneralError buildException(Exception e, int errorCode) {
+
         GeneralError generalError = new GeneralError();
 
-        generalError.setErrorCode(GeneralError.UNCAUGHT_EC);
+        generalError.setErrorCode(errorCode);
 
-        generalError.setErrorMessage("Uncaught error");
+        String message = null;
+
+        switch (errorCode) {
+
+            case GeneralError.DATABASE_PERSISTENCE_EC:
+                message = "Database persistence error";
+                break;
+
+            case GeneralError.JSON_MAPPING_EC:
+                message = "JSON Mapping error";
+                break;
+
+            case GeneralError.UNCAUGHT_EC:
+                message = "Uncaught error";
+                break;
+
+        }
+
+        generalError.setErrorMessage(message);
 
         String cause = e.getCause().toString();
 
