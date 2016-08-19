@@ -18,25 +18,26 @@ import java.io.Serializable;
 public interface CrudController<T, ID extends Serializable> {
 
     // Getting entity by id
-    Object get(ID id, HttpServletResponse response, WebRequest webRequest);
+    Object get(ID id, HttpServletResponse response, WebRequest webRequest) throws Exception;
 
     //Getting list of entities
-    Object getAll(WebRequest webRequest, HttpServletResponse response, Model model);
+    Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) throws Exception;
 
     Object create(T entity,
                   HttpServletResponse response,
                   BindingResult bindingResult,
-                  WebRequest webRequest) throws MethodArgumentNotValidException;
+                  WebRequest webRequest) throws Exception;
 
     // Updating entity
     Object update(ID id,
                   HttpServletResponse response,
                   T entity,
-                  WebRequest webRequest);
+                  BindingResult bindingResult,
+                  WebRequest webRequest) throws Exception;
 
     //Deleting entity
     Object delete(ID id,
                   HttpServletResponse response,
-                  WebRequest webRequest);
+                  WebRequest webRequest) throws Exception;
 
 }

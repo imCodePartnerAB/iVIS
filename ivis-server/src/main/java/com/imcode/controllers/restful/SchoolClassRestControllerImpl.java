@@ -8,14 +8,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/v1/{format}/schoolclasses")
 public class SchoolClassRestControllerImpl extends AbstractRestController<SchoolClass, Long, SchoolClassService> {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"name"})
-    public Object getByName(WebRequest webRequest, Model model, @RequestParam("name") String name, @RequestParam(value = "first", required = false) Boolean firstOnly) {
-        return super.getByName(webRequest, model, name, firstOnly);
+    public Object getByName(WebRequest webRequest, Model model,
+                            HttpServletResponse response,
+                            @RequestParam("name") String name, @RequestParam(value = "first", required = false) Boolean firstOnly) {
+        return super.getByName(webRequest, model, response, name, firstOnly);
     }
 }
 

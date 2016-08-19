@@ -46,12 +46,14 @@ public class ApplicationRestControllerImpl extends AbstractRestController<Applic
     @Override
     public Object update(@PathVariable("id") Long aLong,
                          HttpServletResponse response,
-                         @RequestBody(required = false) Application entity, WebRequest webRequest) {
+                         @RequestBody(required = false) Application entity,
+                         BindingResult bindingResult,
+                         WebRequest webRequest) throws Exception {
         if (entity.getId()!=null && entity.getLoadedValues() == null) {
             Application attachetEntity = getService().find(entity.getId());
                 entity.setLoadedValues(attachetEntity.getLoadedValues());
         }
 
-        return super.update(aLong, response, entity, webRequest);
+        return super.update(aLong, response, entity, bindingResult, webRequest);
     }
 }

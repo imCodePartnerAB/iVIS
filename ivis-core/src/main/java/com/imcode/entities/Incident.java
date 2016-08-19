@@ -9,8 +9,6 @@ import com.imcode.entities.superclasses.AbstractIdEntity;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -24,11 +22,9 @@ import java.util.Set;
 public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(nullable = false)
-    @NotNull(message = "title can not be null")
     private String title;
 
     @Column(columnDefinition = "text")
-    @NotNull(message = "description can not be null")
     private String description;
 
     @Column(name = "report_day")
@@ -39,14 +35,12 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @JoinTable(name = "dbo_incident_category_cross",
             joinColumns = @JoinColumn(name = "incident_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    @Size(min = 1, message = "categories can not be null")
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_incident_pupil_cross",
             joinColumns = @JoinColumn(name = "incident_id"),
             inverseJoinColumns = @JoinColumn(name = "pupil_id"))
-    @Size(min = 1, message = "pupils can not be null")
     private Set<Pupil> pupils = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -55,7 +49,6 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "priority_id")
-    @NotNull(message = "priority can not be null")
     private Priority priority;
 
     @ManyToOne(fetch = FetchType.EAGER)

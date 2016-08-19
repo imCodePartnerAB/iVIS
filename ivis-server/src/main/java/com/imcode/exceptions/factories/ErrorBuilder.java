@@ -68,7 +68,7 @@ public class ErrorBuilder {
                 break;
 
             case GeneralError.JSON_MAPPING_EC:
-                message = "JSON Mapping error";
+                message = "JSON mapping error";
                 break;
 
             case GeneralError.UNCAUGHT_EC:

@@ -11,8 +11,7 @@ import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -26,32 +25,26 @@ import java.util.Set;
 public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(nullable = false)
-    @NotNull(message = "title can not be null")
     private String title;
 
     @Column(columnDefinition = "text")
-    @NotNull(message = "description can not be null")
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id")
-    @NotNull(message = "status can not be null")
     private Status status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
-    @NotNull(message = "responsible person can not be null")
     private Person responsiblePerson;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_issues_authorized_persons_cross",
             joinColumns = @JoinColumn(name = "issue_id"),
             inverseJoinColumns = @JoinColumn(name = "person_id"))
-    @Size(min = 1, message = "authorized persons can not be null")
     private Set<Person> authorizedPersons = new HashSet<>();
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "issue")
-    @Size(min = 1, message = "incidents can not be null")
     private Set<Incident> incidents = new HashSet<>();
 
     @Column(name = "report_day")

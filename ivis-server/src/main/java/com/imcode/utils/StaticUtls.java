@@ -2,6 +2,8 @@ package com.imcode.utils;
 
 import com.imcode.entities.OnceTimeAccessToken;
 import com.imcode.entities.User;
+import com.imcode.entities.interfaces.JpaEntity;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.http.client.utils.URIBuilder;
@@ -13,13 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,8 @@ import java.util.stream.Collectors;
  */
 public class StaticUtls {
 
-    public static void nullAwareBeanCopy(Object dest, Object source) throws IllegalAccessException, InvocationTargetException {
+    public static boolean nullAwareBeanCopy(Object dest, Object source) throws IllegalAccessException, InvocationTargetException {
+        boolean [] isCopied = {false};
         new BeanUtilsBean() {
             @Override
             public void copyProperty(Object dest, String name, Object value)
@@ -36,12 +38,16 @@ public class StaticUtls {
                 if (value instanceof Collection<?>) {
                     if (!((Collection) value).isEmpty()) {
                         super.copyProperty(dest, name, value);
+                        isCopied[0] = true;
                     }
                 } else if (value != null) {
                     super.copyProperty(dest, name, value);
+                    isCopied[0] = true;
                 }
             }
         }.copyProperties(dest, source);
+
+        return isCopied[0];
     }
 
     public static User getCurrentUser(WebRequest webRequest, UserService userService) {
@@ -144,10 +150,12 @@ public class StaticUtls {
 
     }
 
+    public static void checkNullAndSetNoContent(Object object, HttpServletResponse response) throws IllegalAccessException {
 
+        if (object == null) {
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        }
 
-
-
-
+    }
 
 }
