@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("mock")
 public class MockControler {
 
-    @RequestMapping(value = "jsonp",params = "callback")
-    @ResponseBody
-    public String jsonpTest(@RequestParam("callback") String functionName) {
-        return functionName + "(" +
-                                    "[" +
-                                        "{\"firstName\": \"Vitaly\", \"lastName\": \"Sereda\"}, " +
-                                        "{\"firstName\": \"Andrey\", \"lastName\": \"Demidov\"}" +
-                                    "]" +
-                                ");";
-    }
+//    @RequestMapping(value = "jsonp",params = "callback")
+//    @ResponseBody
+//    public String jsonpTest(@RequestParam("callback") String functionName) {
+//        return functionName + "(" +
+//                                    "[" +
+//                                        "{\"firstName\": \"Vitaly\", \"lastName\": \"Sereda\"}, " +
+//                                        "{\"firstName\": \"Andrey\", \"lastName\": \"Demidov\"}" +
+//                                    "]" +
+//                                ");";
+//    }
 //    @Autowired
 //    private ApplicationService applicationService;
 

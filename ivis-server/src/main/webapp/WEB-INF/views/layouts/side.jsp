@@ -24,22 +24,24 @@
 <%--<spring:message var="" code="label."/>--%>
 
 <div id="menu">
-    <div class="title">${labelMainMenu}</div>
-    <div class="main-menu">
-        <a class="main-menu-item" href="${clientsUrl}">${labelClients}</a>
-        <a class="main-menu-item" href="${usersUrl}">${labelUsers}</a>
-        <a class="main-menu-item" href="${schoolsUrl}">${labelSchools}</a>
-        <a class="main-menu-item" href="${pupilsUrl}">${labelPupils}</a>
-        <a class="main-menu-item" href="${csvUrl}">${labelCsvImport}</a>
-        <%--<a class="main-menu-item" href="${sqlUrl}">SQL</a>--%>
-        <%--<a class="main-menu-item" href="${xmlUrl}">Application import</a>--%>
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+        <div class="title">${labelMainMenu}</div>
+        <div class="main-menu">
+            <a class="main-menu-item" href="${clientsUrl}">${labelClients}</a>
+            <a class="main-menu-item" href="${usersUrl}">${labelUsers}</a>
+            <a class="main-menu-item" href="${schoolsUrl}">${labelSchools}</a>
+            <a class="main-menu-item" href="${pupilsUrl}">${labelPupils}</a>
+            <a class="main-menu-item" href="${csvUrl}">${labelCsvImport}</a>
+                <%--<a class="main-menu-item" href="${sqlUrl}">SQL</a>--%>
+                <%--<a class="main-menu-item" href="${xmlUrl}">Application import</a>--%>
 
-        <%--<tiles:importAttribute name="menuMap"/>--%>
-        <%--<c:forEach var="item" items="${menuMap}">--%>
-            <%--<spring:url value="${item.getValue()}" var="entityUrl"/>--%>
-            <%--<a class="main-menu-item" href="${entityUrl}">${item.getKey()}</a>--%>
-        <%--</c:forEach>--%>
-    </div>
+                <%--<tiles:importAttribute name="menuMap"/>--%>
+                <%--<c:forEach var="item" items="${menuMap}">--%>
+                <%--<spring:url value="${item.getValue()}" var="entityUrl"/>--%>
+                <%--<a class="main-menu-item" href="${entityUrl}">${item.getKey()}</a>--%>
+                <%--</c:forEach>--%>
+        </div>
+    </sec:authorize>
     <div class="user-ph">
         <div class="user">
             <div class="box">

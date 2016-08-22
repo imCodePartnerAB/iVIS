@@ -107,6 +107,20 @@
         <expression-handler ref="oauthWebExpressionHandler" />
     </http>
 
+    <http pattern="/(users|clients|csv).*" request-matcher="regex"
+          entry-point-ref="loginUrlAuthenticationEntryPoint"
+          xmlns="http://www.springframework.org/schema/security">
+
+        <intercept-url pattern="/users/(\d+)\?form"
+                       access="ROLE_USER" />
+
+        <intercept-url
+                pattern="/(users|clients|csv|domain|pupils|schema_versions|schools|sql).*"
+                access="ROLE_ADMIN" />
+
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+    </http>
+
     <!-- The OAuth2 protected resources are separated out into their own block
         so we can deal with authorization and error handling separately. This isn't
         mandatory, but it makes it easier to control the behaviour. -->
@@ -145,7 +159,7 @@
 
 
         <form-login authentication-failure-url="/login?authentication_error=true"
-                    default-target-url="/index" login-page="/login"
+                    default-target-url="/" login-page="/login"
                     login-processing-url="/login.do" />
         <logout logout-success-url="/login" logout-url="/logout.do" />
         <anonymous />
