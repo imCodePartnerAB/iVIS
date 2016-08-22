@@ -201,7 +201,10 @@ public class AdminController {
 		return model;
 	}
 
-	@RequestMapping("/registration/do")
+	@RequestMapping(value = "/registration/do",
+			params = {"firstName", "lastName", "email", "contactPhone"},
+			method = RequestMethod.POST
+	)
 	public ModelAndView registrationDo(@ModelAttribute("user") User user,
 												 @RequestParam("firstName") String firstName,
 												 @RequestParam("lastName") String lastName,
@@ -245,7 +248,7 @@ public class AdminController {
 		return model;
 	}
 
-	@RequestMapping(value = "/registration/confirm", method = RequestMethod.GET)
+	@RequestMapping(value = "/registration/confirm", params = {"access", "id"}, method = RequestMethod.GET)
 	public ModelAndView registrationConfirm(@RequestParam("access") String access,
 											@RequestParam("id") Long id,
 											WebRequest webRequest,
@@ -352,7 +355,9 @@ public class AdminController {
 		return model;
 	}
 
-	@RequestMapping(value = "/restore_password/confirm", method = RequestMethod.GET)
+	@RequestMapping(value = "/restore_password/confirm",
+			params = {"access", "id"},
+			method = RequestMethod.GET)
 	public ModelAndView restorePasswordConfirm(@RequestParam("access") String access,
 											   @RequestParam("id") Long id,
 											   WebRequest webRequest,
@@ -380,7 +385,9 @@ public class AdminController {
 		return model;
 	}
 
-	@RequestMapping(value = "/restore_password/do", method = RequestMethod.POST)
+	@RequestMapping(value = "/restore_password/do",
+			params = {"password", "userId"},
+			method = RequestMethod.POST)
 	public ModelAndView restorePasswordDo(@RequestParam("password") String password,
 										  @RequestParam("userId") Long userId,
 										  WebRequest webRequest,
