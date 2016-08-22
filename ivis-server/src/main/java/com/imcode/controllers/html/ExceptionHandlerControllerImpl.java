@@ -1,38 +1,58 @@
 package com.imcode.controllers.html;
 
+import com.imcode.exceptions.factories.ErrorBuilder;
+import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.misc.ErrorResponse;
 import com.imcode.misc.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Locale;
 
 /**
  * Created by vitaly on 27.02.15.
  */
-//@ControllerAdvice
+@ControllerAdvice
 public class ExceptionHandlerControllerImpl {
-//    @Autowired
-//    private ErrorFactory errorFactory;
-//
-//    @ExceptionHandler(Exception.class)
-//    @ResponseBody
-//    Object exceptionHandler(Exception e, WebRequest webRequest) {
-//
-//        com.imcode.misc.errors.Error error = errorFactory.getErrorWithDescription(5);
-//        error.setrequestParams(webRequest.getParameterMap());
-//        return new ErrorResponse(error);
-//    }
-//
-//    public ErrorFactory getErrorFactory() {
-//        return errorFactory;
-//    }
-//
-//    public void setErrorFactory(ErrorFactory errorFactory) {
-//        this.errorFactory = errorFactory;
-//    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ModelAndView handleException(Exception exception) {
+
+
+        GeneralError generalError = null;
+
+        if (exception instanceof MethodArgumentNotValidException) {
+            BindingResult bindingResult = ((MethodArgumentNotValidException) exception).getBindingResult();
+            generalError = ErrorBuilder.buildValidationError(bindingResult);
+        } else if (exception instanceof DataAccessException) {
+            generalError = ErrorBuilder.buildDatabasePersistenceError(exception);
+        } else if (exception instanceof HttpMessageConversionException) {
+            generalError = ErrorBuilder.buildJsonMappingException(exception);
+        } else {
+            generalError = ErrorBuilder.buildUncaughtException(exception);
+        }
+
+        ModelAndView model = new ModelAndView();
+
+        model.addObject("errorCode", generalError.getErrorCode());
+        model.addObject("errorMsg", generalError.getErrorMessage());
+        model.addObject("errorDescription", generalError.getErrorDescription());
+
+        model.setViewName("errors/error");
+        return model;
+
+    }
+
 }

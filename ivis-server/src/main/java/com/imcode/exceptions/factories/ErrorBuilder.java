@@ -79,9 +79,10 @@ public class ErrorBuilder {
 
         generalError.setErrorMessage(message);
 
-        String cause = e.getCause().toString();
+        Throwable cause = e.getCause();
+        String causeString = cause == null ? e.getClass().getSimpleName() : cause.toString();
 
-        List<String> errorDescription = Arrays.asList(cause);
+        List<String> errorDescription = Arrays.asList(causeString);
         generalError.setErrorDescription(errorDescription);
 
         return generalError;

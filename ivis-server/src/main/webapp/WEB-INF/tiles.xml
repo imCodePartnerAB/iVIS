@@ -103,6 +103,11 @@
     <!--<definition name="csv/load" extends="default">-->
         <!--<put-attribute name="content" value="/WEB-INF/views/csv/load.jsp"/>-->
     <!--</definition>-->
+    <!--Error -->
+    <definition name="errors/error" extends="simple">
+        <put-attribute name="content" value="/WEB-INF/views/errors/error.jsp"/>
+    </definition>
+
     <definition name="csv/file_upload_step1" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/csv/file_upload_step1.jsp"/>
     </definition>
