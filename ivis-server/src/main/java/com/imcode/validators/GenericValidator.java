@@ -167,7 +167,7 @@ public class GenericValidator implements Validator {
     public void invoke(Object entity, BindingResult bindingResult) throws MethodArgumentNotValidException {
         validate(entity, bindingResult);
         if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(StaticUtls.getMethodParameter(getClass(), "invoke", 0, Object.class, BindingResult.class), bindingResult);
+            throw new MethodArgumentNotValidException(getMethodParameter(getClass(), "invoke", 0, Object.class, BindingResult.class), bindingResult);
         }
     }
 
@@ -314,6 +314,16 @@ public class GenericValidator implements Validator {
                 fieldValue = first.get().toString();
             }
         }
+    }
+
+    private MethodParameter getMethodParameter(Class<?> clazz, String methodName, int index, Class<?> ... parameterTypes) {
+        MethodParameter methodParameter = null;
+        try {
+            methodParameter = new MethodParameter(clazz.getMethod(methodName, parameterTypes), index);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return methodParameter;
     }
 
 }
