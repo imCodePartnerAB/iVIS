@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,7 +39,10 @@ public class ExceptionHandlerControllerImpl {
         if (exception instanceof MethodArgumentNotValidException) {
             BindingResult bindingResult = ((MethodArgumentNotValidException) exception).getBindingResult();
             generalError = ErrorBuilder.buildValidationError(bindingResult);
-        } else if (exception instanceof DataAccessException) {
+        } else if (exception instanceof BindException) {
+            BindingResult bindingResult = ((BindException) exception).getBindingResult();
+            generalError = ErrorBuilder.buildValidationError(bindingResult);
+        }else if (exception instanceof DataAccessException) {
             generalError = ErrorBuilder.buildDatabasePersistenceError(exception);
         } else if (exception instanceof HttpMessageConversionException) {
             generalError = ErrorBuilder.buildJsonMappingException(exception);

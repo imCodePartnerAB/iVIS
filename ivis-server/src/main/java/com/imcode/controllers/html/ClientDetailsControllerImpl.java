@@ -77,26 +77,26 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 //    Updating exists client
     @RequestMapping(value = "/{clientId}", method = RequestMethod.POST)
     public ModelAndView update(@PathVariable("clientId") String clientId,
-                         @ModelAttribute("client") @Valid JpaClientDetails client,
-                         BindingResult bindingResult,
+                         @ModelAttribute("client") JpaClientDetails client,
+//                         BindingResult bindingResult,
                          ModelAndView model,
                          WebRequest webRequest,
-                         RedirectAttributes redirectAttributes,
+//                         RedirectAttributes redirectAttributes,
                          Authentication principal) {
 
 //        clientValidator.validate(client, bindingResult);
 
-        if (bindingResult.hasErrors()) {
-            model.setViewName("clients/edit");
-            addListsInModel(model);
-            model.addObject("message", new Message(MessageType.ERROR, "Client save fail"));
-            model.addObject("client", client);
+//        if (bindingResult.hasErrors()) {
+//            model.setViewName("clients/edit");
+//            addListsInModel(model);
+//            model.addObject("message", new Message(MessageType.ERROR, "Client save fail"));
+//            model.addObject("client", client);
+//
+//            return model;
+//        }
 
-            return model;
-        }
-
-        model.clear();
-        redirectAttributes.addFlashAttribute("message", new Message(MessageType.SUCCESS, "Client save success"));
+//        model.clear();
+//        redirectAttributes.addFlashAttribute("message", new Message(MessageType.SUCCESS, "Client save success"));
         JpaClientDetails persistentClient;
 
         if (webRequest.isUserInRole("ROLE_ADMIN")) {

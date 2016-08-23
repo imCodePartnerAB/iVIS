@@ -99,8 +99,10 @@ public class ErrorBuilder {
 
         Throwable cause = e.getCause();
         String causeString = cause == null ? e.getClass().getSimpleName() : ExceptionUtils.getRootCauseMessage(e);
+        String messag = e.getMessage();
+        String msg = messag == null ? e.getClass().getSimpleName() : ExceptionUtils.getMessage(e);
 
-        List<String> errorDescription = Arrays.asList(causeString);
+        List<String> errorDescription = Arrays.asList(causeString, msg);
         generalError.setErrorDescription(errorDescription);
 
         return generalError;
