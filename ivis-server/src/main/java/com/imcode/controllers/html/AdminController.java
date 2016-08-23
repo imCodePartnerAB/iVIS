@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
@@ -498,6 +499,11 @@ public class AdminController {
 	@RequestMapping({"/", "/home", "index"})
 	public String home() {
 		return "default";
+	}
+
+	@RequestMapping("/errorhandler")
+	public void errorHandler(HttpServletRequest request, ModelAndView modelAndView) throws Exception {
+		throw (Exception) request.getAttribute("javax.servlet.error.exception");
 	}
 
 	private void checkResourceOwner(String user, Principal principal) {

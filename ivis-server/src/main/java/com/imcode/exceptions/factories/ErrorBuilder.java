@@ -1,6 +1,7 @@
 package com.imcode.exceptions.factories;
 
 import com.imcode.exceptions.wrappers.GeneralError;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.Errors;
 
@@ -97,7 +98,7 @@ public class ErrorBuilder {
         generalError.setErrorMessage(message);
 
         Throwable cause = e.getCause();
-        String causeString = cause == null ? e.getClass().getSimpleName() : cause.toString();
+        String causeString = cause == null ? e.getClass().getSimpleName() : ExceptionUtils.getRootCauseMessage(e);
 
         List<String> errorDescription = Arrays.asList(causeString);
         generalError.setErrorDescription(errorDescription);
