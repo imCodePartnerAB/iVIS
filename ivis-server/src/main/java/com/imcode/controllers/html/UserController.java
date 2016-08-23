@@ -76,8 +76,8 @@ public class UserController {
                                    WebRequest webRequest,
                                    Locale locale) {
 
-        if(!user.hasRoles("ROLE_ADMIN")) {
-            User currentUser = StaticUtls.getCurrentUser(webRequest, userService);;
+        User currentUser = StaticUtls.getCurrentUser(webRequest, userService);
+        if(!currentUser.hasRoles("ROLE_ADMIN")) {
             if (!user.getId().equals(currentUser.getId())) {
                 model.setViewName("redirect:/");
                 return model;
