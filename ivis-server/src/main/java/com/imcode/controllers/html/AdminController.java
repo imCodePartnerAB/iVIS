@@ -379,7 +379,10 @@ public class AdminController {
 		User userByEmail = userService.findByEmail(email);
 
 		if (userByEmail == null) {
-
+			GeneralError generalError = ErrorBuilder.buildValidationError(Arrays.asList("user with email "+ email + " does not exist"));
+			model.addObject(generalError);
+			model.setViewName("errors/error");
+			return model;
 		}
 
 		OnceTimeAccessToken accessToken = OnceTimeAccessToken.genToken(
@@ -418,8 +421,9 @@ public class AdminController {
 
 		String message = StaticUtls.checkOnceTimeAccessToken(accessToken, access);
 		if (message != null) {
-			model.addObject(message);
-			model.setViewName("redirect:/oauth_error");
+			GeneralError generalError = ErrorBuilder.buildSecurityException(message);
+			model.addObject(generalError);
+			model.setViewName("errors/error");
 			return model;
 		}
 
@@ -439,12 +443,32 @@ public class AdminController {
 			params = {"password", "userId"},
 			method = RequestMethod.POST)
 	public ModelAndView restorePasswordDo(@RequestParam("password") String password,
+										  @RequestParam("confirmPassword") String confirmPassword,
 										  @RequestParam("userId") Long userId,
 										  WebRequest webRequest,
-										  ModelAndView model) {
+										  ModelAndView model) throws MethodArgumentNotValidException {
 
 		User user = userService.find(userId);
+		if (user == null) {
+			GeneralError generalError = ErrorBuilder.buildValidationError(Arrays.asList("user with id " + userId + " does not exist"));
+			model.addObject(generalError);
+			model.setViewName("errors/error");
+			return model;
+		}
+
 		user.setPassword(password);
+		user.setConfirmPassword(confirmPassword);
+
+		Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
+
+		GenericValidator.buildField(constraints, "password",
+				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GenericValidator.Constraint.MIN, "8"),
+				new SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
+		);
+		BindingResult bindingResult = new BeanPropertyBindingResult(user, "user");
+		new GenericValidator(constraints).invoke(user, bindingResult);
+
 		StaticUtls.encodeUserPassword(user);
 		userService.save(user);
 

@@ -31,6 +31,19 @@ public class ErrorBuilder {
         return generalError;
     }
 
+    public static GeneralError buildValidationError(List<String> description) {
+
+        GeneralError generalError = new GeneralError();
+
+        generalError.setErrorCode(GeneralError.VALIDATION_EC);
+
+        generalError.setErrorMessage("Validation failed. 1 error");
+
+        generalError.setErrorDescription(description);
+
+        return generalError;
+    }
+
     public static GeneralError buildDatabasePersistenceError(Exception e) {
 
         return buildException(e, GeneralError.DATABASE_PERSISTENCE_EC);
