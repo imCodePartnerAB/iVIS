@@ -48,11 +48,7 @@ public class ExceptionHandlerControllerImpl {
 
         ModelAndView model = new ModelAndView();
 
-        model.clear();
-
-        model.addObject("errorCode", generalError.getErrorCode());
-        model.addObject("errorMsg", generalError.getErrorMessage());
-        model.addObject("errorDescription", generalError.getErrorDescription());
+        model.addObject(generalError);
 
         model.setViewName("errors/error");
         return model;

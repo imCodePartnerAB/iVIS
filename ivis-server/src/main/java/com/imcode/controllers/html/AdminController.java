@@ -22,6 +22,8 @@ import com.imcode.entities.User;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
 import com.imcode.entities.enums.CommunicationTypeEnum;
+import com.imcode.exceptions.factories.ErrorBuilder;
+import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.PersonService;
 import com.imcode.services.OnceTimeAccessTokenService;
@@ -32,10 +34,10 @@ import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.AccessDeniedException;
 //import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -45,14 +47,13 @@ import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
-import java.io.Serializable;
 import java.security.Principal;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
@@ -257,8 +258,17 @@ public class AdminController {
 
 		GenericValidator.buildField(constraints, "person.phones",
 				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-				new SimpleEntry<>(GenericValidator.Constraint.MIN, GenericValidator.EMAIL_PATTERN)
+				new SimpleEntry<>(GenericValidator.Constraint.MIN, "8")
 		);
+
+
+		if (userService.findByUsername(user.getUsername()) != null) {
+			bindingResult.reject(null, "username not unique");
+		}
+
+		if (userService.findByEmail(email) != null) {
+			bindingResult.reject(null, "email not unique");
+		}
 
 		new GenericValidator(constraints).invoke(user, bindingResult);
 
@@ -293,8 +303,9 @@ public class AdminController {
 
 		String message = StaticUtls.checkOnceTimeAccessToken(accessToken, access);
 		if (message != null) {
-			model.addObject(message);
-			model.setViewName("redirect:/oauth_error");
+			GeneralError generalError = ErrorBuilder.buildSecurityException(message);
+			model.addObject(generalError);
+			model.setViewName("errors/error");
 			return model;
 		}
 
@@ -366,6 +377,10 @@ public class AdminController {
 											 ModelAndView model) {
 
 		User userByEmail = userService.findByEmail(email);
+
+		if (userByEmail == null) {
+
+		}
 
 		OnceTimeAccessToken accessToken = OnceTimeAccessToken.genToken(
 				userByEmail,

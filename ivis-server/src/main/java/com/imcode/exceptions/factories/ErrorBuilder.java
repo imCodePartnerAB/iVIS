@@ -1,13 +1,9 @@
 package com.imcode.exceptions.factories;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.imcode.exceptions.wrappers.GeneralError;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.Errors;
 
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +47,14 @@ public class ErrorBuilder {
 
         return buildException(e, GeneralError.UNCAUGHT_EC);
 
+    }
+
+    public static GeneralError buildSecurityException(String msg) {
+        GeneralError generalError = new GeneralError();
+        generalError.setErrorCode(GeneralError.SECURITY_EC);
+        generalError.setErrorMessage("Security level error");
+        generalError.setErrorDescription(Arrays.asList(msg));
+        return generalError;
     }
 
     private static GeneralError buildException(Exception e, int errorCode) {

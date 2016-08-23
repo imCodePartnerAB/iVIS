@@ -46,4 +46,6 @@ public class GeneralError {
     public static final int JSON_MAPPING_EC = 3001;
 
     public static final int UNCAUGHT_EC = 4001;
+
+    public static final int SECURITY_EC = 5001;
 }

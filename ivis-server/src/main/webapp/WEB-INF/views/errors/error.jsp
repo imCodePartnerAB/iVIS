@@ -2,10 +2,10 @@
 
 <h1>Error</h1>
 <div class="field">
-    <label>Error code: ${errorCode}</label>
-    <label>Error message: ${errorMsg}</label>
+    <label>Error code: ${generalError.errorCode}</label>
+    <label>Error message: ${generalError.errorMessage}</label>
     <label>Description:</label>
-    <c:forEach items="${errorDescription}" var="description" >
+    <c:forEach items="${generalError.errorDescription}" var="description" >
         <label>${description}</label>
     </c:forEach>
 </div>
