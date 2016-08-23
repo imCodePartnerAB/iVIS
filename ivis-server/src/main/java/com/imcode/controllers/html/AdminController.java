@@ -29,6 +29,7 @@ import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,8 @@ import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -52,6 +55,7 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 
 /**
  * Controller for resetting the token store for testing purposes.
@@ -210,7 +214,8 @@ public class AdminController {
 												 @RequestParam("lastName") String lastName,
 												 @RequestParam("email") String email,
 												 @RequestParam("contactPhone") String contactPhone,
-												 WebRequest webRequest, ModelAndView model) {
+									   			 BindingResult bindingResult,
+												 WebRequest webRequest, ModelAndView model) throws MethodArgumentNotValidException {
 
 		Person person = new Person();
 
@@ -226,6 +231,36 @@ public class AdminController {
 		person.setPhone(phone);
 
 		user.setPerson(person);
+
+		Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
+
+		GenericValidator.buildField(constraints, "password",
+				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GenericValidator.Constraint.MIN, "4"),
+				new SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
+		);
+
+		GenericValidator.buildField(constraints, "person.firstName",
+				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+		);
+
+		GenericValidator.buildField(constraints, "person.lastName",
+				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+		);
+
+		GenericValidator.buildField(constraints, "person.emails",
+				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GenericValidator.Constraint.REGEX, GenericValidator.EMAIL_PATTERN)
+		);
+
+		GenericValidator.buildField(constraints, "person.phones",
+				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GenericValidator.Constraint.MIN, GenericValidator.EMAIL_PATTERN)
+		);
+
+		new GenericValidator(constraints).invoke(user, bindingResult);
 
 		StaticUtls.encodeUserPassword(user);
 

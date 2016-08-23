@@ -1,12 +1,16 @@
 package com.imcode.validators;
 
 import com.imcode.entities.superclasses.AbstractIdEntity;
+import com.imcode.utils.StaticUtls;
+import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -21,15 +25,24 @@ public class GenericValidator implements Validator {
     public static final String URL_PATTERN =
             "^http(s{0,1})://[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*";
 
-    public enum Constraint { NOT_NULL_OR_EMPTY, MAX, MIN, REGEX, MATCH_WITH, NULL}
+    public enum Constraint {NOT_NULL_OR_EMPTY, MAX, MIN, REGEX, MATCH_WITH, NULL}
 
     private Map<String, Map<Constraint, String>> fieldsConstraints;
+
+//    private BindingResult bindingResult;
+
+//    public GenericValidator() {
+//    }
+
+//    public GenericValidator(BindingResult bindingResult) {
+//        this.bindingResult = bindingResult;
+//    }
 
     public GenericValidator(Map<String, Map<Constraint, String>> fieldsConstraints) {
         this.fieldsConstraints = fieldsConstraints;
     }
 
-    public GenericValidator(boolean isNull, String ... nullFields) {
+    public GenericValidator(boolean isNull, String... nullFields) {
 
         fieldsConstraints = new HashMap<>();
 
@@ -96,7 +109,7 @@ public class GenericValidator implements Validator {
     @SafeVarargs
     public static void buildField(Map<String, Map<GenericValidator.Constraint, String>> fields,
                                   String name,
-                                  AbstractMap.SimpleEntry<GenericValidator.Constraint, String> ... constraints) {
+                                  AbstractMap.SimpleEntry<GenericValidator.Constraint, String>... constraints) {
         Map<GenericValidator.Constraint, String> constraintsResult = new HashMap<>();
         for (AbstractMap.SimpleEntry<Constraint, String> constraint : constraints) {
             constraintsResult.put(constraint.getKey(), constraint.getValue());
@@ -104,10 +117,57 @@ public class GenericValidator implements Validator {
         fields.put(name, constraintsResult);
     }
 
+//    public GenericValidator validateString(BindingResult bindingResult,
+//                                           String forCheck,
+//                                           String defaultName,
+//                                           AbstractMap.SimpleEntry<GenericValidator.Constraint, String>... constraints) {
+//
+//        GenericValidator genericValidator = new GenericValidator();
+//
+//        for (AbstractMap.SimpleEntry<Constraint, String> constraint : constraints) {
+//
+//            switch (constraint.getKey()) {
+//                case NOT_NULL_OR_EMPTY:
+//                    genericValidator.checkNotNullOrEmpty(bindingResult, forCheck, defaultName, false);
+//                    break;
+//
+//                case NULL:
+//                    genericValidator.checkNull(bindingResult, forCheck, defaultName, false);
+//                    break;
+//
+//                case MAX:
+//                    genericValidator.checkMax(bindingResult, forCheck, constraint.getValue(), defaultName, false);
+//                    break;
+//
+//                case MIN:
+//                    genericValidator.checkMin(bindingResult, forCheck, constraint.getValue(), defaultName, false);
+//                    break;
+//
+//                case REGEX:
+//                    genericValidator.checkRegex(bindingResult, forCheck, constraint.getValue(), defaultName, false);
+//                    break;
+//
+//                case MATCH_WITH:
+//                    genericValidator.checkMatchWith(bindingResult, forCheck, constraint.getValue(), defaultName, false);
+//                    break;
+//
+//            }
+//
+//        }
+//
+//        return new GenericValidator(bindingResult);
+//    }
+
+//    public void checkResult() throws MethodArgumentNotValidException {
+//        if (bindingResult.hasErrors()) {
+//            throw new MethodArgumentNotValidException(null, bindingResult);
+//        }
+//    }
+
     public void invoke(Object entity, BindingResult bindingResult) throws MethodArgumentNotValidException {
         validate(entity, bindingResult);
         if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, bindingResult);
+            throw new MethodArgumentNotValidException(StaticUtls.getMethodParameter(getClass(), "invoke", 0, Object.class, BindingResult.class), bindingResult);
         }
     }
 
@@ -118,9 +178,23 @@ public class GenericValidator implements Validator {
             errors.rejectValue(field, null, field + " can not be null");
         } else {
             if (fieldValue instanceof Collection) {
-                if (((Collection) fieldValue).isEmpty()) {
+                Collection collection = (Collection) fieldValue;
+                if (collection.isEmpty()) {
                     errors.rejectValue(field, null, field + " can not be empty or null");
                 }
+            }
+
+            if (fieldValue instanceof String) {
+                if (((String) fieldValue).isEmpty()) {
+                        errors.rejectValue(field, null, field + " can not be empty or null");
+                }
+            }
+        }
+
+        if (fieldValue instanceof Map) {
+            Collection values = ((Map) fieldValue).values();
+            if (values.stream().allMatch(o -> o.toString().isEmpty())) {
+                errors.rejectValue(field, null, field + " can not be empty or null");
             }
         }
     }
@@ -129,14 +203,35 @@ public class GenericValidator implements Validator {
 
         Object fieldValue = errors.getFieldValue(field);
 
-        if (fieldValue != null) {
-            errors.rejectValue(field, null, field + " must be ignored");
+        if (fieldValue instanceof Collection) {
+            if (!((Collection) fieldValue).isEmpty()) {
+                String defaultMessage = field + " must be ignored";
+                errors.rejectValue(field, null, defaultMessage);
+            }
+        } else if (fieldValue instanceof String) {
+            if (!((String) fieldValue).isEmpty()) {
+                String defaultMessage = field + " must be ignored";
+                errors.rejectValue(field, null, defaultMessage);
+            }
+        } else if (fieldValue != null) {
+            String defaultMessage = field + " must be ignored";
+            errors.rejectValue(field, null, defaultMessage);
+        }
+
+        if (fieldValue instanceof Map) {
+            Collection values = ((Map) fieldValue).values();
+            if (values.stream().allMatch(o -> !o.toString().isEmpty())) {
+                errors.rejectValue(field, null, field + "  must be ignored");
+            }
         }
 
     }
 
     private void checkMax(Errors errors, String field, String value) {
         Object fieldValue = errors.getFieldValue(field);
+
+        checkMap(fieldValue);
+
         if (fieldValue instanceof Number) {
             if (value.compareTo(fieldValue.toString()) < 0) {
                 errors.rejectValue(field, null, field + " can not be more than " + value);
@@ -148,13 +243,17 @@ public class GenericValidator implements Validator {
                 errors.rejectValue(field, null, field + " lenght can not be more than " + value);
             }
         }
+
     }
 
     private void checkMin(Errors errors, String field, String value) {
         Object fieldValue = errors.getFieldValue(field);
+
+        checkMap(fieldValue);
+
         if (fieldValue instanceof Number) {
             if (value.compareTo(fieldValue.toString()) > 0) {
-                errors.rejectValue(field, null, field + " can not be less than " + value);
+                errors.rejectValue(field, null, field +" can not be less than " + value);
             }
         }
 
@@ -167,6 +266,8 @@ public class GenericValidator implements Validator {
 
     private void checkRegex(Errors errors, String field, String value) {
         Object fieldValue = errors.getFieldValue(field);
+
+        checkMap(fieldValue);
 
         if (fieldValue != null) {
             String determiner = "";
@@ -184,7 +285,9 @@ public class GenericValidator implements Validator {
             }
 
             if (!(fieldValue.toString().matches(value))) {
+
                 errors.rejectValue(field, null, field + " does not match with " + determiner + " pattern");
+
             }
         }
 
@@ -193,10 +296,22 @@ public class GenericValidator implements Validator {
     private void checkMatchWith(Errors errors, String field, String value) {
         Object fieldValue = errors.getFieldValue(field);
 
+        checkMap(fieldValue);
+
         if (fieldValue != null) {
             Object forCheck = errors.getFieldValue(value);
-            if ( !(fieldValue.toString().equals(forCheck.toString())) ) {
+            if (!(fieldValue.toString().equals(forCheck.toString()))) {
                 errors.rejectValue(field, null, field + " does not match with " + value);
+            }
+        }
+    }
+
+    private void checkMap(Object fieldValue) {
+        if (fieldValue instanceof Map) {
+            Collection values = ((Map) fieldValue).values();
+            Optional first = values.stream().map(Object::toString).findFirst();
+            if (first.isPresent()) {
+                fieldValue = first.get().toString();
             }
         }
     }

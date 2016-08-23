@@ -4,6 +4,8 @@ import com.imcode.exceptions.factories.ErrorBuilder;
 import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.misc.ErrorResponse;
 import com.imcode.misc.errors.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -45,6 +47,8 @@ public class ExceptionHandlerControllerImpl {
         }
 
         ModelAndView model = new ModelAndView();
+
+        model.clear();
 
         model.addObject("errorCode", generalError.getErrorCode());
         model.addObject("errorMsg", generalError.getErrorMessage());

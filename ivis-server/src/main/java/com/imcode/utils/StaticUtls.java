@@ -9,6 +9,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.MethodParameter;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -156,6 +157,16 @@ public class StaticUtls {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         }
 
+    }
+
+    public static MethodParameter getMethodParameter(Class<?> clazz, String methodName, int index, Class<?> ... parameterTypes) {
+        MethodParameter methodParameter = null;
+        try {
+            methodParameter = new MethodParameter(clazz.getMethod(methodName, parameterTypes), index);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return methodParameter;
     }
 
 }
