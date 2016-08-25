@@ -32,6 +32,8 @@ import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GenericValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
@@ -59,14 +61,12 @@ import java.security.Principal;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 
-/**
- * Controller for resetting the token store for testing purposes.
- * 
- * @author Dave Syer
- */
 @Controller
 public class AdminController {
-    @Autowired
+
+	public Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
 	private ConsumerTokenServices tokenServices;
 
 	@Autowired

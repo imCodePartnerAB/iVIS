@@ -40,8 +40,9 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/clients")
-public class ClientDetailsControllerImpl {// extends AbstractRestController<ClientDetails, Long, ApplicationService> {
-    final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class ClientDetailsController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private IvisClientDetailsService clientDetailsService;
@@ -51,9 +52,6 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private JpaClientDetailsValidator clientValidator;
 
     @Autowired
     private EntityRestProviderInformationService entityRestProviderInformationService;

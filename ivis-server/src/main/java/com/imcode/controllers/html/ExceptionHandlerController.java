@@ -27,7 +27,7 @@ import java.util.Locale;
  * Created by vitaly on 27.02.15.
  */
 @ControllerAdvice
-public class ExceptionHandlerControllerImpl {
+public class ExceptionHandlerController {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

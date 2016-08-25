@@ -14,6 +14,8 @@ import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GenericValidator;
 import com.imcode.validators.UserValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -37,17 +39,14 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+
+    public Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private RoleService roleService;
-
-    @Autowired
-    private UserValidator userValidator;
-
-    @Autowired
-    MessageSource messageSource;
 
     @Autowired
     private JavaMailSender mailSender;
