@@ -6,6 +6,8 @@ import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,10 +15,15 @@ import java.util.Set;
 
 @Entity
 @Table(name = "dbo_school")
+@AttributeOverride(name = "name", column = @Column(length = 200, nullable = false) )
 public class School extends AbstractNamedEntity<Long> implements Serializable {
+
+    @NotNull(message = "school id can not be null")
     @Column(name = "school_id")
     private String schoolId;
 
+    @NotNull(message = "services can not be null")
+    @Size(min = 1, message = "at least 1  service must be check")
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @JoinTable(name = "dbo_school_service_cross", joinColumns = @JoinColumn(name = "school_id"))

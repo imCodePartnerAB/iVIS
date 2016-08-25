@@ -11,6 +11,7 @@ import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.services.*;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ExecutionContext;
@@ -25,17 +26,15 @@ import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+
 
 @Controller
 @RequestMapping("/" + PupilController.MAIN_PATH)
@@ -50,7 +49,6 @@ public class PupilController {
     @Autowired
     private PersonService personService;
 
-    //    Shows the list of users
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView list(ModelAndView model) {
         model.setViewName(MAIN_PATH + "/list");
@@ -59,7 +57,6 @@ public class PupilController {
         return model;
     }
 
-    //    Show the UPDATE form
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
     public ModelAndView updateForm(@PathVariable("id") Pupil entity,
                                    ModelAndView model) throws MethodArgumentNotValidException {
@@ -72,7 +69,6 @@ public class PupilController {
         return model;
     }
 
-    //    Show the CREATE form
     @RequestMapping(params = "form", method = RequestMethod.GET)
     public ModelAndView createForm(ModelAndView model) {
         Pupil entity = new Pupil();
@@ -84,7 +80,10 @@ public class PupilController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView create(@ModelAttribute("entity") @Valid Pupil entity,
-                               ModelAndView model) {
+                               ModelAndView model) throws MethodArgumentNotValidException {
+
+        BindingResult bindingResult = new BeanPropertyBindingResult(entity, "pupil");
+        new GenericValidator(true, "id").invoke(entity, bindingResult);
 
         mainService.save(entity);
 
@@ -114,7 +113,6 @@ public class PupilController {
         return model;
     }
 
-    //    DELETE exists user
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public void delete(@PathVariable("id") Long id) throws MethodArgumentNotValidException {

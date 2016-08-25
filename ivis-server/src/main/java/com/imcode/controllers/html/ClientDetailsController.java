@@ -72,7 +72,6 @@ public class ClientDetailsController {
         return "clients/list";
     }
 
-//    Updating exists client
     @RequestMapping(value = "/{clientId}", method = RequestMethod.POST)
     public ModelAndView update(@PathVariable("clientId") String clientId,
                          @ModelAttribute("client") @Valid JpaClientDetails client,
@@ -95,7 +94,6 @@ public class ClientDetailsController {
     }
 
 
-//    Invoke Update Form
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
     public ModelAndView updateForm(@PathVariable("id") String id, ModelAndView model) throws MethodArgumentNotValidException {
 
@@ -111,7 +109,6 @@ public class ClientDetailsController {
         return model;
     }
 
-    //    Invoke create form
     @RequestMapping(params = "form", method = RequestMethod.GET)
     public ModelAndView createForm(ModelAndView model, Authentication authentication) {
         addListsInModel(model);
@@ -123,7 +120,6 @@ public class ClientDetailsController {
         return model;
     }
 
-    //    Show the PERMISSION form
     @RequestMapping(value = "/{id}", params = "perm", method = RequestMethod.GET)
     public ModelAndView permissionForm(@PathVariable("id") String id, ModelAndView model) throws MethodArgumentNotValidException {
 
@@ -148,7 +144,6 @@ public class ClientDetailsController {
         model.addObject("grantTypes", Arrays.asList(AuthorizedGrantType.getRepresentations()));
     }
 
-    //    Create new Client
     @RequestMapping(method = RequestMethod.POST)
     public String create(@ModelAttribute("client") @Valid JpaClientDetails client,
                          Model uiModel,
@@ -160,7 +155,6 @@ public class ClientDetailsController {
     }
 
 
-    //    Invoke Delete
     @RequestMapping(value = "/{id}", params = "delete", method = RequestMethod.GET)
     public ModelAndView deleteClient(@PathVariable("id") String id, ModelAndView model) throws MethodArgumentNotValidException {
 

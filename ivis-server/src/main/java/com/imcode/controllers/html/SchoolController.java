@@ -5,12 +5,14 @@ import com.imcode.entities.School;
 import com.imcode.entities.enums.ServiceTypeEnum;
 import com.imcode.services.SchoolService;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.Locale;
 import org.slf4j.Logger;
 
 @Controller
@@ -67,27 +68,14 @@ public class SchoolController {
         return model;
     }
 
-    //    CREATE new user
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView create(@ModelAttribute("entity") @Valid School entity,
-                               BindingResult bindingResultEntity,
-                               ModelAndView model,
-                               WebRequest webRequest,
-                               Locale locale) {
+                               ModelAndView model) throws MethodArgumentNotValidException {
+
+        BindingResult bindingResult = new BeanPropertyBindingResult(entity, "pupil");
+        new GenericValidator(true, "id").invoke(entity, bindingResult);
 
         addSpecialObjects(model, entity);
-//        ValidationUtils.invokeValidator(userValidator, entity, bindingResultSchool);
-//
-//        if (mainService.findByUsername(entity.getUsername()) != null) {
-//            bindingResultUser.rejectValue("username", null, "User is alredy exists!");
-//        }
-
-        if (bindingResultEntity.hasErrors()) {
-            model.addObject("entity", entity);
-            model.setViewName(MAIN_PATH + "/edit");
-
-            return model;
-        }
 
         mainService.save(entity);
 
@@ -96,69 +84,35 @@ public class SchoolController {
         return model;
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ModelAndView update (@PathVariable("id") School persistEntity,
+                                @ModelAttribute("entity") @Valid School entity,
+                                ModelAndView model) throws MethodArgumentNotValidException {
 
-//    @ModelAttribute("user")
-//    public User bindUser(User user) {
-//        Set<Role> roleSet = new HashSet<>();
-//        Set<Role> roleNameSet = user.getAuthorities();
-//
-//        for (Role role :roleNameSet) {
-//            Role persistRole = roleService.findByName(role.getName());
-//            if (persistRole != null) {
-//                roleSet.add(persistRole);
-//            }
-//        }
-//
-//        user.setAuthorities(roleSet);
-//
-//        return user;
-//    }
+        StaticUtls.rejectNullValue(persistEntity, "Try update non exist school");
 
-        //    UPDATE exists user
-        @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-        public ModelAndView update (@PathVariable("id") School persistEntity,
-                                    @ModelAttribute("entity") @Valid School entity,
-                                    BindingResult bindingResultEntity,
-                                    ModelAndView model,
-                                    WebRequest webRequest,
-                                    Locale locale){
-            addSpecialObjects(model, entity);
+        addSpecialObjects(model, entity);
 
-//            ValidationUtils.invokeValidator(userValidator, entity, bindingResultUser);
+        String[] fieldExceptions = {"id"};
 
-            if (bindingResultEntity.hasErrors()) {
-                model.addObject("entity", entity);
-                model.setViewName(MAIN_PATH + "/edit");
+        BeanUtils.copyProperties(entity, persistEntity, fieldExceptions);
+        mainService.save(persistEntity);
+        model.setViewName("redirect:/" + MAIN_PATH);
 
-                return model;
-            }
+        return model;
+    }
 
-//            User persistUser = mainService.find(id);
-
-            if (persistEntity == null) {
-                throw new NotFoundException();
-            }
-
-            String[] fieldExceptions = {"id"};
-
-            BeanUtils.copyProperties(entity, persistEntity, fieldExceptions);
-            mainService.save(persistEntity);
-            model.setViewName("redirect:/" + MAIN_PATH);
-
-            return model;
-        }
-
-    //    DELETE exists user
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void delete(@PathVariable("id") Long id) {
-        if (!mainService.exist(id)) {
-            throw new NotFoundException();
-        }
+    public void delete(@PathVariable("id") Long id) throws MethodArgumentNotValidException {
+
+        School school = mainService.find(id);
+
+        StaticUtls.rejectNullValue(school, "Try delete non exist school");
+
 
         mainService.delete(id);
 
-//        return "redirect:/schools";
     }
 
     protected void addSpecialObjects(ModelAndView model, School entity) {
