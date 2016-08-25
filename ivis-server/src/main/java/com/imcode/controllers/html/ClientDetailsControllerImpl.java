@@ -7,12 +7,16 @@ import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
 import com.imcode.entities.oauth2.JpaClientDetails;
+import com.imcode.exceptions.factories.ErrorBuilder;
+import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ClientRoleService;
 import com.imcode.services.EntityRestProviderInformationService;
 import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.CollectionTransferUtil;
+import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import com.imcode.validators.JpaClientDetailsValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,16 +62,11 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     private MethodRestProviderForEntityService methodRestProviderForEntityService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAll(WebRequest webRequest, Model model, Authentication principal) {
+    public String getAll(Model model) {
         logger.info("Listing clients");
         List<JpaClientDetails> clientDetailsList = Collections.emptyList();
 
-
-        if (webRequest.isUserInRole("ROLE_ADMIN")) {
-            clientDetailsList = clientDetailsService.findAll();
-        } else if (principal != null){
-            clientDetailsList = clientDetailsService.findAllUserClients((User) principal.getPrincipal());
-        }
+        clientDetailsList = clientDetailsService.findAll();
 
         model.addAttribute("clients", clientDetailsList);
         logger.info("No. of clients: " + clientDetailsList.size());
@@ -77,41 +77,15 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 //    Updating exists client
     @RequestMapping(value = "/{clientId}", method = RequestMethod.POST)
     public ModelAndView update(@PathVariable("clientId") String clientId,
-                         @ModelAttribute("client") JpaClientDetails client,
-//                         BindingResult bindingResult,
-                         ModelAndView model,
-                         WebRequest webRequest,
-//                         RedirectAttributes redirectAttributes,
-                         Authentication principal) {
+                         @ModelAttribute("client") @Valid JpaClientDetails client,
+                         BindingResult bindingResult,
+                         ModelAndView model) throws MethodArgumentNotValidException {
 
-//        clientValidator.validate(client, bindingResult);
+        JpaClientDetails persistentClient = clientDetailsService.findOne(clientId);
 
-//        if (bindingResult.hasErrors()) {
-//            model.setViewName("clients/edit");
-//            addListsInModel(model);
-//            model.addObject("message", new Message(MessageType.ERROR, "Client save fail"));
-//            model.addObject("client", client);
-//
-//            return model;
-//        }
+        StaticUtls.rejectNullValue(persistentClient, "Try update non exist client");
 
-//        model.clear();
-//        redirectAttributes.addFlashAttribute("message", new Message(MessageType.SUCCESS, "Client save success"));
-        JpaClientDetails persistentClient;
-
-        if (webRequest.isUserInRole("ROLE_ADMIN")) {
-            persistentClient = clientDetailsService.findOne(clientId);
-        } else if (principal != null) {
-            User user = (User) principal.getPrincipal();
-            persistentClient = clientDetailsService.findUserClientById(clientId, user);
-        } else {
-            model.setViewName("clients/edit");
-            addListsInModel(model);
-            model.addObject("message", new Message(MessageType.ERROR, "Client not found"));
-            model.addObject("client", client);
-
-            return model;
-        }
+        new GenericValidator(true, "clientId", "autoApproveScopes").invoke(client, bindingResult);
 
         BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
 
@@ -125,19 +99,13 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
 //    Invoke Update Form
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
-    public ModelAndView updateForm(@PathVariable("id") String id, ModelAndView model, WebRequest webRequest, Authentication principal) {
-        JpaClientDetails clientDetails;
-        addListsInModel(model);
+    public ModelAndView updateForm(@PathVariable("id") String id, ModelAndView model) throws MethodArgumentNotValidException {
 
-        if (webRequest.isUserInRole("ROLE_ADMIN")) {
-            clientDetails = clientDetailsService.findOne(id);
-        }else if (principal != null) {
-            clientDetails = clientDetailsService.findUserClientById(id, (User) principal.getPrincipal());
-        } else {
-            model.addObject("message", new Message(MessageType.ERROR, "Client not found"));
-            model.setViewName("clients/list");
-            return model;
-        }
+        JpaClientDetails clientDetails = clientDetailsService.findOne(id);
+
+        StaticUtls.rejectNullValue(clientDetails, "Try invoke update form for non exist client");
+
+        addListsInModel(model);
 
         model.addObject("client", clientDetails);
         model.setViewName("clients/edit");
@@ -159,14 +127,11 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
     //    Show the PERMISSION form
     @RequestMapping(value = "/{id}", params = "perm", method = RequestMethod.GET)
-    public ModelAndView permissionForm(@PathVariable("id") String id, ModelAndView model, WebRequest webRequest, Authentication principal) {
+    public ModelAndView permissionForm(@PathVariable("id") String id, ModelAndView model) throws MethodArgumentNotValidException {
 
         JpaClientDetails clientDetails = clientDetailsService.findOne(id);
 
-        if (clientDetails == null) {
-            model.setViewName("clients/list");
-            throw new NotFoundException();
-        }
+        StaticUtls.rejectNullValue(clientDetails, "Try invoke permission form for non exist client");
 
         model.addObject("identifier", id);
         model.setViewName("clients/permissions");
@@ -188,21 +153,8 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
     //    Create new Client
     @RequestMapping(method = RequestMethod.POST)
     public String create(@ModelAttribute("client") @Valid JpaClientDetails client,
-                         BindingResult bindingResult,
                          Model uiModel,
-                         RedirectAttributes redirectAttributes,
-                         WebRequest webRequest,
-                         Authentication principal) {
-
-        if (bindingResult.hasErrors()) {
-            uiModel.addAttribute("message", new Message(MessageType.ERROR, "Client save fail"));
-            uiModel.addAttribute("client", client);
-
-            return "clients/edit";
-        }
-
-        uiModel.asMap().clear();
-        redirectAttributes.addFlashAttribute("message", new Message(MessageType.SUCCESS, "Client save success"));
+                         RedirectAttributes redirectAttributes) {
 
         clientDetailsService.addClientDetails(client);
 
@@ -212,34 +164,28 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
 
     //    Invoke Delete
     @RequestMapping(value = "/{id}", params = "delete", method = RequestMethod.GET)
-    public ModelAndView deleteClient(@PathVariable("id") String id, ModelAndView model, WebRequest webRequest, Authentication principal) {
-        JpaClientDetails clientDetails;
-        addListsInModel(model);
+    public ModelAndView deleteClient(@PathVariable("id") String id, ModelAndView model) throws MethodArgumentNotValidException {
 
-        if (webRequest.isUserInRole("ROLE_ADMIN")) {
-            clientDetails = clientDetailsService.findOne(id);
-            clientDetailsService.removeClientDetails(id);
-        }else if (principal != null) {
-            clientDetails = null;
-            //clientDetails = clientDetailsService.findUserClientById(id, (User) principal.getPrincipal());
-            clientDetailsService.removeClientDetails(id);
-        } else {
-            model.addObject("message", new Message(MessageType.ERROR, "Client not found"));
-            model.setViewName("clients/list");
-            return model;
-        }
+        JpaClientDetails clientDetails = clientDetailsService.findOne(id);
 
-        model.addObject("client", clientDetails);
+        StaticUtls.rejectNullValue(clientDetails, "Try delete non exist client");
+
+        clientDetailsService.removeClientDetails(id);
+
         model.setViewName("redirect:/clients");
+
         return model;
     }
 
     @RequestMapping(value = "/{id}", params = "permit", method = RequestMethod.POST)
     public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
                                       @PathVariable("id") String clientId,
-                                      ModelAndView model) {
+                                      ModelAndView model) throws MethodArgumentNotValidException {
 
         JpaClientDetails client = clientDetailsService.findOne(clientId);
+
+        StaticUtls.rejectNullValue(client, "Try set permissions for non exist client");
+
         Collection<String> idOfMethods = allowedMethods.getCollection();
         List<MethodRestProviderForEntity> allowedMethodsByUserId = methodRestProviderForEntityService.findAllowedMethodsByClientId(clientId);
 
@@ -258,6 +204,8 @@ public class ClientDetailsControllerImpl {// extends AbstractRestController<Clie
         model.setViewName("redirect:/clients");
         return model;
     }
+
+
 
 
 }

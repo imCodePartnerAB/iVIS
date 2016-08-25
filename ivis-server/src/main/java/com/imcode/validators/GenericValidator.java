@@ -197,6 +197,12 @@ public class GenericValidator implements Validator {
             }
         }
 
+        if (fieldValue instanceof Collection) {
+            if (((Collection) fieldValue).size() > Integer.parseInt(value)) {
+                errors.rejectValue(field, null, field + " lenght can not be more than " + value);
+            }
+        }
+
     }
 
     private void checkMin(Errors errors, String field, String value) {
@@ -213,6 +219,12 @@ public class GenericValidator implements Validator {
         if (fieldValue instanceof String) {
             if (fieldValue.toString().length() < Integer.parseInt(value)) {
                 errors.rejectValue(field, null, field + " lenght can not be less than " + value);
+            }
+        }
+
+        if (fieldValue instanceof Collection) {
+            if (((Collection) fieldValue).size() < Integer.parseInt(value)) {
+                errors.rejectValue(field, null, field + " lenght can not be more than " + value);
             }
         }
     }

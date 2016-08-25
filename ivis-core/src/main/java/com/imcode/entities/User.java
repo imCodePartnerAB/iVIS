@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by vitaly on 12.05.15.
@@ -23,12 +25,14 @@ import javax.persistence.Entity;
 public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable, JpaPersonalizedEntity {
     public static final String DEFAULT_PASSWORD = "";
 
-//    @NotNull(message = "{user.requiredPassword}")
-//    @Size(min = 3, max = 15)
+    @NotNull(message = "password is required")
+    @Size(min = 8, max = 15)
     @Column(nullable = false, columnDefinition = DEFAULT_PASSWORD)
     @JsonIgnore
     private String password = DEFAULT_PASSWORD;
 
+    @NotNull(message = "confirmPassword is required")
+    @Size(min = 8, max = 15)
     @Transient
     @JsonIgnore
     private String confirmPassword = DEFAULT_PASSWORD;
@@ -36,10 +40,12 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column
     private Boolean enabled = false;
 
+    @NotNull(message = "person is required")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;
 
+    @Size(min = 1)
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_user_roles_cross",
             joinColumns = @JoinColumn(name = "user_id"),

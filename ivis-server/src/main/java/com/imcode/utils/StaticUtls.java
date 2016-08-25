@@ -14,6 +14,9 @@ import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
@@ -155,6 +158,16 @@ public class StaticUtls {
 
         if (object == null) {
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        }
+
+    }
+
+    public static void rejectNullValue(Object object, String message) throws MethodArgumentNotValidException {
+
+        if (object == null) {
+            BindingResult bindingResult = new BeanPropertyBindingResult(object, "entity");
+            bindingResult.reject(null, message);
+            throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
     }
