@@ -21,7 +21,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by vitaly on 27.02.15.
@@ -42,7 +49,14 @@ public class ExceptionHandlerController {
         } else if (exception instanceof BindException) {
             BindingResult bindingResult = ((BindException) exception).getBindingResult();
             generalError = ErrorBuilder.buildValidationError(bindingResult);
-        }else if (exception instanceof DataAccessException) {
+        } else if (exception instanceof ConstraintViolationException) {
+            Set<ConstraintViolation<?>> constraintViolations = ((ConstraintViolationException) exception).getConstraintViolations();
+            List<String> description = new LinkedList<>();
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .collect(Collectors.toCollection(() -> description));
+            generalError = ErrorBuilder.buildValidationError(description);
+        } else if (exception instanceof DataAccessException) {
             generalError = ErrorBuilder.buildDatabasePersistenceError(exception);
         } else if (exception instanceof HttpMessageConversionException) {
             generalError = ErrorBuilder.buildJsonMappingException(exception);
