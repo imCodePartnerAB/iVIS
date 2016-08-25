@@ -26,13 +26,11 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     public static final String DEFAULT_PASSWORD = "";
 
     @NotNull(message = "password is required")
-    @Size(min = 8, max = 15)
+    @Size(min = 8, message = "password min 8 characters")
     @Column(nullable = false, columnDefinition = DEFAULT_PASSWORD)
     @JsonIgnore
     private String password = DEFAULT_PASSWORD;
 
-    @NotNull(message = "confirmPassword is required")
-    @Size(min = 8, max = 15)
     @Transient
     @JsonIgnore
     private String confirmPassword = DEFAULT_PASSWORD;
@@ -44,7 +42,8 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @JoinColumn(name = "person_id")
     private Person person;
 
-    @Size(min = 1)
+    @NotNull(message = "roles is required")
+    @Size(min = 1, message = "at least 1 role must be checked")
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_user_roles_cross",
             joinColumns = @JoinColumn(name = "user_id"),

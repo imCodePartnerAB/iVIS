@@ -136,10 +136,6 @@ public class UserController {
 
         Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
 
-        GenericValidator.buildField(constraints, "password",
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
-        );
-
         if (userService.findByUsername(user.getUsername()) != null) {
             bindingResult.reject(null, "username not unique");
         }
@@ -162,16 +158,6 @@ public class UserController {
                                 ModelAndView model) throws MethodArgumentNotValidException {
 
         StaticUtls.rejectNullValue(user, "Try update non exist user");
-
-        Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
-
-        GenericValidator.buildField(constraints, "password",
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
-        );
-
-        BindingResult bindingResult = new BeanPropertyBindingResult(user, "user");
-
-        new GenericValidator(constraints).invoke(user, bindingResult);
 
         StaticUtls.encodeUserPassword(user);
 
