@@ -40,7 +40,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column
     private Boolean enabled = false;
 
-    @NotNull(message = "person is required")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;

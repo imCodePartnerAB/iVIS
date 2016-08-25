@@ -12,6 +12,7 @@ import com.imcode.services.UserService;
 import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GenericValidator;
 import com.imcode.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +21,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -62,7 +65,7 @@ public class UserController {
     private MethodRestProviderForEntityService methodRestProviderForEntityService;
     //    Shows the list of users
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView list(ModelAndView model, Authentication authentication) {
+    public ModelAndView list(ModelAndView model) {
         model.setViewName("users/list");
         model.addObject(userService.findAll());
 
@@ -73,8 +76,9 @@ public class UserController {
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
     public ModelAndView updateForm(@PathVariable("id") User user,
                                    ModelAndView model,
-                                   WebRequest webRequest,
-                                   Locale locale) {
+                                   WebRequest webRequest) throws MethodArgumentNotValidException {
+
+        StaticUtls.rejectNullValue(user, "Try invoke update form for non exist user");
 
         User currentUser = StaticUtls.getCurrentUser(webRequest, userService);
         if(!currentUser.hasRoles("ROLE_ADMIN")) {
@@ -82,12 +86,6 @@ public class UserController {
                 model.setViewName("redirect:/");
                 return model;
             }
-        }
-
-        if (user == null) {
-            model.setViewName("users/list");
-            throw new NotFoundException();
-//            model.addObject(new Message(MessageType.ERROR, messageSource.getMessage("entity.notFoundById", new Object[]{User.class.getSimpleName(), id}, locale)));
         }
 
         model.setViewName("users/edit");
@@ -116,14 +114,9 @@ public class UserController {
     //    Show the PERMISSION form
     @RequestMapping(value = "/{id}", params = "perm", method = RequestMethod.GET)
     public ModelAndView permissionForm(@PathVariable("id") User user,
-                                   ModelAndView model,
-                                   WebRequest webRequest,
-                                   Locale locale) {
+                                   ModelAndView model) throws MethodArgumentNotValidException {
 
-        if (user == null) {
-            model.setViewName("users/list");
-            throw new NotFoundException();
-        }
+        StaticUtls.rejectNullValue(user, "Try invoke permission form for non exist user");
 
         model.addObject("identifier", user.getId());
         model.setViewName("users/permissions");
@@ -138,27 +131,20 @@ public class UserController {
     //    CREATE new user
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView create(@ModelAttribute("user") @Valid User user,
-                               BindingResult bindingResultUser,
-                               ModelAndView model,
-                               WebRequest webRequest,
-                               Locale locale) {
+                               BindingResult bindingResult,
+                               ModelAndView model) throws MethodArgumentNotValidException {
 
-        if (webRequest.isUserInRole("ROLE_ADMIN")) {
-            user.setConfirmPassword(user.getPassword());
-        }
+        Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
 
-        ValidationUtils.invokeValidator(userValidator, user, bindingResultUser);
+        GenericValidator.buildField(constraints, "password",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
+        );
 
         if (userService.findByUsername(user.getUsername()) != null) {
-            bindingResultUser.rejectValue("username", null, "User is alredy exists!");
+            bindingResult.reject(null, "username not unique");
         }
 
-        if (bindingResultUser.hasErrors()) {
-            model.addObject(user);
-            model.setViewName("users/edit");
-
-            return model;
-        }
+        new GenericValidator(constraints).invoke(user, bindingResult);
 
         StaticUtls.encodeUserPassword(user);
 
@@ -169,84 +155,48 @@ public class UserController {
         return model;
     }
 
+    //    UPDATE exists user
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ModelAndView update (@PathVariable("id") User persistUser,
+                                @ModelAttribute("user") @Valid User user,
+                                ModelAndView model) throws MethodArgumentNotValidException {
 
-//    @ModelAttribute("user")
-//    public User bindUser(User user) {
-//        Set<Role> roleSet = new HashSet<>();
-//        Set<Role> roleNameSet = user.getAuthorities();
-//
-//        for (Role role :roleNameSet) {
-//            Role persistRole = roleService.findByName(role.getName());
-//            if (persistRole != null) {
-//                roleSet.add(persistRole);
-//            }
-//        }
-//
-//        user.setAuthorities(roleSet);
-//
-//        return user;
-//    }
+        StaticUtls.rejectNullValue(user, "Try update non exist user");
 
-        //    UPDATE exists user
-        @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-        public ModelAndView update (@PathVariable("id") User persistUser,
-                                    @ModelAttribute("user") @Valid User user,
-                                    BindingResult bindingResultUser,
-                                    ModelAndView model,
-                                    WebRequest webRequest,
-                                    Locale locale){
+        Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
 
-            if (webRequest.isUserInRole("ROLE_ADMIN")) {
-                user.setConfirmPassword(user.getPassword());
-            }
+        GenericValidator.buildField(constraints, "password",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
+        );
 
-            ValidationUtils.invokeValidator(userValidator, user, bindingResultUser);
+        BindingResult bindingResult = new BeanPropertyBindingResult(user, "user");
 
-            if (bindingResultUser.hasErrors()) {
-                model.addObject(user);
-                model.setViewName("users/edit");
+        new GenericValidator(constraints).invoke(user, bindingResult);
 
-                return model;
-            }
+        StaticUtls.encodeUserPassword(user);
 
-//            User persistUser = userService.find(id);
-
-            if (persistUser == null) {
-                throw new NotFoundException();
-            }
-
-//            String[] fieldExceptions = user.getPassword().isEmpty() ? new String[]{"id", "password", "confirmPassword"} : new String[]{"id"};
-//
-//            BeanUtils.copyProperties(user, persistUser, fieldExceptions);
-
-            if (!user.getPassword().isEmpty()) {
-                StaticUtls.encodeUserPassword(user);
-            } else {
-                user.setPassword(null);
-                user.setConfirmPassword(null);
-            }
-
-            try {
-                StaticUtls.nullAwareBeanCopy(persistUser, user);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-
-            userService.save(persistUser);
-            model.setViewName("redirect:/users");
-
-            return model;
+        try {
+            StaticUtls.nullAwareBeanCopy(persistUser, user);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
+
+        userService.save(persistUser);
+        model.setViewName("redirect:/users");
+
+        return model;
+    }
 
     //    DELETE exists user
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void delete(@PathVariable("id") Long id) {
-        if (!userService.exist(id)) {
-            throw new NotFoundException();
-        }
+    public void delete(@PathVariable("id") Long id) throws MethodArgumentNotValidException {
+
+        User user = userService.find(id);
+
+        StaticUtls.rejectNullValue(user, "Try delete non exist user");
 
         userService.delete(id);
 
@@ -256,7 +206,9 @@ public class UserController {
     @RequestMapping(value = "/{id}", params = "passwordchange", method = RequestMethod.POST)
     public ModelAndView passwordChange(@PathVariable("id") User user,
                                @RequestParam("password") String password,
-                               ModelAndView model)  {
+                               ModelAndView model) throws MethodArgumentNotValidException {
+
+        StaticUtls.rejectNullValue(user, "Try change password for non exist user");
 
         user.setPassword(password);
         StaticUtls.encodeUserPassword(user);
@@ -279,7 +231,9 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", params = "checkpassword", method = RequestMethod.GET)
     public @ResponseBody Boolean checkPassword(@PathVariable("id") User user,
-                                               @RequestParam("checkpassword") String password) {
+                                               @RequestParam("checkpassword") String password) throws MethodArgumentNotValidException {
+
+        StaticUtls.rejectNullValue(user, "Try check password for non exist user");
 
         String userEncodedPassword = user.getPassword();
 
@@ -292,9 +246,12 @@ public class UserController {
     @RequestMapping(value = "/{id}", params = "permit", method = RequestMethod.POST)
     public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
                                       @PathVariable("id") Long userId,
-                                      ModelAndView model) {
+                                      ModelAndView model) throws MethodArgumentNotValidException {
 
         User user = userService.find(userId);
+
+        StaticUtls.rejectNullValue(user, "Try set permissions for non exist user");
+
         Collection<String> idOfMethods = allowedMethods.getCollection();
         List<MethodRestProviderForEntity> allowedMethodsByUserId = methodRestProviderForEntityService.findAllowedMethodsByUserId(userId);
 

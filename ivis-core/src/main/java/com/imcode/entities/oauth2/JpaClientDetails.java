@@ -39,33 +39,35 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonProperty("client_id")
     private String clientId;
 
-    @Size(min = 4, max = 100)
+    @NotNull(message = "name is required")
+    @Size(min = 4, max = 100, message = "name must have min 4, max 100 characters")
     @Column(length = 100, unique = true)
     @org.codehaus.jackson.annotate.JsonProperty("client_name")
     @com.fasterxml.jackson.annotation.JsonProperty("client_name")
     private String name;
 
-    @NotNull
+    @NotNull(message = "name is required")
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
     @org.codehaus.jackson.annotate.JsonProperty("client_owner")
     @com.fasterxml.jackson.annotation.JsonProperty("client_owner")
     private User owner;
 
-    @Size(min = 4, max = 100)
+    @NotNull(message = "client secret is required")
+    @Size(min = 4, max = 100, message = "clientSecret must have min 4, max 100 characters")
     @Column(name = "client_secret")
     @org.codehaus.jackson.annotate.JsonProperty("client_secret")
     @com.fasterxml.jackson.annotation.JsonProperty("client_secret")
     private String clientSecret;
 
-    @Size(min = 1)
+    @Size(min = 1, message = "at least one scope must be checked")
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dbo_oauth_client_scope", joinColumns = @JoinColumn(name = "client_id"))
     @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private Set<String> scope = new HashSet<>();
 
-    @Size(min = 1)
+    @Size(min = 1, message = "resourceId is required")
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dbo_oauth_client_resources",joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "resource_id")
@@ -75,7 +77,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private Set<String> resourceIds = Collections.emptySet();
 
-    @Size(min = 1)
+    @Size(min = 2, message = "at least 2 authorized grant types must be checked")
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dbo_oauth_client_grant_types",joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "authorized_grant_type")
@@ -85,7 +87,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private Set<String> authorizedGrantTypes = Collections.emptySet();
 
-    @Size(min = 1)
+    @Size(min = 1, message = "registered redirect uri is required")
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dbo_oauth_client_redirect_uris",joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "registered_redirect_uris")
@@ -102,22 +104,22 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private Set<String> autoApproveScopes;
 
-    @Size(min = 1)
+    @Size(min = 1, message = "at least 1 roles must be checked")
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, targetEntity = ClientRole.class)
     @JoinTable(name = "dbo_oauth_client_roles_cross",
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<ClientRole> authorities;
 
-    @NotNull
-    @Min(value = 90)
+    @NotNull(message = "accessTokenValiditySeconds is required")
+    @Min(value = 90, message = "minimum 90 seconds of accessTokenValiditySeconds")
     @Column(name = "access_token_validity_seconds")
     @org.codehaus.jackson.annotate.JsonProperty("access_token_validity")
     @com.fasterxml.jackson.annotation.JsonProperty("access_token_validity")
     private Integer accessTokenValiditySeconds;
 
-    @NotNull
-    @Min(value = 180)
+    @NotNull(message = "refreshTokenValiditySeconds is required")
+    @Min(value = 180, message = "minimum 180 seconds of refreshTokenValiditySeconds")
     @Column(name = "refresh_token_validity_seconds")
     @org.codehaus.jackson.annotate.JsonProperty("refresh_token_validity")
     @com.fasterxml.jackson.annotation.JsonProperty("refresh_token_validity")

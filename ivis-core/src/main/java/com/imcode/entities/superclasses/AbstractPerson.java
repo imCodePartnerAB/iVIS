@@ -7,6 +7,8 @@ import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
@@ -22,9 +24,13 @@ public abstract class AbstractPerson extends AbstractIdEntity<Long> implements S
     @Column(name = "personal_id")
     private String personalId;
 
+    @NotNull(message = "firstName is required")
+    @Size(min = 4, message = "at least firstName must have 4 characters")
     @Column(name = "first_name")
     private String firstName;
 
+    @NotNull(message = "lastName is required")
+    @Size(min = 4, message = "at least lastName must have 4 characters")
     @Column(name = "last_name")
     private String lastName;
 
