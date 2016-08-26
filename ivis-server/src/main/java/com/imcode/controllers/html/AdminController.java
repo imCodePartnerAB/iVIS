@@ -506,6 +506,17 @@ public class AdminController {
 		throw (Exception) request.getAttribute("javax.servlet.error.exception");
 	}
 
+	@RequestMapping(value = "/errorhandler", params = "body", method = RequestMethod.GET)
+	public ModelAndView errorHandlerWithBody(HttpServletRequest request, ModelAndView modelAndView) throws Exception {
+		GeneralError generalError = new GeneralError();
+		generalError.setErrorCode(Integer.parseInt(request.getParameter("error_code")));
+		generalError.setErrorMessage(request.getParameter("error_message"));
+		generalError.setErrorDescription(Arrays.asList(request.getParameter("error_description").split(",")));
+		modelAndView.addObject(generalError);
+		modelAndView.setViewName("errors/error");
+		return modelAndView;
+	}
+
 	private void checkResourceOwner(String user, Principal principal) {
 		if (principal instanceof OAuth2Authentication) {
 			OAuth2Authentication authentication = (OAuth2Authentication) principal;

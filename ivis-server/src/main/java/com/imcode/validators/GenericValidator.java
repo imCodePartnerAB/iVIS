@@ -57,7 +57,7 @@ public class GenericValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return AbstractIdEntity.class.isAssignableFrom(clazz);
+        return true;
     }
 
     @Override

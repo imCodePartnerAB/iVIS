@@ -849,4 +849,9 @@
         <error-code>500</error-code>
         <location>/imcms/internalerrorpage.jsp</location>
     </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/api/content/ivis/errorhandler</location>
+    </error-page>
 </web-app>

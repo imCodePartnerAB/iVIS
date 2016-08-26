@@ -71,17 +71,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     @RequestMapping(value = "/saveall", method = RequestMethod.POST)
     public @ResponseBody Object saveAll(@RequestBody Iterable<T> entities,
                                         HttpServletResponse response,
-                                        BindingResult bindingResult,
                                         WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
+
         Iterable<T> result = service.save(entities);
-
-        Iterator<T> iterator = result.iterator();
-
-        while (iterator.hasNext()) {
-            T next = iterator.next();
-            new GenericValidator(getFieldsConstraints()).invoke(next, bindingResult);
-            new GenericValidator(true, "id").invoke(next, bindingResult);
-        }
 
         if (Boolean.FALSE.equals(full)) {
             List<ID> ids = StreamSupport.stream(result.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
@@ -102,7 +94,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
-        new GenericValidator(true, "id").invoke(entity, bindingResult);
+        new GenericValidator(false, "id").invoke(entity, bindingResult);
 
         boolean isCopied = false;
 

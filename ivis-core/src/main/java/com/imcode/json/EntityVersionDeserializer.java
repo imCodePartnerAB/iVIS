@@ -20,7 +20,8 @@ public class EntityVersionDeserializer extends JsonDeserializer<EntityVersion> {
     public EntityVersion deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         EntityVersion result = new EntityVersion();
         JsonNode node = jp.getCodec().readTree(jp);
-        Long id = node.get("id").longValue();
+        long entityVersionId = node.get("id").longValue();
+        Long id = entityVersionId == 0 ? null : entityVersionId;
         Long entityId = node.get("entity_id").longValue();
         String entityClassName = node.get("entity_class").asText();
         Date timestamp = new Date((node.get("timestamp").asLong()));

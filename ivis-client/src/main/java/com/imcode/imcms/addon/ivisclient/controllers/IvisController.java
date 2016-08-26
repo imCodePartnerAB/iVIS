@@ -7,7 +7,9 @@ import com.imcode.imcms.addon.ivisclient.controllers.form.ApplicationFormCmd;
 import com.imcode.services.*;
 import imcode.server.Imcms;
 import imcode.services.IvisServiceFactory;
+import imcode.services.exceptionhandling.GeneralException;
 import imcode.services.utils.IvisOAuth2Utils;
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -392,6 +394,31 @@ public class IvisController {
         response.sendRedirect(returnToUri);
 
 //        return "OK";
+    }
+
+    @RequestMapping(value = "/errorhandler")
+    public void handleError(HttpServletRequest request, HttpServletResponse response) {
+
+        Object error = request.getAttribute("javax.servlet.error.exception");
+
+        if (error instanceof GeneralException) {
+            try {
+                GeneralException generalException = (GeneralException) error;
+                URIBuilder uriBuilder = new URIBuilder(serverAddress + "/errorhandler");
+                uriBuilder.addParameter("body", null);
+                uriBuilder.addParameter("error_message", generalException.getErrorMessage());
+                uriBuilder.addParameter("error_code", generalException.getErrorCode().toString());
+                String collect = generalException.getErrorDescription().stream().collect(Collectors.joining(","));
+                uriBuilder.addParameter("error_description", collect);
+                response.sendRedirect(uriBuilder.build().toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 
     private String getRequestReferer(HttpServletRequest request) {
