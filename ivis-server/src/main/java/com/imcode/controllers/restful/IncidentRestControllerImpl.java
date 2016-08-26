@@ -18,8 +18,10 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ruslan on 5/4/16.
@@ -66,4 +68,32 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
         return null;
     }
 
+    @Override
+    protected Map<String, Map<GenericValidator.Constraint, String>> getFieldsConstraints() {
+        Map<String, Map<GenericValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
+
+        GenericValidator.buildField(fieldsConstraints, "title",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "description",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "categories",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "pupils",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "priority",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        );
+
+        return fieldsConstraints;
+    }
 }

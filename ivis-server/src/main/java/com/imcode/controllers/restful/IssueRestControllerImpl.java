@@ -19,7 +19,9 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.util.AbstractMap;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -94,4 +96,36 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     }
 
 
+    @Override
+    protected Map<String, Map<GenericValidator.Constraint, String>> getFieldsConstraints() {
+        Map<String, Map<GenericValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
+
+        GenericValidator.buildField(fieldsConstraints, "title",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "description",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "status",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "responsiblePerson",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "authorizedPersons",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        );
+
+        GenericValidator.buildField(fieldsConstraints, "incidents",
+                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        );
+
+        return fieldsConstraints;
+    }
 }
