@@ -77,7 +77,6 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private Set<String> resourceIds = Collections.emptySet();
 
-    @Size(min = 2, message = "at least 2 authorized grant types must be checked")
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "dbo_oauth_client_grant_types",joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "authorized_grant_type")
@@ -660,6 +659,10 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
 
     public void setAuthorizedGrantTypes(AuthorizedGrantType authorizedGrantType) {
         setAuthorizedGrantTypes(new HashSet<String>(Arrays.asList(authorizedGrantType.toString())));
+    }
+
+    public void addAuthorizedGrantType(AuthorizedGrantType authorizedGrantType) {
+        authorizedGrantTypes.add(authorizedGrantType.toString());
     }
 
     @Override

@@ -1,14 +1,9 @@
 package com.imcode.controllers.html;
 
-import com.imcode.controllers.html.exceptions.NotFoundException;
-import com.imcode.controllers.html.form.Message;
-import com.imcode.controllers.html.form.MessageType;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
 import com.imcode.entities.oauth2.JpaClientDetails;
-import com.imcode.exceptions.factories.ErrorBuilder;
-import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ClientRoleService;
 import com.imcode.services.EntityRestProviderInformationService;
@@ -17,7 +12,6 @@ import com.imcode.services.UserService;
 import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GenericValidator;
-import com.imcode.validators.JpaClientDetailsValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -31,7 +25,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -82,9 +75,11 @@ public class ClientDetailsController {
 
         StaticUtls.rejectNullValue(persistentClient, "Try update non exist client");
 
-        new GenericValidator(true, "clientId", "autoApproveScopes").invoke(client, bindingResult);
+        new GenericValidator(true, "autoApproveScopes").invoke(client, bindingResult);
 
         BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
+
+        client.addAuthorizedGrantType(AuthorizedGrantType.refresh_token);
 
         clientDetailsService.updateClientDetails(persistentClient);
 
@@ -148,6 +143,8 @@ public class ClientDetailsController {
     public String create(@ModelAttribute("client") @Valid JpaClientDetails client,
                          Model uiModel,
                          RedirectAttributes redirectAttributes) {
+
+        client.addAuthorizedGrantType(AuthorizedGrantType.refresh_token);
 
         clientDetailsService.addClientDetails(client);
 
