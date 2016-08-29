@@ -1,22 +1,18 @@
 package com.imcode.validators;
 
-import com.imcode.entities.superclasses.AbstractIdEntity;
-import com.imcode.utils.StaticUtls;
 import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
  * Created by ruslan on 17.08.16.
  */
-public class GenericValidator implements Validator {
+public class GeneralValidator implements Validator {
 
     public static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -31,18 +27,18 @@ public class GenericValidator implements Validator {
 
 //    private BindingResult bindingResult;
 
-//    public GenericValidator() {
+//    public GeneralValidator() {
 //    }
 
-//    public GenericValidator(BindingResult bindingResult) {
+//    public GeneralValidator(BindingResult bindingResult) {
 //        this.bindingResult = bindingResult;
 //    }
 
-    public GenericValidator(Map<String, Map<Constraint, String>> fieldsConstraints) {
+    public GeneralValidator(Map<String, Map<Constraint, String>> fieldsConstraints) {
         this.fieldsConstraints = fieldsConstraints;
     }
 
-    public GenericValidator(boolean isNull, String... nullFields) {
+    public GeneralValidator(boolean isNull, String... nullFields) {
 
         fieldsConstraints = new HashMap<>();
 
@@ -107,10 +103,10 @@ public class GenericValidator implements Validator {
     }
 
     @SafeVarargs
-    public static void buildField(Map<String, Map<GenericValidator.Constraint, String>> fields,
+    public static void buildField(Map<String, Map<GeneralValidator.Constraint, String>> fields,
                                   String name,
-                                  AbstractMap.SimpleEntry<GenericValidator.Constraint, String>... constraints) {
-        Map<GenericValidator.Constraint, String> constraintsResult = new HashMap<>();
+                                  AbstractMap.SimpleEntry<GeneralValidator.Constraint, String>... constraints) {
+        Map<GeneralValidator.Constraint, String> constraintsResult = new HashMap<>();
         for (AbstractMap.SimpleEntry<Constraint, String> constraint : constraints) {
             constraintsResult.put(constraint.getKey(), constraint.getValue());
         }

@@ -31,12 +31,11 @@ import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
+import com.imcode.validators.GeneralValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -234,32 +233,32 @@ public class AdminController {
 
 		user.setPerson(person);
 
-		Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
+		Map<String, Map<GeneralValidator.Constraint, String>> constraints = new HashMap<>();
 
-		GenericValidator.buildField(constraints, "password",
-				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-				new SimpleEntry<>(GenericValidator.Constraint.MIN, "4"),
-				new SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
+		GeneralValidator.buildField(constraints, "password",
+				new SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GeneralValidator.Constraint.MIN, "4"),
+				new SimpleEntry<>(GeneralValidator.Constraint.MATCH_WITH, "confirmPassword")
 		);
 
-		GenericValidator.buildField(constraints, "person.firstName",
-				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-				new SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+		GeneralValidator.buildField(constraints, "person.firstName",
+				new SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
 		);
 
-		GenericValidator.buildField(constraints, "person.lastName",
-				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-				new SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+		GeneralValidator.buildField(constraints, "person.lastName",
+				new SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
 		);
 
-		GenericValidator.buildField(constraints, "person.emails",
-				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-				new SimpleEntry<>(GenericValidator.Constraint.REGEX, GenericValidator.EMAIL_PATTERN)
+		GeneralValidator.buildField(constraints, "person.emails",
+				new SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GeneralValidator.Constraint.REGEX, GeneralValidator.EMAIL_PATTERN)
 		);
 
-		GenericValidator.buildField(constraints, "person.phones",
-				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-				new SimpleEntry<>(GenericValidator.Constraint.MIN, "8")
+		GeneralValidator.buildField(constraints, "person.phones",
+				new SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GeneralValidator.Constraint.MIN, "8")
 		);
 
 
@@ -271,7 +270,7 @@ public class AdminController {
 			bindingResult.reject(null, "email not unique");
 		}
 
-		new GenericValidator(constraints).invoke(user, bindingResult);
+		new GeneralValidator(constraints).invoke(user, bindingResult);
 
 		StaticUtls.encodeUserPassword(user);
 
@@ -460,15 +459,15 @@ public class AdminController {
 		user.setPassword(password);
 		user.setConfirmPassword(confirmPassword);
 
-		Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
+		Map<String, Map<GeneralValidator.Constraint, String>> constraints = new HashMap<>();
 
-		GenericValidator.buildField(constraints, "password",
-				new SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-				new SimpleEntry<>(GenericValidator.Constraint.MIN, "8"),
-				new SimpleEntry<>(GenericValidator.Constraint.MATCH_WITH, "confirmPassword")
+		GeneralValidator.buildField(constraints, "password",
+				new SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+				new SimpleEntry<>(GeneralValidator.Constraint.MIN, "8"),
+				new SimpleEntry<>(GeneralValidator.Constraint.MATCH_WITH, "confirmPassword")
 		);
 		BindingResult bindingResult = new BeanPropertyBindingResult(user, "user");
-		new GenericValidator(constraints).invoke(user, bindingResult);
+		new GeneralValidator(constraints).invoke(user, bindingResult);
 
 		StaticUtls.encodeUserPassword(user);
 		userService.save(user);

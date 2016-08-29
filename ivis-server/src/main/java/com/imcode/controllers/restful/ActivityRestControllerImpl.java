@@ -7,12 +7,9 @@ import com.imcode.services.ActivityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.IssueAttachmentFileUtil;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
-import com.imcode.validators.GenericValidator.Constraint;
+import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -20,11 +17,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Date;
-import java.util.Map;
-
-import static com.imcode.validators.GenericValidator.*;
 
 /**
  * Created by ruslan on 5/12/16.
@@ -46,7 +39,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     public Object create(@RequestBody @Valid Activity entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
-        new GenericValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
+        new GeneralValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         return super.create(entity, response, bindingResult, webRequest);
@@ -90,7 +83,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     }
 
 //    @Override
-//    protected Map<String, Map<GenericValidator.Constraint, String>> getFieldsConstraints() {
+//    protected Map<String, Map<GeneralValidator.Constraint, String>> getFieldsConstraints() {
 //        Map<String, Map<Constraint, String>> fields = super.getFieldsConstraints();
 //
 //        buildField(fields, "description",

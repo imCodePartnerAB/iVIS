@@ -11,7 +11,7 @@ import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
+import com.imcode.validators.GeneralValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -75,7 +75,7 @@ public class ClientDetailsController {
 
         StaticUtls.rejectNullValue(persistentClient, "Try update non exist client");
 
-        new GenericValidator(true, "autoApproveScopes").invoke(client, bindingResult);
+        new GeneralValidator(true, "autoApproveScopes").invoke(client, bindingResult);
 
         BeanUtils.copyProperties(client, persistentClient, "id", "autoApproveScopes");
 

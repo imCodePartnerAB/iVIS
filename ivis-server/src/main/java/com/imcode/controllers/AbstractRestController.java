@@ -7,7 +7,7 @@ import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
+import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,6 @@ import javax.validation.Valid;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,7 +61,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
                                        HttpServletResponse response,
                                        BindingResult bindingResult, WebRequest webRequest) throws Exception {
 
-        new GenericValidator(true, "id").invoke(entity, bindingResult);
+        new GeneralValidator(true, "id").invoke(entity, bindingResult);
 
         return service.save(entity);
 
@@ -94,7 +93,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
-        new GenericValidator(false, "id").invoke(entity, bindingResult);
+        new GeneralValidator(false, "id").invoke(entity, bindingResult);
 
         boolean isCopied = false;
 
@@ -191,12 +190,12 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new GenericValidator(getFieldsConstraints()));
+        binder.setValidator(new GeneralValidator(getFieldsConstraints()));
     }
 
     //must be overriding
-    protected Map<String, Map<GenericValidator.Constraint, String>>  getFieldsConstraints() {
-        Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
+    protected Map<String, Map<GeneralValidator.Constraint, String>>  getFieldsConstraints() {
+        Map<String, Map<GeneralValidator.Constraint, String>> constraints = new HashMap<>();
         return constraints;
     }
 

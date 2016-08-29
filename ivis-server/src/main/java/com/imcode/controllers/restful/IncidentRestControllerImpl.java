@@ -7,11 +7,9 @@ import com.imcode.services.IncidentService;
 import com.imcode.services.StatusService;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
+import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -43,7 +41,7 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     public Object create(@RequestBody @Valid Incident entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
-        new GenericValidator(true, "reportDay", "reportedBy", "status").invoke(entity, bindingResult);
+        new GeneralValidator(true, "reportDay", "reportedBy", "status").invoke(entity, bindingResult);
         entity.setReportDay(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         List<Status> statuses = statusService.findAll();
@@ -69,29 +67,29 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     }
 
     @Override
-    protected Map<String, Map<GenericValidator.Constraint, String>> getFieldsConstraints() {
-        Map<String, Map<GenericValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
+    protected Map<String, Map<GeneralValidator.Constraint, String>> getFieldsConstraints() {
+        Map<String, Map<GeneralValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
 
-        GenericValidator.buildField(fieldsConstraints, "title",
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+        GeneralValidator.buildField(fieldsConstraints, "title",
+                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
         );
 
-        GenericValidator.buildField(fieldsConstraints, "description",
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.MIN, "4")
+        GeneralValidator.buildField(fieldsConstraints, "description",
+                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
         );
 
-        GenericValidator.buildField(fieldsConstraints, "categories",
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        GeneralValidator.buildField(fieldsConstraints, "categories",
+                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
         );
 
-        GenericValidator.buildField(fieldsConstraints, "pupils",
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        GeneralValidator.buildField(fieldsConstraints, "pupils",
+                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
         );
 
-        GenericValidator.buildField(fieldsConstraints, "priority",
-                new AbstractMap.SimpleEntry<>(GenericValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+        GeneralValidator.buildField(fieldsConstraints, "priority",
+                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
         );
 
         return fieldsConstraints;

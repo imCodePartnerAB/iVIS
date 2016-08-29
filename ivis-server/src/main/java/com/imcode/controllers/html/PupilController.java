@@ -1,33 +1,15 @@
 package com.imcode.controllers.html;
 
-import com.imcode.controllers.html.exceptions.NotFoundException;
-import com.imcode.entities.Guardian;
 import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
-import com.imcode.entities.embed.Address;
-import com.imcode.entities.embed.Email;
-import com.imcode.entities.embed.Phone;
-import com.imcode.entities.enums.AddressTypeEnum;
-import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.services.*;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
+import com.imcode.validators.GeneralValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.ExecutionContext;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.mapping.FieldSetMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
-import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -83,7 +65,7 @@ public class PupilController {
                                ModelAndView model) throws MethodArgumentNotValidException {
 
         BindingResult bindingResult = new BeanPropertyBindingResult(entity, "pupil");
-        new GenericValidator(true, "id").invoke(entity, bindingResult);
+        new GeneralValidator(true, "id").invoke(entity, bindingResult);
 
         mainService.save(entity);
 

@@ -1,6 +1,5 @@
 package com.imcode.controllers.html;
 
-import com.imcode.controllers.html.exceptions.NotFoundException;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
@@ -12,20 +11,15 @@ import com.imcode.services.UserService;
 import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
-import com.imcode.validators.UserValidator;
+import com.imcode.validators.GeneralValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -34,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -133,13 +126,13 @@ public class UserController {
                                BindingResult bindingResult,
                                ModelAndView model) throws MethodArgumentNotValidException {
 
-        Map<String, Map<GenericValidator.Constraint, String>> constraints = new HashMap<>();
+        Map<String, Map<GeneralValidator.Constraint, String>> constraints = new HashMap<>();
 
         if (userService.findByUsername(user.getUsername()) != null) {
             bindingResult.reject(null, "username not unique");
         }
 
-        new GenericValidator(constraints).invoke(user, bindingResult);
+        new GeneralValidator(constraints).invoke(user, bindingResult);
 
         StaticUtls.encodeUserPassword(user);
 

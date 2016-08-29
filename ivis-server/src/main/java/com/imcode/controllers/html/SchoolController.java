@@ -1,22 +1,19 @@
 package com.imcode.controllers.html;
 
-import com.imcode.controllers.html.exceptions.NotFoundException;
 import com.imcode.entities.School;
 import com.imcode.entities.enums.ServiceTypeEnum;
 import com.imcode.services.SchoolService;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GenericValidator;
+import com.imcode.validators.GeneralValidator;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -73,7 +70,7 @@ public class SchoolController {
                                ModelAndView model) throws MethodArgumentNotValidException {
 
         BindingResult bindingResult = new BeanPropertyBindingResult(entity, "pupil");
-        new GenericValidator(true, "id").invoke(entity, bindingResult);
+        new GeneralValidator(true, "id").invoke(entity, bindingResult);
 
         addSpecialObjects(model, entity);
 
