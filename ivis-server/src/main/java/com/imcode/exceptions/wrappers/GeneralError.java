@@ -43,7 +43,7 @@ public class GeneralError {
 
     public static final int DATABASE_PERSISTENCE_EC = 2001;
 
-    public static final int JSON_MAPPING_EC = 3001;
+    public static final int JSON_XML_MAPPING_EC = 3001;
 
     public static final int UNCAUGHT_EC = 4001;
 

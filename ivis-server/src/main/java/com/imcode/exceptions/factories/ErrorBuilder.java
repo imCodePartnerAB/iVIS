@@ -53,7 +53,7 @@ public class ErrorBuilder {
 
     public static GeneralError buildJsonMappingException(Exception e) {
 
-        return buildException(e, GeneralError.JSON_MAPPING_EC);
+        return buildException(e, GeneralError.JSON_XML_MAPPING_EC);
 
     }
 
@@ -85,7 +85,7 @@ public class ErrorBuilder {
                 message = "Database level error";
                 break;
 
-            case GeneralError.JSON_MAPPING_EC:
+            case GeneralError.JSON_XML_MAPPING_EC:
                 message = "JSON level error";
                 break;
 
