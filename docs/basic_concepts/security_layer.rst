@@ -2,7 +2,11 @@ Security Layer
 ==============
 
 iVIS uses `OAuth 2.0 <https://tools.ietf.org/html/rfc6749>`_ protocol
-(implemented by standard `Spring Security <http://projects.spring.io/spring-security/>`_ provider)
+(implemented by standard `Spring Security <http://projects.spring.io/spring-security/>`_ provider).
+iVIS is identity provider for any client application that uses it. It means that if user wants to use some iVIS client
+application he has to login on iVIS (and receive token in the background).
+It works the same way as popular social networks. In addition, iVIS can use third-party identity providers too.
+So user after he is redirected to the iVIS login page may choose the option to login using BankId for example.
 
 The provider role in OAuth 2.0 is actually split between Authorization Service and Resource Service,
 and these reside in the iVIS with Spring Security OAuth.
@@ -15,78 +19,71 @@ in the Spring Security filter chain in order to implement OAuth 2.0 Authorizatio
 
 You can find details `here <http://projects.spring.io/spring-security-oauth/docs/oauth2.html>`_.
 
-Authorization and tokens management processes
----------------------------------------------
+Users registration
+------------------
 
-Authorization process is based on `Information about the client`_
+Each user has to be registered in iVIS and obtain some permissions from iVIS administration before he can use the
+system and any of it’s client applications. To become a registered user you need to fill out the form
+on http://ivis.dev.imcode.com/registration. After that you will have your username and password. All passwords are
+stored as `bcrypt <https://en.wikipedia.org/wiki/Bcrypt>`_ hashes so they can’t be read.
 
-And tokens management is based on `Tokens flow`_
+While the login username and password from the login page is sent over HTTPS connection using the SSL encryption
+(if SSL certificate is installed; note: it is not installed on the dev iVIS Server).
 
-Interaction between them provide Spring Security, which need configure.
+Data encryption
+---------------
 
-Information about the client
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Currently data in the iVIS database is stored as plain text, without encryption.
 
-For **data access** responsible
-`JpaClientDetails
-<https://github.com/imCodePartnerAB/iVIS/blob/6171e27d59301a4dd3cc9df768062b0d37241236/ivis-core/src/main/java/com/imcode/entities/oauth2/JpaClientDetails.java>`_
-class which used for persist client credentials.
+Error handling
+--------------
 
-It class mapped on tables
-    * dbo_oauth_client_details
-    * dbo_oauth_client_additional_info
-    * dbo_oauth_client_garant_types
-    * dbo_oauth_client_redirect_uris
-    * dbo_oauth_client_resources
-    * dbo_oauth_client_roles_cross
+iVIS handles the errors on 5 stages:
 
-:download:`Tables diagram <../images/clientTables.png>`
+    #. Validation errors.
+    #. Database level errors.
+    #. JSON/XML mapping errors.
+    #. Security errors.
+    #. Other errors.
 
-**Service** layer represent interface is
-`IvisClientDetailsService
-<https://github.com/imCodePartnerAB/iVIS/blob/6bc6afd037563992fb6770762cf2c3fabe312d7f/ivis-core/src/main/java/com/imcode/oauth2/IvisClientDetailsService.java>`_
-and implementation is
-`ClientDetailsServiceRepoImpl
-<https://github.com/imCodePartnerAB/iVIS/blob/6171e27d59301a4dd3cc9df768062b0d37241236/ivis-server/src/main/java/com/imcode/services/jpa/ClientDetailsServiceRepoImpl.java>`_
+Validation errors
+~~~~~~~~~~~~~~~~~
 
-MVC controller for manage is
-`ClientDetailsControllerImpl
-<https://github.com/imCodePartnerAB/iVIS/blob/398d6eb2ddd4cbaf137c4f1c5189ee3ce9eac87f/ivis-server/src/main/java/com/imcode/controllers/html/ClientDetailsControllerImpl.java>`_
+Handling and providing corresponding messages about missing required fields, too long text values etc.
 
-Tokens flow
-~~~~~~~~~~~
+Database level errors
+~~~~~~~~~~~~~~~~~~~~~
 
-**Data access:**
+Handling and providing corresponding messages about database level errors, like missing values with the given key etc.
 
-`AccessToken
-<https://github.com/imCodePartnerAB/iVIS/blob/fe37e74bf8af36c3908ffea80e65d6f7313c24be/ivis-core/src/main/java/com/imcode/entities/oauth2/AccessToken.java>`_
-class for persist access token.
+JSON/XML mapping errors
+~~~~~~~~~~~~~~~~~~~~~~~
 
-It class mapped on table *oauth_access_token*
+Missing or extra fields etc.
+
+Security errors
+~~~~~~~~~~~~~~~
+
+Expired or invalid tokens etc.
+
+Other errors
+~~~~~~~~~~~~
+
+All other errors.
+
+More about OAuth 2.0 implementation
+-----------------------------------
+
+There are two main entities in the iVIS OAuth 2.0 implementation: AccessToken and RefreshToken.
+Their classes are mapped on the corresponding tables:
+
+oauth_access_token
+~~~~~~~~~~~~~~~~~~
 
 .. image:: /images/oauth_access_tokenDiagram.png
 
-`RefreshToken
-<https://github.com/imCodePartnerAB/iVIS/blob/fe37e74bf8af36c3908ffea80e65d6f7313c24be/ivis-core/src/main/java/com/imcode/entities/oauth2/RefreshToken.java>`_
-class for persist refresh token.
-
-It class mapped on table *oauth_refresh_token*
+oauth_refresh_token
+~~~~~~~~~~~~~~~~~~~
 
 .. image:: /images/oauth_refresh_tokenDiagram.png
-
-**Service and controller** represented by
-`JdbcTokenStore
-<http://docs.spring.io/spring-security/oauth/apidocs/org/springframework/security/oauth2/provider/token/store/JdbcTokenStore.html>`_
-
-
-
-
-
-
-
-
-
-
-
-
 
