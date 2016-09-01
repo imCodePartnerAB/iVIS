@@ -2,7 +2,7 @@ Walkthrough: Install iVIS Server
 ================================
 
 Prerequisites
-_____________
+-------------
 
 To install iVIS server you need:
 

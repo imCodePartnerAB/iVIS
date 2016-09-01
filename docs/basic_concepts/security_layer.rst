@@ -1,5 +1,5 @@
-Security Subsystem
-==================
+Security Layer
+==============
 
 iVIS uses `OAuth 2.0 <https://tools.ietf.org/html/rfc6749>`_ protocol
 (implemented by standard `Spring Security <http://projects.spring.io/spring-security/>`_ provider)

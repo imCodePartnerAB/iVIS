@@ -21,7 +21,7 @@ Relations in DB also are implement by standard JPA.
 
     Embedded entities don't have id and cann't exist without parent entity.
 
-LIST OF ALL TABLES AND DESCRIPTION
+List of all tables and description
 ----------------------------------
 
 dbo_academic_year

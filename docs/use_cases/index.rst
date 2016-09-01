@@ -4,4 +4,7 @@ Use cases
 .. toctree::
     :titlesonly:
 
-    ivis_server
+    school_transport
+    incidents
+
+

@@ -1,5 +1,5 @@
-iVIS Server Configuration
-=========================
+Walkthrough: iVIS Server Configuration
+======================================
 
     * `Create or edit iVIS client`_
 

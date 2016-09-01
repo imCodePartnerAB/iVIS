@@ -2,10 +2,12 @@ Walkthrough: Create iVIS Server Client Application
 ==================================================
 
 Prerequisites
-_____________
+-------------
 
 First of all you need install iVIS server. Visit `this page </en/latest/quick_start/walkthrough_install_ivis_server.html>`_
-for details. When you have working iVIS server we can continue.
+for details. When you have working iVIS server we can continue, but to make it possible to communicate with the iVIS
+Server from the client application you need to register your client application inside the iVIS Server.
+Here is the `walkthrough </en/latest/quick_start/walkthrough_ivis_server_conf.html>`_ that describes this process.
 
 This client is based on imCMS.
 
