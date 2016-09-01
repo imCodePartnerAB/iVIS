@@ -8,17 +8,6 @@ application he has to login on iVIS (and receive token in the background).
 It works the same way as popular social networks. In addition, iVIS can use third-party identity providers too.
 So user after he is redirected to the iVIS login page may choose the option to login using BankId for example.
 
-The provider role in OAuth 2.0 is actually split between Authorization Service and Resource Service,
-and these reside in the iVIS with Spring Security OAuth.
-The requests for the tokens are handled by Spring MVC controller endpoints, and access to protected
-resources is handled by standard Spring Security request filters. The following endpoints are required
-in the Spring Security filter chain in order to implement OAuth 2.0 Authorization Server:
-
-    * Authorization Endpoint is used to service requests for authorization (URL: /oauth/authorize)
-    * Token Endpoint is used to service requests for access token (URL: /oauth/token)
-
-You can find details `here <http://projects.spring.io/spring-security-oauth/docs/oauth2.html>`_.
-
 Users registration
 ------------------
 
@@ -87,3 +76,13 @@ oauth_refresh_token
 
 .. image:: /images/oauth_refresh_tokenDiagram.png
 
+The provider role in OAuth 2.0 is actually split between Authorization Service and Resource Service,
+and these reside in the iVIS with Spring Security OAuth.
+The requests for the tokens are handled by Spring MVC controller endpoints, and access to protected
+resources is handled by standard Spring Security request filters. The following endpoints are required
+in the Spring Security filter chain in order to implement OAuth 2.0 Authorization Server:
+
+    * Authorization Endpoint is used to service requests for authorization (URL: /oauth/authorize)
+    * Token Endpoint is used to service requests for access token (URL: /oauth/token)
+
+You can find details `here <http://projects.spring.io/spring-security-oauth/docs/oauth2.html>`_.
