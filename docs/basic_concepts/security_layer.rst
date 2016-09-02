@@ -19,6 +19,11 @@ stored as `bcrypt <https://en.wikipedia.org/wiki/Bcrypt>`_ hashes so they can’
 While the login username and password from the login page is sent over HTTPS connection using the SSL encryption
 (if SSL certificate is installed; note: it is not installed on the dev iVIS Server).
 
+Permissions
+-----------
+
+Allowed users actions set is controlled as intersection of client and user permissions.
+
 Data encryption
 ---------------
 
