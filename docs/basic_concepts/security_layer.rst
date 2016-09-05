@@ -23,6 +23,12 @@ Permissions
 -----------
 
 Allowed users actions set is controlled as intersection of client and user permissions.
+So each iVIS client application has set of permissions (defined by the iVIS system administrators).
+User have permissions defined by administrators either. So the resulting user permissions in the given client is
+intersection of client and user permissions. For example, if the client has permissions to use resource A, B and C and
+the user has permissions for the resources B, C and D, resulting user permissions using the given client is B and C.
+
+Permission is access to the given API action or some piece of data, it is controlled on the low level of the iVIS API.
 
 Data encryption
 ---------------
