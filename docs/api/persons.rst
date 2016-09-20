@@ -11,8 +11,8 @@ Provides following methods for `API <index.html>`_ calls:
 
 .. _`Get person`:
 
-Get issue
----------
+Get person
+----------
 
 URL:
 ~~~~
