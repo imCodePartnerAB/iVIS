@@ -2,6 +2,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<spring:url value="/resources/js/jquery.tristate.js" var="JQueryTristateUrl"/>
+<head>
+    <script src="${JQueryTristateUrl}"></script>
+</head>
 
 <h1>Permissions of ${specify}</h1>
 
@@ -14,7 +18,7 @@
         <div class="field">
             <label for="entity${info.id}">
                 <span class="arrow" onclick="showOrHideElementByLabel(this);"></span>${info.entityClass}
-                <input type="checkbox" onclick="checkAllMethodsOfEntity(this);" for="entity${info.id}"/>
+                <input type="checkbox" class="tristate" onclick="setClicked();" for="entity${info.id}"/>
             </label>
         </div>
         <div id="entity${info.id}" class="non-display indent">
@@ -71,19 +75,27 @@
 
         $("input[id^='collection']").each(function (index, element) {
 
+            var $tristate = $('.tristate');
+            $tristate.tristate({
+                checked:            "Checked all",
+                unchecked:          "Unchecked all",
+                indeterminate:      "Some checked",
+
+                change:             tristateOnChange,
+                init:               tristateOnInit
+
+            });
+
             $(element).click(function () {
                 var entityDivId = this.parentElement.parentElement.parentElement.id;
-                var $checkboxGroup = $("#" + entityDivId + " :input");
-                var $checkboxGroupChecked = $("#" + entityDivId + " :input:checked");
-                $("input[for='" + entityDivId + "']").prop("checked", $checkboxGroup.length == $checkboxGroupChecked.length);
+                var state = calcState(entityDivId);
+                setState(entityDivId, state);
             });
 
             var idOfMethod = "method" + element.getAttribute("value");
             $("label[for='" + idOfMethod + "']").append(element);
             $("label[for='" + element.id + "']").parent().remove();
 
-            $(element).trigger("click");
-            $(element).trigger("click");
         });
 
     });

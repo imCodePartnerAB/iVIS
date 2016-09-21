@@ -32,7 +32,31 @@ function showOrHideElementByLabel(spanArrow) {
     }
 };
 
-function checkAllMethodsOfEntity(checkbox) {
-    var entityDivId = checkbox.getAttribute("for");
-    $('#' + entityDivId).find("input[type='checkbox']").prop("checked", $(checkbox).is(":checked"));
+
+function calcState(entityDivId) {
+    var $checkboxGroup = $("#" + entityDivId + " :input");
+    var $checkboxGroupChecked = $("#" + entityDivId + " :input:checked");
+    if ($checkboxGroupChecked.length > 0 && $checkboxGroupChecked.length != $checkboxGroup.length) {
+        return null;
+    } else {
+        return $checkboxGroupChecked.length == $checkboxGroup.length;
+    }
+
+}
+
+function setState(entityDivId, state) {
+    $("input[for='" + entityDivId + "']").tristate("state", state);
+}
+
+function tristateOnChange(state, value) {
+    if (state != null) {
+        var entityDivId = this[0].getAttribute("for");
+        $('#' + entityDivId).find("input[type='checkbox']").prop("checked", state);
+    }
+}
+
+function tristateOnInit(state, value) {
+    var entityDivId = this[0].getAttribute("for");
+    var state = calcState(entityDivId);
+    setState(entityDivId, state);
 }
