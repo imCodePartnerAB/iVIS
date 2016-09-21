@@ -81,8 +81,7 @@
                 unchecked:          "Unchecked all",
                 indeterminate:      "Some checked",
 
-                change:             tristateOnChange,
-                init:               tristateOnInit
+                change:             tristateOnChange
 
             });
 
@@ -95,6 +94,9 @@
             var idOfMethod = "method" + element.getAttribute("value");
             $("label[for='" + idOfMethod + "']").append(element);
             $("label[for='" + element.id + "']").parent().remove();
+
+            $(element).trigger("click");
+            $(element).trigger("click");
 
         });
 

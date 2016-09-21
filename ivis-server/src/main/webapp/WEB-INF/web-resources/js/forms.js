@@ -54,9 +54,3 @@ function tristateOnChange(state, value) {
         $('#' + entityDivId).find("input[type='checkbox']").prop("checked", state);
     }
 }
-
-function tristateOnInit(state, value) {
-    var entityDivId = this[0].getAttribute("for");
-    var state = calcState(entityDivId);
-    setState(entityDivId, state);
-}
