@@ -41,7 +41,6 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     public Object create(@RequestBody @Valid Incident entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
-        new GeneralValidator(true, "reportedDate", "reportedBy", "status").invoke(entity, bindingResult);
         entity.setReportedDate(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         List<Status> statuses = statusService.findAll();
@@ -52,6 +51,13 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
                         .get()
         );
         return super.create(entity, response, bindingResult, webRequest);
+    }
+
+    @Override
+    public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+        entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
+        entity.setModifiedDate(new Date());
+        return super.update(aLong, response, entity, bindingResult, webRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
@@ -66,32 +72,32 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
         return null;
     }
 
-    @Override
-    protected Map<String, Map<GeneralValidator.Constraint, String>> getFieldsConstraints() {
-        Map<String, Map<GeneralValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
-
-        GeneralValidator.buildField(fieldsConstraints, "title",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "description",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "categories",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "pupils",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "priority",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
-        );
-
-        return fieldsConstraints;
-    }
+//    @Override
+//    protected Map<String, Map<GeneralValidator.Constraint, String>> getFieldsConstraints() {
+//        Map<String, Map<GeneralValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
+//
+//        GeneralValidator.buildField(fieldsConstraints, "title",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "description",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "categories",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "pupils",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "priority",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        return fieldsConstraints;
+//    }
 }

@@ -61,7 +61,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
                                        HttpServletResponse response,
                                        BindingResult bindingResult, WebRequest webRequest) throws Exception {
 
-        new GeneralValidator(true, "id").invoke(entity, bindingResult);
+        entity.setId(null);
 
         return service.save(entity);
 

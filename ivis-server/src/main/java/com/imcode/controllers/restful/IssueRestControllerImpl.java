@@ -44,8 +44,6 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
-        new GeneralValidator(true, "reportedDate", "reportedBy").invoke(entity, bindingResult);
-
         Set<Incident> incidentsMerged = mergeIncidents(entity.getIncidents());
 
         entity.setIncidents(incidentsMerged);
@@ -58,6 +56,13 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
         saveIncidents(incidentsMerged, issue);
 
         return issue;
+    }
+
+    @Override
+    public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+        entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
+        entity.setModifiedDate(new Date());
+        return super.update(aLong, response, entity, bindingResult, webRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
@@ -94,36 +99,36 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     }
 
 
-    @Override
-    protected Map<String, Map<GeneralValidator.Constraint, String>> getFieldsConstraints() {
-        Map<String, Map<GeneralValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
-
-        GeneralValidator.buildField(fieldsConstraints, "title",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "description",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "status",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "responsiblePerson",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "authorizedPersons",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
-        );
-
-        GeneralValidator.buildField(fieldsConstraints, "incidents",
-                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
-        );
-
-        return fieldsConstraints;
-    }
+//    @Override
+//    protected Map<String, Map<GeneralValidator.Constraint, String>> getFieldsConstraints() {
+//        Map<String, Map<GeneralValidator.Constraint, String>> fieldsConstraints = super.getFieldsConstraints();
+//
+//        GeneralValidator.buildField(fieldsConstraints, "title",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "description",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null),
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.MIN, "4")
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "status",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "responsiblePerson",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "authorizedPersons",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        GeneralValidator.buildField(fieldsConstraints, "incidents",
+//                new AbstractMap.SimpleEntry<>(GeneralValidator.Constraint.NOT_NULL_OR_EMPTY, null)
+//        );
+//
+//        return fieldsConstraints;
+//    }
 }
