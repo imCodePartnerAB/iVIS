@@ -93,7 +93,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
-        new GeneralValidator(false, "id").invoke(entity, bindingResult);
+        entity.setId(null);
 
         boolean isCopied = false;
 
