@@ -1,8 +1,6 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
@@ -28,7 +26,7 @@ public class Activity extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "report_day")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date reportDay;
+    private Date reportedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reported_person_id")
@@ -59,12 +57,12 @@ public class Activity extends AbstractIdEntity<Long> implements Serializable {
         this.issue = issue;
     }
 
-    public Date getReportDay() {
-        return reportDay;
+    public Date getReportedDate() {
+        return reportedDate;
     }
 
-    public void setReportDay(Date reportDay) {
-        this.reportDay = reportDay;
+    public void setReportedDate(Date reportedDate) {
+        this.reportedDate = reportedDate;
     }
 
     public Person getReportedBy() {

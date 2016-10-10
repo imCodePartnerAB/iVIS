@@ -44,13 +44,13 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
-        new GeneralValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
+        new GeneralValidator(true, "reportedDate", "reportedBy").invoke(entity, bindingResult);
 
         Set<Incident> incidentsMerged = mergeIncidents(entity.getIncidents());
 
         entity.setIncidents(incidentsMerged);
 
-        entity.setReportDay(new Date());
+        entity.setReportedDate(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
 
         Issue issue = issueService.save(entity);

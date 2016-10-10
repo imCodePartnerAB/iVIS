@@ -41,8 +41,8 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     public Object create(@RequestBody @Valid Incident entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
-        new GeneralValidator(true, "reportDay", "reportedBy", "status").invoke(entity, bindingResult);
-        entity.setReportDay(new Date());
+        new GeneralValidator(true, "reportedDate", "reportedBy", "status").invoke(entity, bindingResult);
+        entity.setReportedDate(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         List<Status> statuses = statusService.findAll();
         entity.setStatus(

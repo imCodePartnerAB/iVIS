@@ -39,8 +39,8 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     public Object create(@RequestBody @Valid Activity entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
-        new GeneralValidator(true, "reportDay", "reportedBy").invoke(entity, bindingResult);
-        entity.setReportDay(new Date());
+        new GeneralValidator(true, "reportedDate", "reportedBy").invoke(entity, bindingResult);
+        entity.setReportedDate(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         return super.create(entity, response, bindingResult, webRequest);
     }

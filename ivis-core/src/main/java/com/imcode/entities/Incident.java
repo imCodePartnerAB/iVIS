@@ -29,7 +29,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "report_day")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date reportDay;
+    private Date reportedDate;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "dbo_incident_category_cross",
@@ -59,7 +59,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
-    private Date assignedDay;
+    private Date assignedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assigned_person_id")
@@ -69,7 +69,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
-    private Date archivedDay;
+    private Date archivedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "archived_person_id")
@@ -87,7 +87,7 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
-    private Date modifiedDay;
+    private Date modifiedDate;
 
     public Incident() {
     }
@@ -112,12 +112,12 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.description = description;
     }
 
-    public Date getReportDay() {
-        return reportDay;
+    public Date getReportedDate() {
+        return reportedDate;
     }
 
-    public void setReportDay(Date reportDay) {
-        this.reportDay = reportDay;
+    public void setReportedDate(Date reportedDate) {
+        this.reportedDate = reportedDate;
     }
 
     public Set<Category> getCategories() {
@@ -161,12 +161,12 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.issue = issue;
     }
 
-    public Date getAssignedDay() {
-        return assignedDay;
+    public Date getAssignedDate() {
+        return assignedDate;
     }
 
-    public void setAssignedDay(Date assignedDay) {
-        this.assignedDay = assignedDay;
+    public void setAssignedDate(Date assignedDate) {
+        this.assignedDate = assignedDate;
     }
 
     public Person getAssignedBy() {
@@ -177,12 +177,12 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.assignedBy = assignedBy;
     }
 
-    public Date getArchivedDay() {
-        return archivedDay;
+    public Date getArchivedDate() {
+        return archivedDate;
     }
 
-    public void setArchivedDay(Date archivedDay) {
-        this.archivedDay = archivedDay;
+    public void setArchivedDate(Date archivedDate) {
+        this.archivedDate = archivedDate;
     }
 
     public Person getArchivedBy() {
@@ -209,11 +209,11 @@ public class Incident extends AbstractIdEntity<Long> implements Serializable {
         this.modifiedBy = modifiedBy;
     }
 
-    public Date getModifiedDay() {
-        return modifiedDay;
+    public Date getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setModifiedDay(Date modifiedDay) {
-        this.modifiedDay = modifiedDay;
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }

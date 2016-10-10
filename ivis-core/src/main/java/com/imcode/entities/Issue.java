@@ -1,9 +1,5 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
@@ -49,7 +45,7 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
 
     @Column(name = "report_day")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date reportDay;
+    private Date reportedDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reported_person_id")
@@ -63,7 +59,7 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonSerialize(using = DateSerializer.class)
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
-    private Date modifiedDay;
+    private Date modifiedDate;
 
     @OneToMany(mappedBy = "issue")
     private Set<Activity> activities = new HashSet<>();
@@ -132,12 +128,12 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
         this.incidents = incidents;
     }
 
-    public Date getReportDay() {
-        return reportDay;
+    public Date getReportedDate() {
+        return reportedDate;
     }
 
-    public void setReportDay(Date reportDay) {
-        this.reportDay = reportDay;
+    public void setReportedDate(Date reportedDate) {
+        this.reportedDate = reportedDate;
     }
 
     public Person getReportedBy() {
@@ -156,12 +152,12 @@ public class Issue extends AbstractIdEntity<Long> implements Serializable {
         this.modifiedBy = modifiedBy;
     }
 
-    public Date getModifiedDay() {
-        return modifiedDay;
+    public Date getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setModifiedDay(Date modifiedDay) {
-        this.modifiedDay = modifiedDay;
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public Set<Activity> getActivities() {
