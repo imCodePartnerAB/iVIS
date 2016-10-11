@@ -55,8 +55,10 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
 
     @Override
     public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
-        entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
-        entity.setModifiedDate(new Date());
+        if (entity.getReportedDate() != null && entity.getReportedBy() != null) {
+            entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
+            entity.setModifiedDate(new Date());
+        }
         return super.update(aLong, response, entity, bindingResult, webRequest);
     }
 

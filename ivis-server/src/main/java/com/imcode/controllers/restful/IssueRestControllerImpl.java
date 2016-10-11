@@ -60,9 +60,18 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
 
     @Override
     public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
-        entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
-        entity.setModifiedDate(new Date());
-        return super.update(aLong, response, entity, bindingResult, webRequest);
+        if (entity.getReportedBy() != null && entity.getReportedDate() != null) {
+            entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
+            entity.setModifiedDate(new Date());
+        }
+        Issue updated = (Issue) super.update(aLong, response, entity, bindingResult, webRequest);
+        Set<Incident> incidents = entity.getIncidents();
+        if (incidents != null && !incidents.isEmpty()) {
+            Set<Incident> incidentsMerged = mergeIncidents(incidents);
+            updated.setIncidents(incidentsMerged);
+            saveIncidents(incidentsMerged, updated);
+        }
+        return updated;
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
