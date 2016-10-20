@@ -51,6 +51,12 @@ Validation errors
 
 Handling and providing corresponding messages about missing required fields, too long text values etc.
 
+.. note::
+    Validation works on both sides (client and server).
+    On client powered by **jQuery Validation Plugin**.
+    On server powered by **Spring Validator** interface.
+    Validation use cases in details described `here </en/latest/use_cases/validation.html>`_.
+
 Database level errors
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -70,6 +76,14 @@ Other errors
 ~~~~~~~~~~~~
 
 All other errors.
+
+Handling user password
+----------------------
+
+.. toctree::
+    :titlesonly:
+
+    password_management
 
 More about OAuth 2.0 implementation
 -----------------------------------

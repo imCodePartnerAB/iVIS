@@ -14,6 +14,8 @@ iVIS Server itself is split into 4 main layers:
 
 .. image:: /images/bundlesSchema.png
 
+Front-end side also reviewed.
+
 .. toctree::
    :titlesonly:
 
@@ -21,6 +23,7 @@ iVIS Server itself is split into 4 main layers:
    data_access
    security_layer
    api_layer
+   front_end_side
 
 
 
