@@ -1,23 +1,53 @@
 ﻿Authorization
 =============
 
-Basic there are two steps working with authorization.
+    * `Few words about OAuth 2.0`_
+    * `iVIS authorization`_
+    * `Authorization in details`_
 
-First step divide into two different ways (with grant type authorization code or password) to retrieve
-access token object:
+Few words about OAuth 2.0
+-------------------------
 
-    * In `Step 1 (first way)`_ you retrieve access token by two requests with authorization code:
+In `OAuth 2.0 <https://tools.ietf.org/html/rfc6749>`_ concept for authorization defines 4 different ways, they
+are called `Authorized Grant Types <https://tools.ietf.org/html/rfc6749#section-1.3>`_.
 
-        * GET call (`Get authorization code`_)
-        * POST call (`Get access token with authorization code`_)
+They are:
 
-    * In `Step 1 (second way)`_ you retrieve access token by one POST call with password
+    * `authorization code <https://tools.ietf.org/html/rfc6749#section-1.3.1>`_
+    * `implicit <https://tools.ietf.org/html/rfc6749#section-1.3.2>`_
+    * `client credentials <https://tools.ietf.org/html/rfc6749#section-1.3.4>`_
+    * `password <https://tools.ietf.org/html/rfc6749#section-1.3.3>`_
 
-Step 1 (first way)
+iVIS authorization
 ------------------
 
+According to Authorized Grant Type there 4 ways to be authorized in iVIS.
+
+.. note::
+    In iVIS administrator define which Authorized Grant Type must use client (it can be 1 or all together).
+
+For authorization client user we recommend use **authorization code grant**.
+
+We implemented authorization of client user in next way:
+
+    #. User which want to login click login.
+    #. Client app send redirect to iVIS server with client credentials (see `Step 1`_ `Get authorization code`_).
+    #. User input username and password and click Login.
+    #. iVIS redirect back (according to redirect url) with parameter code.
+    #. Client based on code make request to obtain access token(see `Step 1`_ `Get access token with authorization code`_).
+    #. As response client get access token object.
+    #. Every API request from client must have the access_token (property from received object).
+
+Authorization in details
+------------------------
+
+Basic there are two steps working with authorization.
+
+Step 1
+~~~~~~
+
 Get authorization code
-~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""
 
 In order to be authorized and to obtain the token you have to get authorization code first by sending GET request to
 
@@ -71,7 +101,7 @@ Code example **JS** using JQuery
    location.href = authorizeURI + '?' + $.param(data);
 
 Get access token with authorization code
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+""""""""""""""""""""""""""""""""""""""""
 
 When you have the authorization code (it is sent by GET request to your {redirectUrl}) you can try to get token by
 sending POST request to
@@ -161,62 +191,8 @@ Code example **JS** using JQuery
         }
     });
 
-Step 1 (second way)
--------------------
-
-You can obtain access token by providing your login and password in one POST request to
-
-/oauth/token
-
-with parameters
-
-username (= '{yourUsername}')
-
-password (= '{yourPassword}')
-
-client_id (= '{yourClientId}')
-
-client_secret (= '{yourClientSecret}')
-
-grant_type (= 'password')
-
-As response to the redirect_uri you will receive json object with next properties:
-
-access_token (token for access to API)
-
-refresh_token (when token is expired, you can exchange refresh_token to new access_token, see step 2)
-
-expires_in (property is a number of seconds after which the access token expires, and is no longer valid)
-
-access_token object has also another properties, but they aren't necessary for accessing to API.
-
-Code example **Java** using org.apache.http package
-
-.. code-block:: java
-   :linenos:
-
-   String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
-   String clientId = "{yourClientId}";
-   String clientSecret = "{yourClientSecret}";
-   String username = "{yourUsername}";
-   String password = "{yourPassword}";
-
-   List<NameValuePair> pairsPost = new LinkedList<NameValuePair>();
-   pairsPost.add(new BasicNameValuePair("username", username));
-   pairsPost.add(new BasicNameValuePair("password", password));
-   pairsPost.add(new BasicNameValuePair("client_id", clientId));
-   pairsPost.add(new BasicNameValuePair("client_secret", clientSecret));
-   pairsPost.add(new BasicNameValuePair("grant_type", "password"));
-
-   HttpPost post = new HttpPost(tokenURI);
-   post.setEntity(new UrlEncodedFormEntity(pairsPost));
-   HttpClient client = new DefaultHttpClient();
-   HttpResponse response = client.execute(post);
-
-   String token = EntityUtils.toString(response.getEntity()); //there is a json object response
-
 Step 2
-------
+~~~~~~
 
 When your token is expired  you can refresh (update) it without repeating authorization by sending POST request to
 
@@ -253,7 +229,7 @@ Code example **Java** using org.apache.http package
    HttpPost post = new HttpPost(tokenURI);
    post.setEntity(new UrlEncodedFormEntity(pairsPost));
 
-   HttpClient client = new DefaultHttpClient();
+   HttpClient client = HttpClientBuilder.create().build();
    HttpResponse response = client.execute(post);
 
    String token = EntityUtils.toString(response.getEntity()); //there is a json object response
