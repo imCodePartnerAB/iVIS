@@ -11,8 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save logEvents`_
     * `Update logEvent`_
     * `Delete logEvent`_
-    * `Get logEvent or logEvents by personal id`_
-    * `Get logEvent or logEvents by name`_
 
 .. _`Get logEvent`:
 
@@ -40,7 +38,8 @@ Parameters response:
         #. timestamp(NUMBER)
         #. entity_class_name(STRING)
         #. entity_id(NUMBER)
-        #. action(NULL)
+        #. action(STRING)
+            Only can be "CREATE", "MODIFY", "DELETE"
         #. field_name(STRING)
         #. previous_value(STRING)
         #. new_value(STRING)
@@ -54,10 +53,10 @@ Example of response:
 
     {
       "id" : 0,
-      "timestamp" : 1477471556931,
+      "timestamp" : 1477474353117,
       "entity_class_name" : "",
       "entity_id" : 0,
-      "action" : null,
+      "action" : "CREATE",
       "field_name" : "",
       "previous_value" : "",
       "new_value" : "",
@@ -92,8 +91,8 @@ Parameters response:
     *Array*
 
 .. seealso::
-    
-Array consists of objects from `Get logEvent`_ method
+
+    Array consists of objects from `Get logEvent`_ method
 
 Save logEvent
 -------------
@@ -162,8 +161,8 @@ Parameters response:
     *OBJECT(LogEvent)*
 
 .. note::
-    
-property will be updated, if you don't want update property it need set null
+
+    property will be updated, if you don't want update property it need set null
 
 .. _`Delete logEvent`:
 
@@ -187,49 +186,5 @@ Parameters response:
     *OBJECT(LogEvent)*
 
 .. note::
+
     you receive deleted object
-
-.. _`Get logEvent or logEvents by personal id`:
-
-Get logEvent or logEvents by personal id
--------------------------------------
-
-URL:
-~~~~
-    */logevents
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *personalId(STRING)*
-    *first(BOOLEAN)* - optional
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (LogEvent)*
-
-.. _`Get logEvent or logEvents by name`:
-
-Get logEvent or logEvents by name
----------------------------------
-
-URL:
-~~~~
-    */logevents
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    *first(BOOLEAN)* - optional
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (LogEvent)*
-
