@@ -11,6 +11,7 @@ Provides following method for `API <index.html>`_ calls:
     * `Save logEvents`_
     * `Update logEvent`_
     * `Delete logEvent`_
+    * `Get logEvent by entity id`_
 
 .. _`Get logEvent`:
 
@@ -188,3 +189,25 @@ Parameters response:
 .. note::
 
     you receive deleted object
+
+.. _`Get logEvent by entity id`:
+
+Get logEvent by entity id
+-------------------------
+
+URL:
+~~~~
+    */logevents*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *entityId(NUMBER)*
+    and *entityClassName(STRING)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY (EntityVersion)*
