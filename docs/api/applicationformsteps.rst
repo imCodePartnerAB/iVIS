@@ -3,13 +3,16 @@
 
 ``(implementation of ApplicationFormStep entity)``
 
-Provides following methods for `API <index.html>`_ calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get applicationFormStep`_
     * `Get applicationFormSteps`_
     * `Save applicationFormStep`_
+    * `Save applicationFormSteps`_
     * `Update applicationFormStep`_
     * `Delete applicationFormStep`_
+    * `Get applicationFormStep or applicationFormSteps by personal id`_
+    * `Get applicationFormStep or applicationFormSteps by name`_
 
 .. _`Get applicationFormStep`:
 
@@ -33,20 +36,14 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. name (String)
-        #. text (String)
-        #. sort_order (Number)
-        #. question_groups (Array)
-        #. application_form (Object)
-
-.. note::
-
-    sort_order represent unique number according to sort purpose
-
-    question_groups relates to ApplicationFormStepGroup entity
-
-    application_form  relates to ApplicationForm entity
+        #. id(NUMBER)
+        #. name(STRING)
+        #. sort_order(NUMBER)
+        #. text(STRING)
+        #. question_groups(ARRAY)
+           type of `ApplicationFormQuestionGroup <http://docs.ivis.se/en/latest/api/applicationformquestiongroup.html>`_
+        #. application_form(OBJECT)
+           type of `ApplicationForm <http://docs.ivis.se/en/latest/api/applicationform.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -54,17 +51,21 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "name":"Name",
-        "text":"Definition",
-        "sort_order":1,
-        "question_groups":[],
-        "application_form":{}
+      "id" : 0,
+      "name" : "",
+      "sort_order" : 0,
+      "text" : "",
+      "question_groups" : [ ],
+      "application_form" : {
+        "id" : null,
+        "name" : null,
+        "version" : null
+      }
     }
 
-.. _`Get applicationFormSteps`:
+.. _`Get applicationformsteps`:
 
-Get applicationFormSteps
+Get applicationformsteps
 ------------------------
 
 URL:
@@ -84,21 +85,8 @@ Parameters response:
     *Array*
 
 .. seealso::
-Array consists of objects from `Get applicationFormStep`_ method
 
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Save applicationFormStep`:
+    Array consists of objects from `Get applicationFormStep`_ method
 
 Save applicationFormStep
 ------------------------
@@ -113,20 +101,39 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to create, except id*
-
-.. seealso::
-Whole properties list you can see at `Get applicationFormStep`_
+    *OBJECT(ApplicationFormStep)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormStep)*
 
-    *On server fill id*
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
 
-.. _`Update applicationFormSteps`:
+Save applicationformsteps
+-------------------------
+
+URL:
+~~~~
+    */applicationformsteps*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationFormStep)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationFormStep)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
+
+.. _`Update applicationFormStep`:
 
 Update applicationFormStep
 --------------------------
@@ -141,18 +148,17 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to update, except id*
-
-.. seealso::
-Whole properties list you can see at `Get applicationFormStep`_
+    *OBJECT(ApplicationFormStep)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormStep)*
 
-.. _`Delete applicationFormSteps`:
+.. note::
+
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete applicationFormStep`:
 
 Delete applicationFormStep
 --------------------------
@@ -171,5 +177,53 @@ Parameters request:
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormStep)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get applicationFormStep or applicationFormSteps by personal id`:
+
+Get applicationFormStep or applicationFormSteps by personal id
+-----------------------------------------------------------
+
+URL:
+~~~~
+    */applicationformsteps*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *personalId(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (ApplicationFormStep)*
+
+.. _`Get applicationFormStep or applicationFormSteps by name`:
+
+Get applicationFormStep or applicationFormSteps by name
+-------------------------------------------------------
+
+URL:
+~~~~
+    */applicationformsteps*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (ApplicationFormStep)*
 
