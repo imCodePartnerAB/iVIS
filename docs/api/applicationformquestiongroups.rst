@@ -3,13 +3,15 @@
 
 ``(implementation of ApplicationFormQuestionGroup entity)``
 
-Provides following methods for `API <index.html>`_ calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get applicationFormQuestionGroup`_
     * `Get applicationFormQuestionGroups`_
     * `Save applicationFormQuestionGroup`_
+    * `Save applicationFormQuestionGroups`_
     * `Update applicationFormQuestionGroup`_
     * `Delete applicationFormQuestionGroup`_
+    * `Get applicationFormQuestionGroup or applicationFormQuestionGroups by name`_
 
 .. _`Get applicationFormQuestionGroup`:
 
@@ -33,23 +35,15 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. name (String)
-        #. sort_order (Number)
-        #. text (String)
-        #. questions (Array)
-        #. question_type (String)
-        #. step (Array)
-
-.. note::
-
-    sort_order represent unique number according to sort purpose
-
-    questions relate to ApplicationFormQuestion entity
-
-    question_type - full class name which responds for question
-
-    step relates to ApplicationFormStep entity
+        #. id(NUMBER)
+        #. name(STRING)
+        #. sort_order(NUMBER)
+        #. text(STRING)
+        #. questions(ARRAY)
+           type of `ApplicationFormQuestion <http://docs.ivis.se/en/latest/api/applicationformquestion.html>`_
+        #. question_type(STRING)
+        #. step(OBJECT)
+           type of `ApplicationFormStep <http://docs.ivis.se/en/latest/api/applicationformstep.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -57,18 +51,24 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "name":"Name",
-        "sort_order":1,
-        "text":"Definition",
-        "questions":[],
-        "question_type":"com.imcode.ClassName",
-        "step":{}
+      "id" : 0,
+      "name" : "",
+      "sort_order" : 0,
+      "text" : "",
+      "questions" : [ ],
+      "question_type" : "",
+      "step" : {
+        "id" : null,
+        "name" : null,
+        "sort_order" : null,
+        "text" : null,
+        "application_form" : null
+      }
     }
 
-.. _`Get applicationFormQuestionGroups`:
+.. _`Get applicationformquestiongroups`:
 
-Get applicationFormQuestionGroups
+Get applicationformquestiongroups
 ---------------------------------
 
 URL:
@@ -88,24 +88,11 @@ Parameters response:
     *Array*
 
 .. seealso::
+
     Array consists of objects from `Get applicationFormQuestionGroup`_ method
 
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Save applicationFormQuestionGroup`:
-
 Save applicationFormQuestionGroup
------------------------------------
+---------------------------------
 
 URL:
 ~~~~
@@ -117,20 +104,39 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to create, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get applicationFormQuestionGroup`_
+    *OBJECT(ApplicationFormQuestionGroup)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormQuestionGroup)*
 
-    *On server fill id*
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
 
-.. _`Update applicationFormQuestionGroups`:
+Save applicationformquestiongroups
+----------------------------------
+
+URL:
+~~~~
+    */applicationformquestiongroups*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationFormQuestionGroup)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationFormQuestionGroup)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
+
+.. _`Update applicationFormQuestionGroup`:
 
 Update applicationFormQuestionGroup
 -----------------------------------
@@ -145,18 +151,17 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to update, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get applicationFormQuestionGroup`_
+    *OBJECT(ApplicationFormQuestionGroup)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormQuestionGroup)*
 
-.. _`Delete applicationFormQuestionGroups`:
+.. note::
+
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete applicationFormQuestionGroup`:
 
 Delete applicationFormQuestionGroup
 -----------------------------------
@@ -175,5 +180,31 @@ Parameters request:
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormQuestionGroup)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get applicationFormQuestionGroup or applicationFormQuestionGroups by name`:
+
+Get applicationFormQuestionGroup or applicationFormQuestionGroups by name
+-------------------------------------------------------------------------
+
+URL:
+~~~~
+    */applicationformquestiongroups*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (ApplicationFormQuestionGroup)*
 
