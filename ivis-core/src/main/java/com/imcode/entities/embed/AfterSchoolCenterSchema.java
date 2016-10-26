@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class AfterSchoolCenterSchema implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "after_school_section_id")
-    private AfterSchoolCenterSection afrerSchoolSection;
+    private AfterSchoolCenterSection afterSchoolSection;
 
     @Column(name = "day_of_week")
     @Enumerated(EnumType.STRING)
@@ -31,27 +31,27 @@ public class AfterSchoolCenterSchema implements Serializable {
     public AfterSchoolCenterSchema() {
     }
 
-    public AfterSchoolCenterSchema(AfterSchoolCenterSection AfrerSchoolSection, DayOfWeek dayOfWeek, Boolean useBeforeSchool, Boolean useAfterSchool) {
-        this.afrerSchoolSection = AfrerSchoolSection;
+    public AfterSchoolCenterSchema(AfterSchoolCenterSection afterSchoolSection, DayOfWeek dayOfWeek, Boolean useBeforeSchool, Boolean useAfterSchool) {
+        this.afterSchoolSection = afterSchoolSection;
         this.dayOfWeek = dayOfWeek;
         this.useBeforeSchool = useBeforeSchool;
         this.useAfterSchool = useAfterSchool;
     }
 
     //AfterSchoolOnly
-    public AfterSchoolCenterSchema(AfterSchoolCenterSection AfrerSchoolSection, DayOfWeek dayOfWeek) {
-        this.afrerSchoolSection = AfrerSchoolSection;
+    public AfterSchoolCenterSchema(AfterSchoolCenterSection afterSchoolSection, DayOfWeek dayOfWeek) {
+        this.afterSchoolSection = afterSchoolSection;
         this.dayOfWeek = dayOfWeek;
 //        this.useAfterSchool = true;
 //        this.useBeforeSchool = false;
     }
 
-    public AfterSchoolCenterSection getAfrerSchoolSection() {
-        return afrerSchoolSection;
+    public AfterSchoolCenterSection getAfterSchoolSection() {
+        return afterSchoolSection;
     }
 
-    public void setAfrerSchoolSection(AfterSchoolCenterSection afterSchoolSection) {
-        this.afrerSchoolSection = afterSchoolSection;
+    public void setAfterSchoolSection(AfterSchoolCenterSection afterSchoolSection) {
+        this.afterSchoolSection = afterSchoolSection;
     }
 
     public DayOfWeek getDayOfWeek() {
@@ -85,7 +85,7 @@ public class AfterSchoolCenterSchema implements Serializable {
 
         AfterSchoolCenterSchema that = (AfterSchoolCenterSchema) o;
 
-        if (afrerSchoolSection != null ? !afrerSchoolSection.equals(that.afrerSchoolSection) : that.afrerSchoolSection != null)
+        if (afterSchoolSection != null ? !afterSchoolSection.equals(that.afterSchoolSection) : that.afterSchoolSection != null)
             return false;
         return dayOfWeek == that.dayOfWeek;
 
@@ -93,7 +93,7 @@ public class AfterSchoolCenterSchema implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = afrerSchoolSection != null ? afrerSchoolSection.hashCode() : 0;
+        int result = afterSchoolSection != null ? afterSchoolSection.hashCode() : 0;
         result = 31 * result + (dayOfWeek != null ? dayOfWeek.hashCode() : 0);
         return result;
     }
