@@ -3,13 +3,15 @@
 
 ``(implementation of ApplicationForm entity)``
 
-Provides following methods for `API <index.html>`_ calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get applicationForm`_
     * `Get applicationForms`_
     * `Save applicationForm`_
+    * `Save applicationForms`_
     * `Update applicationForm`_
     * `Delete applicationForm`_
+    * `Get applicationForm or applicationForms by name`_
 
 .. _`Get applicationForm`:
 
@@ -33,17 +35,13 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. name (String)
-        #. version (Number)
-        #. steps (Array)
-        #. applications (Array)
-
-.. note::
-
-    steps relates to ApplicationFormStep entity
-
-    applications relates to Application entity
+        #. id(NUMBER)
+        #. name(STRING)
+        #. version(NUMBER)
+        #. steps(ARRAY)
+           type of `Step <http://docs.ivis.se/en/latest/api/step.html>`_
+        #. applications(ARRAY)
+           type of `Application <http://docs.ivis.se/en/latest/api/application.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -51,16 +49,16 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "name":"Name",
-        "version":1,
-        "steps":[],
-        "applications":[]
+      "id" : 0,
+      "name" : "",
+      "version" : 0,
+      "steps" : [ ],
+      "applications" : null
     }
 
-.. _`Get applicationForms`:
+.. _`Get applicationforms`:
 
-Get applicationForms
+Get applicationforms
 --------------------
 
 URL:
@@ -80,21 +78,8 @@ Parameters response:
     *Array*
 
 .. seealso::
+
     Array consists of objects from `Get applicationForm`_ method
-
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Save applicationForm`:
 
 Save applicationForm
 --------------------
@@ -109,20 +94,39 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to create, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get applicationForm`_
+    *OBJECT(ApplicationForm)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationForm)*
 
-    *On server fill id*
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
 
-.. _`Update applicationForms`:
+Save applicationforms
+---------------------
+
+URL:
+~~~~
+    */applicationforms*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationForm)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationForm)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
+
+.. _`Update applicationForm`:
 
 Update applicationForm
 ----------------------
@@ -137,18 +141,17 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to update, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get applicationForm`_
+    *OBJECT(ApplicationForm)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationForm)*
 
-.. _`Delete applicationForms`:
+.. note::
+
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete applicationForm`:
 
 Delete applicationForm
 ----------------------
@@ -167,5 +170,31 @@ Parameters request:
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationForm)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get applicationForm or applicationForms by name`:
+
+Get applicationForm or applicationForms by name
+-----------------------------------------------
+
+URL:
+~~~~
+    */applicationforms*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (ApplicationForm)*
 
