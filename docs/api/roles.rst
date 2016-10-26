@@ -73,6 +73,8 @@ Parameters response:
 
     Array consists of objects from `Get role`_ method
 
+.. _`Save role`:
+
 Save role
 ---------
 
@@ -95,6 +97,8 @@ Parameters response:
 Null properties:
 ~~~~~~~~~~~~~~~~
     *id*
+
+.. _`Save roles`:
 
 Save roles
 ----------

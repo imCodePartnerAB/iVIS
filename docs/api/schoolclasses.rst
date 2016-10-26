@@ -33,21 +33,16 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. name (String)
-        #. school (Object)
-        #. pupils (Array)
-        #. diaries (Array)
-        #. school_day_start (String)
-        #. school_day_end (String)
-
-.. note::
-
-    school relates to School entity
-
-    pupils relates to Pupil entity
-
-    diaries relates to Diary entity
+        #. id (NUMBER)
+        #. name (STRING)
+        #. school (OBJECT)
+            type of `School <http://docs.ivis.se/en/latest/api/school.html>`_
+        #. pupils (ARRAY)
+            type of `Pupil <http://docs.ivis.se/en/latest/api/pupil.html>`_
+        #. diaries (ARRAY)
+             type of `Diary <http://docs.ivis.se/en/latest/api/diary.html>`_
+        #. school_day_start (STRING)
+        #. school_day_end (STRING)
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -55,13 +50,14 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "name":"Name",
-        "school":{},
-        "pupils":[],
-        "diaries":[],
-        "school_day_start":"00:00:00",
-        "school_day_end":"00:00:00"
+       "id":10,
+       "name":"",
+       "school_day_start":"08:00:00",
+       "school_day_end":"15:00:00",
+       "school":{  },
+       "pupils":[  ],
+       "diaries":[  ],
+       "diary_list":[  ]
     }
 
 .. _`Get schoolClasses`:
@@ -87,18 +83,6 @@ Parameters response:
 
 .. seealso::
     Array consists of objects from `Get schoolClass`_ method
-
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
 
 .. _`Save schoolClass`:
 
@@ -126,7 +110,26 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Object*
 
-    *On server fill id*
+.. _`Save schoolClasses`:
+
+Save schoolClasses
+------------------
+
+URL:
+~~~~
+    */schoolclasses*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *ARRAY*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY*
 
 .. _`Update schoolClass`:
 
