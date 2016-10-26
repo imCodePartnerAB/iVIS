@@ -7,6 +7,7 @@ Provides following method for `API <index.html>`_ calls:
 
     * `Get pupil`_
     * `Get pupils`_
+    * `Get current guardian pupils`_
     * `Save pupil`_
     * `Save pupils`_
     * `Update pupil`_
@@ -77,10 +78,35 @@ Example of response:
        "school_center_schema":[  ]
     }
 
-.. _`Get persons`:
+.. _`Get current guardian pupils`:
 
 Get pupils
 ----------
+
+URL:
+~~~~
+    */pupils/all*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+.. seealso::
+
+    Array consists of objects from `Get pupil`_ method
+
+.. _`Get current guardian pupils`:
+
+Get current guardian pupils
+---------------------------
 
 URL:
 ~~~~
@@ -101,6 +127,8 @@ Parameters response:
 .. seealso::
 
     Array consists of objects from `Get pupil`_ method
+
+.. _`Save pupil`:
 
 Save pupil
 ----------
@@ -124,6 +152,8 @@ Parameters response:
 Null properties:
 ~~~~~~~~~~~~~~~~
     *id*
+
+.. _`Save pupils`:
 
 Save pupils
 -----------
