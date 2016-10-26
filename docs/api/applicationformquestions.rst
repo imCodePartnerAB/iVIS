@@ -3,13 +3,15 @@
 
 ``(implementation of ApplicationFormQuestion entity)``
 
-Provides following methods for `API <index.html>`_ calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get applicationFormQuestion`_
     * `Get applicationFormQuestions`_
     * `Save applicationFormQuestion`_
+    * `Save applicationFormQuestions`_
     * `Update applicationFormQuestion`_
     * `Delete applicationFormQuestion`_
+    * `Get applicationFormQuestion or applicationFormQuestions by name`_
 
 .. _`Get applicationFormQuestion`:
 
@@ -33,27 +35,20 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. name (String)
-        #. text (String)
-        #. value (String)
-        #. values (Array)
-        #. variants (Array)
-        #. sort_order (Number)
-        #. multi_values (Boolean)
-        #. multi_variants (Boolean)
-        #. question_type (String)
-        #. question_group (Object)
-
-.. note::
-
-    values, variants - Arrays of String
-
-    questions relate to ApplicationFormQuestion entity
-
-    question_type - full class name which responds for question
-
-    question_group relate to ApplicationFormQuestionGroup entity
+        #. id(NUMBER)
+        #. name(STRING)
+        #. sort_order(NUMBER)
+        #. text(STRING)
+        #. value(STRING)
+        #. multi_values(BOOLEAN)
+        #. values(ARRAY)
+           type of STRING
+        #. multi_variants(BOOLEAN)
+        #. variants(ARRAY)
+           type of STRING
+        #. question_type(STRING)
+        #. question_group(OBJECT)
+           type of `ApplicationFormQuestionGroup <http://docs.ivis.se/en/latest/api/applicationformquestiongroup.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -61,22 +56,29 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "name":"Name",
-        "text":"Definition",
-        "value":"Value",
-        "values":[],
-        "variants":[],
-        "sort_order":1,
-        "multi_values":false,
-        "multi_variants":false,
-        "question_type":"com.imcode.ClassName",
-        "question_group":{}
+      "id" : 0,
+      "name" : "",
+      "sort_order" : 0,
+      "text" : "",
+      "value" : "",
+      "multi_values" : false,
+      "values" : [ ],
+      "multi_variants" : false,
+      "variants" : [ ],
+      "question_type" : "",
+      "question_group" : {
+        "id" : null,
+        "name" : null,
+        "sort_order" : null,
+        "text" : null,
+        "question_type" : null,
+        "step" : null
+      }
     }
 
-.. _`Get applicationFormQuestions`:
+.. _`Get applicationformquestions`:
 
-Get applicationFormQuestions
+Get applicationformquestions
 ----------------------------
 
 URL:
@@ -96,21 +98,8 @@ Parameters response:
     *Array*
 
 .. seealso::
+
     Array consists of objects from `Get applicationFormQuestion`_ method
-
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Save applicationFormQuestion`:
 
 Save applicationFormQuestion
 ----------------------------
@@ -125,20 +114,39 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to create, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get applicationFormQuestion`_
+    *OBJECT(ApplicationFormQuestion)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormQuestion)*
 
-    *On server fill id*
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
 
-.. _`Update applicationFormQuestions`:
+Save applicationformquestions
+-----------------------------
+
+URL:
+~~~~
+    */applicationformquestions*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationFormQuestion)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(ApplicationFormQuestion)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
+
+.. _`Update applicationFormQuestion`:
 
 Update applicationFormQuestion
 ------------------------------
@@ -153,18 +161,17 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to update, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get applicationFormQuestion`_
+    *OBJECT(ApplicationFormQuestion)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormQuestion)*
 
-.. _`Delete applicationFormQuestions`:
+.. note::
+
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete applicationFormQuestion`:
 
 Delete applicationFormQuestion
 ------------------------------
@@ -183,5 +190,31 @@ Parameters request:
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(ApplicationFormQuestion)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get applicationFormQuestion or applicationFormQuestions by name`:
+
+Get applicationFormQuestion or applicationFormQuestions by name
+---------------------------------------------------------------
+
+URL:
+~~~~
+    */applicationformquestions*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (ApplicationFormQuestion)*
 
