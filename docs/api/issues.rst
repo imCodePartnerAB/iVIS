@@ -252,5 +252,10 @@ Parameters request:
     * *search_text*
     * *order_by*
 
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
 .. note::
-Now required for order_by only "title" and search criteria also title in Issue
+
+    Now required for order_by only "title" and search criteria also title. Search mechanism use contain.

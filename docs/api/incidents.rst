@@ -275,17 +275,13 @@ Parameters request:
     * *search_text*
     * *order_by*
 
-.. note::
-
-    Now required for order_by only "title" and search criteria also title in Incident
-
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array*
 
 .. note::
 
-    Array structure the same as `Get incidents`_
+    Now required for order_by only "title" and search criteria also title. Search mechanism use contain.
 
 
 

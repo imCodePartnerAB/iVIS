@@ -12,6 +12,7 @@ Provides following method for `API <index.html>`_ calls:
     * `Update person`_
     * `Delete person`_
     * `Get person or persons by personal id`_
+    * `Get persons list`_ by some criteria
 
 .. _`Get person`:
 
@@ -224,4 +225,24 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *ARRAY or OBJECT (Person)*
 
+.. _`Get persons list`:
 
+Get persons list
+----------------
+
+URL:
+~~~~
+    */persons*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    * *search_text*
+    * *order_by*
+
+.. note::
+
+    Now required for order_by "first_name" and "last_name" search criteria first_name or last_name. Search mechanism use contain.
