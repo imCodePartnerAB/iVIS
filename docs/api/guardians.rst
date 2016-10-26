@@ -11,6 +11,7 @@ Provides following method for `API <index.html>`_ calls:
     * `Save guardians`_
     * `Update guardian`_
     * `Delete guardian`_
+    * `Get guardian or guardians by personal id`_
 
 .. _`Get guardian`:
 
@@ -178,6 +179,28 @@ Parameters response:
 .. note::
 
     you receive deleted object
+
+.. _`Get guardian or guardians by personal id`:
+
+Get guardian or guardians by personal id
+-------------------------------------
+
+URL:
+~~~~
+    */guardians*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *personalId(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (Guardian)*
 
 
 
