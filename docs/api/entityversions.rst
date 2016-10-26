@@ -11,6 +11,7 @@ Provides following method for `API <index.html>`_ calls:
     * `Save entityVersions`_
     * `Update entityVersion`_
     * `Delete entityVersion`_
+    * `Get entityVersion by entity id`_
 
 .. _`Get entityVersion`:
 
@@ -173,3 +174,25 @@ Parameters response:
 .. note::
 
     you receive deleted object
+
+.. _`Get entityVersion by entity id`:
+
+Get entityVersion by entity id
+------------------------------
+
+URL:
+~~~~
+    */entityversions*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *entityId(NUMBER)*
+    and *entityClassName(STRING)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY (EntityVersion)*
