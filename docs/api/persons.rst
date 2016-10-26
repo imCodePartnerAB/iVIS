@@ -3,11 +3,15 @@ Persons
 
 ``(implementation of Person entity)``
 
-Provides following methods for `API <index.html>`_ calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get person`_
     * `Get persons`_
-    * `Get persons list`_ (by some criteria)
+    * `Save person`_
+    * `Save persons`_
+    * `Update person`_
+    * `Delete person`_
+    * `Get person or persons by personal id`_
 
 .. _`Get person`:
 
@@ -31,13 +35,16 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. first_name (String)
-        #. last_name (String)
-        #. personal_id (String)
-        #. addresses (Object)
-        #. emails (Object)
-        #. phones (Object)
+        #. id(NUMBER)
+        #. personal_id(STRING)
+        #. first_name(STRING)
+        #. last_name(STRING)
+        #. addresses(OBJECT)
+            Object keys: "REGISTERED", "RESIDENTIAL", "BOARDER". See example of response.
+        #. emails(OBJECT)
+            Object keys: "MOBILE", "WORK", "HOME". See example of response.
+        #. phones(OBJECT)
+            Object keys: "MOBILE", "WORK", "HOME". See example of response.
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -45,13 +52,34 @@ Example of response:
 .. code-block:: json
 
     {
-        "id": 1,
-        "addresses": {},
-        "emails": {},
-        "phones": {},
-        "personal_id": "number-1111",
-        "first_name": "Test",
-        "last_name": "Test"
+      "id" : 0,
+      "personal_id" : "",
+      "first_name" : "",
+      "last_name" : "",
+      "addresses" : {
+            "REGISTERED": {
+                "type": "REGISTERED",
+                "postal_code": 1235,
+                "municipality_code": "",
+                "city": "",
+                "street": "",
+                "street2": "",
+                "care_of": "",
+                "address_type": "REGISTERED"
+            }
+        },
+      "emails" : {
+            "HOME": {
+                    "type": "HOME",
+                    "value": ""
+            }
+      },
+      "phones" : {
+            "HOME": {
+                    "type": "HOME",
+                    "value": ""
+            }
+      }
     }
 
 .. _`Get persons`:
@@ -76,24 +104,108 @@ Parameters response:
     *Array*
 
 .. seealso::
-Array consists of objects from `Get person`_ method
 
-Example of response:
+    Array consists of objects from `Get person`_ method
+
+Save person
+-----------
+
+URL:
+~~~~
+    */persons*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Person)*
+
+Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Person)*
 
-.. code-block:: json
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
 
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
+Save persons
+------------
 
-.. _`Get persons list`:
+URL:
+~~~~
+    */persons*
 
-Get persons list
-----------------
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(Person)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(Person)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
+
+.. _`Update person`:
+
+Update person
+-------------
+
+URL:
+~~~~
+    */persons/{id}*
+
+Method:
+~~~~~~~
+    *PUT*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Person)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Person)*
+
+.. note::
+
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete person`:
+
+Delete person
+-------------
+
+URL:
+~~~~
+    */persons/{id}*
+
+Method:
+~~~~~~~
+    *DELETE*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Person)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get person or persons by personal id`:
+
+Get person or persons by personal id
+---------------------------------
 
 URL:
 ~~~~
@@ -105,17 +217,11 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    * *search_text*
-    * *order_by*
-
-.. note::
-    Search in last name, or first name
-
-    order_by can be: "last_name", "first_name"
+    *personalId(STRING)*
+    and optional *first(BOOLEAN)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Array*
+    *ARRAY or OBJECT (Person)*
 
-.. note::
-Array structure the same as `Get persons`_
+
