@@ -11,7 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save priorities`_
     * `Update priority`_
     * `Delete priority`_
-    * `Get priority or priorities by name`_
 
 .. _`Get priority`:
 
@@ -168,25 +167,4 @@ Parameters response:
 
     you receive deleted object
 
-.. _`Get priority or priorities by name`:
-
-Get priority or priorities by name
-----------------------------------
-
-URL:
-~~~~
-    */priorities*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    and optional *first(BOOLEAN)*
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (Priority)*
 
