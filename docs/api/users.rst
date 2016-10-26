@@ -257,7 +257,8 @@ Parameters response:
            type of `Role <http://docs.ivis.se/en/latest/api/role.html>`_
 
 .. note::
-    roles consist of objects with properties: *id* and *name*
+
+    Response object is different from user standard object!!!
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
