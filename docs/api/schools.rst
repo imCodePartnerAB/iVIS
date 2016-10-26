@@ -3,13 +3,15 @@
 
 ``(implementation of School entity)``
 
-Provides following methods for `API <index.html>`_ calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get school`_
     * `Get schools`_
     * `Save school`_
+    * `Save schools`_
     * `Update school`_
     * `Delete school`_
+    * `Get school or schools by name`_
 
 .. _`Get school`:
 
@@ -33,17 +35,13 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. name (String)
-        #. school_id (String)
-        #. school_classes (Array)
-        #. after_school_center_sections (Array)
-
-.. note::
-
-    school_classes relates to SchoolClass entity
-    
-    after_school_center_sections relates to afterSchoolCenterSections entity
+        #. id(NUMBER)
+        #. name(STRING)
+        #. school_id(STRING)
+        #. school_classes(ARRAY)
+            type of `SchoolClass <http://docs.ivis.se/en/latest/api/schoolclass.html>`_
+        #. after_school_center_sections(ARRAY)
+            type of `AfterSchoolCenterSection <http://docs.ivis.se/en/latest/api/afterschoolcentersection.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -51,11 +49,11 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "name":"Name",
-        "school_id":"1111-id",
-        "school_classes":[],
-        "after_school_center_sections":[]
+      "id" : 0,
+      "name" : "",
+      "school_id" : "",
+      "school_classes" : {},
+      "after_school_center_sections" : {}
     }
 
 .. _`Get schools`:
@@ -80,21 +78,8 @@ Parameters response:
     *Array*
 
 .. seealso::
+
     Array consists of objects from `Get school`_ method
-
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Save school`:
 
 Save school
 -----------
@@ -109,18 +94,37 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to create, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get school`_
+    *OBJECT(School)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(School)*
 
-    *On server fill id*
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
+
+Save schools
+------------
+
+URL:
+~~~~
+    */schools*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(School)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(School)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
 
 .. _`Update school`:
 
@@ -137,18 +141,17 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to update, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get school`_
+    *OBJECT(School)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(School)*
 
-.. _`Delete  school`:
+.. note::
+
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete school`:
 
 Delete school
 -------------
@@ -167,5 +170,31 @@ Parameters request:
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(School)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get school or schools by name`:
+
+Get school or schools by name
+-----------------------------
+
+URL:
+~~~~
+    */schools*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (School)*
 
