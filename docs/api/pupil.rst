@@ -22,3 +22,23 @@ List of properties from Pupil
            type of `AfterSchoolCenterSection <http://docs.ivis.se/en/latest/api/afterschoolcentersection.html>`_
         #. school_center_schema(ARRAY)
            type of `AfterSchoolCenterSchema <http://docs.ivis.se/en/latest/api/afterschoolcenterschema.html>`_
+
+Example of response:
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: json
+
+    {
+       "id":10,
+       "person":{  },
+       "contact_person":{  },
+       "class_placement_from":null,
+       "class_placement_to":null,
+       "school_class":{  },
+       "school":null,
+       "academic_year":null,
+       "guardians":[  ],
+       "truancies":[  ],
+       "after_school_center_section":{  },
+       "school_center_schema":[  ]
+    }
