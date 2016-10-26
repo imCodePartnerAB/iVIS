@@ -11,8 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save applicationFormSteps`_
     * `Update applicationFormStep`_
     * `Delete applicationFormStep`_
-    * `Get applicationFormStep or applicationFormSteps by personal id`_
-    * `Get applicationFormStep or applicationFormSteps by name`_
 
 .. _`Get applicationFormStep`:
 
@@ -183,47 +181,4 @@ Parameters response:
 
     you receive deleted object
 
-.. _`Get applicationFormStep or applicationFormSteps by personal id`:
-
-Get applicationFormStep or applicationFormSteps by personal id
------------------------------------------------------------
-
-URL:
-~~~~
-    */applicationformsteps*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *personalId(STRING)*
-    and optional *first(BOOLEAN)*
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (ApplicationFormStep)*
-
-.. _`Get applicationFormStep or applicationFormSteps by name`:
-
-Get applicationFormStep or applicationFormSteps by name
--------------------------------------------------------
-
-URL:
-~~~~
-    */applicationformsteps*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    and optional *first(BOOLEAN)*
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (ApplicationFormStep)*
 

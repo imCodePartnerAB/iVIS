@@ -11,7 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save applicationForms`_
     * `Update applicationForm`_
     * `Delete applicationForm`_
-    * `Get applicationForm or applicationForms by name`_
 
 .. _`Get applicationForm`:
 
@@ -175,26 +174,4 @@ Parameters response:
 .. note::
 
     you receive deleted object
-
-.. _`Get applicationForm or applicationForms by name`:
-
-Get applicationForm or applicationForms by name
------------------------------------------------
-
-URL:
-~~~~
-    */applicationforms*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    and optional *first(BOOLEAN)*
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (ApplicationForm)*
 

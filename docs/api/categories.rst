@@ -11,7 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save categories`_
     * `Update category`_
     * `Delete category`_
-    * `Get category or categories by name`_
 
 .. _`Get category`:
 
@@ -167,26 +166,4 @@ Parameters response:
 .. note::
 
     you receive deleted object
-
-.. _`Get category or categories by name`:
-
-Get category or categories by name
-----------------------------------
-
-URL:
-~~~~
-    */categories*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    and optional *first(BOOLEAN)*
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (Category)*
 

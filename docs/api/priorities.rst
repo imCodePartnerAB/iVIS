@@ -5,12 +5,18 @@ Priorities
 
 Provides following method for `API <index.html>`_ calls:
 
+    * `Get priority`_
     * `Get priorities`_
+    * `Save priority`_
+    * `Save priorities`_
+    * `Update priority`_
+    * `Delete priority`_
+    * `Get priority or priorities by name`_
 
-.. _`Get priorities`:
+.. _`Get priority`:
 
-Get priorities
---------------
+Get priority
+------------
 
 URL:
 ~~~~
@@ -29,8 +35,8 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. name (String)
+        #. id(NUMBER)
+        #. name(STRING)
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -38,6 +44,149 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "name" : "priority"
+      "id" : 0,
+      "name" : ""
     }
+
+.. _`Get priorities`:
+
+Get priorities
+--------------
+
+URL:
+~~~~
+    */priorities*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+.. seealso::
+
+    Array consists of objects from `Get priority`_ method
+
+Save priority
+-------------
+
+URL:
+~~~~
+    */priorities*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Priority)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Priority)*
+
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
+
+Save priorities
+---------------
+
+URL:
+~~~~
+    */priorities*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(Priority)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(Priority)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
+
+.. _`Update priority`:
+
+Update priority
+---------------
+
+URL:
+~~~~
+    */priorities/{id}*
+
+Method:
+~~~~~~~
+    *PUT*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Priority)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Priority)*
+
+.. note::
+
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete priority`:
+
+Delete priority
+---------------
+
+URL:
+~~~~
+    */priorities/{id}*
+
+Method:
+~~~~~~~
+    *DELETE*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Priority)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get priority or priorities by name`:
+
+Get priority or priorities by name
+----------------------------------
+
+URL:
+~~~~
+    */priorities*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (Priority)*
+

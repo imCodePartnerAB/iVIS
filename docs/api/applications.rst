@@ -11,7 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save applications`_
     * `Update application`_
     * `Delete application`_
-    * `Get application or applications by name`_
 
 .. _`Get application`:
 
@@ -212,25 +211,4 @@ Parameters response:
 
     you receive deleted object
 
-.. _`Get application or applications by name`:
-
-Get application or applications by name
----------------------------------------
-
-URL:
-~~~~
-    */applications*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    and optional *first(BOOLEAN)*
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (Application)*
 

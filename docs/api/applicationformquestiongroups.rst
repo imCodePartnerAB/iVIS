@@ -11,7 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save applicationFormQuestionGroups`_
     * `Update applicationFormQuestionGroup`_
     * `Delete applicationFormQuestionGroup`_
-    * `Get applicationFormQuestionGroup or applicationFormQuestionGroups by name`_
 
 .. _`Get applicationFormQuestionGroup`:
 
@@ -185,26 +184,4 @@ Parameters response:
 .. note::
 
     you receive deleted object
-
-.. _`Get applicationFormQuestionGroup or applicationFormQuestionGroups by name`:
-
-Get applicationFormQuestionGroup or applicationFormQuestionGroups by name
--------------------------------------------------------------------------
-
-URL:
-~~~~
-    */applicationformquestiongroups*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    and optional *first(BOOLEAN)*
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (ApplicationFormQuestionGroup)*
 
