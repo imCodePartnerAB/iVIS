@@ -1,6 +1,13 @@
 ﻿API
 ===
 
+You can't using API unauthorized, so you look first at:
+
+.. toctree::
+   :titlesonly:
+
+   authorization
+
 iVIS provides API for data manipulation using JSON or XML format.
 
 In general, the process looks like:
@@ -24,22 +31,27 @@ You can have access and operate with following entities
 
 .. toctree::
    :titlesonly:
-
-   authorization
-   incidents
-   issues
+   
+   academicyears
    activities
-   pupils
-   priorities
-   categories
-   statuses
-   persons
-   users
-   schools
-   schoolclasses
-   applications
-   applicationforms
-   applicationformsteps
+   afterschoolcentersections
    applicationformquestiongroups
    applicationformquestions
-   exceptionhandling
+   applicationforms
+   applicationformsteps
+   applications
+   categories
+   entityversions
+   guardians
+   incidents
+   issues
+   logevents
+   persons
+   priorities
+   pupils
+   roles
+   schoolclasses
+   schools
+   schooltransports
+   statuses
+   users

@@ -8,6 +8,9 @@ Provides following methods for `API <index.html>`_ calls:
     * `Get activity`_
     * `Get activities`_
     * `Save activity`_
+    * `Save activities`_
+    * `Update activity`_
+    * `Delete activity`_
     * `Attach file to activity`_
     * `Download attached file`_
 
@@ -33,18 +36,14 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. description (String)
-        #. reported_date (Number)
-        #. reported_by (Object)
-        #. file_name (String)
-        #. issue (Object)
-
-.. note::
-
-    reported_by links with Person entity
-
-    reported_date represent as number of seconds since 1 Jan 1970 00:00:00 (UTC)
+        #. id(NUMBER)
+        #. description(STRING)
+        #. file_name(STRING)
+        #. issue(OBJECT)
+           type of `Issue <http://docs.ivis.se/en/latest/api/issue.html>`_
+        #. reported_date(NUMBER)
+        #. reported_by(OBJECT)
+           type of `Person <http://docs.ivis.se/en/latest/api/person.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -52,12 +51,34 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "description":"Test",
-        "reported_date":1465828993000,
-        "reported_by":{},
-        "issue":{},
-        "file_name":"file.pdf",
+      "id" : 0,
+      "description" : "",
+      "file_name" : "",
+      "issue" : {
+        "id" : null,
+        "title" : null,
+        "description" : null,
+        "status" : null,
+        "responsible_person" : null,
+        "authorized_persons" : [ ],
+        "reported_date" : null,
+        "reported_by" : null,
+        "modified_by" : null,
+        "modified_date" : null,
+        "categories" : [ ],
+        "priority" : null,
+        "pupils" : [ ]
+      },
+      "reported_date" : 1477473027056,
+      "reported_by" : {
+        "id" : null,
+        "personal_id" : null,
+        "first_name" : null,
+        "last_name" : null,
+        "addresses" : { },
+        "emails" : { },
+        "phones" : { }
+      }
     }
 
 .. _`Get activities`:
@@ -82,21 +103,8 @@ Parameters response:
     *Array*
 
 .. seealso::
+
     Array consists of objects from `Get activity`_ method
-
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Save activity`:
 
 Save activity
 -------------
@@ -111,33 +119,87 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties:*
-        #. description (String)
-        #. issue (Object)
+    *OBJECT(Activity)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(Activity)*
 
-    *On server fill properties*
-        #. id (Number)
-        #. reported_date (Number)
-        #. reported_by (Object)
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
+
+Save activities
+---------------
+
+URL:
+~~~~
+    */activities*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(Activity)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(Activity)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
+
+.. _`Update activity`:
+
+Update activity
+---------------
+
+URL:
+~~~~
+    */activities/{id}*
+
+Method:
+~~~~~~~
+    *PUT*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Activity)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Activity)*
 
 .. note::
-    You retrieve whole object just like in `Get activity`_
 
-Example of request:
+    property will be updated, if you don't want update property it need set null
+
+.. _`Delete activity`:
+
+Delete activity
+---------------
+
+URL:
+~~~~
+    */activities/{id}*
+
+Method:
+~~~~~~~
+    *DELETE*
+
+Parameters request:
 ~~~~~~~~~~~~~~~~~~~
+    *null*
 
-.. code-block:: json
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *OBJECT(Activity)*
 
-    {
-        "description" : "Test",
-        "issue" : { id : 1 }
-    }
+.. note::
+
+    you receive deleted object
 
 .. _`Attach file to activity`:
 
