@@ -10,6 +10,7 @@ Provides following methods for `API <index.html>`_ calls:
     * `Save schoolClass`_
     * `Update schoolClass`_
     * `Delete schoolClass`_
+    * `Get schoolClass or schoolClasses by name`_
 
 .. _`Get schoolClass`:
 
@@ -177,4 +178,26 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Object*
+
+.. _`Get schoolClass or schoolClasses by name`:
+
+Get schoolClass or schoolClasses by name
+----------------------------------------
+
+URL:
+~~~~
+    */schoolclasses*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (SchoolClass)*
 
