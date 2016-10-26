@@ -3,13 +3,15 @@
 
 ``(implementation of Application entity)``
 
-Provides following methods for `API <index.html>`_ calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get application`_
     * `Get applications`_
     * `Save application`_
+    * `Save applications`_
     * `Update application`_
     * `Delete application`_
+    * `Get application or applications by name`_
 
 .. _`Get application`:
 
@@ -33,27 +35,20 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. decision (Object)
-        #. create_date (Number)
-        #. update_date (Number)
-        #. application_form (Object)
-        #. submitted_user (Object)
-        #. regarding_user (Object)
-        #. registration_number (Number)
-        #. handled_user (Object)
-
-.. note::
-
-    decision relates to Decision entity
-
-    *_date represent as number of seconds since 1 Jan 1970 00:00:00 (UTC)
-
-    application_form relates to ApplicationForm entity
-
-    submitted_user, regarding_user relate to User entity
-
-    handled_user relates to Person
+        #. id(NUMBER)
+        #. create_date(NUMBER)
+        #. update_date(NUMBER)
+        #. application_form(OBJECT)
+           type of `ApplicationForm <http://docs.ivis.se/en/latest/api/applicationform.html>`_
+        #. submitted_user(OBJECT)
+           type of `User <http://docs.ivis.se/en/latest/api/user.html>`_
+        #. regarding_user(OBJECT)
+           type of `User <http://docs.ivis.se/en/latest/api/user.html>`_
+        #. registration_number(NUMBER)
+        #. decision(OBJECT)
+            type of `Decision <http://docs.ivis.se/en/latest/api/decision.html>`_
+        #. handled_user(OBJECT)
+           type of `Person <http://docs.ivis.se/en/latest/api/person.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -61,15 +56,40 @@ Example of response:
 .. code-block:: json
 
     {
-        "id":1,
-        "decision":{},
-        "create_date":1461239571000,
-        "update_date":1461297884000,
-        "application_form":{},
-        "submitted_user":{},
-        "regarding_user":{},
-        "registration_number":1111,
-        "handled_user":{}
+      "id" : 0,
+      "create_date" : 1477474353064,
+      "update_date" : 1477474353064,
+      "application_form" : {
+        "id" : null,
+        "name" : null,
+        "version" : null,
+        "steps" : [ ]
+      },
+      "submitted_user" : {
+        "id" : null,
+        "name" : null,
+        "person" : null,
+        "roles" : [ ],
+        "saml2_id" : null
+      },
+      "regarding_user" : {
+        "id" : null,
+        "name" : null,
+        "person" : null,
+        "roles" : [ ],
+        "saml2_id" : null
+      },
+      "registration_number" : 0,
+      "decision" : null,
+      "handled_user" : {
+        "id" : null,
+        "personal_id" : null,
+        "first_name" : null,
+        "last_name" : null,
+        "addresses" : { },
+        "emails" : { },
+        "phones" : { }
+      }
     }
 
 .. _`Get applications`:
@@ -94,21 +114,8 @@ Parameters response:
     *Array*
 
 .. seealso::
+
     Array consists of objects from `Get application`_ method
-
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Save application`:
 
 Save application
 ----------------
@@ -123,18 +130,37 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to create, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get application`_
+    *OBJECT(Application)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(Application)*
 
-    *On server fill id*
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
+
+Save applications
+-----------------
+
+URL:
+~~~~
+    */applications*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *Array(Application)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(Application)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
 
 .. _`Update application`:
 
@@ -151,21 +177,20 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to update, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get application`_
+    *OBJECT(Application)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(Application)*
+
+.. note::
+
+    property will be updated, if you don't want update property it need set null
 
 .. _`Delete application`:
 
-Delete applicationForm
-----------------------
+Delete application
+------------------
 
 URL:
 ~~~~
@@ -181,5 +206,31 @@ Parameters request:
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(Application)*
+
+.. note::
+
+    you receive deleted object
+
+.. _`Get application or applications by name`:
+
+Get application or applications by name
+---------------------------------------
+
+URL:
+~~~~
+    */applications*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *name(STRING)*
+    and optional *first(BOOLEAN)*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *ARRAY or OBJECT (Application)*
 
