@@ -3,14 +3,15 @@ Incidents
 
 ``(implementation of Incident entity)``
 
-Provides following methods for `API <index.html>`_  calls:
+Provides following method for `API <index.html>`_ calls:
 
     * `Get incident`_
     * `Get incidents`_
-    * `Get incidents list`_ (by some criteria)
     * `Save incident`_
+    * `Save incidents`_
     * `Update incident`_
     * `Delete incident`_
+    * `Get incidents list`_ by some criteria
 
 .. _`Get incident`:
 
@@ -34,29 +35,31 @@ Parameters response:
     *Object*
 
     *With properties:*
-        #. id (Number)
-        #. title (String)
-        #. description (String)
-        #. categories (Array)
-        #. priority (Object)
-        #. pupils (Array)
-        #. status (Object)
-        #. reported_date (Number),
-        #. reported_by (Array)
-        #. reported_date (Number)
-        #. issue (Object)
-        #. assigned_date (Number)
-        #. assigned_by (Object)
-        #. archived_date (Number)
-        #. archived_by (Object)
-        #. modified_date (Number)
-        #. modified_by (Object)
-
-.. note::
-
-    *_date represent as number of seconds since 1 Jan 1970 00:00:00 (UTC)
-
-    *_by reference in implementation to Person entity
+        #. id(NUMBER)
+        #. title(STRING)
+        #. description(STRING)
+        #. reported_date(NUMBER)
+        #. categories(ARRAY)
+           type of `Category <http://docs.ivis.se/en/latest/api/category.html>`_
+        #. pupils(ARRAY)
+           type of `Pupil <http://docs.ivis.se/en/latest/api/pupil.html>`_
+        #. status(OBJECT)
+           type of `Status <http://docs.ivis.se/en/latest/api/status.html>`_
+        #. priority(OBJECT)
+           type of `Priority <http://docs.ivis.se/en/latest/api/priority.html>`_
+        #. issue(OBJECT)
+           type of `Issue <http://docs.ivis.se/en/latest/api/issue.html>`_
+        #. assigned_date(NUMBER)
+        #. assigned_by(OBJECT)
+           type of `Person <http://docs.ivis.se/en/latest/api/person.html>`_
+        #. archived_date(NUMBER)
+        #. archived_by(OBJECT)
+           type of `Person <http://docs.ivis.se/en/latest/api/person.html>`_
+        #. reported_by(OBJECT)
+           type of `Person <http://docs.ivis.se/en/latest/api/person.html>`_
+        #. modified_by(OBJECT)
+           type of `Person <http://docs.ivis.se/en/latest/api/person.html>`_
+        #. modified_date(NUMBER)
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -64,22 +67,74 @@ Example of response:
 .. code-block:: json
 
     {
-       "id":1,
-       "title":"Test",
-       "description":"Test",
-       "categories":[  ],
-       "pupils":[  ],
-       "status":{  },
-       "priority":{  },
-       "issue":{  },
-       "reported_date":1462441906000,
-       "assigned_date":1466147548000,
-       "assigned_by":{  },
-       "archived_date":1466147548000,
-       "archived_by":{  },
-       "reported_by":{  },
-       "modified_by":{  },
-       "modified_date":1462441906000
+      "id" : 0,
+      "title" : "",
+      "description" : "",
+      "reported_date" : 1477474353092,
+      "categories" : [ ],
+      "pupils" : [ ],
+      "status" : {
+        "id" : null,
+        "name" : null
+      },
+      "priority" : {
+        "id" : null,
+        "name" : null
+      },
+      "issue" : {
+        "id" : null,
+        "title" : null,
+        "description" : null,
+        "status" : null,
+        "responsible_person" : null,
+        "authorized_persons" : [ ],
+        "reported_date" : null,
+        "reported_by" : null,
+        "modified_by" : null,
+        "modified_date" : null,
+        "categories" : [ ],
+        "priority" : null,
+        "pupils" : [ ]
+      },
+      "assigned_date" : 1477474353099,
+      "assigned_by" : {
+        "id" : null,
+        "personal_id" : null,
+        "first_name" : null,
+        "last_name" : null,
+        "addresses" : { },
+        "emails" : { },
+        "phones" : { }
+      },
+      "archived_date" : 1477474353099,
+      "archived_by" : {
+        "id" : null,
+        "personal_id" : null,
+        "first_name" : null,
+        "last_name" : null,
+        "addresses" : { },
+        "emails" : { },
+        "phones" : { }
+      },
+      "reported_by" : {
+        "id" : null,
+        "personal_id" : null,
+        "first_name" : null,
+        "last_name" : null,
+        "addresses" : { },
+        "emails" : { },
+        "phones" : { }
+      },
+      "modified_by" : {
+        "id" : null,
+        "personal_id" : null,
+        "first_name" : null,
+        "last_name" : null,
+        "addresses" : { },
+        "emails" : { },
+        "phones" : { }
+      },
+      "modified_date" : 1477474353099
     }
 
 .. _`Get incidents`:
@@ -104,49 +159,8 @@ Parameters response:
     *Array*
 
 .. seealso::
+
     Array consists of objects from `Get incident`_ method
-
-Example of response:
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: json
-
-    [
-        {},
-        {},
-        ...
-        {}
-    ]
-
-.. _`Get incidents list`:
-
-Get incidents list
-------------------
-
-URL:
-~~~~
-    */incidents*
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    * *search_text*
-    * *order_by*
-
-.. note::
-    Now required for order_by only "title" and search criteria also title in Incident
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *Array*
-
-.. note::
-    Array structure the same as `Get incidents`_
-
-.. _`Save incident`:
 
 Save incident
 -------------
@@ -161,39 +175,37 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties:*
-        #. title (String)
-        #. description (String)
-        #. categories (Array)
-        #. pupils (Array)
-        #. priority (Object)
+    *OBJECT(Incident)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(Incident)*
 
-    *On server fill properties*
-        #. id (Number)
-        #. reported_date (Number)
-        #. reported_by (Object)
+Null properties:
+~~~~~~~~~~~~~~~~
+    *id*
 
-.. note::
-    You retrieve whole object just like in `Get incident`_
+Save incidents
+--------------
 
-Example of request:
+URL:
+~~~~
+    */incidents*
+
+Method:
+~~~~~~~
+    *POST*
+
+Parameters request:
 ~~~~~~~~~~~~~~~~~~~
+    *Array(Incident)*
 
-.. code-block:: json
-
-    {
-        "title" : "Test",
-        "description" : "Test",
-        "categories" : [ {id : 1}, {id : 2}, ... {id : n} ],
-        "priority" : { id : 1 },
-        "pupils" : [ {id : 1}, {id : 2}, ... {id : n} ]
-    }
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array(Incident)*
+Null properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *id*
 
 .. _`Update incident`:
 
@@ -210,16 +222,15 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    *Object*
-
-    *With properties what you want to update, except id*
-
-.. seealso::
-    Whole properties list you can see at `Get incident`_
+    *OBJECT(Incident)*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(Incident)*
+
+.. note::
+
+    property will be updated, if you don't want update property it need set null
 
 .. _`Delete incident`:
 
@@ -240,9 +251,41 @@ Parameters request:
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
-    *Object*
+    *OBJECT(Incident)*
 
+.. note::
 
+    you receive deleted object
+
+.. _`Get incidents list`:
+
+Get incidents list
+------------------
+
+URL:
+~~~~
+    */incidents*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    * *search_text*
+    * *order_by*
+
+.. note::
+
+    Now required for order_by only "title" and search criteria also title in Incident
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+.. note::
+
+    Array structure the same as `Get incidents`_
 
 
 
