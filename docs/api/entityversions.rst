@@ -11,8 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save entityVersions`_
     * `Update entityVersion`_
     * `Delete entityVersion`_
-    * `Get entityVersion or entityVersions by personal id`_
-    * `Get entityVersion or entityVersions by name`_
 
 .. _`Get entityVersion`:
 
@@ -38,8 +36,9 @@ Parameters response:
     *With properties:*
         #. id(NUMBER)
         #. entity_id(NUMBER)
-        #. entity_class(NULL)
-        #. entity(NULL)
+        #. entity_class(STRING)
+        #. entity(OBJECT)
+            Exist entity object which we want to serialize
         #. timestamp(NUMBER)
 
 Example of response:
@@ -52,7 +51,7 @@ Example of response:
       "entity_id" : 0,
       "entity_class" : null,
       "entity" : null,
-      "timestamp" : 1477471556916
+      "timestamp" : 1477474353089
     }
 
 .. _`Get entityversions`:
@@ -77,8 +76,8 @@ Parameters response:
     *Array*
 
 .. seealso::
-    
-Array consists of objects from `Get entityVersion`_ method
+
+    Array consists of objects from `Get entityVersion`_ method
 
 Save entityVersion
 ------------------
@@ -147,8 +146,8 @@ Parameters response:
     *OBJECT(EntityVersion)*
 
 .. note::
-    
-property will be updated, if you don't want update property it need set null
+
+    property will be updated, if you don't want update property it need set null
 
 .. _`Delete entityVersion`:
 
@@ -172,49 +171,5 @@ Parameters response:
     *OBJECT(EntityVersion)*
 
 .. note::
+
     you receive deleted object
-
-.. _`Get entityVersion or entityVersions by personal id`:
-
-Get entityVersion or entityVersions by personal id
------------------------------------------------
-
-URL:
-~~~~
-    */entityversions
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *personalId(STRING)*
-    *first(BOOLEAN)* - optional
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (EntityVersion)*
-
-.. _`Get entityVersion or entityVersions by name`:
-
-Get entityVersion or entityVersions by name
--------------------------------------------
-
-URL:
-~~~~
-    */entityversions
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *name(STRING)*
-    *first(BOOLEAN)* - optional
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (EntityVersion)*
-
