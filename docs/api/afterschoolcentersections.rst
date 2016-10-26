@@ -11,7 +11,6 @@ Provides following method for `API <index.html>`_ calls:
     * `Save afterSchoolCenterSections`_
     * `Update afterSchoolCenterSection`_
     * `Delete afterSchoolCenterSection`_
-    * `Get afterSchoolCenterSection or afterSchoolCenterSections by personal id`_
     * `Get afterSchoolCenterSection or afterSchoolCenterSections by name`_
 
 .. _`Get afterSchoolCenterSection`:
@@ -174,28 +173,6 @@ Parameters response:
 
 .. note::
     you receive deleted object
-
-.. _`Get afterSchoolCenterSection or afterSchoolCenterSections by personal id`:
-
-Get afterSchoolCenterSection or afterSchoolCenterSections by personal id
----------------------------------------------------------------------
-
-URL:
-~~~~
-    */afterschoolcentersections
-
-Method:
-~~~~~~~
-    *GET*
-
-Parameters request:
-~~~~~~~~~~~~~~~~~~~
-    *personalId(STRING)*
-    *first(BOOLEAN)* - optional
-
-Parameters response:
-~~~~~~~~~~~~~~~~~~~~
-    *ARRAY or OBJECT (AfterSchoolCenterSection)*
 
 .. _`Get afterSchoolCenterSection or afterSchoolCenterSections by name`:
 
