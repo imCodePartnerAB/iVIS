@@ -41,12 +41,6 @@ public class OnStartupController {
     @Autowired
     private EntityRestProviderInformationService entityRestProviderInformationService;
 
-    @Autowired
-    private IvisClientDetailsService clientDetailsService;
-
-    @Autowired
-    private UserService userService;
-
     @PostConstruct
     public void deleteExpiredOrUsedOnceTimeAccessTokens() {
         List<OnceTimeAccessToken> onceTimeAccessTokens = onceTimeAccessTokenService.selectExpiredOrUsedTokens();
@@ -80,7 +74,7 @@ public class OnStartupController {
             methodRestProviderForEntityService.save(methodsForPersist);
 
         }
-
+        //merge
         for (EntityRestProviderInformation info : allInfo) {
 
             EntityRestProviderInformation persistInfoByEntityClass = entityRestProviderInformationService.findByEntityClass(info.getEntityClass());

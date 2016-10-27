@@ -18,7 +18,7 @@
         <div class="field">
             <label for="entity${info.id}">
                 <span class="arrow" onclick="showOrHideElementByLabel(this);"></span>${info.entityClass}
-                <input type="checkbox" class="tristate" onclick="setClicked();" for="entity${info.id}"/>
+                <input type="checkbox" class="tristate" for="entity${info.id}"/>
             </label>
         </div>
         <div id="entity${info.id}" class="non-display indent">
@@ -41,7 +41,7 @@
                     <div class="field">
                         <label>Out parameter: ${method.outParameter}</label>
                     </div>
-                    <div class="field" onclick="showOrHideNextElement(this);">
+                    <div class="field">
                         <label for="inparameters${method.id}">
                             <span class="arrow" onclick="showOrHideElementByLabel(this);"></span>In parameters
                         </label>
