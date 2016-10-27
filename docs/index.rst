@@ -20,6 +20,7 @@ Contents
    quick_start/index
    basic_concepts/index
    api/index
+   sdk/index
    use_cases/index
 
 .. include:: /common/contribute.txt
