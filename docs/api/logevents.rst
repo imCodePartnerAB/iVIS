@@ -39,13 +39,13 @@ Parameters response:
         #. timestamp(NUMBER)
         #. entity_class_name(STRING)
         #. entity_id(NUMBER)
-        #. action(STRING)
-            Only can be "CREATE", "MODIFY", "DELETE"
         #. field_name(STRING)
         #. previous_value(STRING)
         #. new_value(STRING)
         #. user(OBJECT)
            type of `User <http://docs.ivis.se/en/latest/api/user.html>`_
+        #. action(STRING)
+            Only can be "CREATE", "MODIFY", "DELETE"
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~

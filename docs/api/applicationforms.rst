@@ -38,7 +38,7 @@ Parameters response:
         #. name(STRING)
         #. version(NUMBER)
         #. steps(ARRAY)
-           type of `Step <http://docs.ivis.se/en/latest/api/step.html>`_
+           type of `ApplicationFormStep <http://docs.ivis.se/en/latest/api/applicationformstep.html>`_
         #. applications(ARRAY)
            type of `Application <http://docs.ivis.se/en/latest/api/application.html>`_
 

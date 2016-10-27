@@ -45,7 +45,7 @@ Parameters response:
            type of `User <http://docs.ivis.se/en/latest/api/user.html>`_
         #. registration_number(NUMBER)
         #. decision(OBJECT)
-            type of `Decision <http://docs.ivis.se/en/latest/api/decision.html>`_
+           type of `Decision <http://docs.ivis.se/en/latest/api/decision.html>`_
         #. handled_user(OBJECT)
            type of `Person <http://docs.ivis.se/en/latest/api/person.html>`_
 

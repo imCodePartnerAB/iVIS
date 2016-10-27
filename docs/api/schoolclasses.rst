@@ -37,11 +37,11 @@ Parameters response:
         #. id (NUMBER)
         #. name (STRING)
         #. school (OBJECT)
-            type of `School <http://docs.ivis.se/en/latest/api/school.html>`_
+           type of `School <http://docs.ivis.se/en/latest/api/school.html>`_
         #. pupils (ARRAY)
-            type of `Pupil <http://docs.ivis.se/en/latest/api/pupil.html>`_
+           type of `Pupil <http://docs.ivis.se/en/latest/api/pupil.html>`_
         #. diaries (ARRAY)
-             type of `Diary <http://docs.ivis.se/en/latest/api/diary.html>`_
+           type of `Diary <http://docs.ivis.se/en/latest/api/diary.html>`_
         #. school_day_start (STRING)
         #. school_day_end (STRING)
 

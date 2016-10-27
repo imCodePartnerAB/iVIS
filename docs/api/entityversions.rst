@@ -38,9 +38,9 @@ Parameters response:
         #. id(NUMBER)
         #. entity_id(NUMBER)
         #. entity_class(STRING)
-        #. entity(OBJECT)
-            Exist entity object which we want to serialize
         #. timestamp(NUMBER)
+        #. entity(OBJECT)
+            Exist entity object which you want to serialize
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~

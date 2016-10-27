@@ -5,9 +5,9 @@ List of properties from School
         #. name(STRING)
         #. school_id(STRING)
         #. school_classes(ARRAY)
-            type of `SchoolClass <http://docs.ivis.se/en/latest/api/schoolclass.html>`_
+           type of `SchoolClass <http://docs.ivis.se/en/latest/api/schoolclass.html>`_
         #. after_school_center_sections(ARRAY)
-            type of `AfterSchoolCenterSection <http://docs.ivis.se/en/latest/api/afterschoolcentersection.html>`_
+           type of `AfterSchoolCenterSection <http://docs.ivis.se/en/latest/api/afterschoolcentersection.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~

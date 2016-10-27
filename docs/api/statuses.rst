@@ -35,7 +35,8 @@ Parameters response:
 
     *With properties:*
         #. id(NUMBER)
-        #. name(NULL)
+        #. name(STRING)
+            only can be "CREATING", "NEW", "ASSIGNED", "ARCHIVED"
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~

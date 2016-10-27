@@ -44,7 +44,7 @@ Parameters response:
         #. class_placement_from(NUMBER)
         #. class_placement_to(NUMBER)
         #. school_class(OBJECT)
-            type of `SchoolClass <http://docs.ivis.se/en/latest/api/schoolclass.html>`_
+           type of `SchoolClass <http://docs.ivis.se/en/latest/api/schoolclass.html>`_
         #. school
            type of `School <http://docs.ivis.se/en/latest/api/school.html>`_
         #. academic_year(OBJECT)

@@ -7,7 +7,7 @@ List of properties from ApplicationForm
         #. steps(ARRAY)
            type of `ApplicationFormStep <http://docs.ivis.se/en/latest/api/applicationformstep.html>`_
         #. applications(ARRAY)
-            type of `Application <http://docs.ivis.se/en/latest/api/application.html>`_
+           type of `Application <http://docs.ivis.se/en/latest/api/application.html>`_
 
 Example of response:
 ~~~~~~~~~~~~~~~~~~~~
