@@ -100,8 +100,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(School)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save schools
@@ -122,8 +122,8 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(School)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update school`:

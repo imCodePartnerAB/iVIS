@@ -98,8 +98,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(AfterSchoolCenterSection)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save afterschoolcentersections
@@ -120,8 +120,8 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(AfterSchoolCenterSection)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update afterSchoolCenterSection`:

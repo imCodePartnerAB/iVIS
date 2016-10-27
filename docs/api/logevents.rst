@@ -114,8 +114,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(LogEvent)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save logevents
@@ -136,8 +136,8 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(LogEvent)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update logEvent`:

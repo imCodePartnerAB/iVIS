@@ -105,8 +105,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(ApplicationFormStep)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save applicationformsteps
@@ -127,8 +127,8 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(ApplicationFormStep)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update applicationFormStep`:

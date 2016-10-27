@@ -109,8 +109,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(ApplicationFormQuestionGroup)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save applicationformquestiongroups
@@ -131,8 +131,8 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(ApplicationFormQuestionGroup)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update applicationFormQuestionGroup`:

@@ -78,7 +78,7 @@ Example of response:
        "school_center_schema":[  ]
     }
 
-.. _`Get current guardian pupils`:
+.. _`Get pupils`:
 
 Get pupils
 ----------
@@ -149,8 +149,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(Pupil)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Save pupils`:
@@ -174,8 +174,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(Pupil)*
 
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update pupil`:

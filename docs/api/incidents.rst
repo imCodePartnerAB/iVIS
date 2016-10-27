@@ -177,13 +177,17 @@ Parameters request:
 ~~~~~~~~~~~~~~~~~~~
     *OBJECT(Incident)*
 
+
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(Incident)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
+    *reported_date* - current timestamp
+    *reported_by* - person of current user
+    *status* - "NEW"
 
 Save incidents
 --------------
@@ -203,8 +207,8 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(Incident)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update incident`:
@@ -227,6 +231,11 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(Incident)*
+
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *modified_date* - current timestamp
+    *modified_by* - person of current user
 
 .. note::
 

@@ -158,9 +158,11 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(Issue)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
+    *reported_date* - current timestamp
+    *reported_by* - person of current user
 
 Save issues
 -----------
@@ -180,8 +182,9 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(Issue)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update issue`:
@@ -204,6 +207,11 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(Issue)*
+
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+    *modified_date* - current timestamp
+    *modified_by* - person of current user
 
 .. note::
 

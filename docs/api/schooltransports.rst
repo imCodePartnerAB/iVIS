@@ -92,8 +92,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(SchoolTransport)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save schooltransports
@@ -114,7 +114,7 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(SchoolTransport)*
-Null properties of every object in array:
+On server fill properties of every object in array:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 

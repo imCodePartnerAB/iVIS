@@ -125,9 +125,11 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(Activity)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
+    *reported_date* - current timestamp
+    *reported_by* - person of current user
 
 Save activities
 ---------------
@@ -147,7 +149,7 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(Activity)*
-Null properties of every object in array:
+On server fill properties of every object in array:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 

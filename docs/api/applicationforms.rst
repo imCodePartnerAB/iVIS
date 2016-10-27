@@ -99,8 +99,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(ApplicationForm)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save applicationforms
@@ -121,7 +121,7 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(ApplicationForm)*
-Null properties of every object in array:
+On server fill properties of every object in array:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 

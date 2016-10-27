@@ -55,7 +55,7 @@ Example of response:
       "timestamp" : 1477474353089
     }
 
-.. _`Get entityversions`:
+.. _`Get entityVersions`:
 
 Get entityversions
 ------------------
@@ -99,8 +99,8 @@ Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *OBJECT(EntityVersion)*
 
-Null properties:
-~~~~~~~~~~~~~~~~
+On server fill properties:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 Save entityversions
@@ -121,8 +121,8 @@ Parameters request:
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
     *Array(EntityVersion)*
-Null properties of every object in array:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On server fill properties of every object in array:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     *id*
 
 .. _`Update entityVersion`:
