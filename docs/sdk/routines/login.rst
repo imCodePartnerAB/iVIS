@@ -14,12 +14,33 @@ To login you need:
     #. send POST request with client credentials with code.
     #. receive access token.
 
-Talking is a good but let's coding.
+Let's see how it looks like.
 
-Prerequisites
--------------
+.. literalinclude:: /sdk/routines/code/LoginController.java
+    :language: java
+    :linenos:
 
-.. code-block:: java
+To know if user login on JSP you can invoke special tag <ivis:authorized> with optional parameter role.
+
+.. code-block:: jsp
+
+    <%@taglib prefix="ivis" uri="ivis.sdk" %>
+
+    <ivis:authorized>
+        Information for authorized persons
+    </ivis:authorized>
+
+    ...
+
+    <ivis:authorized role="ROLE_ADMIN">
+        Information for user in admin role
+    </ivis:authorized>
+
+.. important::
+
+    You can use this tag if you have permission to use method getCurrent user.
+
+
 
 
 
