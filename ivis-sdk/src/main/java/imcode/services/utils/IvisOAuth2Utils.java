@@ -31,6 +31,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -115,15 +116,17 @@ public class IvisOAuth2Utils {
             return user instanceof User ? (User) user : null;
         }  else {
             User currentUser = getServiceFactory(session).getService(UserService.class).getCurrentUser();
-            setLoggedInUser(session, currentUser);
+            if (currentUser == null) {
+                return currentUser;
+            }
+            loginUser(session, currentUser);
             return currentUser;
         }
     }
 
-    private static void setLoggedInUser(HttpSession session, User user) {
+    private static void loginUser(HttpSession session, User user) {
         session.setAttribute(LOGGED_IN_USER_PARAMETER_NAME, user);
     }
-
 
     public static String getOAuth2AuthirizationUrl(AuthorizationCodeResourceDetails client, String redirectUri) throws URISyntaxException {
 

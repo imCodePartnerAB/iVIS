@@ -9,7 +9,7 @@
     <display-name>iVIS SDK</display-name>
     <tlib-version>1.1</tlib-version>
     <short-name>ivis</short-name>
-    <uri>http://imcode.com</uri>
+    <uri>ivis.sdk</uri>
 
     <tag>
         <description>
