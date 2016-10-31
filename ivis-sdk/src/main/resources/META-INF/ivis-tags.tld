@@ -1,14 +1,29 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <taglib xmlns="http://java.sun.com/xml/ns/javaee"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
         version="2.1">
 
-    <tlib-version>1.0</tlib-version>
+    <description>iVIS SDK tag library</description>
+    <display-name>iVIS SDK</display-name>
+    <tlib-version>1.1</tlib-version>
     <short-name>ivis</short-name>
     <uri>http://imcode.com</uri>
 
-    <!-- Invoke 'Generate' action to add tags or functions -->
+    <tag>
+        <description>
+            Check if user authorize and display code in that section
+        </description>
+        <name>authorized</name>
+        <tag-class>imcode.tags.AuthorizedTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>role</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
 
 </taglib>

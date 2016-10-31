@@ -1,6 +1,8 @@
 package imcode.services.utils;
 
 import com.imcode.entities.Person;
+import com.imcode.entities.User;
+import com.imcode.services.UserService;
 import imcode.services.IvisServiceFactory;
 import imcode.services.restful.ProxyIvisServiceFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -8,16 +10,23 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,6 +38,7 @@ import java.util.regex.Pattern;
  */
 public class IvisOAuth2Utils {
     public static final String CLIENT_CONTEXT_PARAMETER_NAME = "oauth2ClientContext";
+    public static final String LOGGED_IN_USER_PARAMETER_NAME = "loggedInUser";
     public static final String IVIS_SERVICE_FACTORY_PARAMETER_NAME = "ivisServiceFactory";
 
     public static OAuth2ClientContext getClientContext(HttpServletRequest request) {
@@ -39,30 +49,15 @@ public class IvisOAuth2Utils {
 
         OAuth2ClientContext clientContext = (OAuth2ClientContext) session.getAttribute(CLIENT_CONTEXT_PARAMETER_NAME);
         if (clientContext == null) {
-//            ApplicationContext ctx = getSpringContext(session);
-//            clientContext = ctx.getBean(OAuth2ClientContext.class);
             clientContext = new DefaultOAuth2ClientContext();
             session.setAttribute(CLIENT_CONTEXT_PARAMETER_NAME, clientContext);
         }
         return clientContext;
     }
 
-//    public static void setClientContext(HttpServletRequest request, OAuth2ClientContext clientContext) {
-//        setClientContext(request.getSession(), clientContext);
-//    }
-//
-//    public static void setClientContext(HttpSession session, OAuth2ClientContext clientContext) {
-//        session.setAttribute(CLIENT_CONTEXT_PARAMETER_NAME, clientContext);
-//    }
 
     public static void setAccessToken(HttpSession session, OAuth2AccessToken accessToken) {
         OAuth2ClientContext clientContext = getClientContext(session);
-
-//        if (clientContext == null) {
-//            clientContext = new DefaultOAuth2ClientContext();
-//            setClientContext(session, clientContext);
-//        }
-
         clientContext.setAccessToken(accessToken);
     }
 
@@ -76,7 +71,6 @@ public class IvisOAuth2Utils {
 
     public static OAuth2AccessToken getAccessToken(HttpSession session) {
         OAuth2AccessToken accessToken = null;
-//        OAuth2ClientContext clientContext = (OAuth2ClientContext) session.getAttribute(CLIENT_CONTEXT_PARAMETER_NAME);
         OAuth2ClientContext clientContext = getClientContext(session);
 
         if (clientContext != null) {
@@ -84,6 +78,20 @@ public class IvisOAuth2Utils {
         }
 
         return accessToken;
+    }
+
+    public static OAuth2AccessToken getAccessToken(AuthorizationCodeResourceDetails client, String code, String redirectUri) throws UnsupportedEncodingException {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "authorization_code");
+        form.add("code", code);
+        form.add("redirect_uri", redirectUri);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization",
+                String.format("Basic %s", new String(Base64.encode(String.format("%s:%s", client.getClientId(), client.getClientSecret()).getBytes("UTF-8")), "UTF-8")));
+        HttpEntity httpEntity = new HttpEntity(form, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<OAuth2AccessToken> result = restTemplate.postForEntity(client.getAccessTokenUri(), httpEntity, OAuth2AccessToken.class);
+        return result.getBody();
     }
 
     public static boolean isTokenGood(HttpServletRequest request) {
@@ -95,6 +103,27 @@ public class IvisOAuth2Utils {
             return false;
         }
     }
+
+    public static User getIvisLoggedInUser(HttpServletRequest request) {
+        return isTokenGood(request) ? getIvisLoggedInUser(request.getSession(true)) : null;
+    }
+
+    private static User getIvisLoggedInUser(HttpSession session) {
+        Object user = session.getAttribute(LOGGED_IN_USER_PARAMETER_NAME);
+
+        if ( user != null ) {
+            return user instanceof User ? (User) user : null;
+        }  else {
+            User currentUser = getServiceFactory(session).getService(UserService.class).getCurrentUser();
+            setLoggedInUser(session, currentUser);
+            return currentUser;
+        }
+    }
+
+    private static void setLoggedInUser(HttpSession session, User user) {
+        session.setAttribute(LOGGED_IN_USER_PARAMETER_NAME, user);
+    }
+
 
     public static String getOAuth2AuthirizationUrl(AuthorizationCodeResourceDetails client, String redirectUri) throws URISyntaxException {
 
@@ -137,28 +166,6 @@ public class IvisOAuth2Utils {
         return uriBuilder.toString();
     }
 
-//    public static IvisServiceFactory createServiceFactory(HttpSession session, OAuth2ProtectedResourceDetails client, String serverAddress) {
-//        IvisServiceFactory factory = null;
-//        ApplicationContext context = getSpringContext(session);
-//        factory = context.getBean(IvisServiceFactory.class);
-////        OAuth2ClientContext clientContext = getClientContext(session);
-////
-////        if (client != null) {
-//////            IvisFacade ivis = IvisFacade.instance(new IvisFacade.Configuration.Builder()
-//////                    .endPointUrl(serverAddress)
-//////                    .responseType("json")
-//////                    .version("v1").build());
-//////
-//////            factory = ivis.getServiceFactory(client, clientContext);
-////            ServiceAddressBuilder builder = getServiceAddressBuilder();
-////            String serviceAddess = builder.
-////
-////            session.setAttribute(IVIS_SERVICE_FACTORY_PARAMETER_NAME, factory);
-////        }
-//
-//        return factory;
-//    }
-
     public static IvisServiceFactory getServiceFactory(HttpSession session) {
         ProxyIvisServiceFactory serviceFactory = (ProxyIvisServiceFactory) session.getAttribute(IVIS_SERVICE_FACTORY_PARAMETER_NAME);
 
@@ -172,7 +179,6 @@ public class IvisOAuth2Utils {
         }
 
         return serviceFactory;
-//        return ctx.getBean(IvisServiceFactory.class);
     }
 
     public static IvisServiceFactory getServiceFactory(HttpServletRequest request) {
@@ -256,11 +262,4 @@ public class IvisOAuth2Utils {
                 || StringUtils.containsIgnoreCase(person.getFirstName(), searchText)
                 || StringUtils.containsIgnoreCase(person.getLastName(), searchText));
     }
-//    public static SentenceBuilder getSentenceBuilder() {
-//        return new StringBuilder(){};
-//    }
-//
-//    private static class SentenceBuilder extends StringBuilder {
-//
-//    }
 }
