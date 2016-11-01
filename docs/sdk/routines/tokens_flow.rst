@@ -24,3 +24,27 @@ So tokens flow looks like
     #. If token is expired (IvisOAuth2Utils.isTokenGood(httpServletRequest) -> exchange refresh token from cookie (cookie key "refreshToken") to access token.
     #. If cookie does not exist -> login user again.
 
+Let's see how it looks like.
+
+In IvisAuthorizationController.java for last two points let's defined method that will define what need to do with unauthorized users.
+
+.. note::
+
+    Don't forget write information about error page in web.xml.
+
+    .. code-block:: xml
+
+        <error-page>
+            <error-code>401</error-code>
+            <location>/unauthorized</location>
+        </error-page>
+
+    Or use something other way for redirect to /unauthorized.
+
+
+
+
+
+
+
+

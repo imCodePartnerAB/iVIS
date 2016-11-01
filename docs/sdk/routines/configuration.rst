@@ -22,6 +22,7 @@ Properties
     redirect-relate-uri = /redirecttome
     user-authorization-relate-uri = /oauth/authorize
     access-token-relate-uri = /oauth/token
+    ivis-logout-relate-uri = /logout.do
 
 Beans for injection
 -------------------

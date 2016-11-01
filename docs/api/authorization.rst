@@ -224,7 +224,6 @@ Code example **Java** using org.apache.http package
    pairsPost.add(new BasicNameValuePair("grant_type", "refresh_token"));
    pairsPost.add(new BasicNameValuePair("client_id", client_id));
    pairsPost.add(new BasicNameValuePair("client_secret", client_secret));
-   pairsPost.add(new BasicNameValuePair("grant_type", "refresh_token"));
 
    HttpPost post = new HttpPost(tokenURI);
    post.setEntity(new UrlEncodedFormEntity(pairsPost));

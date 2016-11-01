@@ -25,6 +25,12 @@ public class IvisAuthorizationController {
     @Value("${refresh-token-validity-seconds")
     private Integer refreshTokenValiditySeconds;
 
+    @Value("#{'${api-server-address}' + '${ivis-logout-relate-uri}'}")
+    private String ivisLogoutUrl;
+
+    @Value("${client-address}")
+    private String clientAddress;
+
     private final AuthorizationCodeResourceDetails client;
 
     @Autowired
@@ -49,6 +55,27 @@ public class IvisAuthorizationController {
         IvisOAuth2Utils.setAccessToken(request, accessToken);
         IvisOAuth2Utils.setRefreshTokenAsCokie(response, accessToken.getRefreshToken(), refreshTokenValiditySeconds);
         view.setViewName("start_page_view");//view name of start page
+        return view;
+    }
+
+    //Only need redirect to this handler if IvisOAuth2Utils.isTokenGood(request) -> false
+    @RequestMapping(value = "/unauthorized", method = RequestMethod.GET)
+    public ModelAndView unauthorizedUsers(ModelAndView view,
+                                          HttpServletRequest request,
+                                          @CookieValue("refreshToken") String refreshTokenCookie) throws UnsupportedEncodingException, URISyntaxException {
+        OAuth2AccessToken accessToken = IvisOAuth2Utils.getAccessToken(client, refreshTokenCookie);
+        //logout client
+        if (accessToken == null) {
+            String redirectUrl = new URIBuilder(ivisLogoutUrl)
+                    .addParameter("redirect_url", clientAddress + "start_page_view")//view name of start page
+                    .build()
+                    .toString();
+            view.setViewName("redirect:" + redirectUrl);
+            return view;
+        }
+
+        IvisOAuth2Utils.setAccessToken(request, accessToken);
+        view.setViewName("start_page_view");
         return view;
     }
 

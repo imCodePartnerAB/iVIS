@@ -16,7 +16,7 @@ To login you need:
 
 Let's see how it looks like.
 
-:download:`BeansContext.java </sdk/routines/code/IvisAuthorizationController.java>`
+:download:`IvisAuthorizationController.java </sdk/routines/code/IvisAuthorizationController.java>`
 
 .. literalinclude:: /sdk/routines/code/IvisAuthorizationController.java
     :language: java
