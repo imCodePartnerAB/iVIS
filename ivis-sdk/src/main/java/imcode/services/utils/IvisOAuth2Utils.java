@@ -103,6 +103,9 @@ public class IvisOAuth2Utils {
     }
 
     public static OAuth2AccessToken getAccessToken(AuthorizationCodeResourceDetails client, String refreshToken) throws UnsupportedEncodingException {
+        if (refreshToken == null) {
+            return null;
+        }
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "refresh_token");
         form.add("refresh_token", refreshToken);
