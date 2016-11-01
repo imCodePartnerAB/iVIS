@@ -9,3 +9,5 @@ And as conclusion we will create simple web application which calls iVIS API. So
 
     routines/configuration
     routines/login
+    routines/tokens_flow
+    routines/access_to_protected_resources

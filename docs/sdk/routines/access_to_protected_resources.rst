@@ -69,4 +69,4 @@ To know if user login on JSP you can invoke special tag <ivis:authorized> with o
 .. important::
 
     You can use this two cases if you have permission to use method getCurrent user.
-    After invoking Filter or tag in session persisted user object ("loggedInUser" key to parameter).
+    After invoking Filter or tag with parameter role in session persisted user object ("loggedInUser" key to parameter).
