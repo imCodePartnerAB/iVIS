@@ -31,7 +31,6 @@ XML config
 You need write in web.xml following.
 
 .. code-block:: xml
-    :linenos:
 
     <filter>
         <filter-name>ivisAuthorizedFilter</filter-name>
@@ -53,7 +52,6 @@ Tag
 To know if user login on JSP you can invoke special tag <ivis:authorized> with optional parameter role.
 
 .. code-block:: jsp
-    :linenos:
 
     <%@taglib prefix="ivis" uri="ivis.sdk" %>
 
