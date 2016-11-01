@@ -17,11 +17,12 @@ Filter
 Java config
 ~~~~~~~~~~~
 
-`BeansContext.java <http://docs.ivis.se/en/latest/sdk/routines/code/BeansContext.java>`_
+:download:`BeansContext.java </sdk/routines/code/BeansContext.java>`
 
 .. literalinclude:: /sdk/routines/code/BeansContext.java
     :language: java
     :linenos:
+    :lineno-start: 54
     :lines: 39-54
 
 XML config
@@ -55,6 +56,8 @@ To know if user login on JSP you can invoke special tag <ivis:authorized> with o
     :linenos:
 
     <%@taglib prefix="ivis" uri="ivis.sdk" %>
+
+    ...
 
     <ivis:authorized>
         Information for authorized users
