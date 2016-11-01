@@ -29,13 +29,19 @@ Beans for injection
 Java config
 ~~~~~~~~~~~
 
+`BeansContext.java <http://docs.ivis.se/en/latest/sdk/routines/code/BeansContext.java>`_
+
 .. literalinclude:: /sdk/routines/code/BeansContext.java
     :language: java
     :linenos:
+    :lines: 14-37
 
 XML config
 ~~~~~~~~~~
 
+`beansContext.xml <http://docs.ivis.se/en/latest/sdk/routines/code/beansContext.xml>`_
+
 .. literalinclude:: /sdk/routines/code/beansContext.xml
     :language: xml
     :linenos:
+    :lines: 7-15

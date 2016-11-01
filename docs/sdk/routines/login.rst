@@ -16,29 +16,13 @@ To login you need:
 
 Let's see how it looks like.
 
-.. literalinclude:: /sdk/routines/code/LoginController.java
+.. literalinclude:: /sdk/routines/code/IvisAuthorizationController.java
     :language: java
     :linenos:
 
-To know if user login on JSP you can invoke special tag <ivis:authorized> with optional parameter role.
 
-.. code-block:: jsp
 
-    <%@taglib prefix="ivis" uri="ivis.sdk" %>
 
-    <ivis:authorized>
-        Information for authorized persons
-    </ivis:authorized>
-
-    ...
-
-    <ivis:authorized role="ROLE_ADMIN">
-        Information for user in admin role
-    </ivis:authorized>
-
-.. important::
-
-    You can use this tag if you have permission to use method getCurrent user.
 
 
 
