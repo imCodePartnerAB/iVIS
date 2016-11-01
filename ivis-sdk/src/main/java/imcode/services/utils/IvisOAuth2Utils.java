@@ -19,12 +19,15 @@ import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -199,7 +202,13 @@ public class IvisOAuth2Utils {
     public static ServiceAddressBuilder getServiceAddressBuilder() {
         return new ServiceAddressBuilder();
     }
-    
+
+    public static void setRefreshTokenAsCokie(HttpServletResponse response, OAuth2RefreshToken token, int expiry) {
+        Cookie cookie = new Cookie("refreshToken", token.getValue());
+        cookie.setMaxAge(expiry);
+        response.addCookie(cookie);
+    }
+
     public static class ServiceAddressBuilder {
         private boolean builded;
         private String endPointUrl = "http://ivis.dev.imcode.com";
