@@ -19,7 +19,7 @@
         <tag-class>imcode.tags.AuthorizedTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
-            <name>role</name>
+            <name>roles</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>

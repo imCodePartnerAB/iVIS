@@ -9,7 +9,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class AuthorizedTag extends TagSupport {
 
-    private String role;
+    private String roles;
 
     @Override
     public int doStartTag() throws JspException {
@@ -23,20 +23,20 @@ public class AuthorizedTag extends TagSupport {
 
         if (!IvisOAuth2Utils.isTokenGood(request)) { // if token no good than skip
             return SKIP_BODY;
-        } else if (role == null){ // if token good, but you don't need use role based
+        } else if (roles == null){ // if token good, but you don't need use roles based
             return EVAL_BODY_INCLUDE;
-        } else if (IvisOAuth2Utils.getIvisLoggedInUser(request).hasRoles(role)){ // if you need use role based
+        } else if (IvisOAuth2Utils.getIvisLoggedInUser(request).hasRoles(roles.split(","))){ // if you need use roles based
             return EVAL_BODY_INCLUDE;
         }
         return SKIP_BODY;
 
     }
 
-    public String getRole() {
-        return role;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 }
