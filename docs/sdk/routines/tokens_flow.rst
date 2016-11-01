@@ -28,6 +28,14 @@ Let's see how it looks like.
 
 In IvisAuthorizationController.java for last two points let's defined method that will define what need to do with unauthorized users.
 
+:download:`IvisAuthorizationController.java </sdk/routines/code/IvisAuthorizationController.java>`
+
+.. literalinclude:: /sdk/routines/code/IvisAuthorizationController.java
+    :language: java
+    :linenos:
+    :lineno-start: 61
+    :lines: 61-80
+
 .. note::
 
     Don't forget write information about error page in web.xml.
