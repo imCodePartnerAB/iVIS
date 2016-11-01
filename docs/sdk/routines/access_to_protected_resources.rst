@@ -22,8 +22,8 @@ Java config
 .. literalinclude:: /sdk/routines/code/BeansContext.java
     :language: java
     :linenos:
-    :lineno-start: 54
-    :lines: 39-54
+    :lineno-start: 40
+    :lines: 40-55
 
 XML config
 ~~~~~~~~~~
