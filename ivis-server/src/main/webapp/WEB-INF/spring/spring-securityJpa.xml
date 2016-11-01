@@ -161,25 +161,12 @@
         <form-login authentication-failure-url="/login?authentication_error=true"
                     default-target-url="/" login-page="/login"
                     login-processing-url="/login.do" />
-        <logout logout-success-url="/login" logout-url="/logout.do" />
+        <logout invalidate-session="true" success-handler-ref="ivisLogoutSuccessHandler" logout-url="/logout.do" />
         <anonymous />
         <!--<csrf/>-->
     </http>
 
-    <!--Glogal Security-->
-    <!--<http access-denied-page="/error403.jsp">-->
-        <!--<sec:intercept-url pattern="/index*" access="ROLE_USER,ROLE_ADMIN" />-->
-        <!--<sec:intercept-url pattern="/add*" access="ROLE_USER" />-->
-        <!--<sec:intercept-url pattern="/delete/*" access="ROLE_ADMIN" />-->
-        <!--<sec:form-login login-page="/login.jsp" default-target-url="/index"-->
-                        <!--authentication-failure-url="/login.jsp?error=true" />-->
-        <!--<sec:logout logout-url="/logout" logout-success-url="/index" />-->
-
-        <!--<sec:anonymous username="guest" granted-authority="ROLE_ANONYMOUS" />-->
-        <!--&lt;!&ndash;<sec:remember-me />&ndash;&gt;-->
-    <!--</http>-->
-
-    <!--<bean id="" class="com.imcode.entities.oauth2.JpaClientDetails"/>-->
+    <bean id="ivisLogoutSuccessHandler" class="com.imcode.controllers.html.oauth2.IvisLogoutSuccessHandler"/>
 
     <bean id="oauthAuthenticationEntryPoint"
           class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
