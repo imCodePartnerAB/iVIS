@@ -94,8 +94,29 @@ public class IvisOAuth2Utils {
                 String.format("Basic %s", new String(Base64.encode(String.format("%s:%s", client.getClientId(), client.getClientSecret()).getBytes("UTF-8")), "UTF-8")));
         HttpEntity httpEntity = new HttpEntity(form, headers);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<OAuth2AccessToken> result = restTemplate.postForEntity(client.getAccessTokenUri(), httpEntity, OAuth2AccessToken.class);
-        return result.getBody();
+        try {
+            ResponseEntity<OAuth2AccessToken> result = restTemplate.postForEntity(client.getAccessTokenUri(), httpEntity, OAuth2AccessToken.class);
+            return result.getBody();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static OAuth2AccessToken getAccessToken(AuthorizationCodeResourceDetails client, String refreshToken) throws UnsupportedEncodingException {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "refresh_token");
+        form.add("refresh_token", refreshToken);
+        form.add("client_id", client.getId());
+        form.add("client_secret", client.getClientSecret());
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity httpEntity = new HttpEntity(form, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            ResponseEntity<OAuth2AccessToken> result = restTemplate.postForEntity(client.getAccessTokenUri(), httpEntity, OAuth2AccessToken.class);
+            return result.getBody();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static boolean isTokenGood(HttpServletRequest request) {
