@@ -10,7 +10,7 @@ import imcode.services.utils.builders.CollectionBuilder;
 import imcode.services.filter.IvisAuthorizedFilter;
 
 @Configuration
-public class BeansContext {
+public class Configuration {
 
     @Value("${client-id}")
     private String clientId;

@@ -30,7 +30,7 @@ Beans for injection
 Java config
 ~~~~~~~~~~~
 
-:download:`BeansContext.java </sdk/routines/code/BeansContext.java>`
+:download:`BeansContext.java </sdk/routines/code/Configuration.java>`
 
 .. literalinclude:: /sdk/routines/code/BeansContext.java
     :language: java
