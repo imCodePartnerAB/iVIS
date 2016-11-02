@@ -15,18 +15,18 @@ And also refresh token value from access token object put in cookie.
 
 .. important::
 
-    Cookie has expiration time defined. It is defined by value refresh token validity seconds,
+    Cookie has expiration time. It is defined by value refresh token validity seconds,
     contact system administrator to know that.
 
 So tokens flow looks like
 
-    #. Client app login user (access token -> session, refresh token -> cookie with with expiration time).
+    #. Client app login user (access token -> session, refresh token -> cookie with expiration time).
     #. If token is expired (IvisOAuth2Utils.isTokenGood(httpServletRequest) -> exchange refresh token from cookie (cookie key "refreshToken") to access token.
     #. If cookie does not exist -> login user again.
 
 Let's see how it looks like.
 
-In IvisAuthorizationController.java for last two points let's defined method that will define what need to do with unauthorized users.
+In IvisAuthorizationController.java for last two points let's define method that will work with unauthorized users.
 
 :download:`IvisAuthorizationController.java </sdk/routines/code/IvisAuthorizationController.java>`
 
@@ -35,6 +35,8 @@ In IvisAuthorizationController.java for last two points let's defined method tha
     :linenos:
     :lineno-start: 61
     :lines: 61-80
+
+As you can see this method also logout user from iVIS.
 
 .. note::
 

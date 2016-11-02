@@ -87,9 +87,11 @@ In the Terminal (Ctrl+ALt+T) execute following commands:
 
 Go to project folder (/home/../iVIS/ivis-server/target).
 
-Find there file iVIS.war, rename to ivis.war.
+Find there file iVIS.war, rename to ROOT.war.
 
-Copy file to directory where you download Tomcat (/home/../apache-tomcat-{version}/webapps).
+Delete ROOT directory in Tomcat (/home/../apache-tomcat-{version}/webapps/ROOT)
+
+Copy file (ROOT.war) to directory where you download Tomcat (/home/../apache-tomcat-{version}/webapps).
 
 If you have process on port 8080 you must kill it by executing following command in the Terminal:
 

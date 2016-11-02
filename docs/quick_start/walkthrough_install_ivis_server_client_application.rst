@@ -1,5 +1,5 @@
-Walkthrough: Create iVIS Server Client Application
-==================================================
+Walkthrough: Install iVIS Server Client Application
+===================================================
 
 Prerequisites
 -------------
