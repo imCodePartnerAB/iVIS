@@ -17,9 +17,9 @@ Filter
 Java config
 ~~~~~~~~~~~
 
-:download:`BeansContext.java </sdk/routines/code/Configuration.java>`
+:download:`Configuration.java </sdk/routines/code/Configuration.java>`
 
-.. literalinclude:: /sdk/routines/code/BeansContext.java
+.. literalinclude:: /sdk/routines/code/Configuration.java
     :language: java
     :linenos:
     :lineno-start: 40
