@@ -6,9 +6,11 @@ import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
+import com.imcode.utils.SelectCriteriaBuilder;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.persistence.Table;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -125,6 +128,18 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         }
         service.delete(id);
         return entity;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, params = "list")
+    public Object findAllByCriteria(@RequestBody(required = false) T entity,
+                                    @RequestBody SelectCriteriaBuilder builder) throws Exception {
+        Class<T> clazz = (Class<T>) entity.getClass();
+        builder.setClazz(builder.getClassName());
+        if (builder.getQuery().startsWith("SELECT * FROM " + AnnotationUtils.findAnnotation(clazz, Table.class).name())) {
+            return service.findAllByCriteria(builder);
+        }
+
+        return null;
     }
 
     @SuppressWarnings("unchecked")

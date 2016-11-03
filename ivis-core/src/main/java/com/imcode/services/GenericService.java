@@ -1,5 +1,7 @@
 package com.imcode.services;
 
+import com.imcode.utils.SelectCriteriaBuilder;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,6 +21,10 @@ public interface GenericService<T, ID> {
 
     default void delete(Iterable<T> entities) {
 
+    }
+
+    default List findAllByCriteria(SelectCriteriaBuilder builder) {
+        return null;
     }
 
     List<T> findAll();
