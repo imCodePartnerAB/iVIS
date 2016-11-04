@@ -1,5 +1,5 @@
-iVIS SDK
-========
+iVIS SDK (test mode)
+====================
 
 iVIS provides SDK for easier api uses.
 

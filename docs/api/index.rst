@@ -27,31 +27,11 @@ Each request requires additional parameter access_token.
 
 If method has url, it concatenates with base URL.
 
-You can have access and operate with following entities
+You can have access and operate with following groups of entities:
 
 .. toctree::
    :titlesonly:
-   
-   academicyears
-   activities
-   afterschoolcentersections
-   applicationformquestiongroups
-   applicationformquestions
-   applicationforms
-   applicationformsteps
-   applications
-   categories
-   entityversions
-   guardians
-   incidents
-   issues
-   logevents
-   persons
-   priorities
-   pupils
-   roles
-   schoolclasses
-   schools
-   schooltransports
-   statuses
-   users
+
+   basegroup
+   applicationgroup
+   incidentgroup
