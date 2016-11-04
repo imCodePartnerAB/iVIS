@@ -1,4 +1,4 @@
-﻿Authorization
+﻿AUTHORIZATION
 =============
 
     * `Few words about OAuth 2.0`_

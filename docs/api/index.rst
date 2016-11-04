@@ -32,7 +32,7 @@ You can have access and operate with following groups of entities:
 .. toctree::
    :titlesonly:
 
-   allgroup
    basegroup
    applicationgroup
    incidentgroup
+   allgroup
