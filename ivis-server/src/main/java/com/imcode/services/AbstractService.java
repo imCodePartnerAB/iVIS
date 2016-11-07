@@ -1,6 +1,5 @@
 package com.imcode.services;
 
-import com.imcode.utils.SelectCriteriaBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.List;
 
@@ -20,9 +16,6 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
     @Autowired
     @Qualifier("messages")
     protected MessageSource messageSource;
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Autowired
     protected REPOSITORY_TYPE repo;
@@ -76,12 +69,6 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
     @Transactional
     public void delete(Iterable<T> entities) {
         repo.delete(entities);
-    }
-
-    @Override
-    @Transactional
-    public List findAllByCriteria(SelectCriteriaBuilder builder) {
-        return em.createNativeQuery(builder.getQuery(), builder.getClazz()).getResultList();
     }
 
     public REPOSITORY_TYPE getRepo() {

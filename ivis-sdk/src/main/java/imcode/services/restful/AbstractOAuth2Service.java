@@ -6,7 +6,6 @@ import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
-import com.imcode.utils.SelectCriteriaBuilder;
 import imcode.services.IvisServiceFactory;
 import imcode.services.exceptionhandling.IvisResponseErrorHandler;
 import org.apache.commons.lang3.StringUtils;
@@ -404,29 +403,6 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 //
 //        return result;
         return obtainEntityList(getFindAllRequest(), EMPTY_PARAMS);
-    }
-
-    @Override
-    public List<T> findAllByCriteria(SelectCriteriaBuilder builder) {
-
-
-        RestTemplate restTemplate = getRestTemplate();
-        RestServiceRequest request = getFindRequest();
-        String uri = buildUrlString(request, parameterMap("list", "need"));
-        HttpMethod method = request.getMethod();
-        HttpEntity<SelectCriteriaBuilder> httpEntity = null;
-        try {
-            httpEntity = new RequestEntity<>(builder, HttpMethod.GET, new URI(uri));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        ParameterizedTypeReference<List<T>> typeReference = getListTypeReference();
-        ResponseEntity<List<T>> responseEntity = restTemplate.exchange(uri, method, httpEntity, typeReference);
-        if (responseEntity.getBody() != null) {
-            return responseEntity.getBody();
-        }
-
-        return null;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
