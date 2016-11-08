@@ -1,6 +1,6 @@
 package com.imcode.specifications.builders;
 
-import com.imcode.entities.superclasses.AbstractIdEntity;
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.search.SearchCriteria;
 import com.imcode.search.SearchOperation;
 import com.imcode.specifications.AbstractSpecification;
@@ -23,7 +23,7 @@ public class SpecificationBuilder {
     private List<Conjunction> conjunctionList = new LinkedList<>();
 
     private Class<? extends AbstractSpecification> specificationClass;
-    private Class<? extends AbstractIdEntity> entityClass;
+    private Class<? extends JpaEntity> entityClass;
 
     private boolean buildPermit = false;
 
@@ -31,7 +31,7 @@ public class SpecificationBuilder {
     }
 
     @SuppressWarnings("unchecked")
-    public static SpecificationBuilder from(@NotNull Class<? extends AbstractIdEntity> clazz) {
+    public static SpecificationBuilder from(@NotNull Class<? extends JpaEntity> clazz) {
         SpecificationBuilder builder = new SpecificationBuilder();
         builder.entityClass = clazz;
         String simpleName = clazz.getSimpleName();

@@ -3,9 +3,11 @@ package com.imcode.controllers;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.exceptions.factories.ErrorBuilder;
 import com.imcode.exceptions.wrappers.GeneralError;
+import com.imcode.search.SearchOperation;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
+import com.imcode.specifications.builders.SpecificationBuilder;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -125,6 +130,20 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         }
         service.delete(id);
         return entity;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, params = {"list"})
+    public @ResponseBody Object search(@RequestParam("list") Boolean list,
+
+                         @RequestBody(required = false) T entity) throws Exception {
+
+        Class<? extends JpaEntity> clazz = entity.getClass();
+
+        SpecificationBuilder builder = SpecificationBuilder.from(clazz);
+
+
+
+        return  ;
     }
 
     @SuppressWarnings("unchecked")

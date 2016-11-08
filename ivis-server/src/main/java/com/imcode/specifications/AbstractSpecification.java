@@ -21,7 +21,7 @@ public abstract class AbstractSpecification<T extends AbstractIdEntity> implemen
         switch (criteria.getOperation()) {
             case EQUALITY:
                 return builder.equal(root.get(criteria.getFieldName()), criteria.getValue());
-            case NEGATION:
+            case NOT_EQUAL:
                 return builder.notEqual(root.get(criteria.getFieldName()), criteria.getValue());
             case GREATER_THAN:
                 return builder.greaterThan(root.get(
