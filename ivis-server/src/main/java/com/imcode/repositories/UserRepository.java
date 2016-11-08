@@ -4,10 +4,11 @@ package com.imcode.repositories;
 import com.imcode.entities.Person;
 import com.imcode.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UserRepository extends PersonalizedRepository<User> {
+public interface UserRepository extends PersonalizedRepository<User>, JpaSpecificationExecutor<User> {
     @Query("select u from User u where u.name = :username")
     User findByUsername(@Param("username") String username);
 
