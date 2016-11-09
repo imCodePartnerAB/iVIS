@@ -182,6 +182,16 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return abstractService.findOne(result);
     }
 
+    @RequestMapping(value = "/deleteall", method = RequestMethod.POST)
+    public @ResponseBody Object deleteAll(@RequestBody Iterable<T> entities,
+                                        HttpServletResponse response,
+                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
+
+        service.delete(entities);
+
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
 //    @RequestMapping(method = RequestMethod.GET, params = {"name"})
     public Object getByName(WebRequest webRequest, Model model,

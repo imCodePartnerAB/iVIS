@@ -303,7 +303,18 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     @Override
     public void delete(Iterable<T> entities) {
-        throw new UnsupportedOperationException();
+        RestServiceRequest request = getCreateRequest();
+        List<T> result = new LinkedList<>();
+        String uri = request.getAddress() + "/deleteall";
+        HttpMethod method = request.getMethod();
+        RestTemplate restTemplate = getRestTemplate();
+        HttpEntity<Iterable<T>> httpEntity = null;
+        try {
+            httpEntity = new RequestEntity<>(entities, HttpMethod.POST, new URI(uri));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        restTemplate.exchange(uri, method, httpEntity, void.class);
     }
 
     @Override
