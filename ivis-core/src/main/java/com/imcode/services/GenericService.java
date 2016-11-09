@@ -1,5 +1,7 @@
 package com.imcode.services;
 
+import com.imcode.search.SearchCriteries;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,4 +24,13 @@ public interface GenericService<T, ID> {
     }
 
     List<T> findAll();
+
+    default List<T> search(List<SearchCriteries.SearchCriteriaResult> result) {
+        return null;
+    }
+
+    default T searchOne(List<SearchCriteries.SearchCriteriaResult> result) {
+        return null;
+    }
+
 }

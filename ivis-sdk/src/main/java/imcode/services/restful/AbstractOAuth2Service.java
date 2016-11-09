@@ -3,6 +3,7 @@ package imcode.services.restful;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.imcode.entities.superclasses.AbstractIdEntity;
+import com.imcode.search.SearchCriteries;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
@@ -21,14 +22,11 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.http.OAuth2ErrorHandler;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import java.awt.*;
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -179,18 +177,13 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
             request = getCreateRequest();
             String uri = request.getAddress();
             HttpMethod method = request.getMethod();
-//            result = restTemplate.postForObject(uri, entity, getGeneticType("T"));
             result = restTemplate.postForObject(uri, entity, getEntityClass());
         } else {
             request = getUpdateRequest();
             uriVariables = new Object[]{idEntity.getId()};
             String uri = request.getAddress();
             HttpMethod method = request.getMethod();
-//            try {
             restTemplate.put(uri, entity, uriVariables);
-//            } catch (RestClientException e) {
-//                throw new RuntimeException(e);
-//            }
         }
 
         return result;
@@ -204,10 +197,9 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         HttpMethod method = request.getMethod();
         RestTemplate restTemplate = getRestTemplate();
         ParameterizedTypeReference<List<T>> typeReference = getListTypeReference();
-        RequestObject<T> requestObject = new RequestObject<>(entities);
         HttpEntity<Iterable<T>> httpEntity = null;
         try {
-            httpEntity = new RequestEntity<Iterable<T>>(entities, HttpMethod.POST, new URI(uri));
+            httpEntity = new RequestEntity<>(entities, HttpMethod.POST, new URI(uri));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -222,23 +214,6 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     @Override
     public T find(ID id) {
-//        T result = null;
-//        RestTemplate restTemplate = getRestTemplate();
-//        RestServiceRequest request = null;
-//
-//        request = getFindRequest();
-//        Object[] uriVariables = {id};
-//
-//        String uri = request.getAddress();
-//        HttpMethod method = request.getMethod();
-//
-//        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getEntityClass(), uriVariables);
-//
-//        if (responseEntity.getBody() != null) {
-//            result = (T) responseEntity.getBody();
-//        }
-//
-//        return result;
         return obtainEntity(getFindRequest(), Collections.emptyMap(), id);
     }
 
@@ -262,22 +237,6 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     @Override
     public T findFirstByName(String name) {
-//        T result = null;
-//        RestServiceRequest request = getFindAllRequest();
-//        String uri = request.getAddress() + "?name={name}&first=true";
-//        Object[] uriVariables = {name};
-//        HttpMethod method = request.getMethod();
-//        RestTemplate restTemplate = getRestTemplate();
-//
-//        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getEntityClass(), uriVariables);
-//
-//        if (responseEntity.getBody() != null) {
-//            result = (T) responseEntity.getBody();
-//        }
-//
-//        return result;
-//        RestServiceRequestBuilder builder = new RestServiceRequestBuilder(getFindAllRequest());
-//        RestServiceRequest = builder.appendAddress()
         return obtainEntity(getFindAllRequest(), parameterMap("name,first", name, true));
     }
 
@@ -316,61 +275,17 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     @Override
     public List<T> findByName(String name) {
-//        List<T> result = new LinkedList<>();
-//        RestServiceRequest request = getFindAllRequest();
-//        String uri = request.getAddress() + "?name={id}";
-//        Object[] uriVariables = {name};
-//        HttpMethod method = request.getMethod();
-//
-//        RestTemplate restTemplate = getRestTemplate();
-//        ParameterizedTypeReference typeReference = getListTypeReference();
-//        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, typeReference, uriVariables);
-//
-//        if (responseEntity.getBody() != null) {
-//            return (List<T>) responseEntity.getBody();
-//        }
-//
-//        return result;
         return obtainEntityList(getFindAllRequest(), parameterMap("name", name));
     }
 
 
     @Override
     public T findFirstByPersonalId(String personalId) {
-//        T result = null;
-//        RestServiceRequest request = getFindAllRequest();
-//        String uri = request.getAddress() + "?personalId={id}&first=true";
-//        Object[] uriVariables = {personalId};
-//        HttpMethod method = request.getMethod();
-//        RestTemplate restTemplate = getRestTemplate();
-//
-//        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, getEntityClass(), uriVariables);
-//
-//        if (responseEntity.getBody() != null) {
-//            result = (T) responseEntity.getBody();
-//        }
-//
-//        return result;
         return obtainEntity(getFindAllRequest(), parameterMap("personalId,first", personalId, true));
     }
 
     @Override
     public List<T> findByPersonalId(String personalId) {
-//        List<T> result = new LinkedList<>();
-//        RestServiceRequest request = getFindAllRequest();
-//        String uri = request.getAddress() + "?personalId={id}";
-//        Object[] uriVariables = {personalId};
-//        HttpMethod method = request.getMethod();
-//
-//        RestTemplate restTemplate = getRestTemplate();
-//        ParameterizedTypeReference typeReference = getListTypeReference();
-//        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, typeReference, uriVariables);
-//
-//        if (responseEntity.getBody() != null) {
-//            return (List<T>) responseEntity.getBody();
-//        }
-//
-//        return result;
         return obtainEntityList(getFindAllRequest(), parameterMap("personalId", personalId));
     }
 
@@ -387,22 +302,49 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     }
 
     @Override
+    public void delete(Iterable<T> entities) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<T> findAll() {
-//        List<T> result = new LinkedList<>();
-//        RestServiceRequest request = getFindAllRequest();
-//        String uri = request.getAddress();
-//        HttpMethod method = request.getMethod();
-//
-//        RestTemplate restTemplate = getRestTemplate();
-//        ParameterizedTypeReference typeReference = getListTypeReference();
-//        ResponseEntity responseEntity = restTemplate.exchange(uri, method, null, typeReference);
-//
-//        if (responseEntity.getBody() != null) {
-//            return (List<T>) responseEntity.getBody();
-//        }
-//
-//        return result;
         return obtainEntityList(getFindAllRequest(), EMPTY_PARAMS);
+    }
+
+    @Override
+    public List<T> search(List<SearchCriteries.SearchCriteriaResult> searchCriteriaResult) {
+        RestServiceRequest request = getCreateRequest();
+        List<T> result = new LinkedList<>();
+        String uri = request.getAddress() + "/search";
+        HttpMethod method = request.getMethod();
+        RestTemplate restTemplate = getRestTemplate();
+        ParameterizedTypeReference<List<T>> typeReference = getListTypeReference();
+        HttpEntity<List<SearchCriteries.SearchCriteriaResult>> httpEntity = null;
+        try {
+            httpEntity = new RequestEntity<>(searchCriteriaResult, HttpMethod.POST, new URI(uri));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        ResponseEntity<List<T>> responseEntity = restTemplate.exchange(uri, method, httpEntity,  typeReference);
+
+        if (responseEntity.getBody() != null) {
+            return responseEntity.getBody();
+        }
+
+        return result;
+    }
+
+    @Override
+    public T searchOne(List<SearchCriteries.SearchCriteriaResult> searchCriteriaResult) {
+        T result = null;
+        RestTemplate restTemplate = getRestTemplate();
+        RestServiceRequest request = null;
+        Object[] uriVariables = null;
+        request = getCreateRequest();
+        String uri = request.getAddress() + "/search/first";
+        HttpMethod method = request.getMethod();
+        result = restTemplate.postForObject(uri, searchCriteriaResult, getEntityClass());
+        return result;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

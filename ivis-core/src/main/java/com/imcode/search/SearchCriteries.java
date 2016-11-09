@@ -54,7 +54,7 @@ public class SearchCriteries {
         return this;
     }
 
-    public SearchCriteriaResult buildSearchCriteriaResult(SearchCriteria searchCriteria) {
+    private SearchCriteriaResult buildSearchCriteriaResult(SearchCriteria searchCriteria) {
         SearchCriteriaResult result = new SearchCriteriaResult();
         result.fieldName = searchCriteria.getFieldName();
         result.operation = searchCriteria.getOperation();
