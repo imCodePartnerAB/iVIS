@@ -7,8 +7,8 @@ import com.imcode.entities.embed.Phone;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.enums.CommunicationTypeEnum;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.entities.superclasses.ContactInformation;
-import com.imcode.entities.superclasses.AbstractPerson;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -16,14 +16,28 @@ import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by vitaly on 13.05.15.
  */
 @Entity
 @Table(name = "dbo_person")
-@JsonIgnoreProperties(value = "person")//, ignoreUnknown = true)
-public class Person extends AbstractPerson implements Serializable {
+public class Person extends AbstractIdEntity<Long> implements Serializable {
+
+    @Column(name = "personal_id")
+    private String personalId;
+
+    @NotNull(message = "firstName is required")
+    @Size(min = 4, message = "at least firstName must have 4 characters")
+    @Column(name = "first_name")
+    private String firstName;
+
+    @NotNull(message = "lastName is required")
+    @Size(min = 4, message = "at least lastName must have 4 characters")
+    @Column(name = "last_name")
+    private String lastName;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
@@ -50,18 +64,33 @@ public class Person extends AbstractPerson implements Serializable {
     }
 
     public Person(String pid, String firstName, String lastName) {
-        super(pid, firstName, lastName);
+        this.personalId = pid;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    //todo Убрать это
-    @Override
-    public Person getPerson() {
-        return this;
+    public String getPersonalId() {
+        return personalId;
     }
 
-    @Override
-    public void setPerson(Person person) {
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     //Comunication information
@@ -178,6 +207,18 @@ public class Person extends AbstractPerson implements Serializable {
         }
 
         return (EnumMap<K, V>) newValue;
+    }
+
+    protected  static <K extends Enum<K>, V extends ContactInformation<K>> void putAddressValueIntoMap(Class<K> enumClass, V addressValue, Map<K, V> map) {
+        Objects.requireNonNull(addressValue);
+        K addressValueType = addressValue.getType();
+        Objects.requireNonNull(addressValueType);
+
+        if (map == null) {
+            map = new EnumMap<>(enumClass);
+        }
+
+        map.put(addressValueType, addressValue);
     }
 
 }
