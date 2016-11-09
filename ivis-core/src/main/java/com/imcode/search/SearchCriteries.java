@@ -29,7 +29,7 @@ public class SearchCriteries {
         return builder;
     }
 
-    public List<SearchCriteriaResult> where(SearchCriteria searchCriteria) {
+    public List<SearchCriteriaResult> where(@NotNull SearchCriteria searchCriteria) {
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
         if (orderBy != null && order != null) {
             result.orderBy = orderBy;
@@ -39,14 +39,14 @@ public class SearchCriteries {
         return searchCriteriaResults;
     }
 
-    public SearchCriteries whereAnd(SearchCriteria searchCriteria) {
+    public SearchCriteries whereAnd(@NotNull SearchCriteria searchCriteria) {
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
         result.conjunction = Conjunction.AND;
         searchCriteriaResults.add(result);
         return this;
     }
 
-    public SearchCriteries whereOr(SearchCriteria searchCriteria) {
+    public SearchCriteries whereOr(@NotNull SearchCriteria searchCriteria) {
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
         result.conjunction = Conjunction.OR;
         searchCriteriaResults.add(result);
@@ -70,7 +70,7 @@ public class SearchCriteries {
         return result;
     }
 
-    public static SearchCriteria statement(String fieldName, SearchOperation so, Object value) {
+    public static SearchCriteria statement(@NotNull String fieldName, @NotNull SearchOperation so, @NotNull Object value) {
         return new SearchCriteria(fieldName, so, value);
     }
 
