@@ -12,7 +12,6 @@ public class SearchCriteries {
     public enum Order {ASC, DESC}
 
     private List<SearchCriteriaResult> searchCriteriaResults;
-    private int index = 0;
     private String orderBy;
     private Order order;
 
@@ -61,7 +60,6 @@ public class SearchCriteries {
         result.operation = searchCriteria.getOperation();
         result.value = searchCriteria.getValue();
         result.nextAnd = null;
-        result.index = index++;
         return result;
     }
 
@@ -75,7 +73,6 @@ public class SearchCriteries {
         private SearchOperation operation;
         private Object value;
         private Boolean nextAnd;
-        private Integer index;
         private String orderBy;
         private Order order;
 
@@ -111,14 +108,6 @@ public class SearchCriteries {
             this.nextAnd = nextAnd;
         }
 
-        public Integer getIndex() {
-            return index;
-        }
-
-        public void setIndex(Integer index) {
-            this.index = index;
-        }
-
         public String getOrderBy() {
             return orderBy;
         }
@@ -135,7 +124,5 @@ public class SearchCriteries {
             this.order = order;
         }
     }
-
-    public enum Conjunction {AND, OR}
 
 }
