@@ -140,15 +140,16 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         if (criteries == null || criteries.isEmpty()) {
             return criteries;
         }
+
+        SearchCriteries.SearchCriteriaResult first = criteries.get(0);
+
         Sort sort = null;
-        if (criteries.size() > 1) {
-            SearchCriteries.SearchCriteriaResult lastOne = criteries.get(criteries.size() - 1);
-            if (lastOne.getOrderBy() != null && !lastOne.getOrderBy().isEmpty() && lastOne.getOrder() != null )
-            sort = new Sort(new Sort.Order(Sort.Direction.fromString(lastOne.getOrder().toString()), lastOne.getFieldName()));
+        if (first.getOrderBy() != null && !first.getOrderBy().isEmpty() && first.getOrder() != null ) {
+            sort = new Sort(new Sort.Order(Sort.Direction.fromString(first.getOrder().toString()), first.getFieldName()));
         }
 
         JpaEntitySpecification<T> result = createSpec(criteries, 0);
-        Boolean nextAnd = criteries.get(0).getNextAnd();
+        Boolean nextAnd = first.getNextAnd();
         for (int i = 1; i < criteries.size(); i++) {
             if (nextAnd) {
                 Specifications.where(result).and(createSpec(criteries, i));
@@ -167,8 +168,14 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     @RequestMapping(value = "/search/first", method = RequestMethod.POST)
     public @ResponseBody Object searchFirst(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
 
+        if (criteries == null || criteries.isEmpty()) {
+            return criteries;
+        }
+
+        SearchCriteries.SearchCriteriaResult searchCriteriaResult = criteries.get(0);
+
         JpaEntitySpecification<T> result = createSpec(criteries, 0);
-        Boolean nextAnd = criteries.get(0).getNextAnd();
+        Boolean nextAnd = searchCriteriaResult.getNextAnd();
         for (int i = 1; i < criteries.size(); i++) {
             if (nextAnd) {
                 Specifications.where(result).and(createSpec(criteries, i));
@@ -286,8 +293,8 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return ErrorBuilder.buildUncaughtException(exception);
     }
 
-    private JpaEntitySpecification<T> createSpec(List<SearchCriteries.SearchCriteriaResult> criteries, int index) {
-        SearchCriteries.SearchCriteriaResult first = criteries.get(index);
+    private JpaEntitySpecification<T> createSpec(List<SearchCriteries.SearchCriteriaResult> criteriaResults, int index) {
+        SearchCriteries.SearchCriteriaResult first = criteriaResults.get(index);
         SearchCriteria searchCriteria = new SearchCriteria(first.getFieldName(), first.getOperation(), first.getValue());
         return new JpaEntitySpecification<>(searchCriteria);
     }
