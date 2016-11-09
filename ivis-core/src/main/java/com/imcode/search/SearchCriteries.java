@@ -18,9 +18,17 @@ public class SearchCriteries {
     private SearchCriteries() {
     }
 
-    public static <T> SearchCriteries select() {
+    public static SearchCriteries select() {
         SearchCriteries builder = new SearchCriteries();
         builder.searchCriteriaResults = new LinkedList<>();
+        return builder;
+    }
+
+    public static SearchCriteries orderedSelect(@NotNull String orderBy, @NotNull Order order) {
+        SearchCriteries builder = new SearchCriteries();
+        builder.searchCriteriaResults = new LinkedList<>();
+        builder.orderBy = orderBy;
+        builder.order = order;
         return builder;
     }
 
@@ -48,18 +56,13 @@ public class SearchCriteries {
         return this;
     }
 
-    public SearchCriteries orderBy(@NotNull String orderBy, @NotNull Order order) {
-        this.orderBy = orderBy;
-        this.order = order;
-        return this;
-    }
-
     private SearchCriteriaResult buildSearchCriteriaResult(SearchCriteria searchCriteria) {
         SearchCriteriaResult result = new SearchCriteriaResult();
         result.fieldName = searchCriteria.getFieldName();
         result.operation = searchCriteria.getOperation();
         result.value = searchCriteria.getValue();
-        result.nextAnd = null;
+        result.order = order;
+        result.orderBy = orderBy;
         return result;
     }
 
