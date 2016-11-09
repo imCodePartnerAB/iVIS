@@ -1,6 +1,7 @@
 package com.imcode.services;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * Created by vitaly on 10.08.15.
  */
-public class AbstractNamedService<T, ID extends Serializable, REPOSITORY_TYPE extends JpaRepository<T, ID>> extends AbstractService<T, ID, REPOSITORY_TYPE> implements NamedService<T> {
+public class AbstractNamedService<T, ID extends Serializable, REPOSITORY_TYPE extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>> extends AbstractService<T, ID, REPOSITORY_TYPE> implements NamedService<T> {
     @Override
     @SuppressWarnings("unchecked")
     public T findFirstByName(String name) {
