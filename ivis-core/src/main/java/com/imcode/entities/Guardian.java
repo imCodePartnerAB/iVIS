@@ -1,17 +1,7 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.imcode.entities.embed.Address;
-import com.imcode.entities.embed.Email;
-import com.imcode.entities.embed.Phone;
-import com.imcode.entities.enums.AddressTypeEnum;
-import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractIdEntity;
-import com.imcode.entities.superclasses.AbstractPerson;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;

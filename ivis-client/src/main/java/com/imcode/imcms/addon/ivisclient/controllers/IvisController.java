@@ -4,6 +4,8 @@ import com.imcode.entities.*;
 import com.imcode.entities.embed.Decision;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.imcms.addon.ivisclient.controllers.form.ApplicationFormCmd;
+import com.imcode.search.SearchCriteries;
+import com.imcode.search.SearchOperation;
 import com.imcode.services.*;
 import imcode.server.Imcms;
 import imcode.services.IvisServiceFactory;
@@ -37,6 +39,8 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static com.imcode.search.SearchCriteries.statement;
 
 /**
  * Created by vitaly on 26.05.15.
@@ -359,7 +363,6 @@ public class IvisController {
     }
 
     @RequestMapping(value = "/applications", method = RequestMethod.POST)
-//    @ResponseBody
     public void updateApplication(@ModelAttribute("app") Application application,
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws IOException {
@@ -394,6 +397,19 @@ public class IvisController {
         response.sendRedirect(returnToUri);
 
 //        return "OK";
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public void test(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        PersonService personService = getIvisServiceFactory(request).getService(PersonService.class);
+
+        List<Person> personList = personService.search(
+                SearchCriteries.orderedSelect("firstName", SearchCriteries.Order.ASC)
+                .whereAnd(statement("firstName", SearchOperation.CONTAINS, "las"))
+                .where(statement("lastName", SearchOperation.ENDS_WITH, "son"))
+        );
+        response.sendRedirect(request.getContextPath());
     }
 
     @RequestMapping(value = "/errorhandler")

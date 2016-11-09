@@ -7,6 +7,7 @@ import com.imcode.entities.embed.Phone;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.enums.AddressTypeEnum;
 import com.imcode.entities.enums.CommunicationTypeEnum;
+import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.entities.superclasses.ContactInformation;
 import org.hibernate.annotations.LazyCollection;
@@ -24,7 +25,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "dbo_person")
-public class Person extends AbstractIdEntity<Long> implements Serializable {
+public class Person extends AbstractIdEntity<Long> implements Serializable, JpaPersonalizedEntity {
 
     @Column(name = "personal_id")
     private String personalId;
@@ -167,6 +168,18 @@ public class Person extends AbstractIdEntity<Long> implements Serializable {
         }
 
         return phones.get(type);
+    }
+
+    @Override
+    @JsonIgnore
+    public Person getPerson() {
+        return this;
+    }
+
+    @Override
+    @JsonIgnore
+    public void setPerson(Person person) {
+        throw new UnsupportedOperationException();
     }
 
     public static Person fromString(String firstNameLastName) {
