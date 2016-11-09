@@ -3,15 +3,19 @@ package com.imcode.controllers;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.exceptions.factories.ErrorBuilder;
 import com.imcode.exceptions.wrappers.GeneralError;
-import com.imcode.search.SearchOperation;
+import com.imcode.search.SearchCriteria;
+import com.imcode.search.SearchCriteries;
+import com.imcode.services.AbstractService;
 import com.imcode.services.GenericService;
 import com.imcode.services.NamedService;
 import com.imcode.services.PersonalizedService;
-import com.imcode.specifications.builders.SpecificationBuilder;
+import com.imcode.specifications.JpaEntitySpecification;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.ui.Model;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -29,9 +34,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -132,18 +134,52 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return entity;
     }
 
-    @RequestMapping(method = RequestMethod.POST, params = {"list"})
-    public @ResponseBody Object search(@RequestParam("list") Boolean list,
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public @ResponseBody Object search(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
 
-                         @RequestBody(required = false) T entity) throws Exception {
+        if (criteries == null || criteries.isEmpty()) {
+            return criteries;
+        }
+        Sort sort = null;
+        if (criteries.size() > 1) {
+            SearchCriteries.SearchCriteriaResult lastOne = criteries.get(criteries.size() - 1);
+            if (lastOne.getOrderBy() != null && !lastOne.getOrderBy().isEmpty() && lastOne.getOrder() != null )
+            sort = new Sort(new Sort.Order(Sort.Direction.fromString(lastOne.getOrder().toString()), lastOne.getFieldName()));
+        }
 
-        Class<? extends JpaEntity> clazz = entity.getClass();
+        JpaEntitySpecification<T> result = createSpec(criteries, 0);
+        Boolean nextAnd = criteries.get(0).getNextAnd();
+        for (int i = 1; i < criteries.size(); i++) {
+            if (nextAnd) {
+                Specifications.where(result).and(createSpec(criteries, i));
+            } else {
+                Specifications.where(result).or(createSpec(criteries, i));
+            }
+            nextAnd = criteries.get(i).getNextAnd();
+        }
 
-        SpecificationBuilder builder = SpecificationBuilder.from(clazz);
+        AbstractService abstractService = (AbstractService) service;
+
+        return  sort == null ? abstractService.findAll(result) : abstractService.findAll(result, sort);
+    }
 
 
+    @RequestMapping(value = "/search/first", method = RequestMethod.POST)
+    public @ResponseBody Object searchFirst(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
 
-        return  ;
+        JpaEntitySpecification<T> result = createSpec(criteries, 0);
+        Boolean nextAnd = criteries.get(0).getNextAnd();
+        for (int i = 1; i < criteries.size(); i++) {
+            if (nextAnd) {
+                Specifications.where(result).and(createSpec(criteries, i));
+            } else {
+                Specifications.where(result).or(createSpec(criteries, i));
+            }
+        }
+
+        AbstractService abstractService = (AbstractService) service;
+
+        return abstractService.findOne(result);
     }
 
     @SuppressWarnings("unchecked")
@@ -240,5 +276,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return ErrorBuilder.buildUncaughtException(exception);
     }
 
-
+    private JpaEntitySpecification<T> createSpec(List<SearchCriteries.SearchCriteriaResult> criteries, int index) {
+        SearchCriteries.SearchCriteriaResult first = criteries.get(index);
+        SearchCriteria searchCriteria = new SearchCriteria(first.getFieldName(), first.getOperation(), first.getValue());
+        return new JpaEntitySpecification<>(searchCriteria);
+    }
 }

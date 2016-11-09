@@ -1,7 +1,5 @@
 package com.imcode.search;
 
-import com.imcode.entities.interfaces.JpaEntity;
-
 import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +11,6 @@ public class SearchCriteries {
 
     public enum Order {ASC, DESC}
 
-    private String className;
     private List<SearchCriteriaResult> searchCriteriaResults;
     private int index = 0;
     private String orderBy;
@@ -22,9 +19,8 @@ public class SearchCriteries {
     private SearchCriteries() {
     }
 
-    public static SearchCriteries from(Class<? extends JpaEntity> clazz) {
+    public static <T> SearchCriteries select() {
         SearchCriteries builder = new SearchCriteries();
-        builder.className = clazz.getName();
         builder.searchCriteriaResults = new LinkedList<>();
         return builder;
     }
@@ -41,14 +37,14 @@ public class SearchCriteries {
 
     public SearchCriteries whereAnd(@NotNull SearchCriteria searchCriteria) {
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
-        result.conjunction = Conjunction.AND;
+        result.nextAnd = true;
         searchCriteriaResults.add(result);
         return this;
     }
 
     public SearchCriteries whereOr(@NotNull SearchCriteria searchCriteria) {
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
-        result.conjunction = Conjunction.OR;
+        result.nextAnd = false;
         searchCriteriaResults.add(result);
         return this;
     }
@@ -61,11 +57,10 @@ public class SearchCriteries {
 
     public SearchCriteriaResult buildSearchCriteriaResult(SearchCriteria searchCriteria) {
         SearchCriteriaResult result = new SearchCriteriaResult();
-        result.className = className;
         result.fieldName = searchCriteria.getFieldName();
         result.operation = searchCriteria.getOperation();
         result.value = searchCriteria.getValue();
-        result.conjunction = null;
+        result.nextAnd = null;
         result.index = index++;
         return result;
     }
@@ -76,22 +71,13 @@ public class SearchCriteries {
 
     public static class SearchCriteriaResult {
 
-        private String className;
         private String fieldName;
         private SearchOperation operation;
         private Object value;
-        private Conjunction conjunction;
+        private Boolean nextAnd;
         private Integer index;
         private String orderBy;
         private Order order;
-
-        public String getClassName() {
-            return className;
-        }
-
-        public void setClassName(String className) {
-            this.className = className;
-        }
 
         public String getFieldName() {
             return fieldName;
@@ -117,12 +103,12 @@ public class SearchCriteries {
             this.value = value;
         }
 
-        public Conjunction getConjunction() {
-            return conjunction;
+        public Boolean getNextAnd() {
+            return nextAnd;
         }
 
-        public void setConjunction(Conjunction conjunction) {
-            this.conjunction = conjunction;
+        public void setNextAnd(Boolean nextAnd) {
+            this.nextAnd = nextAnd;
         }
 
         public Integer getIndex() {
@@ -150,6 +136,6 @@ public class SearchCriteries {
         }
     }
 
-    private enum Conjunction {AND, OR}
+    public enum Conjunction {AND, OR}
 
 }

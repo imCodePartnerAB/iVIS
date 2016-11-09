@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,18 +75,18 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
     }
 
     @Transactional
-    public List<T> findAll(Specifications<T> specifications) {
-        return repo.findAll(specifications);
+    public List<T> findAll(Specification<T> specification) {
+        return repo.findAll(specification);
     }
 
     @Transactional
-    public List<T> findAll(Specifications<T> specifications, Sort sort) {
-        return repo.findAll(specifications, sort);
+    public List<T> findAll(Specification<T> specification, Sort sort) {
+        return repo.findAll(specification, sort);
     }
 
     @Transactional
-    public T findOne(Specifications<T> specifications) {
-        return repo.findOne(specifications);
+    public T findOne(Specification<T> specification) {
+        return repo.findOne(specification);
     }
 
     public REPOSITORY_TYPE getRepo() {

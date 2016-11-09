@@ -1,6 +1,6 @@
 package com.imcode.specifications;
 
-import com.imcode.entities.superclasses.AbstractIdEntity;
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.search.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,16 +12,20 @@ import javax.persistence.criteria.Root;
 /**
  * Created by ruslan on 08.11.16.
  */
-public abstract class AbstractSpecification<T extends AbstractIdEntity> implements Specification<T> {
+public class JpaEntitySpecification<T extends JpaEntity> implements Specification<T> {
 
     private SearchCriteria criteria;
+
+    public JpaEntitySpecification(SearchCriteria criteria) {
+        this.criteria = criteria;
+    }
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         switch (criteria.getOperation()) {
             case EQUALITY:
                 return builder.equal(root.get(criteria.getFieldName()), criteria.getValue());
-            case NOT_EQUAL:
+            case NEGATION:
                 return builder.notEqual(root.get(criteria.getFieldName()), criteria.getValue());
             case GREATER_THAN:
                 return builder.greaterThan(root.get(
