@@ -15,6 +15,7 @@ import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -148,13 +149,13 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
             sort = new Sort(new Sort.Order(Sort.Direction.fromString(first.getOrder().toString()), first.getOrderBy()));
         }
 
-        JpaEntitySpecification<T> result = createSpec(criteries, 0);
+        Specification<T> result = createSpec(criteries, 0);
         Boolean nextAnd = first.getNextAnd();
         for (int i = 1; i < criteries.size(); i++) {
             if (nextAnd) {
-                Specifications.where(result).and(createSpec(criteries, i));
+                result = Specifications.where(result).and(createSpec(criteries, i));
             } else {
-                Specifications.where(result).or(createSpec(criteries, i));
+                result = Specifications.where(result).or(createSpec(criteries, i));
             }
             nextAnd = criteries.get(i).getNextAnd();
         }
@@ -174,13 +175,13 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
         SearchCriteries.SearchCriteriaResult searchCriteriaResult = criteries.get(0);
 
-        JpaEntitySpecification<T> result = createSpec(criteries, 0);
+        Specification<T> result = createSpec(criteries, 0);
         Boolean nextAnd = searchCriteriaResult.getNextAnd();
         for (int i = 1; i < criteries.size(); i++) {
             if (nextAnd) {
-                Specifications.where(result).and(createSpec(criteries, i));
+                result = Specifications.where(result).and(createSpec(criteries, i));
             } else {
-                Specifications.where(result).or(createSpec(criteries, i));
+                result = Specifications.where(result).or(createSpec(criteries, i));
             }
         }
 
