@@ -48,4 +48,13 @@ public class GeneralException extends RuntimeException {
     public static final int UNCAUGHT_EC = 4001;
 
     public static final int SECURITY_EC = 5001;
+
+    @Override
+    public String toString() {
+        return "GeneralException{" +
+                "errorCode=" + errorCode +
+                ", errorMessage='" + errorMessage + '\'' +
+                ", errorDescription=" + errorDescription +
+                '}';
+    }
 }

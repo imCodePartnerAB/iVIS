@@ -145,7 +145,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
         Sort sort = null;
         if (first.getOrderBy() != null && !first.getOrderBy().isEmpty() && first.getOrder() != null ) {
-            sort = new Sort(new Sort.Order(Sort.Direction.fromString(first.getOrder().toString()), first.getFieldName()));
+            sort = new Sort(new Sort.Order(Sort.Direction.fromString(first.getOrder().toString()), first.getOrderBy()));
         }
 
         JpaEntitySpecification<T> result = createSpec(criteries, 0);

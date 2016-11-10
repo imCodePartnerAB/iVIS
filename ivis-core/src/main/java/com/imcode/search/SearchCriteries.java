@@ -32,7 +32,8 @@ public class SearchCriteries {
         return builder;
     }
 
-    public List<SearchCriteriaResult> where(@NotNull SearchCriteria searchCriteria) {
+    public List<SearchCriteriaResult> where(@NotNull String fieldName, @NotNull SearchOperation so, @NotNull Object value) {
+        SearchCriteria searchCriteria = new SearchCriteria(fieldName, so, value);
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
         if (orderBy != null && order != null) {
             result.orderBy = orderBy;
@@ -42,14 +43,16 @@ public class SearchCriteries {
         return searchCriteriaResults;
     }
 
-    public SearchCriteries whereAnd(@NotNull SearchCriteria searchCriteria) {
+    public SearchCriteries whereAnd(@NotNull String fieldName, @NotNull SearchOperation so, @NotNull Object value) {
+        SearchCriteria searchCriteria = new SearchCriteria(fieldName, so, value);
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
         result.nextAnd = true;
         searchCriteriaResults.add(result);
         return this;
     }
 
-    public SearchCriteries whereOr(@NotNull SearchCriteria searchCriteria) {
+    public SearchCriteries whereOr(@NotNull String fieldName, @NotNull SearchOperation so, @NotNull Object value) {
+        SearchCriteria searchCriteria = new SearchCriteria(fieldName, so, value);
         SearchCriteriaResult result = buildSearchCriteriaResult(searchCriteria);
         result.nextAnd = false;
         searchCriteriaResults.add(result);
@@ -64,10 +67,6 @@ public class SearchCriteries {
         result.order = order;
         result.orderBy = orderBy;
         return result;
-    }
-
-    public static SearchCriteria statement(@NotNull String fieldName, @NotNull SearchOperation so, @NotNull Object value) {
-        return new SearchCriteria(fieldName, so, value);
     }
 
     public static class SearchCriteriaResult {

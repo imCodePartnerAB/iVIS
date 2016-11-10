@@ -40,8 +40,6 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static com.imcode.search.SearchCriteries.statement;
-
 /**
  * Created by vitaly on 26.05.15.
  */
@@ -399,18 +397,19 @@ public class IvisController {
 //        return "OK";
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public void test(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        PersonService personService = getIvisServiceFactory(request).getService(PersonService.class);
-
-        List<Person> personList = personService.search(
-                SearchCriteries.orderedSelect("firstName", SearchCriteries.Order.ASC)
-                .whereAnd(statement("firstName", SearchOperation.CONTAINS, "las"))
-                .where(statement("lastName", SearchOperation.ENDS_WITH, "son"))
-        );
-        response.sendRedirect(request.getContextPath());
-    }
+//    @RequestMapping(value = "/test", method = RequestMethod.GET)
+//    public void test(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//
+//        IncidentService incidentService = getIvisServiceFactory(request).getService(IncidentService.class);
+//
+//        List<Incident> personList = incidentService.search(
+//                SearchCriteries.orderedSelect("title", SearchCriteries.Order.ASC)
+//                .whereOr("description", SearchOperation.STARTS_WITH, "Vivamus")
+//                .whereOr("title", SearchOperation.CONTAINS, "ning")
+//                .where("title", SearchOperation.ENDS_WITH, "jer")
+//        );
+//        response.sendRedirect(request.getContextPath());
+//    }
 
     @RequestMapping(value = "/errorhandler")
     public void handleError(HttpServletRequest request, HttpServletResponse response) {
