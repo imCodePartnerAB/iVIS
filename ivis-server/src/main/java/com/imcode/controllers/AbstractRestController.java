@@ -1,5 +1,6 @@
 package com.imcode.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.exceptions.factories.ErrorBuilder;
 import com.imcode.exceptions.wrappers.GeneralError;
@@ -30,6 +31,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -294,9 +296,11 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return ErrorBuilder.buildUncaughtException(exception);
     }
 
-    private JpaEntitySpecification<T> createSpec(List<SearchCriteries.SearchCriteriaResult> criteriaResults, int index) {
-        SearchCriteries.SearchCriteriaResult first = criteriaResults.get(index);
-        SearchCriteria searchCriteria = new SearchCriteria(first.getFieldName(), first.getOperation(), first.getValue());
+    private JpaEntitySpecification<T> createSpec(List<SearchCriteries.SearchCriteriaResult> criteriaResults, int index) throws IOException {
+        SearchCriteries.SearchCriteriaResult criteriaResult = criteriaResults.get(index);
+        String valueJson = criteriaResult.getValue();
+        Object object = criteriaResult.getValueType().cast(new ObjectMapper().readValue(valueJson, criteriaResult.getValueType()));
+        SearchCriteria searchCriteria = new SearchCriteria(criteriaResult.getFieldName(), criteriaResult.getOperation(), object);
         return new JpaEntitySpecification<>(searchCriteria);
     }
 }

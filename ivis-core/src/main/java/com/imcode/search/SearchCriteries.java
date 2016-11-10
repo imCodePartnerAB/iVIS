@@ -1,5 +1,8 @@
 package com.imcode.search;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,7 +66,14 @@ public class SearchCriteries {
         SearchCriteriaResult result = new SearchCriteriaResult();
         result.fieldName = searchCriteria.getFieldName();
         result.operation = searchCriteria.getOperation();
-        result.value = searchCriteria.getValue();
+        String valueAsJson = null;
+        try {
+            valueAsJson = new ObjectMapper().writeValueAsString(searchCriteria.getValue());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        result.value = valueAsJson;
+        result.valueType = searchCriteria.getValue().getClass();
         result.order = order;
         result.orderBy = orderBy;
         return result;
@@ -73,7 +83,8 @@ public class SearchCriteries {
 
         private String fieldName;
         private SearchOperation operation;
-        private Object value;
+        private String value;
+        private Class<?> valueType;
         private Boolean nextAnd;
         private String orderBy;
         private Order order;
@@ -94,12 +105,20 @@ public class SearchCriteries {
             this.operation = operation;
         }
 
-        public Object getValue() {
+        public String getValue() {
             return value;
         }
 
-        public void setValue(Object value) {
+        public void setValue(String value) {
             this.value = value;
+        }
+
+        public Class<?> getValueType() {
+            return valueType;
+        }
+
+        public void setValueType(Class<?> valueType) {
+            this.valueType = valueType;
         }
 
         public Boolean getNextAnd() {
