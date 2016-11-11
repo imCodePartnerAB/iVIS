@@ -3,6 +3,7 @@ package com.imcode.controllers.html;
 import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
+import com.imcode.entities.enums.Scope;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ClientRoleService;
@@ -135,7 +136,7 @@ public class ClientDetailsController {
     private void addListsInModel(ModelAndView model) {
         model.addObject(userService.findAll());
         model.addObject(clientRoleService.findAll());
-        model.addObject("scopeList", "read,write,execute".split(","));
+        model.addObject("scopeList", Scope.getValues());
         model.addObject("grantTypes", Arrays.asList(AuthorizedGrantType.getRepresentations()));
     }
 

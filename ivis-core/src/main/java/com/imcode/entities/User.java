@@ -1,10 +1,11 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.imcode.entities.enums.Scope;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -49,6 +50,12 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @Column(columnDefinition = "text")
+    private String scope;
+
+    @Column(columnDefinition = "text")
+    private String allowedEntities;
 
     @Column(name = "saml2_id")
     private String saml2Id;
@@ -102,6 +109,22 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public String getAllowedEntities() {
+        return allowedEntities;
+    }
+
+    public void setAllowedEntities(String allowedEntities) {
+        this.allowedEntities = allowedEntities;
     }
 
     @Override
@@ -192,6 +215,50 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @JsonIgnore
     public Set<String> getRoleNames() {
         return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
+    }
+
+    @JsonIgnore
+    public String[] getScopeArray() {
+        return scope.split(",");
+    }
+
+    @JsonIgnore
+    public Scope[] getScopeEnum() {
+        String[] split = scope.split(",");
+        return Arrays.stream(split)
+                .map(s -> Scope.valueOf(s.toUpperCase()))
+                .toArray(Scope[]::new);
+    }
+
+    @JsonIgnore
+    public void addScope(Scope scope) {
+        this.scope += "," + scope.toString().toLowerCase();
+    }
+
+    @JsonIgnore
+    public void deleteScope(Scope scope) {
+        String[] scopeArray = getScopeArray();
+        this.scope = Arrays.stream(scopeArray)
+                .filter(s -> !s.equals(scope.toString().toLowerCase()))
+                .collect(Collectors.joining(","));
+    }
+
+    @JsonIgnore
+    public void setScopeEnum(Scope [] scope) {
+        this.scope = Arrays.stream(scope)
+                .map(s -> s.toString().toLowerCase())
+                .collect(Collectors.joining(","));
+    }
+
+    @JsonIgnore
+    public List<String> getAllowedEntitiesList() {
+        String[] split = allowedEntities.split(",");
+        return Arrays.asList(split);
+    }
+
+    @JsonIgnore
+    public void setAllowedEntities(List<String> allowedEntities) {
+        this.allowedEntities = allowedEntities.stream().collect(Collectors.joining(","));
     }
 
     public static void main(String[] args) {
