@@ -1,6 +1,5 @@
 package com.imcode.services.jpa;
 
-import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;

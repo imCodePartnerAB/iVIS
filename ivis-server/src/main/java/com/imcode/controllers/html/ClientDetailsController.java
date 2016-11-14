@@ -1,14 +1,11 @@
 package com.imcode.controllers.html;
 
-import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
 import com.imcode.entities.enums.Scope;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ClientRoleService;
-import com.imcode.services.EntityRestProviderInformationService;
-import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.StaticUtls;
@@ -46,12 +43,6 @@ public class ClientDetailsController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private EntityRestProviderInformationService entityRestProviderInformationService;
-
-    @Autowired
-    private MethodRestProviderForEntityService methodRestProviderForEntityService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAll(Model model) {
@@ -113,23 +104,6 @@ public class ClientDetailsController {
         model.addObject("client", client);
         model.setViewName("clients/edit");
 
-        return model;
-    }
-
-    @RequestMapping(value = "/{id}", params = "perm", method = RequestMethod.GET)
-    public ModelAndView permissionForm(@PathVariable("id") String id, ModelAndView model) throws MethodArgumentNotValidException {
-
-        JpaClientDetails clientDetails = clientDetailsService.findOne(id);
-
-        StaticUtls.rejectNullValue(clientDetails, "Try invoke permission form for non exist client");
-
-        model.addObject("identifier", id);
-        model.setViewName("clients/permissions");
-        model.addObject(methodRestProviderForEntityService.findAll());
-        model.addObject(entityRestProviderInformationService.findAll());
-        model.addObject("specify", "client");
-        model.addObject("allowedMethods",
-                new CollectionTransferUtil<>(methodRestProviderForEntityService.findAllowedMethodsByClientId(id)));
         return model;
     }
 

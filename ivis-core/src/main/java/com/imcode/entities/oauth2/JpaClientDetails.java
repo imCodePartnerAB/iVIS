@@ -1,6 +1,5 @@
 package com.imcode.entities.oauth2;
 
-import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.AuthorizedGrantType;
 import com.imcode.oauth2.IvisClientDetails;

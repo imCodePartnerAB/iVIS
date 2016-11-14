@@ -1,6 +1,5 @@
 package com.imcode.oauth2;
 
-import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
@@ -19,8 +18,5 @@ public interface IvisClientDetailsService extends ClientDetailsService, ClientRe
     List<JpaClientDetails> findAll();
 
     JpaClientDetails findOne(String clientId);
-
-//    JpaClientDetails save(JpaClientDetails clientDetails);
-
 
 }

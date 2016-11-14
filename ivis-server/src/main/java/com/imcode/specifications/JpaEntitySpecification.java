@@ -23,9 +23,9 @@ public class JpaEntitySpecification<T extends JpaEntity> implements Specificatio
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         switch (criteria.getOperation()) {
-            case EQUALITY:
+            case EQUALS:
                 return builder.equal(root.get(criteria.getFieldName()), criteria.getValue());
-            case NEGATION:
+            case NOT_EQUALS:
                 return builder.notEqual(root.get(criteria.getFieldName()), criteria.getValue());
             case GREATER_THAN:
                 return builder.greaterThan(root.get(
@@ -46,14 +46,6 @@ public class JpaEntitySpecification<T extends JpaEntity> implements Specificatio
             default:
                 return null;
         }
-    }
-
-    public SearchCriteria getCriteria() {
-        return criteria;
-    }
-
-    public void setCriteria(SearchCriteria criteria) {
-        this.criteria = criteria;
     }
 
 }

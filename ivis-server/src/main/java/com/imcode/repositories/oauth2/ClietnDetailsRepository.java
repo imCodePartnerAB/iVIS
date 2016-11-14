@@ -1,6 +1,5 @@
 package com.imcode.repositories.oauth2;
 
-import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.User;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,14 +1,10 @@
 package com.imcode.controllers.html;
 
-import com.imcode.entities.MethodRestProviderForEntity;
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.CommunicationTypeEnum;
-import com.imcode.services.EntityRestProviderInformationService;
-import com.imcode.services.MethodRestProviderForEntityService;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
-import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GeneralValidator;
@@ -50,11 +46,6 @@ public class UserController {
     @Value("${mail.smtp.from.username}")
     private String fromUsername;
 
-    @Autowired
-    private EntityRestProviderInformationService entityRestProviderInformationService;
-
-    @Autowired
-    private MethodRestProviderForEntityService methodRestProviderForEntityService;
     //    Shows the list of users
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView list(ModelAndView model) {
@@ -100,23 +91,6 @@ public class UserController {
             user.setAuthorities(roleUser);
         }
 
-        return model;
-    }
-
-    //    Show the PERMISSION form
-    @RequestMapping(value = "/{id}", params = "perm", method = RequestMethod.GET)
-    public ModelAndView permissionForm(@PathVariable("id") User user,
-                                   ModelAndView model) throws MethodArgumentNotValidException {
-
-        StaticUtls.rejectNullValue(user, "Try invoke permission form for non exist user");
-
-        model.addObject("identifier", user.getId());
-        model.setViewName("users/permissions");
-        model.addObject(methodRestProviderForEntityService.findAll());
-        model.addObject(entityRestProviderInformationService.findAll());
-        model.addObject("specify", "user");
-        model.addObject("allowedMethods",
-                new CollectionTransferUtil<>(methodRestProviderForEntityService.findAllowedMethodsByUserId(user.getId())));
         return model;
     }
 
