@@ -134,14 +134,14 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
 
     @Size(min = 1, message = "allowedEntities is required")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "dbo_clients_allowed_entities", joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "entity_name")
     @Enumerated(EnumType.STRING)
     private Set<ApiEntities> allowedEntities = Collections.emptySet();
 
     @Size(min = 1, message = "allowedHttpMethods is required")
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "dbo_clients_allowed_http_methods", joinColumns = @JoinColumn(name = "client_id"))
     @Column(name = "http_method")
     @Enumerated(EnumType.STRING)

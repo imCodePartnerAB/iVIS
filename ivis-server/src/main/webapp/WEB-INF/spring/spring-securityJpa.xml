@@ -194,8 +194,11 @@
         <property name="tokenStore" ref="tokenStore" />
     </bean>
 
+    <bean id="ivisOAuth2RequestValidator" class="com.imcode.security.validators.IvisOAuth2RequestValidator"></bean>
+
     <oauth:authorization-server
             client-details-service-ref="clientDetailsServiceRepoImpl" token-services-ref="tokenServices"
+            request-validator-ref="ivisOAuth2RequestValidator"
             user-approval-handler-ref="userApprovalHandler">
         <oauth:authorization-code />
         <oauth:implicit />
