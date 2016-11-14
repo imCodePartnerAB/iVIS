@@ -221,35 +221,5 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/{id}", params = "permit", method = RequestMethod.POST)
-    public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
-                                      @PathVariable("id") Long userId,
-                                      ModelAndView model) throws MethodArgumentNotValidException {
-
-        User user = userService.find(userId);
-
-        StaticUtls.rejectNullValue(user, "Try set permissions for non exist user");
-
-        Collection<String> idOfMethods = allowedMethods.getCollection();
-        List<MethodRestProviderForEntity> allowedMethodsByUserId = methodRestProviderForEntityService.findAllowedMethodsByUserId(userId);
-
-        allowedMethodsByUserId.stream()
-                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.deleteUser(userId))
-                .forEach(methodRestProviderForEntityService::save);
-
-        if (idOfMethods != null) {
-            idOfMethods.stream()
-                    .map(Long::parseLong)
-                    .map(methodRestProviderForEntityService::find)
-                    .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addUser(user))
-                    .forEach(methodRestProviderForEntityService::save);
-        }
-
-        model.setViewName("redirect:/users");
-        return model;
-    }
-
-
-
 }
 

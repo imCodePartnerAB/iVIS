@@ -79,9 +79,14 @@
         so we can deal with authorization and error handling separately. This isn't
         mandatory, but it makes it easier to control the behaviour. -->
     <http pattern="/api/v1/**" create-session="never"
+          access-decision-manager-ref="accessDecisionManager"
           entry-point-ref="oauthAuthenticationEntryPoint"
           xmlns="http://www.springframework.org/schema/security">
         <anonymous enabled="false" />
+        <intercept-url pattern="/api/v1/**" method="GET" access="SCOPE_GET" />
+        <intercept-url pattern="/api/v1/**" method="POST" access="SCOPE_POST" />
+        <intercept-url pattern="/api/v1/**" method="PUT" access="SCOPE_PUT" />
+        <intercept-url pattern="/api/v1/**" method="DELETE" access="SCOPE_DELETE" />
         <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
         <access-denied-handler ref="oauthAccessDeniedHandler" />
     </http>
@@ -119,6 +124,15 @@
     <bean id="oauthAuthenticationEntryPoint"
           class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
         <property name="realmName" value="sparklr2" />
+    </bean>
+
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased"
+          xmlns="http://www.springframework.org/schema/beans">
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter" />
+            </list>
+        </constructor-arg>
     </bean>
 
     <bean id="clientAuthenticationEntryPoint"

@@ -33,7 +33,6 @@
                 <td>${embeded.enabled}</td>
                 <td class="buttons">
                     <a class="button positive" href="users/${embeded.id}?form">Edit</a>
-                    <a class="button orange-btn" href="users/${embeded.id}?perm">Perm</a>
                     <button class="negative" type="button" onclick="deleteElement('${listUrl}',${embeded.id})">Remove</button>
                 </td>
             </tr>

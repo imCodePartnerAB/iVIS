@@ -167,35 +167,4 @@ public class ClientDetailsController {
         return model;
     }
 
-    @RequestMapping(value = "/{id}", params = "permit", method = RequestMethod.POST)
-    public ModelAndView permitMethods(@ModelAttribute("allowedMethods") CollectionTransferUtil<String> allowedMethods,
-                                      @PathVariable("id") String clientId,
-                                      ModelAndView model) throws MethodArgumentNotValidException {
-
-        JpaClientDetails client = clientDetailsService.findOne(clientId);
-
-        StaticUtls.rejectNullValue(client, "Try set permissions for non exist client");
-
-        Collection<String> idOfMethods = allowedMethods.getCollection();
-        List<MethodRestProviderForEntity> allowedMethodsByUserId = methodRestProviderForEntityService.findAllowedMethodsByClientId(clientId);
-
-        allowedMethodsByUserId.stream()
-                .peek(methodRestProviderForEntity -> methodRestProviderForEntity.deleteClient(clientId))
-                .forEach(methodRestProviderForEntityService::save);
-
-        if (idOfMethods != null) {
-            idOfMethods.stream()
-                    .map(Long::parseLong)
-                    .map(methodRestProviderForEntityService::find)
-                    .peek(methodRestProviderForEntity -> methodRestProviderForEntity.addClient(client))
-                    .forEach(methodRestProviderForEntityService::save);
-        }
-
-        model.setViewName("redirect:/clients");
-        return model;
-    }
-
-
-
-
 }

@@ -41,7 +41,6 @@
                 <%--<td>${client.isAutoApprove(client.scope)}</td>--%>
                 <td class="buttons">
                     <a class="button positive" href="clients/${client.clientId}?form">Edit</a>
-                    <a class="button orange-btn" href="clients/${client.clientId}?perm">Perm</a>
                     <button class="negative" type="button" onclick="location.href = 'clients/${client.clientId}?delete';">
                         Remove
                     </button>

@@ -101,28 +101,6 @@ public class AdminController {
 	@Value("${server.name}")
 	private String serverName;
 
-//	private SparklrUserApprovalHandler userApprovalHandler;
-//
-//	@RequestMapping("/oauth/cache_approvals")
-//	@ResponseStatus(HttpStatus.NO_CONTENT)
-//	public void startCaching() throws Exception {
-//		userApprovalHandler.setUseApprovalStore(true);
-//	}
-//
-//	@RequestMapping("/oauth/uncache_approvals")
-//	@ResponseStatus(HttpStatus.NO_CONTENT)
-//	public void stopCaching() throws Exception {
-//		userApprovalHandler.setUseApprovalStore(false);
-//	}
-
-//	@RequestMapping("/oauth/users/{user}/tokens")
-//	@ResponseBody
-//	public Collection<OAuth2AccessToken> listTokensForUser(@PathVariable String user, Principal principal)
-//			throws Exception {
-//		checkResourceOwner(user, principal);
-//		return tokenStore.findTokensByUserName(user);
-//	}
-
 	@RequestMapping(value = "/oauth/users/{user}/tokens/{token}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> revokeToken(@PathVariable String user, @PathVariable String token, Principal principal)
 			throws Exception {
@@ -155,14 +133,6 @@ public class AdminController {
             }
         }
 
-//        for (int i = 0; i < clients.length; i++) {
-//            Collection<OAuth2AccessToken> tokensByClientId = tokenStore.findTokensByClientId(clients[i]);
-//
-//            if (tokensByClientId != null) {
-//                tokens.addAll(tokensByClientId);
-//            }
-//        }
-
         model.addAttribute("tokens", tokens);
 
         return "tokens";
@@ -173,14 +143,6 @@ public class AdminController {
     public boolean delete(@PathVariable("tokenVlue") String tokenValue) {
         return tokenServices.revokeToken(tokenValue);
     }
-
-//    @RequestMapping(value = "/oauth/tokens", method = RequestMethod.DELETE)
-//    @ResponseBody
-//    public String deleteToken(@RequestParam("tokenVlue") String tokenValue) {
-////        tokenServices.revokeToken(tokenValue);
-//
-//        return "redirect:/oauth/tokens";
-//    }
 
 	@RequestMapping("/login")
 	public ModelAndView login(@RequestParam(value = "display", required = false) String display,
@@ -525,13 +487,6 @@ public class AdminController {
 			}
 		}
 	}
-
-//	/**
-//	 * @param userApprovalHandler the userApprovalHandler to set
-//	 */
-//	public void setUserApprovalHandler(SparklrUserApprovalHandler userApprovalHandler) {
-//		this.userApprovalHandler = userApprovalHandler;
-//	}
 
 	/**
 	 * @param tokenServices the consumerTokenServices to set
