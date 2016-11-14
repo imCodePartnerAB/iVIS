@@ -46,11 +46,19 @@
         <form:errors path="clientSecret" cssClass="error-description"/>
     </div>
     <div class="checkbox">
-        <form:label path="scope">
-            Scope*
+        <form:label path="allowedHttpMethods">
+            Methods*
         </form:label>
-        <form:checkboxes path="scope" items="${scopeList}" cssErrorClass="error" cssClass="check-box" />
-        <form:errors path="scope" cssClass="error-description"/>
+        <form:checkboxes path="allowedHttpMethods" items="${httpMethodList}" cssErrorClass="error" cssClass="check-box" />
+        <form:errors path="allowedHttpMethods" cssClass="error-description"/>
+    </div>
+    <div class="field">
+        <form:label path="allowedEntities">
+            Allowed entities*
+        </form:label>
+        <form:select path="allowedEntities" items="${apiEntitiesList}" multiple="true" cssErrorClass="error">
+        </form:select>
+        <form:errors path="allowedEntities" cssClass="error-description"/>
     </div>
     <div class="field">
         <form:label path="authorizedGrantTypes">

@@ -1,6 +1,8 @@
 package com.imcode.oauth2;
 
 import com.imcode.entities.User;
+import com.imcode.entities.enums.ApiEntities;
+import com.imcode.entities.enums.HttpMethod;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationService;
@@ -18,5 +20,7 @@ public interface IvisClientDetailsService extends ClientDetailsService, ClientRe
     List<JpaClientDetails> findAll();
 
     JpaClientDetails findOne(String clientId);
+
+    boolean isMethodAllowed(String clientId, Long userId, ApiEntities entity, HttpMethod method);
 
 }

@@ -39,6 +39,21 @@
                                  cssClass="check-box" itemValue="id"/>
                 <form:errors path="authorities" cssClass="error-description"/>
             </div>
+            <div class="checkbox">
+                <form:label path="allowedHttpMethods">
+                    Methods*
+                </form:label>
+                <form:checkboxes path="allowedHttpMethods" items="${httpMethodList}" cssErrorClass="error" cssClass="check-box" />
+                <form:errors path="allowedHttpMethods" cssClass="error-description"/>
+            </div>
+            <div class="field">
+                <form:label path="allowedEntities">
+                    Allowed entities*
+                </form:label>
+                <form:select path="allowedEntities" items="${apiEntitiesList}" multiple="true" cssErrorClass="error">
+                </form:select>
+                <form:errors path="allowedEntities" cssClass="error-description"/>
+            </div>
             <div class="buttons">
                 <button class="positive" type="submit">Save</button>
                 <a class="button neutral" href="${backUrl}">Back</a>

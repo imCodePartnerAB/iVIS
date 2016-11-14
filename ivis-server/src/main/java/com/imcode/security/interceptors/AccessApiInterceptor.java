@@ -1,6 +1,10 @@
 package com.imcode.security.interceptors;
 
 import com.imcode.entities.User;
+import com.imcode.entities.enums.ApiEntities;
+import com.imcode.entities.enums.HttpMethod;
+import com.imcode.entities.oauth2.JpaClientDetails;
+import com.imcode.oauth2.IvisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  * Created by ruslan on 15.08.16.
  */
 public class AccessApiInterceptor extends HandlerInterceptorAdapter {
+
+    @Autowired
+    private IvisClientDetailsService clientDetailsService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -36,11 +43,10 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
         String controllerSimpleName = handlerMethod.getBean().getClass().getSimpleName();
-        String entityName = controllerSimpleName.substring(0, controllerSimpleName.indexOf("RestControllerImpl"));
-        String methodName = handlerMethod.getMethod().getName();
+        ApiEntities entity = ApiEntities.valueOf(controllerSimpleName.substring(0, controllerSimpleName.indexOf("RestControllerImpl")));
+        HttpMethod method = HttpMethod.valueOf(request.getMethod());
 
-
-        if (true) {
+        if (!clientDetailsService.isMethodAllowed(clientId, userId, entity, method)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }

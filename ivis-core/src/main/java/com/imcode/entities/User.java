@@ -1,7 +1,8 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.imcode.entities.enums.Scope;
+import com.imcode.entities.enums.ApiEntities;
+import com.imcode.entities.enums.HttpMethod;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,11 +52,19 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @Column(columnDefinition = "text")
-    private String scope;
+    @Size(min = 1, message = "allowedEntities is required")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "dbo_users_allowed_entities", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "entity_name")
+    @Enumerated(EnumType.STRING)
+    private Set<ApiEntities> allowedEntities = Collections.emptySet();
 
-    @Column(columnDefinition = "text")
-    private String allowedEntities;
+    @Size(min = 1, message = "allowedHttpMethods is required")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "dbo_users_allowed_http_methods", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "http_method")
+    @Enumerated(EnumType.STRING)
+    private Set<HttpMethod> allowedHttpMethods = Collections.emptySet();
 
     @Column(name = "saml2_id")
     private String saml2Id;
@@ -111,22 +120,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         this.enabled = enabled;
     }
 
-    public String getScope() {
-        return scope;
-    }
-
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    public String getAllowedEntities() {
-        return allowedEntities;
-    }
-
-    public void setAllowedEntities(String allowedEntities) {
-        this.allowedEntities = allowedEntities;
-    }
-
     @Override
     @JsonIgnore
     public Set<Role> getAuthorities() {
@@ -144,6 +137,22 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public Set<ApiEntities> getAllowedEntities() {
+        return allowedEntities;
+    }
+
+    public void setAllowedEntities(Set<ApiEntities> allowedEntities) {
+        this.allowedEntities = allowedEntities;
+    }
+
+    public Set<HttpMethod> getAllowedHttpMethods() {
+        return allowedHttpMethods;
+    }
+
+    public void setAllowedHttpMethods(Set<HttpMethod> allowedHttpMethods) {
+        this.allowedHttpMethods = allowedHttpMethods;
     }
 
     @JsonIgnore
@@ -217,49 +226,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
     }
 
-    @JsonIgnore
-    public String[] getScopeArray() {
-        return scope.split(",");
-    }
-
-    @JsonIgnore
-    public Scope[] getScopeEnum() {
-        String[] split = scope.split(",");
-        return Arrays.stream(split)
-                .map(s -> Scope.valueOf(s.toUpperCase()))
-                .toArray(Scope[]::new);
-    }
-
-    @JsonIgnore
-    public void addScope(Scope scope) {
-        this.scope += "," + scope.toString().toLowerCase();
-    }
-
-    @JsonIgnore
-    public void deleteScope(Scope scope) {
-        String[] scopeArray = getScopeArray();
-        this.scope = Arrays.stream(scopeArray)
-                .filter(s -> !s.equals(scope.toString().toLowerCase()))
-                .collect(Collectors.joining(","));
-    }
-
-    @JsonIgnore
-    public void setScopeEnum(Scope [] scope) {
-        this.scope = Arrays.stream(scope)
-                .map(s -> s.toString().toLowerCase())
-                .collect(Collectors.joining(","));
-    }
-
-    @JsonIgnore
-    public List<String> getAllowedEntitiesList() {
-        String[] split = allowedEntities.split(",");
-        return Arrays.asList(split);
-    }
-
-    @JsonIgnore
-    public void setAllowedEntities(List<String> allowedEntities) {
-        this.allowedEntities = allowedEntities.stream().collect(Collectors.joining(","));
-    }
 
     public static void main(String[] args) {
         Set<Role> roles = new HashSet<>();

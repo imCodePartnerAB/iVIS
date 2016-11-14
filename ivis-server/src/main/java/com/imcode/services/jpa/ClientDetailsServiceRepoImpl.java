@@ -1,6 +1,8 @@
 package com.imcode.services.jpa;
 
 import com.imcode.entities.User;
+import com.imcode.entities.enums.ApiEntities;
+import com.imcode.entities.enums.HttpMethod;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.repositories.oauth2.ClietnDetailsRepository;
@@ -114,4 +116,9 @@ public class ClientDetailsServiceRepoImpl implements IvisClientDetailsService {
         return clietnDetailsRepository.findOne(clientId);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isMethodAllowed(String clientId, Long userId, ApiEntities entity, HttpMethod method) {
+        return clietnDetailsRepository.isMethodAllowed(clientId, userId, entity, method);
+    }
 }

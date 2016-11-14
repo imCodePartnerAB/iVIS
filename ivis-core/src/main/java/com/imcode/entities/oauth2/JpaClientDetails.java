@@ -1,7 +1,9 @@
 package com.imcode.entities.oauth2;
 
 import com.imcode.entities.User;
+import com.imcode.entities.enums.ApiEntities;
 import com.imcode.entities.enums.AuthorizedGrantType;
+import com.imcode.entities.enums.HttpMethod;
 import com.imcode.oauth2.IvisClientDetails;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,10 +61,10 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonProperty("client_secret")
     private String clientSecret;
 
-    @Size(min = 1, message = "at least one scope must be checked")
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "dbo_oauth_client_scope", joinColumns = @JoinColumn(name = "client_id"))
+    @Transient
+    @org.codehaus.jackson.annotate.JsonProperty("scope")
     @org.codehaus.jackson.map.annotate.JsonDeserialize(using = JacksonArrayOrStringDeserializer.class)
+    @com.fasterxml.jackson.annotation.JsonProperty("scope")
     @com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = Jackson2ArrayOrStringDeserializer.class)
     private Set<String> scope = new HashSet<>();
 
@@ -130,6 +132,20 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
     private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
+
+    @Size(min = 1, message = "allowedEntities is required")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "dbo_clients_allowed_entities", joinColumns = @JoinColumn(name = "client_id"))
+    @Column(name = "entity_name")
+    @Enumerated(EnumType.STRING)
+    private Set<ApiEntities> allowedEntities = Collections.emptySet();
+
+    @Size(min = 1, message = "allowedHttpMethods is required")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "dbo_clients_allowed_http_methods", joinColumns = @JoinColumn(name = "client_id"))
+    @Column(name = "http_method")
+    @Enumerated(EnumType.STRING)
+    private Set<HttpMethod> allowedHttpMethods = Collections.emptySet();
 
     public JpaClientDetails() {
     }
@@ -245,13 +261,17 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
     public boolean isScoped() {
-        return this.scope != null && !this.scope.isEmpty();
+        return false;
     }
 
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public Set<String> getScope() {
-        return scope;
+        return new HashSet<>();
     }
 
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public void setScope(Set<String> scope) {
         this.scope = scope == null ? Collections.<String> emptySet()
                 : new LinkedHashSet<String>(scope);
@@ -372,6 +392,30 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonAnySetter
     public void addAdditionalInformation(String key, Object value) {
         this.additionalInformation.put(key, value);
+    }
+
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Set<ApiEntities> getAllowedEntities() {
+        return allowedEntities;
+    }
+
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public void setAllowedEntities(Set<ApiEntities> allowedEntities) {
+        this.allowedEntities = allowedEntities;
+    }
+
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Set<HttpMethod> getAllowedHttpMethods() {
+        return allowedHttpMethods;
+    }
+
+    @org.codehaus.jackson.annotate.JsonIgnore
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public void setAllowedHttpMethods(Set<HttpMethod> allowedHttpMethods) {
+        this.allowedHttpMethods = allowedHttpMethods;
     }
 
     @Override

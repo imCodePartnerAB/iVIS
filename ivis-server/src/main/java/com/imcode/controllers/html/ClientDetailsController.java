@@ -1,13 +1,13 @@
 package com.imcode.controllers.html;
 
 import com.imcode.entities.User;
+import com.imcode.entities.enums.ApiEntities;
 import com.imcode.entities.enums.AuthorizedGrantType;
-import com.imcode.entities.enums.Scope;
+import com.imcode.entities.enums.HttpMethod;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.oauth2.IvisClientDetailsService;
 import com.imcode.services.ClientRoleService;
 import com.imcode.services.UserService;
-import com.imcode.utils.CollectionTransferUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GeneralValidator;
 import org.slf4j.Logger;
@@ -110,7 +110,8 @@ public class ClientDetailsController {
     private void addListsInModel(ModelAndView model) {
         model.addObject(userService.findAll());
         model.addObject(clientRoleService.findAll());
-        model.addObject("scopeList", Scope.getValues());
+        model.addObject("httpMethodList", HttpMethod.values());
+        model.addObject("apiEntitiesList", ApiEntities.values());
         model.addObject("grantTypes", Arrays.asList(AuthorizedGrantType.getRepresentations()));
     }
 

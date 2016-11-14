@@ -2,7 +2,9 @@ package com.imcode.controllers.html;
 
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
+import com.imcode.entities.enums.ApiEntities;
 import com.imcode.entities.enums.CommunicationTypeEnum;
+import com.imcode.entities.enums.HttpMethod;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
@@ -75,6 +77,8 @@ public class UserController {
         model.addObject(user);
         model.addObject(roleService.findAll());
 
+        addListsInModel(model);
+
         return model;
     }
 
@@ -83,6 +87,8 @@ public class UserController {
     public ModelAndView createForm(ModelAndView model) {
         model.setViewName("users/edit");
         model.addObject(roleService.findAll());
+        addListsInModel(model);
+
         User user = new User();
         Role roleUser = roleService.findFirstByName("ROLE_USER");
         model.addObject(user);
@@ -152,7 +158,6 @@ public class UserController {
 
         userService.delete(id);
 
-//        return "redirect:/users";
     }
 
     @RequestMapping(value = "/{id}", params = "passwordchange", method = RequestMethod.POST)
@@ -193,6 +198,11 @@ public class UserController {
 
         return encoder.matches(password, userEncodedPassword);
 
+    }
+
+    private void addListsInModel(ModelAndView model) {
+        model.addObject("httpMethodList", HttpMethod.values());
+        model.addObject("apiEntitiesList", ApiEntities.values());
     }
 
 }
