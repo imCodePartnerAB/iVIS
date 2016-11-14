@@ -17,9 +17,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=8"/>
     <link rel="stylesheet" type="text/css" media="screen" href="${app_css_url}"/>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="${jsFormsUrl}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="${jsFormsUrl}"></script>
     <script type="text/javascript" src="${jQueryValidationUrl}"></script>
     <title>${labelApplicationName}</title>
 </head>

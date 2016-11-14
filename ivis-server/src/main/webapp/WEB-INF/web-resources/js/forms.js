@@ -1,4 +1,20 @@
-    function deleteElement(url, id){
+
+$('table').ready(function () {
+    var colCount = 0;
+    $('tr:nth-child(1) td').each(function () {
+        if ($(this).attr('colspan')) {
+            colCount += +$(this).attr('colspan');
+        } else {
+            colCount++;
+        }
+    });
+    var $th = $('th');
+    var $td = $('td');
+    $th.attr("width", 100/colCount + "%");
+    $td.attr("width", 100/colCount + "%");
+});
+
+function deleteElement(url, id){
     if(confirm("do you want to delete application?")){
        deleteElementRest(url, id,
            function(){
