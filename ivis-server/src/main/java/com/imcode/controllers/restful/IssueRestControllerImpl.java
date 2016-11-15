@@ -7,6 +7,7 @@ import com.imcode.services.IncidentService;
 import com.imcode.services.IssueService;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,7 +17,9 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.util.AbstractMap;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,9 +40,9 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     UserService userService;
 
     @Override
-    public Object createSingle(@RequestBody @Valid Issue entity,
-                               HttpServletResponse response,
-                               BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
+    public Object create(@RequestBody @Valid Issue entity,
+                         HttpServletResponse response,
+                         BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
         Set<Incident> incidentsMerged = mergeIncidents(entity.getIncidents());
 
@@ -56,12 +59,12 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     }
 
     @Override
-    public Object updateSingle(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
         if (entity.getReportedBy() != null && entity.getReportedDate() != null) {
             entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
             entity.setModifiedDate(new Date());
         }
-        Issue updated = (Issue) super.updateSingle(aLong, response, entity, bindingResult, webRequest);
+        Issue updated = (Issue) super.update(aLong, response, entity, bindingResult, webRequest);
         Set<Incident> incidents = entity.getIncidents();
         if (incidents != null && !incidents.isEmpty()) {
             Set<Incident> incidentsMerged = mergeIncidents(incidents);

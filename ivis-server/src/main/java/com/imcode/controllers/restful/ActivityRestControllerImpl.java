@@ -7,6 +7,7 @@ import com.imcode.services.ActivityService;
 import com.imcode.services.UserService;
 import com.imcode.utils.IssueAttachmentFileUtil;
 import com.imcode.utils.StaticUtls;
+import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +36,12 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     private UserService userService;
 
     @Override
-    public Object createSingle(@RequestBody @Valid Activity entity,
-                               HttpServletResponse response,
-                               BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Object create(@RequestBody @Valid Activity entity,
+                         HttpServletResponse response,
+                         BindingResult bindingResult, WebRequest webRequest) throws Exception {
         entity.setReportedDate(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
-        return super.createSingle(entity, response, bindingResult, webRequest);
+        return super.create(entity, response, bindingResult, webRequest);
     }
 
     @RequestMapping(value = "/attach/{id}", method = RequestMethod.POST)

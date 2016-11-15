@@ -50,7 +50,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     // Getting entity by id
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Object getSingle(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
+    public Object get(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
         T entity = service.find(id);
         StaticUtls.checkNullAndSetNoContent(entity, response);
         return entity;
@@ -58,7 +58,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     //Getting list of entities
     @RequestMapping(method = RequestMethod.GET)
-    public Object getMultiple(WebRequest webRequest, HttpServletResponse response, Model model) throws Exception {
+    public Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) throws Exception {
         List<T> result = service.findAll();
         StaticUtls.checkNullAndSetNoContent(result, response);
         return result;
@@ -67,9 +67,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     //Creating entity
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object createSingle(@RequestBody @Valid T entity,
-                                             HttpServletResponse response,
-                                             BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public @ResponseBody Object create(@RequestBody @Valid T entity,
+                                       HttpServletResponse response,
+                                       BindingResult bindingResult, WebRequest webRequest) throws Exception {
 
         entity.setId(null);
 
@@ -78,9 +78,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     @RequestMapping(value = "/saveall", method = RequestMethod.POST)
-    public @ResponseBody Object saveMultiple(@RequestBody Iterable<T> entities,
-                                             HttpServletResponse response,
-                                             WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
+    public @ResponseBody Object saveAll(@RequestBody Iterable<T> entities,
+                                        HttpServletResponse response,
+                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
 
         Iterable<T> result = service.save(entities);
 
@@ -95,11 +95,11 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Object updateSingle(@PathVariable("id") ID id, HttpServletResponse response, @RequestBody(required = false) @Valid T entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Object update(@PathVariable("id") ID id, HttpServletResponse response, @RequestBody(required = false) @Valid T entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
         T existsEntity = getService().find(id);
 
         if (existsEntity == null) {
-            bindingResult.reject(null, "Try updateSingle non exist entity");
+            bindingResult.reject(null, "Try update non exist entity");
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
@@ -126,11 +126,11 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     //Deleting entity
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Object deleteSingle(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
+    public Object delete(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
         T entity = service.find(id);
         if (entity == null) {
             BindingResult bindingResult = new BeanPropertyBindingResult(entity, "entity");
-            bindingResult.reject(null, "Try deleteSingle non exist entity");
+            bindingResult.reject(null, "Try delete non exist entity");
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
         service.delete(id);
@@ -138,7 +138,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public @ResponseBody Object searchMultiple(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
+    public @ResponseBody Object search(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
 
         if (criteries == null || criteries.isEmpty()) {
             return criteries;
@@ -169,7 +169,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
 
     @RequestMapping(value = "/search/first", method = RequestMethod.POST)
-    public @ResponseBody Object searchSingle(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
+    public @ResponseBody Object searchFirst(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
 
         if (criteries == null || criteries.isEmpty()) {
             return criteries;
@@ -192,20 +192,22 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         return abstractService.findOne(result);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, params = {"ids"})
-    public @ResponseBody Object deleteMultiple(@RequestParam("ids") List<ID> ids) throws Exception {
+    @RequestMapping(value = "/deleteall", method = RequestMethod.POST)
+    public @ResponseBody Object deleteAll(@RequestBody Iterable<T> entities,
+                                        HttpServletResponse response,
+                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
 
-        List<T> entities = ids.stream().map(service::find).collect(Collectors.toList());
         service.delete(entities);
-        return entities;
+
+        return null;
     }
 
     @SuppressWarnings("unchecked")
 //    @RequestMapping(method = RequestMethod.GET, params = {"name"})
-    public Object getSingleOrMultipleByName(WebRequest webRequest, Model model,
-                                            HttpServletResponse response,
-                                            @RequestParam("name") String name,
-                                            @RequestParam(value = "first", required = false) Boolean firstOnly) {
+    public Object getByName(WebRequest webRequest, Model model,
+                            HttpServletResponse response,
+                            @RequestParam("name") String name,
+                            @RequestParam(value = "first", required = false) Boolean firstOnly) {
 
         if (service instanceof NamedService) {
             NamedService<T> namedService = (NamedService<T>) service;
@@ -227,9 +229,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     @SuppressWarnings("unchecked")
 //    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getSingleOrMultipleByPersonalId(@RequestParam("personalId") String personId,
-                                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
-                                                  HttpServletResponse response
+    public Object getByPersonalId(@RequestParam("personalId") String personId,
+                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+                                  HttpServletResponse response
     ) {
 
         if (service instanceof PersonalizedService) {

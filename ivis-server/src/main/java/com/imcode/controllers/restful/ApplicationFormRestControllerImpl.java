@@ -13,7 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 @RequestMapping("/v1/{format}/applicationforms")
 public class ApplicationFormRestControllerImpl extends AbstractRestController<ApplicationForm, Long, ApplicationFormService> {
 //    @Override
-//    public Object updateSingle(@PathVariable("id") Long aLong, @RequestBody(required = false) ApplicationForm entity, WebRequest webRequest) {
+//    public Object update(@PathVariable("id") Long aLong, @RequestBody(required = false) ApplicationForm entity, WebRequest webRequest) {
 //        return getService().save(entity);
 //    }
 }

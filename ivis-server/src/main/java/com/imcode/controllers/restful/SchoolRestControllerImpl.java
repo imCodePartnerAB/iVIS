@@ -18,9 +18,9 @@ public class SchoolRestControllerImpl extends AbstractRestController<School, Lon
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"name"})
-    public Object getSingleOrMultipleByName(WebRequest webRequest, Model model,
-                                            HttpServletResponse response,
-                                            @RequestParam("name") String name, @RequestParam(value = "first", required = false) Boolean firstOnly) {
-        return super.getSingleOrMultipleByName(webRequest, model, response, name, firstOnly);
+    public Object getByName(WebRequest webRequest, Model model,
+                            HttpServletResponse response,
+                            @RequestParam("name") String name, @RequestParam(value = "first", required = false) Boolean firstOnly) {
+        return super.getByName(webRequest, model, response, name, firstOnly);
     }
 }

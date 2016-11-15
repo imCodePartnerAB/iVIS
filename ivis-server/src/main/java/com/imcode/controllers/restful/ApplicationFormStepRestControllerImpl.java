@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/{format}/applicationformsteps")
 public class ApplicationFormStepRestControllerImpl extends AbstractRestController<ApplicationFormStep, Long, ApplicationFormStepService> {
 //    @Override
-//    public Object updateSingle(@PathVariable("id") Long aLong, @RequestBody(required = false) ApplicationFormStep entity, WebRequest webRequest) {
+//    public Object update(@PathVariable("id") Long aLong, @RequestBody(required = false) ApplicationFormStep entity, WebRequest webRequest) {
 //        return getService().save(entity);
 //    }
 }
