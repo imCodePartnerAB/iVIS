@@ -1,5 +1,6 @@
 package com.imcode.entities.oauth2;
 
+import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.entities.enums.ApiEntities;
 import com.imcode.entities.enums.AuthorizedGrantType;
@@ -105,11 +106,11 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     private Set<String> autoApproveScopes;
 
     @Size(min = 1, message = "at least 1 roles must be checked")
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, targetEntity = ClientRole.class)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinTable(name = "dbo_oauth_client_roles_cross",
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<ClientRole> authorities;
+    private Set<Role> authorities;
 
     @NotNull(message = "accessTokenValiditySeconds is required")
     @Min(value = 90, message = "minimum 90 seconds of accessTokenValiditySeconds")
@@ -132,20 +133,6 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
     private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
-
-    @Size(min = 1, message = "allowedEntities is required")
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "dbo_clients_allowed_entities", joinColumns = @JoinColumn(name = "client_id"))
-    @Column(name = "entity_name")
-    @Enumerated(EnumType.STRING)
-    private Set<ApiEntities> allowedEntities = Collections.emptySet();
-
-    @Size(min = 1, message = "allowedHttpMethods is required")
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "dbo_clients_allowed_http_methods", joinColumns = @JoinColumn(name = "client_id"))
-    @Column(name = "http_method")
-    @Enumerated(EnumType.STRING)
-    private Set<HttpMethod> allowedHttpMethods = Collections.emptySet();
 
     public JpaClientDetails() {
     }
@@ -331,7 +318,7 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     public Set<GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
-        for (ClientRole authority :this.authorities) {
+        for (Role authority :this.authorities) {
             authorities.add(authority);
         }
 
@@ -340,19 +327,19 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
 
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
-    public void setAuthorities(Set<ClientRole> authorities) {
+    public void setAuthorities(Set<Role> authorities) {
         this.authorities = new HashSet<>(authorities);
     }
 
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
-    public Set<ClientRole> getRoles() {
+    public Set<Role> getRoles() {
         return authorities;
     }
 
     @org.codehaus.jackson.annotate.JsonIgnore
     @com.fasterxml.jackson.annotation.JsonIgnore
-    public void setRoles(Set<ClientRole> authorities) {
+    public void setRoles(Set<Role> authorities) {
         this.authorities = new HashSet<>(authorities);
     }
 
@@ -392,30 +379,6 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonAnySetter
     public void addAdditionalInformation(String key, Object value) {
         this.additionalInformation.put(key, value);
-    }
-
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public Set<ApiEntities> getAllowedEntities() {
-        return allowedEntities;
-    }
-
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public void setAllowedEntities(Set<ApiEntities> allowedEntities) {
-        this.allowedEntities = allowedEntities;
-    }
-
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public Set<HttpMethod> getAllowedHttpMethods() {
-        return allowedHttpMethods;
-    }
-
-    @org.codehaus.jackson.annotate.JsonIgnore
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    public void setAllowedHttpMethods(Set<HttpMethod> allowedHttpMethods) {
-        this.allowedHttpMethods = allowedHttpMethods;
     }
 
     @Override
@@ -528,122 +491,6 @@ public class JpaClientDetails implements IvisClientDetails, Serializable {
                 + refreshTokenValiditySeconds + ", additionalInformation="
                 + additionalInformation + "]";
     }
-
-//    private User owner;
-//
-//    private String name;
-//
-//    public JpaClientDetails() {
-//        super();
-//    }
-//
-//    public JpaClientDetails(ClientDetails prototype) {
-//        super(prototype);
-//    }
-//
-//    public JpaClientDetails(String name, String resourceIds, String scopes, String grantTypes, String authorities) {
-//        super(null, resourceIds, scopes, grantTypes, authorities);
-//        this.name = name;
-//    }
-//
-//    public JpaClientDetails(String name, String resourceIds, String scopes, String grantTypes, String authorities, String redirectUris) {
-//        super(null, resourceIds, scopes, grantTypes, authorities, redirectUris);
-//        this.name = name;
-//    }
-//
-//    @Id
-//    @Column(name = "id", length = 36, nullable = false)
-//    @GeneratedValue(generator = "uuid")
-//    @GenericGenerator(name = "uuid", strategy = "uuid2")
-//    @Override
-//    public String getClientId() {
-//        return super.getClientId();
-//    }
-//
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    @CollectionTable(name = "dbo_oauth_client_resources",joinColumns = @JoinColumn(name = "clientId"))
-//    @Column(name = "resourceId")
-//    @Override
-//    public Set<String> getResourceIds() {
-//        return super.getResourceIds();
-//    }
-//
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    @CollectionTable(name = "dbo_oauth_client_scope", joinColumns = @JoinColumn(name = "clientId"))
-//    @Override
-//    public Set<String> getScope() {
-//        return super.getScope();
-//    }
-//
-//    @Column
-//    @Override
-//    public String getClientSecret() {
-//        return super.getClientSecret();
-//    }
-//
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    @CollectionTable(name = "dbo_oauth_client_garant_types",joinColumns = @JoinColumn(name = "clientId"))
-//    @Column(name = "authorizedGrantType")
-//    @Override
-//    public Set<String> getAuthorizedGrantTypes() {
-//        return super.getAuthorizedGrantTypes();
-//    }
-//
-//    @ElementCollection(fetch = FetchType.EAGER)
-//    @CollectionTable(name = "dbo_oauth_client_redirect_uris",joinColumns = @JoinColumn(name = "clientId"))
-//    @Override
-//    public Set<String> getRegisteredRedirectUri() {
-//        return super.getRegisteredRedirectUri();
-//    }
-//
-//    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, targetEntity = ClientRole.class)
-//    @JoinTable(name = "dbo_oauth_client_roles_cross",
-//            joinColumns = @JoinColumn(name = "clientId"),
-//            inverseJoinColumns = @JoinColumn(name = "roleId"))
-//    @Override
-//    public Collection<GrantedAuthority> getAuthorities() {
-//        return super.getAuthorities();
-//    }
-//
-//    @Column
-//    @Override
-//    public Integer getAccessTokenValiditySeconds() {
-//        return super.getAccessTokenValiditySeconds();
-//    }
-//
-//    @Column
-//    @Override
-//    public Integer getRefreshTokenValiditySeconds() {
-//        return super.getRefreshTokenValiditySeconds();
-//    }
-//
-//    @ElementCollection(fetch = FetchType.EAGER, targetClass = String.class)
-//    @MapKeyColumn(name = "name", length = 100)
-//    @Column(name = "value")
-//    @CollectionTable(name = "dbo_oauth_client_additional_info",joinColumns = @JoinColumn(name = "clientId"))
-//    @Override
-//    public Map<String, Object> getAdditionalInformation() {
-//        return super.getAdditionalInformation();
-//    }
-//
-//    @Column
-//    public String getName() {
-//        return name;
-//    }
-//
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "ownerId")
-//    public User getOwner() {
-//        return owner;
-//    }
-//
-//    public void setOwner(User owner) {
-//        this.owner = owner;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
 
 //    Setter utilities
     public void setScope(String... scope) {

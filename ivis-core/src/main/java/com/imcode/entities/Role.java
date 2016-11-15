@@ -6,11 +6,18 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "dbo_role")
 @AttributeOverrides(@AttributeOverride(name = "name", column = @Column(name = "authority", nullable = false, length = 100, unique = true)))
 public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority, Serializable{
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "dbo_role_permission_cross",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permission> permissions;
 
     public Role() { }
 
@@ -38,5 +45,12 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
         return sb.toString();
     }
 
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
 }
 

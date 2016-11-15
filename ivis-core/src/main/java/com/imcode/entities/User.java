@@ -21,9 +21,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="dbo_user")
-//@AttributeOverrides({
-        @AttributeOverride(name="name", column = @Column(unique = true, length = 150, nullable = false))
-//})
+@AttributeOverride(name="name", column = @Column(unique = true, length = 150, nullable = false))
 public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable, JpaPersonalizedEntity {
     public static final String DEFAULT_PASSWORD = "";
 
@@ -51,20 +49,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
-    @Size(min = 1, message = "allowedEntities is required")
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "dbo_users_allowed_entities", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "entity_name")
-    @Enumerated(EnumType.STRING)
-    private Set<ApiEntities> allowedEntities = Collections.emptySet();
-
-    @Size(min = 1, message = "allowedHttpMethods is required")
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "dbo_users_allowed_http_methods", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "http_method")
-    @Enumerated(EnumType.STRING)
-    private Set<HttpMethod> allowedHttpMethods = Collections.emptySet();
 
     @Column(name = "saml2_id")
     private String saml2Id;
@@ -137,26 +121,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     public void setPerson(Person person) {
         this.person = person;
-    }
-
-    @JsonIgnore
-    public Set<ApiEntities> getAllowedEntities() {
-        return allowedEntities;
-    }
-
-    @JsonIgnore
-    public void setAllowedEntities(Set<ApiEntities> allowedEntities) {
-        this.allowedEntities = allowedEntities;
-    }
-
-    @JsonIgnore
-    public Set<HttpMethod> getAllowedHttpMethods() {
-        return allowedHttpMethods;
-    }
-
-    @JsonIgnore
-    public void setAllowedHttpMethods(Set<HttpMethod> allowedHttpMethods) {
-        this.allowedHttpMethods = allowedHttpMethods;
     }
 
     @JsonIgnore
