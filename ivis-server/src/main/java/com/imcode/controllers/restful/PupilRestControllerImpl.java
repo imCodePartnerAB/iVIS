@@ -50,7 +50,7 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
             if (person != null) {
                 Guardian guardian = guardianService.findFirstByPersonalId(person.getPersonalId());
                 if (guardian != null) {
-                    pupilList.addAll(guardian.getPupils())
+                    pupilList.addAll(guardian.getPupils());
                 }
             }
         }
