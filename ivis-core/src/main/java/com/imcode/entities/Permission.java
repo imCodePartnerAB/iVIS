@@ -12,14 +12,13 @@ import java.util.Set;
  * Created by ruslan on 14.11.16.
  */
 @Entity
-@Table("dbo_permission")
+@Table(name = "dbo_permission")
 public class Permission extends AbstractIdEntity<Long> implements Serializable{
 
     @Column(name = "http_method")
-    @Enumerated(EnumType.STRING)
     private HttpMethod httpMethod;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String url;
 
     @Column(columnDefinition = "text")
@@ -108,6 +107,16 @@ public class Permission extends AbstractIdEntity<Long> implements Serializable{
 
     public void setClients(Set<JpaClientDetails> clients) {
         this.clients = clients;
+    }
+
+
+    //Additional methods
+    public void addParameter(String paramName) {
+        if (parameters == null) {
+            parameters = paramName;
+        } else {
+            parameters += "," + paramName;
+        }
     }
 }
 

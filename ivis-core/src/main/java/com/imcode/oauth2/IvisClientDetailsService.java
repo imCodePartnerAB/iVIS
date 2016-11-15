@@ -20,7 +20,4 @@ public interface IvisClientDetailsService extends ClientDetailsService, ClientRe
     List<JpaClientDetails> findAll();
 
     JpaClientDetails findOne(String clientId);
-
-    boolean isMethodAllowed(String clientId, Long userId, ApiEntities entity, HttpMethod method);
-
 }

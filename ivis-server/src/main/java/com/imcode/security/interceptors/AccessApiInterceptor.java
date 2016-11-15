@@ -21,9 +21,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AccessApiInterceptor extends HandlerInterceptorAdapter {
 
-    @Autowired
-    private IvisClientDetailsService clientDetailsService;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -46,7 +43,7 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         ApiEntities entity = ApiEntities.valueOf(controllerSimpleName.substring(0, controllerSimpleName.indexOf("RestControllerImpl")));
         HttpMethod method = HttpMethod.valueOf(request.getMethod());
 
-        if (!clientDetailsService.isMethodAllowed(clientId, userId, entity, method)) {
+        if (true) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }

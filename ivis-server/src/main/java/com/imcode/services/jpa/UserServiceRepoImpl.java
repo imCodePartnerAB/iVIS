@@ -23,18 +23,6 @@ public class UserServiceRepoImpl extends AbstractPersonalizedEntityService<User,
         return getRepo().findByUsername(username);
     }
 
-//    @Override
-//    public User findByPerson(Person person) {
-//        return getRepo().findByPerson(person);
-//    }
-//
-//    @Override
-//    public User findByPersonId(Long personId) {
-//        throw new UnsupportedOperationException();
-////        return null;
-//    }
-
-
     @Override
     public User findByEmail(String email) {
         return getRepo().findByEmail(email);
@@ -62,14 +50,5 @@ public class UserServiceRepoImpl extends AbstractPersonalizedEntityService<User,
         return user;
     }
 
-//    @Override
-//    public User findByPersonalId(String personalId) {
-//        return repo.findByPersonalId(personalId);
-//    }
-
-//    @Override
-//    public boolean checkAutorisation(String login, String pwd) {
-//        return getRepo().checkAutorisation(login, pwd);
-//    }
 
 }
