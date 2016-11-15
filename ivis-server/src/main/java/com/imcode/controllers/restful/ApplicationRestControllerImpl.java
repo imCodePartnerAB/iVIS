@@ -27,7 +27,7 @@ import java.util.Date;
 public class ApplicationRestControllerImpl extends AbstractRestController<Application, Long, ApplicationService> {
 
     @Override
-    public Object create(@RequestBody @Valid Application entity,
+    public Application create(@RequestBody @Valid Application entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
         Principal principal = webRequest.getUserPrincipal();
@@ -44,7 +44,7 @@ public class ApplicationRestControllerImpl extends AbstractRestController<Applic
     }
 
     @Override
-    public Object update(@PathVariable("id") Long aLong,
+    public Application update(@PathVariable("id") Long aLong,
                          HttpServletResponse response,
                          @RequestBody(required = false) @Valid Application entity,
                          BindingResult bindingResult,

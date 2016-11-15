@@ -50,7 +50,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     // Getting entity by id
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Object get(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
+    public T get(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
         T entity = service.find(id);
         StaticUtls.checkNullAndSetNoContent(entity, response);
         return entity;
@@ -58,7 +58,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     //Getting list of entities
     @RequestMapping(method = RequestMethod.GET)
-    public Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) throws Exception {
+    public List<T> getAll(WebRequest webRequest, HttpServletResponse response, Model model) throws Exception {
         List<T> result = service.findAll();
         StaticUtls.checkNullAndSetNoContent(result, response);
         return result;
@@ -67,7 +67,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     //Creating entity
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody Object create(@RequestBody @Valid T entity,
+    public @ResponseBody T create(@RequestBody @Valid T entity,
                                        HttpServletResponse response,
                                        BindingResult bindingResult, WebRequest webRequest) throws Exception {
 
@@ -78,24 +78,30 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     @RequestMapping(value = "/saveall", method = RequestMethod.POST)
-    public @ResponseBody Object saveAll(@RequestBody Iterable<T> entities,
+    public @ResponseBody Iterable<T> saveAll(@RequestBody Iterable<T> entities,
                                         HttpServletResponse response,
-                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
+                                        WebRequest webRequest) throws Exception {
 
         Iterable<T> result = service.save(entities);
 
-        if (Boolean.FALSE.equals(full)) {
-            List<ID> ids = StreamSupport.stream(result.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
-            return ids;
-        }
-
         return result;
+    }
+
+    @RequestMapping(value = "/saveall", method = RequestMethod.POST, params = {"full"})
+    public @ResponseBody List<ID> saveAllAndReturnIds(@RequestBody Iterable<T> entities,
+                                                      HttpServletResponse response,
+                                                      WebRequest webRequest) throws Exception {
+
+        Iterable<T> saved = service.save(entities);
+        List<ID> ids = StreamSupport.stream(saved.spliterator(), false).map(JpaEntity::getId).collect(Collectors.toList());
+        return ids;
+
     }
 
 
     // Updating entity
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public Object update(@PathVariable("id") ID id, HttpServletResponse response, @RequestBody(required = false) @Valid T entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public T update(@PathVariable("id") ID id, HttpServletResponse response, @RequestBody(required = false) @Valid T entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
         T existsEntity = getService().find(id);
 
         if (existsEntity == null) {
@@ -126,7 +132,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     //Deleting entity
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Object delete(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
+    public T delete(@PathVariable("id") ID id, HttpServletResponse response, WebRequest webRequest) throws Exception {
         T entity = service.find(id);
         if (entity == null) {
             BindingResult bindingResult = new BeanPropertyBindingResult(entity, "entity");
@@ -138,10 +144,10 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public @ResponseBody Object search(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
+    public @ResponseBody List<T> search(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
 
         if (criteries == null || criteries.isEmpty()) {
-            return criteries;
+            return null;
         }
 
         SearchCriteries.SearchCriteriaResult first = criteries.get(0);
@@ -169,10 +175,10 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
 
     @RequestMapping(value = "/search/first", method = RequestMethod.POST)
-    public @ResponseBody Object searchFirst(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
+    public @ResponseBody T searchFirst(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
 
         if (criteries == null || criteries.isEmpty()) {
-            return criteries;
+            return null;
         }
 
         SearchCriteries.SearchCriteriaResult searchCriteriaResult = criteries.get(0);
@@ -189,63 +195,75 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
         AbstractService abstractService = (AbstractService) service;
 
-        return abstractService.findOne(result);
+        return (T) abstractService.findOne(result);
     }
 
-    @RequestMapping(value = "/deleteall", method = RequestMethod.POST)
-    public @ResponseBody Object deleteAll(@RequestBody Iterable<T> entities,
+    @RequestMapping(method = RequestMethod.DELETE, params = {"ids"})
+    public @ResponseBody List<T> deleteByIds(@RequestParam("ids") List<ID> ids,
                                         HttpServletResponse response,
-                                        WebRequest webRequest, @RequestParam(required = false) Boolean full) throws Exception {
-
-        service.delete(entities);
-
-        return null;
+                                        WebRequest webRequest) throws Exception {
+        List<T> collect = ids.stream().map(service::find).collect(Collectors.toList());
+        service.delete(collect);
+        return collect;
     }
 
-    @SuppressWarnings("unchecked")
-//    @RequestMapping(method = RequestMethod.GET, params = {"name"})
-    public Object getByName(WebRequest webRequest, Model model,
+    // if need override
+    public List<T> getByName(WebRequest webRequest, Model model,
                             HttpServletResponse response,
-                            @RequestParam("name") String name,
-                            @RequestParam(value = "first", required = false) Boolean firstOnly) {
+                            @RequestParam("name") String name) {
 
         if (service instanceof NamedService) {
             NamedService<T> namedService = (NamedService<T>) service;
-
-            if (firstOnly == null || !firstOnly) {
-                List<T> byName = namedService.findByName(name);
-                StaticUtls.checkNullAndSetNoContent(byName, response);
-                return byName;
-            } else {
-                T firstByName = namedService.findFirstByName(name);
-                StaticUtls.checkNullAndSetNoContent(firstByName, response);
-                return firstByName;
-            }
+            List<T> byName = namedService.findByName(name);
+            StaticUtls.checkNullAndSetNoContent(byName, response);
+            return byName;
         }
 
         throw new UnsupportedOperationException("findByName method not supported!");
 
     }
 
-    @SuppressWarnings("unchecked")
-//    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId,
-                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+    // if need override
+    public T getFirstByName(WebRequest webRequest, Model model,
+                             HttpServletResponse response,
+                             @RequestParam("name") String name) {
+
+        if (service instanceof NamedService) {
+            NamedService<T> namedService = (NamedService<T>) service;
+            T firstByName = namedService.findFirstByName(name);
+            StaticUtls.checkNullAndSetNoContent(firstByName, response);
+            return firstByName;
+        }
+
+        throw new UnsupportedOperationException("findByName method not supported!");
+
+    }
+
+    public List<T> getByPersonalId(@RequestParam("personalId") String personId,
                                   HttpServletResponse response
     ) {
 
         if (service instanceof PersonalizedService) {
             PersonalizedService<T> personalizedService = (PersonalizedService<T>) service;
 
-            if (firstOnly == null || !firstOnly) {
-                List<T> byPersonalId = personalizedService.findByPersonalId(personId);
-                StaticUtls.checkNullAndSetNoContent(byPersonalId, response);
-                return byPersonalId;
-            } else {
-                T firstByPersonalId = personalizedService.findFirstByPersonalId(personId);
-                StaticUtls.checkNullAndSetNoContent(firstByPersonalId, response);
-                return firstByPersonalId;
-            }
+            List<T> byPersonalId = personalizedService.findByPersonalId(personId);
+            StaticUtls.checkNullAndSetNoContent(byPersonalId, response);
+            return byPersonalId;
+        }
+
+        throw new UnsupportedOperationException("findByName method not supported!");
+    }
+
+    public T getFirstByPersonalId(@RequestParam("personalId") String personId,
+                                  HttpServletResponse response
+    ) {
+
+        if (service instanceof PersonalizedService) {
+            PersonalizedService<T> personalizedService = (PersonalizedService<T>) service;
+
+            T firstByPersonalId = personalizedService.findFirstByPersonalId(personId);
+            StaticUtls.checkNullAndSetNoContent(firstByPersonalId, response);
+            return firstByPersonalId;
         }
 
         throw new UnsupportedOperationException("findByName method not supported!");

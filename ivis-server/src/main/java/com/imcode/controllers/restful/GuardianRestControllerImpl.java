@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/{format}/guardians")
@@ -16,10 +17,17 @@ public class GuardianRestControllerImpl extends AbstractRestController<Guardian,
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId,
-                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+    public List<Guardian> getByPersonalId(@RequestParam("personalId") String personId,
+                                         HttpServletResponse response
+    ) {
+        return super.getByPersonalId(personId, response);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, params = {"personalId", "first"})
+    public Guardian getFirstByPersonalId(@RequestParam("personalId") String personId,
                                   HttpServletResponse response
     ) {
-        return super.getByPersonalId(personId, firstOnly, response);
+        return super.getFirstByPersonalId(personId, response);
     }
 }

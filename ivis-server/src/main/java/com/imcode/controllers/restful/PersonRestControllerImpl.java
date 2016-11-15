@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/{format}/persons")
@@ -42,10 +43,17 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId,
-                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
-                                  HttpServletResponse response
+    public List<Person> getByPersonalId(@RequestParam("personalId") String personId,
+                                HttpServletResponse response
     ) {
-        return super.getByPersonalId(personId, firstOnly, response);
+        return super.getByPersonalId(personId, response);
+    }
+
+    @Override
+    @RequestMapping(method = RequestMethod.GET, params = {"personalId", "first"})
+    public Person getFirstByPersonalId(@RequestParam("personalId") String personId,
+                                         HttpServletResponse response
+    ) {
+        return super.getFirstByPersonalId(personId, response);
     }
 }

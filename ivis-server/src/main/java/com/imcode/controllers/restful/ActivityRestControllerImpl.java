@@ -36,7 +36,7 @@ public class ActivityRestControllerImpl extends AbstractRestController<Activity,
     private UserService userService;
 
     @Override
-    public Object create(@RequestBody @Valid Activity entity,
+    public Activity create(@RequestBody @Valid Activity entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
         entity.setReportedDate(new Date());

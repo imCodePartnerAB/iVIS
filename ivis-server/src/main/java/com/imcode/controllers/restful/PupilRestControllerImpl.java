@@ -34,25 +34,23 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
     private PupilService pupilService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public Object getAllPupils(WebRequest webRequest, Model model) {
+    public List<Pupil> getAllPupils(WebRequest webRequest, Model model) {
         return pupilService.findAll();
     }
 
     @Override
-    public Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) {
-        Object pupilList = new ArrayList<>();
+    public List<Pupil> getAll(WebRequest webRequest, HttpServletResponse response, Model model) {
+        List<Pupil> pupilList = new ArrayList<>();
         User user = getUser(webRequest);
 
         if (user == null) {
             throw new RuntimeException("User unauthorized!");
-//        } else if (user.hasRoles("ROLE_ADMIN")) {
-//            pupilList = super.getAll(webRequest, model);
         } else if (user.hasRoles("ROLE_GUARDIAN")) {
             Person person = user.getPerson();
             if (person != null) {
                 Guardian guardian = guardianService.findFirstByPersonalId(person.getPersonalId());
                 if (guardian != null) {
-                    pupilList = guardian.getPupils();
+                    pupilList.addAll(guardian.getPupils())
                 }
             }
         }
@@ -62,23 +60,18 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId,
-                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
-                                  HttpServletResponse response
+    public List<Pupil> getByPersonalId(@RequestParam("personalId") String personId,
+                                       HttpServletResponse response
     ) {
-        return super.getByPersonalId(personId, firstOnly, response);
+        return super.getByPersonalId(personId, response);
     }
 
-    private Person getPerson(WebRequest webRequest) {
-        Person person = null;
-
-            User user = getUser(webRequest);
-
-            if (user != null) {
-                person = user.getPerson();
-            }
-
-        return person;
+    @Override
+    @RequestMapping(method = RequestMethod.GET, params = {"personalId", "first"})
+    public Pupil getFirstByPersonalId(@RequestParam("personalId") String personId,
+                                      HttpServletResponse response
+    ) {
+        return super.getFirstByPersonalId(personId, response);
     }
 
     private User getUser(WebRequest webRequest) {
