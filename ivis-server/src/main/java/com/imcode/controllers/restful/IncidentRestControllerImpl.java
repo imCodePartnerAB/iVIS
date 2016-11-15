@@ -7,7 +7,6 @@ import com.imcode.services.IncidentService;
 import com.imcode.services.StatusService;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtls;
-import com.imcode.validators.GeneralValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +15,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.AbstractMap;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ruslan on 5/4/16.
@@ -38,9 +35,9 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     StatusService statusService;
 
     @Override
-    public Object create(@RequestBody @Valid Incident entity,
-                         HttpServletResponse response,
-                         BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Object createSingle(@RequestBody @Valid Incident entity,
+                               HttpServletResponse response,
+                               BindingResult bindingResult, WebRequest webRequest) throws Exception {
         entity.setReportedDate(new Date());
         entity.setReportedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
         List<Status> statuses = statusService.findAll();
@@ -50,16 +47,16 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
                         .findFirst()
                         .get()
         );
-        return super.create(entity, response, bindingResult, webRequest);
+        return super.createSingle(entity, response, bindingResult, webRequest);
     }
 
     @Override
-    public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Object updateSingle(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
         if (entity.getReportedDate() != null && entity.getReportedBy() != null) {
             entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
             entity.setModifiedDate(new Date());
         }
-        return super.update(aLong, response, entity, bindingResult, webRequest);
+        return super.updateSingle(aLong, response, entity, bindingResult, webRequest);
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})

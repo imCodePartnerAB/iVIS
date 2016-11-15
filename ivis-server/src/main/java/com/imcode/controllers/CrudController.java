@@ -18,26 +18,26 @@ import java.io.Serializable;
 public interface CrudController<T, ID extends Serializable> {
 
     // Getting entity by id
-    Object get(ID id, HttpServletResponse response, WebRequest webRequest) throws Exception;
+    Object getSingle(ID id, HttpServletResponse response, WebRequest webRequest) throws Exception;
 
     //Getting list of entities
-    Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) throws Exception;
+    Object getMultiple(WebRequest webRequest, HttpServletResponse response, Model model) throws Exception;
 
-    Object create(T entity,
-                  HttpServletResponse response,
-                  BindingResult bindingResult,
-                  WebRequest webRequest) throws Exception;
+    Object createSingle(T entity,
+                        HttpServletResponse response,
+                        BindingResult bindingResult,
+                        WebRequest webRequest) throws Exception;
 
     // Updating entity
-    Object update(ID id,
-                  HttpServletResponse response,
-                  T entity,
-                  BindingResult bindingResult,
-                  WebRequest webRequest) throws Exception;
+    Object updateSingle(ID id,
+                        HttpServletResponse response,
+                        T entity,
+                        BindingResult bindingResult,
+                        WebRequest webRequest) throws Exception;
 
     //Deleting entity
-    Object delete(ID id,
-                  HttpServletResponse response,
-                  WebRequest webRequest) throws Exception;
+    Object deleteSingle(ID id,
+                        HttpServletResponse response,
+                        WebRequest webRequest) throws Exception;
 
 }

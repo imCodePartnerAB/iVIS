@@ -19,7 +19,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/{format}/pupils")
@@ -34,19 +33,17 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
     private PupilService pupilService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public Object getAllPupils(WebRequest webRequest, Model model) {
+    public Object getMultiplePupils(WebRequest webRequest, Model model) {
         return pupilService.findAll();
     }
 
     @Override
-    public Object getAll(WebRequest webRequest, HttpServletResponse response, Model model) {
+    public Object getMultiple(WebRequest webRequest, HttpServletResponse response, Model model) {
         Object pupilList = new ArrayList<>();
         User user = getUser(webRequest);
 
         if (user == null) {
             throw new RuntimeException("User unauthorized!");
-//        } else if (user.hasRoles("ROLE_ADMIN")) {
-//            pupilList = super.getAll(webRequest, model);
         } else if (user.hasRoles("ROLE_GUARDIAN")) {
             Person person = user.getPerson();
             if (person != null) {
@@ -62,11 +59,11 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId,
-                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
-                                  HttpServletResponse response
+    public Object getSingleOrMultipleByPersonalId(@RequestParam("personalId") String personId,
+                                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+                                                  HttpServletResponse response
     ) {
-        return super.getByPersonalId(personId, firstOnly, response);
+        return super.getSingleOrMultipleByPersonalId(personId, firstOnly, response);
     }
 
     private Person getPerson(WebRequest webRequest) {

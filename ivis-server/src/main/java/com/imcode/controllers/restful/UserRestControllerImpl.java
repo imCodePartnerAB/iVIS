@@ -22,7 +22,7 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
     private UserService userService;
 
 //    @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-//    public User getByPersonalId(WebRequest webRequest, @RequestParam("personalId") String personId) {
+//    public User getSingleOrMultipleByPersonalId(WebRequest webRequest, @RequestParam("personalId") String personId) {
 //        return null;
 //    }
 
@@ -45,10 +45,10 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
-    public Object getByPersonalId(@RequestParam("personalId") String personId,
-                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
-                                  HttpServletResponse response
+    public Object getSingleOrMultipleByPersonalId(@RequestParam("personalId") String personId,
+                                                  @RequestParam(value = "first", required = false) Boolean firstOnly,
+                                                  HttpServletResponse response
     ) {
-        return super.getByPersonalId(personId, firstOnly, response);
+        return super.getSingleOrMultipleByPersonalId(personId, firstOnly, response);
     }
 }
