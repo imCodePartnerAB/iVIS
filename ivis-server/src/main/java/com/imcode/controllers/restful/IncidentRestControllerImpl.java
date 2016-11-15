@@ -38,7 +38,7 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     StatusService statusService;
 
     @Override
-    public Object create(@RequestBody @Valid Incident entity,
+    public Incident create(@RequestBody @Valid Incident entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws Exception {
         entity.setReportedDate(new Date());
@@ -54,7 +54,7 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     }
 
     @Override
-    public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Incident update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Incident entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
         if (entity.getReportedDate() != null && entity.getReportedBy() != null) {
             entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
             entity.setModifiedDate(new Date());
@@ -63,7 +63,7 @@ public class IncidentRestControllerImpl extends AbstractRestController<Incident,
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
-    public Object findByCriteria (@RequestParam(value = "search_text") String searchText,
+    public List<Incident> findByCriteria (@RequestParam(value = "search_text") String searchText,
                                   @RequestParam(value = "order_by") String orderBy,
                                   WebRequest webRequest) {
 

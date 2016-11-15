@@ -17,10 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
-import java.util.AbstractMap;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +37,7 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     UserService userService;
 
     @Override
-    public Object create(@RequestBody @Valid Issue entity,
+    public Issue create(@RequestBody @Valid Issue entity,
                          HttpServletResponse response,
                          BindingResult bindingResult, WebRequest webRequest) throws MethodArgumentNotValidException {
 
@@ -59,7 +56,7 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     }
 
     @Override
-    public Object update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
+    public Issue update(@PathVariable("id") Long aLong, HttpServletResponse response, @RequestBody(required = false) @Valid Issue entity, BindingResult bindingResult, WebRequest webRequest) throws Exception {
         if (entity.getReportedBy() != null && entity.getReportedDate() != null) {
             entity.setModifiedBy(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
             entity.setModifiedDate(new Date());
@@ -75,9 +72,9 @@ public class IssueRestControllerImpl extends AbstractRestController<Issue, Long,
     }
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
-    public Object findByCriteria (@RequestParam(value = "search_text") String searchText,
-                                  @RequestParam(value = "order_by") String orderBy,
-                                  WebRequest webRequest) {
+    public List<Issue> findByCriteria (@RequestParam(value = "search_text") String searchText,
+                                @RequestParam(value = "order_by") String orderBy,
+                                WebRequest webRequest) {
 
         if (orderBy.equals("title"))
             return issueService.findBySearchCriteria(searchText, orderBy);
