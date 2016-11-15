@@ -2,6 +2,7 @@ package com.imcode.controllers.html.form.upload.loaders;
 
 import com.imcode.controllers.converters.NotNullStringToCollectionConverter;
 import com.imcode.controllers.html.form.upload.FileOption;
+import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.services.AbstractService;
 import com.imcode.services.GenericService;
 import org.springframework.batch.item.ItemWriter;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 /**
  * Created by vitaly on 10.12.15.
  */
-public class EntityLoader<T> {
+public class EntityLoader<T extends JpaEntity> {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final Class<T> entityType;
     private ConversionService conversionService;

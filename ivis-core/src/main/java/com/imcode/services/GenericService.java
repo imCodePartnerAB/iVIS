@@ -25,12 +25,8 @@ public interface GenericService<T, ID> {
 
     List<T> findAll();
 
-    default List<T> search(List<SearchCriteries.SearchCriteriaResult> result) {
-        return null;
-    }
+    List<T> search(List<SearchCriteries.SearchCriteriaResult> criteries);
 
-    default T searchOne(List<SearchCriteries.SearchCriteriaResult> result) {
-        return null;
-    }
+    T searchOne(List<SearchCriteries.SearchCriteriaResult> criteries) ;
 
 }

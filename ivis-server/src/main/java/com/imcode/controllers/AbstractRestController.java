@@ -145,57 +145,13 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public @ResponseBody List<T> search(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
-
-        if (criteries == null || criteries.isEmpty()) {
-            return null;
-        }
-
-        SearchCriteries.SearchCriteriaResult first = criteries.get(0);
-
-        Sort sort = null;
-        if (first.getOrderBy() != null && !first.getOrderBy().isEmpty() && first.getOrder() != null ) {
-            sort = new Sort(new Sort.Order(Sort.Direction.fromString(first.getOrder().toString()), first.getOrderBy()));
-        }
-
-        Specification<T> result = createSpec(criteries, 0);
-        Boolean nextAnd = first.getNextAnd();
-        for (int i = 1; i < criteries.size(); i++) {
-            if (nextAnd) {
-                result = Specifications.where(result).and(createSpec(criteries, i));
-            } else {
-                result = Specifications.where(result).or(createSpec(criteries, i));
-            }
-            nextAnd = criteries.get(i).getNextAnd();
-        }
-
-        AbstractService abstractService = (AbstractService) service;
-
-        return  sort == null ? abstractService.findAll(result) : abstractService.findAll(result, sort);
+        return  service.search(criteries);
     }
 
 
     @RequestMapping(value = "/search/first", method = RequestMethod.POST)
     public @ResponseBody T searchFirst(@RequestBody List<SearchCriteries.SearchCriteriaResult> criteries) throws Exception {
-
-        if (criteries == null || criteries.isEmpty()) {
-            return null;
-        }
-
-        SearchCriteries.SearchCriteriaResult searchCriteriaResult = criteries.get(0);
-
-        Specification<T> result = createSpec(criteries, 0);
-        Boolean nextAnd = searchCriteriaResult.getNextAnd();
-        for (int i = 1; i < criteries.size(); i++) {
-            if (nextAnd) {
-                result = Specifications.where(result).and(createSpec(criteries, i));
-            } else {
-                result = Specifications.where(result).or(createSpec(criteries, i));
-            }
-        }
-
-        AbstractService abstractService = (AbstractService) service;
-
-        return (T) abstractService.findOne(result);
+        return service.searchOne(criteries);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, params = {"ids"})
@@ -312,13 +268,5 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
         }
 
         return ErrorBuilder.buildUncaughtException(exception);
-    }
-
-    private JpaEntitySpecification<T> createSpec(List<SearchCriteries.SearchCriteriaResult> criteriaResults, int index) throws IOException {
-        SearchCriteries.SearchCriteriaResult criteriaResult = criteriaResults.get(index);
-        String valueJson = criteriaResult.getValue();
-        Object object = criteriaResult.getValueType().cast(new ObjectMapper().readValue(valueJson, criteriaResult.getValueType()));
-        SearchCriteria searchCriteria = new SearchCriteria(criteriaResult.getFieldName(), criteriaResult.getOperation(), object);
-        return new JpaEntitySpecification<>(searchCriteria);
     }
 }

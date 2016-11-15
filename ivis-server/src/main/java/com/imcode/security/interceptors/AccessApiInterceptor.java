@@ -43,7 +43,7 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         ApiEntities entity = ApiEntities.valueOf(controllerSimpleName.substring(0, controllerSimpleName.indexOf("RestControllerImpl")));
         HttpMethod method = HttpMethod.valueOf(request.getMethod());
 
-        if (true) {
+        if (false) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }

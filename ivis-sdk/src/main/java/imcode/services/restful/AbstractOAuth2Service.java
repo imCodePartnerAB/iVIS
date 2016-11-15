@@ -323,7 +323,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     }
 
     @Override
-    public List<T> search(List<SearchCriteries.SearchCriteriaResult> searchCriteriaResult) {
+    public List<T> search(List<SearchCriteries.SearchCriteriaResult> criteries) {
         RestServiceRequest request = getCreateRequest();
         List<T> result = new LinkedList<>();
         String uri = request.getAddress() + "/search";
@@ -332,7 +332,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         ParameterizedTypeReference<List<T>> typeReference = getListTypeReference();
         HttpEntity<List<SearchCriteries.SearchCriteriaResult>> httpEntity = null;
         try {
-            httpEntity = new RequestEntity<>(searchCriteriaResult, HttpMethod.POST, new URI(uri));
+            httpEntity = new RequestEntity<>(criteries, HttpMethod.POST, new URI(uri));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -346,7 +346,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
     }
 
     @Override
-    public T searchOne(List<SearchCriteries.SearchCriteriaResult> searchCriteriaResult) {
+    public T searchOne(List<SearchCriteries.SearchCriteriaResult> criteries) {
         T result = null;
         RestTemplate restTemplate = getRestTemplate();
         RestServiceRequest request = null;
@@ -354,7 +354,7 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
         request = getCreateRequest();
         String uri = request.getAddress() + "/search/first";
         HttpMethod method = request.getMethod();
-        result = restTemplate.postForObject(uri, searchCriteriaResult, getEntityClass());
+        result = restTemplate.postForObject(uri, criteries, getEntityClass());
         return result;
     }
 

@@ -1,6 +1,5 @@
 package com.imcode.entities;
 
-import com.imcode.entities.enums.HttpMethod;
 import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
@@ -16,7 +15,7 @@ import java.util.Set;
 public class Permission extends AbstractIdEntity<Long> implements Serializable{
 
     @Column(name = "http_method")
-    private HttpMethod httpMethod;
+    private String httpMethod;
 
     @Column(columnDefinition = "text")
     private String url;
@@ -45,11 +44,14 @@ public class Permission extends AbstractIdEntity<Long> implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "client_id"))
     private Set<JpaClientDetails> clients;
 
-    public HttpMethod getHttpMethod() {
+    @Column
+    private Boolean updated;
+
+    public String getHttpMethod() {
         return httpMethod;
     }
 
-    public void setHttpMethod(HttpMethod httpMethod) {
+    public void setHttpMethod(String httpMethod) {
         this.httpMethod = httpMethod;
     }
 
@@ -109,13 +111,20 @@ public class Permission extends AbstractIdEntity<Long> implements Serializable{
         this.clients = clients;
     }
 
+    public Boolean getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Boolean updated) {
+        this.updated = updated;
+    }
 
     //Additional methods
     public void addParameter(String paramName) {
-        if (parameters == null) {
+        if (parameters == null || parameters.isEmpty()) {
             parameters = paramName;
         } else {
-            parameters += "," + paramName;
+            parameters += ";" + paramName;
         }
     }
 }

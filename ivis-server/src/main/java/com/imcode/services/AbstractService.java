@@ -1,5 +1,10 @@
 package com.imcode.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.imcode.entities.interfaces.JpaEntity;
+import com.imcode.search.SearchCriteria;
+import com.imcode.search.SearchCriteries;
+import com.imcode.specifications.JpaEntitySpecification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +12,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYPE extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>> implements GenericService<T, ID> {
+public abstract class AbstractService<T extends JpaEntity, ID extends Serializable, REPOSITORY_TYPE extends JpaRepository<T, ID> & JpaSpecificationExecutor<T>> implements GenericService<T, ID> {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -74,18 +82,46 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
         repo.delete(entities);
     }
 
+    @Override
+    public List<T> search(List<SearchCriteries.SearchCriteriaResult> criteries) {
+
+        SearchCriteries.SearchCriteriaResult first = criteries.get(0);
+
+        Sort sort = null;
+
+        if (first.getOrderBy() != null && !first.getOrderBy().isEmpty() && first.getOrder() != null ) {
+            sort = new Sort(new Sort.Order(Sort.Direction.fromString(first.getOrder().toString()), first.getOrderBy()));
+        }
+
+        Specification<T> resultSpec = getResultSpec(criteries);
+
+        if (resultSpec == null) {
+            return null;
+        }
+
+        return sort == null ? findAll(resultSpec) : findAll(resultSpec, sort);
+    }
+
+    @Override
+    public T searchOne(List<SearchCriteries.SearchCriteriaResult> criteries) {
+
+        Specification<T> resultSpec = getResultSpec(criteries);
+
+        return resultSpec == null ? null : findOne(resultSpec);
+    }
+
     @Transactional
-    public List<T> findAll(Specification<T> specification) {
+    private List<T> findAll(Specification<T> specification) {
         return repo.findAll(specification);
     }
 
     @Transactional
-    public List<T> findAll(Specification<T> specification, Sort sort) {
+    private List<T> findAll(Specification<T> specification, Sort sort) {
         return repo.findAll(specification, sort);
     }
 
     @Transactional
-    public T findOne(Specification<T> specification) {
+    private T findOne(Specification<T> specification) {
         return repo.findOne(specification);
     }
 
@@ -103,5 +139,38 @@ public abstract class AbstractService<T, ID extends Serializable, REPOSITORY_TYP
 
     public MessageSource getMessageSource() {
         return messageSource;
+    }
+
+    private JpaEntitySpecification<T> createSpec(List<SearchCriteries.SearchCriteriaResult> criteriaResults, int index) {
+        try {
+            SearchCriteries.SearchCriteriaResult criteriaResult = criteriaResults.get(index);
+            String valueJson = criteriaResult.getValue();
+            Object object = criteriaResult.getValueType().cast(new ObjectMapper().readValue(valueJson, criteriaResult.getValueType()));
+            SearchCriteria searchCriteria = new SearchCriteria(criteriaResult.getFieldName(), criteriaResult.getOperation(), object);
+            return new JpaEntitySpecification<>(searchCriteria);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getCause());
+        }
+    }
+
+    private Specification<T> getResultSpec(List<SearchCriteries.SearchCriteriaResult> criteries) {
+        if (criteries == null || criteries.isEmpty()) {
+            return null;
+        }
+
+        SearchCriteries.SearchCriteriaResult first = criteries.get(0);
+
+        Specification<T> resultSpec = createSpec(criteries, 0);
+        Boolean isNextConditionAnd = first.getNextAnd();
+        for (int i = 1; i < criteries.size(); i++) {
+            if (isNextConditionAnd) {
+                resultSpec = Specifications.where(resultSpec).and(createSpec(criteries, i));
+            } else {
+                resultSpec = Specifications.where(resultSpec).or(createSpec(criteries, i));
+            }
+            isNextConditionAnd = criteries.get(i).getNextAnd();
+        }
+
+        return resultSpec;
     }
 }
