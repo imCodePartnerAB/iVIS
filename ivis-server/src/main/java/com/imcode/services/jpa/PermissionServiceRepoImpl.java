@@ -24,4 +24,10 @@ public class PermissionServiceRepoImpl extends AbstractService<Permission, Long,
     public void setUpdated(Integer hash) {
         getRepo().setUpdated(hash);
     }
+
+    @Override
+    @Transactional
+    public void deleteUnUpdated() {
+        getRepo().deleteUnUpdated();
+    }
 }

@@ -39,7 +39,7 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-        String controllerSimpleName = handlerMethod.getBean().getClass().getSimpleName();
+        String controllerSimpleName = handlerMethod.getBeanType().getSimpleName();
         ApiEntities entity = ApiEntities.valueOf(controllerSimpleName.substring(0, controllerSimpleName.indexOf("RestControllerImpl")));
         HttpMethod method = HttpMethod.valueOf(request.getMethod());
 

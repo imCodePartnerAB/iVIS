@@ -8,4 +8,5 @@ import com.imcode.entities.Permission;
 public interface PermissionService extends GenericService<Permission, Long> {
     void makeAllUnUpdated();
     void setUpdated(Integer hash);
+    void deleteUnUpdated();
 }

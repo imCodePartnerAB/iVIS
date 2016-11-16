@@ -1,11 +1,9 @@
 package com.imcode.entities;
 
-import com.imcode.entities.oauth2.JpaClientDetails;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * Created by ruslan on 14.11.16.
@@ -26,23 +24,14 @@ public class Permission extends AbstractIdEntity<Long> implements Serializable{
     @Column(name = "return_value", columnDefinition = "text")
     private String returnValue;
 
+    @Column(name = "entity_name")
+    private String entityName;
+
     @Column(name = "method_name")
     private String methodName;
 
     @Column(unique = true)
     private Integer hash;
-
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_permission_user_cross",
-            joinColumns = @JoinColumn(name = "permission_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> users;
-
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinTable(name = "dbo_permission_oauth_client_details_cross",
-            joinColumns = @JoinColumn(name = "permission_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id"))
-    private Set<JpaClientDetails> clients;
 
     @Column
     private Boolean updated;
@@ -87,28 +76,20 @@ public class Permission extends AbstractIdEntity<Long> implements Serializable{
         this.methodName = methodName;
     }
 
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
     public Integer getHash() {
         return hash;
     }
 
     public void setHash(Integer hash) {
         this.hash = hash;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Set<JpaClientDetails> getClients() {
-        return clients;
-    }
-
-    public void setClients(Set<JpaClientDetails> clients) {
-        this.clients = clients;
     }
 
     public Boolean getUpdated() {

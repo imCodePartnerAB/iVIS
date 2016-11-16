@@ -2,12 +2,7 @@ package com.imcode.controllers.restful;
 
 import com.imcode.entities.Permission;
 import com.imcode.entities.interfaces.JpaEntity;
-import com.imcode.search.SearchCriteria;
-import com.imcode.search.SearchCriteries;
-import com.imcode.search.SearchOperation;
-import com.imcode.services.AbstractService;
 import com.imcode.services.PermissionService;
-import com.imcode.specifications.JpaEntitySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.MethodParameter;
@@ -21,7 +16,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +28,7 @@ import java.util.stream.Collectors;
 public class PermissionRestController {
 
     private static final String API_PREFIX = "/api";
+    private static final String REST_CONTROLLER_SUFIX = "RestControllerImpl";
 
     private final RequestMappingHandlerMapping handler;
     private final PermissionService permissionService;
@@ -52,7 +47,7 @@ public class PermissionRestController {
         permissionService.makeAllUnUpdated();
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = handler.getHandlerMethods();
         handlerMethods.forEach(this::process);
-        permissionService.delete();
+        permissionService.deleteUnUpdated();
     }
 
     private void process(RequestMappingInfo info, HandlerMethod handlerMethod) {
@@ -86,6 +81,8 @@ public class PermissionRestController {
 
     private void setFrom(HandlerMethod handlerMethod, Permission permission) {
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
+        String controllerClassName = handlerMethod.getBeanType().getSimpleName();
+        permission.setEntityName(controllerClassName.substring(0, controllerClassName.lastIndexOf(REST_CONTROLLER_SUFIX)));
         permission.setHash(handlerMethod.hashCode() + Arrays.hashCode(methodParameters));
         permission.setMethodName(handlerMethod.getMethod().getName());
         permission.setReturnValue(

@@ -19,4 +19,8 @@ public interface PermissionRepository extends JpaRepository<Permission, Long>, J
     @Modifying(clearAutomatically = true)
     @Query("update Permission p set p.updated = true where p.hash = :hash")
     void setUpdated(@Param("hash") Integer hash);
+
+    @Modifying(clearAutomatically = true)
+    @Query("delete from Permission p where p.updated = false ")
+    void deleteUnUpdated();
 }
