@@ -6,10 +6,12 @@ import com.imcode.services.AbstractNamedService;
 import com.imcode.services.RoleService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class RoleServiceRepoImpl extends AbstractNamedService<Role, Long, RoleRepository> implements RoleService{
-//    @Override
-//    public Role findFirstByName(String name) {
-//        return getRepo().findByName(name);
-//    }
+public class RoleServiceRepoImpl extends AbstractNamedService<Role, Long, RoleRepository> implements RoleService {
+    @Override
+    public List<Role> findAllNonInternal() {
+        return getRepo().findByInternalFalse();
+    }
 }

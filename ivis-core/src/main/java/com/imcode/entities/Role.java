@@ -19,6 +19,9 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private Set<Permission> permissions;
 
+    @Column
+    private Boolean internal;
+
     public Role() { }
 
     public Role(String name) {
@@ -51,6 +54,14 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
 
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    public Boolean getInternal() {
+        return internal;
+    }
+
+    public void setInternal(Boolean internal) {
+        this.internal = internal;
     }
 }
 
