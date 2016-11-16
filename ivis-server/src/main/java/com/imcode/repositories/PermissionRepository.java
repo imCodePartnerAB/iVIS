@@ -7,10 +7,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created by ruslan on 15.11.16.
  */
 public interface PermissionRepository extends JpaRepository<Permission, Long>, JpaSpecificationExecutor<Permission> {
+
+    @Override
+    @Query("select p from Permission p order by p.entityName")
+    List<Permission> findAll();
 
     @Modifying(clearAutomatically = true)
     @Query("update Permission p set p.updated = false ")

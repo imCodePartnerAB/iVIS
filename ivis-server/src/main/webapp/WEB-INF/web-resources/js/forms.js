@@ -15,7 +15,7 @@ $('table').ready(function () {
 });
 
 function deleteElement(url, id){
-    if(confirm("do you want to delete application?")){
+    if(confirm("do you want to delete?")){
        deleteElementRest(url, id,
            function(){
                $("tr[data-object-id='" + id + "']").remove();
@@ -47,6 +47,12 @@ function showOrHideElementByLabel(spanArrow) {
         $(label).find(">:first-child").css('transform', 'rotate(135deg)');
     }
 };
+
+function permissionOnClick (input) {
+    var entityDivId = input.parentElement.parentElement.parentElement.id;
+    var state = calcState(entityDivId);
+    setState(entityDivId, state);
+}
 
 
 function calcState(entityDivId) {

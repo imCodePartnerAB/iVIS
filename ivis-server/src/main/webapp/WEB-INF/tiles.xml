@@ -15,10 +15,6 @@
         <put-attribute name="content" value=""/>
     </definition>
 
-    <definition name="permissions" extends="default">
-        <put-attribute name="content" value="/WEB-INF/views/layouts/permissions.jsp"/>
-    </definition>
-
     <!--Home-->
     <definition name="home" extends="default">
     </definition>
@@ -40,8 +36,6 @@
         <put-attribute name="content" value="/WEB-INF/views/clients/edit.jsp"/>
     </definition>
 
-    <definition name="clients/permissions" extends="permissions"/>
-
     <!--Users-->
     <definition name="users/list" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/users/list.jsp"/>
@@ -51,8 +45,14 @@
         <put-attribute name="content" value="/WEB-INF/views/users/edit.jsp"/>
     </definition>
 
-    <definition name="users/permissions" extends="permissions" />
+    <!--Roles-->
+    <definition name="roles/list" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/roles/list.jsp"/>
+    </definition>
 
+    <definition name="roles/edit" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/roles/edit.jsp"/>
+    </definition>
 
     <!--Schools-->
     <definition name="schools/list" extends="default">

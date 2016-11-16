@@ -8,6 +8,7 @@
 <spring:url var="loginUrl" value="/login"/>
 <spring:url value="/clients" var="clientsUrl"/>
 <spring:url value="/users" var="usersUrl"/>
+<spring:url value="/roles" var="rolesUrl"/>
 <spring:url value="/schools" var="schoolsUrl"/>
 <spring:url value="/pupils" var="pupilsUrl"/>
 <spring:url value="/sql" var="sqlUrl"/>
@@ -16,6 +17,7 @@
 <spring:message var="labelMainMenu" code="label.mainMenu.title"/>
 <spring:message var="labelClients" code="label.mainMenu.clientList"/>
 <spring:message var="labelUsers" code="label.mainMenu.userList"/>
+<spring:message var="labelRoles" code="label.mainMenu.roleList"/>
 <spring:message var="labelSchools" code="label.mainMenu.schoolList"/>
 <spring:message var="labelPupils" code="label.mainMenu.pupilList"/>
 <spring:message var="labelCsvImport" code="label.mainMenu.csvImport"/>
@@ -29,17 +31,10 @@
         <div class="main-menu">
             <a class="main-menu-item" href="${clientsUrl}">${labelClients}</a>
             <a class="main-menu-item" href="${usersUrl}">${labelUsers}</a>
+            <a class="main-menu-item" href="${rolesUrl}">${labelRoles}</a>
             <a class="main-menu-item" href="${schoolsUrl}">${labelSchools}</a>
             <a class="main-menu-item" href="${pupilsUrl}">${labelPupils}</a>
             <a class="main-menu-item" href="${csvUrl}">${labelCsvImport}</a>
-                <%--<a class="main-menu-item" href="${sqlUrl}">SQL</a>--%>
-                <%--<a class="main-menu-item" href="${xmlUrl}">Application import</a>--%>
-
-                <%--<tiles:importAttribute name="menuMap"/>--%>
-                <%--<c:forEach var="item" items="${menuMap}">--%>
-                <%--<spring:url value="${item.getValue()}" var="entityUrl"/>--%>
-                <%--<a class="main-menu-item" href="${entityUrl}">${item.getKey()}</a>--%>
-                <%--</c:forEach>--%>
         </div>
     </sec:authorize>
     <div class="user-ph">

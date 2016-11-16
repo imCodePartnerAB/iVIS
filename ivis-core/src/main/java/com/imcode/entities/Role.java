@@ -22,6 +22,9 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
     @Column
     private Boolean internal;
 
+    @Column(name = "user_role")
+    private Boolean userRole;
+
     public Role() { }
 
     public Role(String name) {
@@ -62,6 +65,18 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
 
     public void setInternal(Boolean internal) {
         this.internal = internal;
+    }
+
+    public Boolean isUserRole() {
+        return userRole;
+    }
+
+    public Boolean getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(Boolean userRole) {
+        this.userRole = userRole;
     }
 }
 
