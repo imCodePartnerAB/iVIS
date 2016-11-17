@@ -26,8 +26,10 @@
                 <td>${embeded.name}</td>
                 <td>
                     <c:forEach items="${embeded.authorities}" var="role" varStatus="fileOptionStatus">
-                        ${role.name}
-                        <c:if test="${!fileOptionStatus.last}">, </c:if>
+                        <c:if test="${!role.internal}">
+                            ${role.name}
+                            <c:if test="${!fileOptionStatus.last}">, </c:if>
+                        </c:if>
                     </c:forEach>
                 </td>
                 <td>${embeded.enabled}</td>

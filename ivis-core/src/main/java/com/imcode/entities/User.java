@@ -38,6 +38,9 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column
     private Boolean enabled = false;
 
+    @Column(name = "client_owner")
+    private Boolean clientOwner = false;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;
@@ -194,17 +197,12 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
     }
 
-
-    public static void main(String[] args) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role(1l, "ROLE_ADMIN"));
-        roles.add(new Role(2l, "ROLE_USER"));
-        roles.add(new Role(3l, "ROLE_GUARDIAN"));
-        roles.add(new Role(4l, "ROLE_STUDENT"));
-        Role roleAdmin = new Role("ROLE_ADMIN");
-        User vitaly = new User("Admin", "pass", true, roles);
-        System.out.println(roles.contains(roleAdmin));
+    public Boolean getClientOwner() {
+        return clientOwner;
     }
 
+    public void setClientOwner(Boolean clientOwner) {
+        this.clientOwner = clientOwner;
+    }
 
 }

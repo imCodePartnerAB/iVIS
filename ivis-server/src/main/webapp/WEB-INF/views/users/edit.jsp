@@ -27,10 +27,16 @@
                 <form:label path="password">
                     Password*
                 </form:label>
+                <label
+                        onclick="$(this.parentElement).hide();"
+                        style="color: blue;">Don't change</label>
                 <form:input path="password" id="password" cssErrorClass="error"/>
                 <form:errors path="password" cssClass="error-description"/>
             </div>
-
+            <div class="checkbox">
+                <form:checkbox path="clientOwner" cssErrorClass="error" label="Client owner"/>
+                <form:errors path="clientOwner" cssClass="error-description"/>
+            </div>
             <div class="checkbox">
                 <form:label path="authorities">
                     Roles*
@@ -38,21 +44,6 @@
                 <form:checkboxes path="authorities" items="${roleList}" itemLabel="authority" cssErrorClass="error"
                                  cssClass="check-box" itemValue="id"/>
                 <form:errors path="authorities" cssClass="error-description"/>
-            </div>
-            <div class="checkbox">
-                <form:label path="allowedHttpMethods">
-                    Methods*
-                </form:label>
-                <form:checkboxes path="allowedHttpMethods" items="${httpMethodList}" cssErrorClass="error" cssClass="check-box" />
-                <form:errors path="allowedHttpMethods" cssClass="error-description"/>
-            </div>
-            <div class="field">
-                <form:label path="allowedEntities">
-                    Allowed entities*
-                </form:label>
-                <form:select path="allowedEntities" items="${apiEntitiesList}" multiple="true" cssErrorClass="error">
-                </form:select>
-                <form:errors path="allowedEntities" cssClass="error-description"/>
             </div>
             <div class="buttons">
                 <button class="positive" type="submit">Save</button>

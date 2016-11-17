@@ -11,5 +11,7 @@ import java.util.List;
 public interface RoleRepository extends JpaRepository<Role, Long>, NamedService<Role>, JpaSpecificationExecutor<Role> {
 
     List<Role> findByInternalFalse();
+    List<Role> findByUserRoleFalse();
+    List<Role> findByUserRoleTrue();
 
 }

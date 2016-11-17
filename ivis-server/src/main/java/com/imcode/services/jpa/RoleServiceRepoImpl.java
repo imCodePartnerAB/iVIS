@@ -14,4 +14,14 @@ public class RoleServiceRepoImpl extends AbstractNamedService<Role, Long, RoleRe
     public List<Role> findAllNonInternal() {
         return getRepo().findByInternalFalse();
     }
+
+    @Override
+    public List<Role> findUserRoles() {
+        return getRepo().findByUserRoleTrue();
+    }
+
+    @Override
+    public List<Role> findClientRoles() {
+        return getRepo().findByUserRoleFalse();
+    }
 }

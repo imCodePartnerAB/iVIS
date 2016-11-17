@@ -178,11 +178,6 @@ $(document).ready(function () {
                     required: true,
                     minlength: 8,
                     equalTo: "#password"
-                },
-
-                authorities: {
-                    required: true,
-                    checkboxesInspection: ["ROLE_USER"]
                 }
 
             },
@@ -203,11 +198,6 @@ $(document).ready(function () {
                     required: "Confirm password is required",
                     minlength: "Minimum must be {0} characters",
                     equalTo: "Password and confirmation do not match"
-                },
-
-                authorities: {
-                    required: "Roles is required",
-                    checkboxesInspection: "ROLE_USER must be chosen"
                 }
 
             },

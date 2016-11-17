@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -47,6 +48,8 @@ public class UserController {
 
     @Value("${mail.smtp.from.username}")
     private String fromUsername;
+
+    private static final String ROLE_USER = "ROLE_USER";
 
     //    Shows the list of users
     @RequestMapping(method = RequestMethod.GET)
@@ -75,9 +78,7 @@ public class UserController {
 
         model.setViewName("users/edit");
         model.addObject(user);
-        model.addObject(roleService.findAll());
-
-        addListsInModel(model);
+        model.addObject(roleService.findUserRoles());
 
         return model;
     }
@@ -86,8 +87,7 @@ public class UserController {
     @RequestMapping(params = "form", method = RequestMethod.GET)
     public ModelAndView createForm(ModelAndView model) {
         model.setViewName("users/edit");
-        model.addObject(roleService.findAll());
-        addListsInModel(model);
+        model.addObject(roleService.findUserRoles());
 
         User user = new User();
         Role roleUser = roleService.findFirstByName("ROLE_USER");
@@ -114,6 +114,8 @@ public class UserController {
 
         new GeneralValidator(constraints).invoke(user, bindingResult);
 
+        user.getRoles().add(roleService.findFirstByName(ROLE_USER));
+
         StaticUtls.encodeUserPassword(user);
 
         userService.save(user);
@@ -126,19 +128,30 @@ public class UserController {
     //    UPDATE exists user
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public ModelAndView update (@PathVariable("id") User persistUser,
-                                @ModelAttribute("user") @Valid User user,
+                                @ModelAttribute("user") User user,
                                 ModelAndView model) throws MethodArgumentNotValidException {
 
         StaticUtls.rejectNullValue(user, "Try update non exist user");
 
-        StaticUtls.encodeUserPassword(user);
+        if (user.getPassword().isEmpty()) {
+            user.setPassword(persistUser.getPassword());
+        } else {
+            StaticUtls.encodeUserPassword(user);
+        }
+
+        Set<Role> internalRoles = persistUser.getRoles()
+                .stream()
+                .filter(Role::getInternal)
+                .collect(Collectors.toSet());
+
+        internalRoles.add(roleService.findFirstByName(ROLE_USER));
+
+        user.getRoles().addAll(internalRoles);
 
         try {
             StaticUtls.nullAwareBeanCopy(persistUser, user);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("Error UserController.update", e);
         }
 
         userService.save(persistUser);
@@ -198,11 +211,6 @@ public class UserController {
 
         return encoder.matches(password, userEncodedPassword);
 
-    }
-
-    private void addListsInModel(ModelAndView model) {
-        model.addObject("httpMethodList", HttpMethod.values());
-        model.addObject("apiEntitiesList", ApiEntities.values());
     }
 
 }
