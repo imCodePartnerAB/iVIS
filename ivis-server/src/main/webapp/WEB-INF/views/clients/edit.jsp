@@ -8,9 +8,6 @@
 
 
 <form:form modelAttribute="client" id="clientUpdateForm" method="post">
-    <%--<c:if test="${not empty message}">--%>
-    <%--<div id="message" class="${message.type}">${message.message}</div>--%>
-    <%--</c:if>--%>
     <div class="field">
         <form:label path="name">
             Name*
@@ -25,40 +22,19 @@
         <form:input path="resourceIds"/>
         <form:errors path="resourceIds" cssClass="error"/>
     </div>
-
-    <sec:authorize access="hasRole('ROLE_ADMIN')">
-        <div class="field">
-            <form:label path="owner">
-                Owner*
-            </form:label>
-            <form:select path="owner" cssErrorClass="error" items="${userList}" itemValue="id" itemLabel="name"/>
-            <form:errors path="owner" cssClass="error-description"/>
-        </div>
-    </sec:authorize>
-    <sec:authorize access="!hasRole('ROLE_ADMIN')">
-        <form:hidden path="owner" cssErrorClass="error"/>
-    </sec:authorize>
+    <div class="field">
+        <form:label path="owner">
+            Owner*
+        </form:label>
+        <form:select path="owner" cssErrorClass="error" items="${userList}" itemValue="id" itemLabel="name"/>
+        <form:errors path="owner" cssClass="error-description"/>
+    </div>
     <div class="field">
         <form:label path="clientSecret">
             Secret*
         </form:label>
         <form:input path="clientSecret" cssErrorClass="error"/>
         <form:errors path="clientSecret" cssClass="error-description"/>
-    </div>
-    <div class="checkbox">
-        <form:label path="allowedHttpMethods">
-            Methods*
-        </form:label>
-        <form:checkboxes path="allowedHttpMethods" items="${httpMethodList}" cssErrorClass="error" cssClass="check-box" />
-        <form:errors path="allowedHttpMethods" cssClass="error-description"/>
-    </div>
-    <div class="field">
-        <form:label path="allowedEntities">
-            Allowed entities*
-        </form:label>
-        <form:select path="allowedEntities" items="${apiEntitiesList}" multiple="true" cssErrorClass="error">
-        </form:select>
-        <form:errors path="allowedEntities" cssClass="error-description"/>
     </div>
     <div class="field">
         <form:label path="authorizedGrantTypes">
@@ -80,7 +56,7 @@
         <form:label path="roles">
             Roles*
         </form:label>
-        <form:checkboxes path="roles" items="${clientRoleList}" itemLabel="name" cssErrorClass="error"
+        <form:checkboxes path="roles" items="${roleList}" itemLabel="name" cssErrorClass="error"
                          cssClass="check-box" itemValue="id" />
         <form:errors path="roles" cssClass="error-description"/>
     </div>
