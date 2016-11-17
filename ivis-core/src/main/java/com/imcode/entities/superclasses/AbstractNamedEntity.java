@@ -5,6 +5,8 @@ import com.imcode.entities.interfaces.JpaNamedEntity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,6 +15,9 @@ import java.util.Objects;
  */
 @MappedSuperclass
 public abstract class AbstractNamedEntity<ID extends Serializable> extends AbstractIdEntity<ID> implements JpaNamedEntity<ID>, Serializable{
+
+    @NotNull
+    @Size(min = 4, max = 200)
     @Column(length = 200, columnDefinition = "")
     protected String name;
 

@@ -5,7 +5,9 @@ import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,11 +19,12 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
     @JoinTable(name = "dbo_role_permission_cross",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private Set<Permission> permissions;
+    private Set<Permission> permissions = new HashSet<>();
 
     @Column
     private Boolean internal;
 
+    @NotNull
     @Column(name = "user_role")
     private Boolean userRole;
 

@@ -100,7 +100,7 @@ public class PermissionRestController {
 
         Class<?> controllerClass = parameter.getContainingClass();
 
-        StringBuilder result = new StringBuilder("Json body parameter: ");
+        StringBuilder result = new StringBuilder();
         if (type.contains("Iterable") || type.contains("Set") || type.contains("List")) {
             result.append("Array");
         } else {

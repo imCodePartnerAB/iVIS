@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by ruslan on 16.11.16.
@@ -60,8 +61,8 @@ public class RolesController {
     public ModelAndView createForm(ModelAndView model) {
         Role entity = new Role();
         model.setViewName(MAIN_PATH + "/edit");
-        model.addObject("role", entity);
-        model.addObject("permissions", permissionService.findAll());
+        model.addObject("entity", entity);
+        model.addObject("permissionsAll", permissionService.findAll());
         return model;
     }
 
@@ -71,11 +72,9 @@ public class RolesController {
 
         BindingResult bindingResult = new BeanPropertyBindingResult(entity, "role");
         new GeneralValidator(true, "id").invoke(entity, bindingResult);
-
+        entity.setInternal(false);
         mainService.save(entity);
-
         model.setViewName("redirect:/" + MAIN_PATH);
-
         return model;
     }
 
@@ -83,13 +82,13 @@ public class RolesController {
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public ModelAndView update(@PathVariable("id") Role persistEntity,
                                @ModelAttribute("entity") @Valid Role entity,
-                               ModelAndView model) throws MethodArgumentNotValidException {
+                               ModelAndView model) throws MethodArgumentNotValidException, InvocationTargetException, IllegalAccessException {
 
         StaticUtls.rejectNullValue(persistEntity, "Try update non exist role");
-
-
+        entity.setInternal(false);
+        StaticUtls.nullAwareBeanCopy(persistEntity, entity);
+        mainService.save(persistEntity);
         model.setViewName("redirect:/" + MAIN_PATH);
-
         return model;
     }
 

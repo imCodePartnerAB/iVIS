@@ -52,8 +52,7 @@ function permissionOnClick (input) {
     var entityDivId = input.parentElement.parentElement.parentElement.id;
     var state = calcState(entityDivId);
     setState(entityDivId, state);
-}
-
+};
 
 function calcState(entityDivId) {
     var $checkboxGroup = $("#" + entityDivId + " :input");
@@ -63,16 +62,18 @@ function calcState(entityDivId) {
     } else {
         return $checkboxGroupChecked.length == $checkboxGroup.length;
     }
-
-}
+};
 
 function setState(entityDivId, state) {
     $("input[for='" + entityDivId + "']").tristate("state", state);
-}
+};
 
-function tristateOnChange(state, value) {
-    if (state != null) {
-        var entityDivId = this[0].getAttribute("for");
-        $('#' + entityDivId).find("input[type='checkbox']").prop("checked", state);
-    }
-}
+function tristateOnClick(checkbox) {
+    var checked = checkbox.hasAttribute("checked");
+    var indeterminate = checkbox.hasAttribute("indeterminate");
+    var entityDivId = checkbox.getAttribute("for");
+    if (!checked && !indeterminate)
+        $('#' + entityDivId).find("input[type='checkbox']").prop("checked", true);
+    if (!checked && indeterminate)
+        $('#' + entityDivId).find("input[type='checkbox']").prop("checked", false);
+};
