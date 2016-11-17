@@ -54,14 +54,16 @@ $(document).ready(function () {
                         minlength: 4
                     },
 
+                    owner: {
+                        required: true,
+                        number: true,
+                        digits: true,
+                        min: 1
+                    },
+
                     clientSecret: {
                         required: true,
                         minlength: 4
-                    },
-
-                    scope: {
-                        required: true,
-                        checkboxesInspection: ["read", "write"]
                     },
 
                     authorizedGrantTypes: {
@@ -74,8 +76,7 @@ $(document).ready(function () {
                     },
 
                     roles: {
-                        required: true,
-                        checkboxesInspection: ["ROLE_USER"]
+                        required: true
                     },
 
                     accessTokenValiditySeconds: {
@@ -106,14 +107,16 @@ $(document).ready(function () {
                         minlength: "Minimum must be {0} characters"
                     },
 
+                    owner: {
+                        required: "Owner is required",
+                        number: "Must be number",
+                        digits: "Must be natural number",
+                        min: "Minimum id {0}"
+                    },
+
                     clientSecret: {
                         required: "Secret is required",
                         minlength: "Minimum must be {0} characters"
-                    },
-
-                    scope: {
-                        required: "Scope is required",
-                        checkboxesInspection: "Need choose read, write"
                     },
 
                     registeredRedirectUri: {
@@ -122,8 +125,7 @@ $(document).ready(function () {
                     },
 
                     roles: {
-                        required: "Roles is required",
-                        checkboxesInspection: "ROLE_USER need check"
+                        required: "Roles is required"
                     },
 
                     accessTokenValiditySeconds: {

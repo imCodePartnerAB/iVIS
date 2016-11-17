@@ -105,12 +105,6 @@ public class ClientDetailsController {
     }
 
     private void addListsInModel(ModelAndView model) {
-        model.addObject(
-                userService.search(
-                    SearchCriteries.select()
-                        .where("clientOwner", SearchOperation.EQUALS, Boolean.TRUE)
-                )
-        );
         model.addObject(roleService.findClientRoles());
         model.addObject("grantTypes", Arrays.asList(AuthorizedGrantType.getRepresentations()));
     }

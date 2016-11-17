@@ -5,8 +5,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <spring:url value="/clients" var="backUrl"/>
 <h1>Edit Client</h1>
-
-
 <form:form modelAttribute="client" id="clientUpdateForm" method="post">
     <div class="field">
         <form:label path="name">
@@ -26,7 +24,7 @@
         <form:label path="owner">
             Owner*
         </form:label>
-        <form:select path="owner" cssErrorClass="error" items="${userList}" itemValue="id" itemLabel="name"/>
+        <form:input path="owner" type="number" min="1" step="1"/>
         <form:errors path="owner" cssClass="error-description"/>
     </div>
     <div class="field">

@@ -34,10 +34,6 @@
                 <form:errors path="password" cssClass="error-description"/>
             </div>
             <div class="checkbox">
-                <form:checkbox path="clientOwner" cssErrorClass="error" label="Client owner"/>
-                <form:errors path="clientOwner" cssClass="error-description"/>
-            </div>
-            <div class="checkbox">
                 <form:label path="authorities">
                     Roles*
                 </form:label>

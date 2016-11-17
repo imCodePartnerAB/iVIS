@@ -38,9 +38,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column
     private Boolean enabled = false;
 
-    @Column(name = "client_owner")
-    private Boolean clientOwner = false;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     private Person person;
@@ -195,14 +192,6 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @JsonIgnore
     public Set<String> getRoleNames() {
         return roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
-    }
-
-    public Boolean getClientOwner() {
-        return clientOwner;
-    }
-
-    public void setClientOwner(Boolean clientOwner) {
-        this.clientOwner = clientOwner;
     }
 
 }
