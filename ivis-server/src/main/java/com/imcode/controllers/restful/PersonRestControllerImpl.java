@@ -29,6 +29,7 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
     public List<Person> findByCriteria (@RequestParam(value = "search_text") String searchText,
                                   @RequestParam(value = "order_by") String orderBy,
+                                        HttpServletResponse response,
                                   WebRequest webRequest) {
 
         if (orderBy.equals("last_name") || orderBy.equals("first_name")) {

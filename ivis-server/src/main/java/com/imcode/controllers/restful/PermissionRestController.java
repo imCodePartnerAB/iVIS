@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -48,7 +49,9 @@ public class PermissionRestController {
         permissionService.makeAllUnUpdated();
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = handler.getHandlerMethods();
         handlerMethods.forEach(this::process);
-        permissionService.deleteUnUpdated();
+        List<Permission> unUpdated = permissionService.getUnUpdated();
+        permissionService.deleteAssociation(unUpdated);
+        permissionService.delete(unUpdated);
     }
 
     private void process(RequestMappingInfo info, HandlerMethod handlerMethod) {

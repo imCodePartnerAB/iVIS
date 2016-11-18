@@ -26,9 +26,11 @@ public interface PermissionRepository extends JpaRepository<Permission, Long>, J
     @Query("update Permission p set p.updated = true where p.hash = :hash")
     void setUpdated(@Param("hash") Integer hash);
 
+    List<Permission> findByUpdatedFalse();
+
     @Modifying(clearAutomatically = true)
-    @Query("delete from Permission p where p.updated = false ")
-    void deleteUnUpdated();
+    @Query(value = "DELETE FROM dbo_role_permission_cross WHERE permission_id = ?1 ", nativeQuery = true)
+    void deleteAssociation(Long permissionId);
 
     @Query("select case when p is not null then true else false end " +
             "from Permission p, Role rC, Role rU, JpaClientDetails c, User u " +
