@@ -71,10 +71,6 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
         this.internal = internal;
     }
 
-    public Boolean isUserRole() {
-        return userRole;
-    }
-
     public Boolean getUserRole() {
         return userRole;
     }

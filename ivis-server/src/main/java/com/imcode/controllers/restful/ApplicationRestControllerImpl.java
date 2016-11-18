@@ -1,6 +1,5 @@
 package com.imcode.controllers.restful;
 
-import com.imcode.App;
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Person;
 import com.imcode.entities.Application;
