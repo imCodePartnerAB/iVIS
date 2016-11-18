@@ -87,6 +87,7 @@ public class RolesController {
         StaticUtls.rejectNullValue(persistEntity, "Try update non exist role");
         entity.setInternal(false);
         StaticUtls.nullAwareBeanCopy(persistEntity, entity);
+        persistEntity.setPermissions(entity.getPermissions());
         mainService.save(persistEntity);
         model.setViewName("redirect:/" + MAIN_PATH);
         return model;

@@ -18,11 +18,14 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -170,6 +173,16 @@ public class StaticUtls {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
+    }
+
+    public static Integer getHashFrom(HandlerMethod handlerMethod) {
+        Method method = handlerMethod.getMethod();
+        Parameter[] parameters = method.getParameters();
+        Integer hash = method.hashCode() + handlerMethod.getBeanType().getTypeName().hashCode();
+        for (int i = 0; i < parameters.length; i++) {
+            hash += parameters[i].getType().getTypeName().hashCode() + 31 * i;
+        }
+        return hash;
     }
 
 

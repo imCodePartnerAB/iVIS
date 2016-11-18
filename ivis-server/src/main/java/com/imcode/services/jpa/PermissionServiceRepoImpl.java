@@ -30,4 +30,9 @@ public class PermissionServiceRepoImpl extends AbstractService<Permission, Long,
     public void deleteUnUpdated() {
         getRepo().deleteUnUpdated();
     }
+
+    @Override
+    public Boolean isPermitted(String clientId, Long userId, Integer hash) {
+        return getRepo().getPermission(clientId, userId, hash);
+    }
 }

@@ -15,6 +15,7 @@ import java.util.Set;
 @AttributeOverrides(@AttributeOverride(name = "name", column = @Column(name = "authority", nullable = false, length = 100, unique = true)))
 public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority, Serializable{
 
+    @NotNull
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "dbo_role_permission_cross",
             joinColumns = @JoinColumn(name = "role_id"),

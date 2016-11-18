@@ -3,6 +3,7 @@ package com.imcode.controllers.restful;
 import com.imcode.entities.Permission;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.services.PermissionService;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.MethodParameter;
@@ -83,7 +84,7 @@ public class PermissionRestController {
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
         String controllerClassName = handlerMethod.getBeanType().getSimpleName();
         permission.setEntityName(controllerClassName.substring(0, controllerClassName.lastIndexOf(REST_CONTROLLER_SUFIX)));
-        permission.setHash(handlerMethod.hashCode() + Arrays.hashCode(methodParameters));
+        permission.setHash(StaticUtls.getHashFrom(handlerMethod));
         permission.setMethodName(handlerMethod.getMethod().getName());
         permission.setReturnValue(
                 determineJsonType(handlerMethod.getReturnType())

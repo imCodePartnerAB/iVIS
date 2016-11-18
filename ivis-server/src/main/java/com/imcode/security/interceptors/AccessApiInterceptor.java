@@ -1,10 +1,8 @@
 package com.imcode.security.interceptors;
 
 import com.imcode.entities.User;
-import com.imcode.entities.enums.ApiEntities;
-import com.imcode.entities.enums.HttpMethod;
-import com.imcode.entities.oauth2.JpaClientDetails;
-import com.imcode.oauth2.IvisClientDetailsService;
+import com.imcode.services.PermissionService;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,11 +13,19 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 
 /**
  * Created by ruslan on 15.08.16.
  */
 public class AccessApiInterceptor extends HandlerInterceptorAdapter {
+
+    private final PermissionService permissionService;
+
+    @Autowired
+    public AccessApiInterceptor(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,7 +33,6 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (!(authentication instanceof OAuth2Authentication)) {
-
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
@@ -38,16 +43,14 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         Long userId = ((User) oauth2Authentication.getUserAuthentication().getPrincipal()).getId();
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Integer hash = StaticUtls.getHashFrom(handlerMethod);
 
-        String controllerSimpleName = handlerMethod.getBeanType().getSimpleName();
-        ApiEntities entity = ApiEntities.valueOf(controllerSimpleName.substring(0, controllerSimpleName.indexOf("RestControllerImpl")));
-        HttpMethod method = HttpMethod.valueOf(request.getMethod());
-
-        if (false) {
+        Boolean permitted = permissionService.isPermitted(clientId, userId, hash);
+        if (Objects.isNull(permitted)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }
 
-        return true;
+        return permitted;
     }
 }
