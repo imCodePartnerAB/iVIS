@@ -12,6 +12,7 @@ import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.entities.superclasses.ContactInformation;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -199,6 +200,24 @@ public class Person extends AbstractIdEntity<Long> implements Serializable, JpaP
 
 
         return person;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        if (StringUtils.hasText(firstName))
+            addWord(sb, firstName);
+
+        if (StringUtils.hasText(lastName))
+            addWord(sb, lastName);
+
+
+        if (sb.length() == 0)
+            addWord(sb, personalId);
+        ;
+
+        return sb.toString();
     }
 
     private void addWord(StringBuilder sb, String word) {
