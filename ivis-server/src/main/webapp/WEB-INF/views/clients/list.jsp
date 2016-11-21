@@ -13,6 +13,7 @@
         <th>Id</th>
         <th class="ordered-by">Name</th>
         <th>Resource Ids</th>
+        <th>Roles</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
@@ -23,6 +24,14 @@
                 <td>${client.clientId}</td>
                 <td>${client.name}</td>
                 <td>${client.resourceIds}</td>
+                <td>
+                    <c:forEach items="${client.authorities}" var="role" varStatus="fileOptionStatus">
+                        <c:if test="${!role.internal}">
+                            ${role.name}
+                            <c:if test="${!fileOptionStatus.last}">, </c:if>
+                        </c:if>
+                    </c:forEach>
+                </td>
                 <td class="buttons">
                     <a class="button positive" href="clients/${client.clientId}?form">Edit</a>
                     <button class="negative" type="button" onclick="location.href = 'clients/${client.clientId}?delete';">

@@ -17,11 +17,11 @@ public class RoleServiceRepoImpl extends AbstractNamedService<Role, Long, RoleRe
 
     @Override
     public List<Role> findUserRoles() {
-        return getRepo().findByUserRoleTrue();
+        return getRepo().findByUserRoleTrueAndInternalFalse();
     }
 
     @Override
     public List<Role> findClientRoles() {
-        return getRepo().findByUserRoleFalse();
+        return getRepo().findByUserRoleFalseAndInternalFalse();
     }
 }
