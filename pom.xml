@@ -8,7 +8,6 @@
         <module>ivis-core</module>
         <module>ivis-sdk</module>
         <module>ivis-server</module>
-        <module>ivis-client</module>
     </modules>
     <properties>
         <spring-oauth2.version>2.0.5.RELEASE</spring-oauth2.version>
