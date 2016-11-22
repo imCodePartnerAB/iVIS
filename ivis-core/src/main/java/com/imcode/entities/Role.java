@@ -55,10 +55,12 @@ public class Role extends AbstractNamedEntity<Long> implements GrantedAuthority,
         return sb.toString();
     }
 
+    @JsonIgnore
     public Set<Permission> getPermissions() {
         return permissions;
     }
 
+    @JsonIgnore
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
