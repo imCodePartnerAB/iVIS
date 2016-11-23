@@ -1,6 +1,5 @@
 package com.imcode.services;
 
-import com.imcode.entities.Person;
 import com.imcode.entities.Pupil;
 
 /**

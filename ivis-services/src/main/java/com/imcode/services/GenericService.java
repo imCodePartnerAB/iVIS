@@ -2,7 +2,6 @@ package com.imcode.services;
 
 import com.imcode.search.SearchCriteries;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**

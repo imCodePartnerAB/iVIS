@@ -389,7 +389,12 @@
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-core</artifactId>
             <version>1.0.0-alpha1-SNAPSHOT</version>
-            <!--<scope>runtime</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.imcode.ivis</groupId>
+            <artifactId>ivis-services</artifactId>
+            <version>1.0.0-alpha1-SNAPSHOT</version>
         </dependency>
 
         <!--HttpClientFor loading test data-->

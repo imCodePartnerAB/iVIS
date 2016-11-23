@@ -6,6 +6,7 @@
     <version>1.0.0-alpha1-SNAPSHOT</version>
     <modules>
         <module>ivis-core</module>
+        <module>ivis-services</module>
         <module>ivis-sdk</module>
         <module>ivis-server</module>
     </modules>
