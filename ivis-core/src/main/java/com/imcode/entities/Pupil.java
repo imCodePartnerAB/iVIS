@@ -2,6 +2,7 @@ package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.imcode.entities.auxiliary.Truancy;
 import com.imcode.entities.embed.AfterSchoolCenterSchema;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractIdEntity;

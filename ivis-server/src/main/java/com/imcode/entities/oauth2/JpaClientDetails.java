@@ -2,9 +2,7 @@ package com.imcode.entities.oauth2;
 
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
-import com.imcode.entities.enums.ApiEntities;
 import com.imcode.entities.enums.AuthorizedGrantType;
-import com.imcode.entities.enums.HttpMethod;
 import com.imcode.oauth2.IvisClientDetails;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
