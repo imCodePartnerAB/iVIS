@@ -1,5 +1,0 @@
-﻿Basic Concepts
-==============
-
-.. toctree::
-   :titlesonly:
