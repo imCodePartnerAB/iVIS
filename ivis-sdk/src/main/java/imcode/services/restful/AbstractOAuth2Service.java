@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -36,11 +37,12 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by vitaly on 28.05.15.
  */
-public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, ID>, NamedService<T>, PersonalizedService<T> {
+public abstract class AbstractOAuth2Service<T extends AbstractIdEntity, ID> implements GenericService<T, ID>, NamedService<T>, PersonalizedService<T> {
     private static final HashMap<String, Object> EMPTY_PARAMS = new HashMap<>();
     private String mainServiceAddres;
 
@@ -303,18 +305,17 @@ public abstract class AbstractOAuth2Service<T, ID> implements GenericService<T, 
 
     @Override
     public void delete(Iterable<T> entities) {
-        RestServiceRequest request = getCreateRequest();
-        List<T> result = new LinkedList<>();
-        String uri = request.getAddress() + "/deleteall";
-        HttpMethod method = request.getMethod();
         RestTemplate restTemplate = getRestTemplate();
-        HttpEntity<Iterable<T>> httpEntity = null;
-        try {
-            httpEntity = new RequestEntity<>(entities, HttpMethod.POST, new URI(uri));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        restTemplate.exchange(uri, method, httpEntity, void.class);
+        RestServiceRequest request = getDeleteRequest();
+        Serializable[] ids = StreamSupport.stream(entities.spliterator(), false)
+                .map(AbstractIdEntity::getId)
+                .toArray(Serializable[]::new);
+        String uri = buildUrlString(request, parameterMap("ids", ids));
+        HttpMethod method = request.getMethod();
+
+        Object[] uriVariables = null;
+
+        restTemplate.exchange(uri, method, null, void.class, uriVariables);
     }
 
     @Override
