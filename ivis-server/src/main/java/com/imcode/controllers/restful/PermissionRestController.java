@@ -3,6 +3,7 @@ package com.imcode.controllers.restful;
 import com.imcode.entities.Permission;
 import com.imcode.entities.interfaces.JpaEntity;
 import com.imcode.services.PermissionService;
+import com.imcode.utils.DocumentationUtil;
 import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.List;
@@ -34,14 +36,17 @@ public class PermissionRestController {
 
     private final RequestMappingHandlerMapping handler;
     private final PermissionService permissionService;
+    private final ServletContext servletContext;
 
     @Autowired
     public PermissionRestController(
             @Qualifier("org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping#0")
                     RequestMappingHandlerMapping handler,
-            PermissionService permissionService) {
+            PermissionService permissionService,
+            ServletContext servletContext) {
         this.handler = handler;
         this.permissionService = permissionService;
+        this.servletContext = servletContext;
     }
 
     @PostConstruct
@@ -52,6 +57,8 @@ public class PermissionRestController {
         List<Permission> unUpdated = permissionService.getUnUpdated();
         permissionService.deleteAssociation(unUpdated);
         permissionService.delete(unUpdated);
+        new DocumentationUtil()
+                .generate(permissionService, servletContext);
     }
 
     private void process(RequestMappingInfo info, HandlerMethod handlerMethod) {
@@ -129,7 +136,7 @@ public class PermissionRestController {
                         .append(">");
             } else {
                 result.append("<")
-                        .append(parameterType)
+                        .append(parameterType.getTypeName())
                         .append(">");
             }
 
