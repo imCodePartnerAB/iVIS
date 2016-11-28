@@ -1,10 +1,9 @@
 package com.imcode.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imcode.entities.Permission;
 import com.imcode.entities.superclasses.ContactInformation;
+import com.imcode.search.SearchCriteries;
 import com.imcode.services.PermissionService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -32,6 +31,8 @@ public class DocumentationUtil {
     private final String ZIP_FILE_NAME = "/api_docs.zip";
     private final String SERVICE_FOLDER = "services/";
     private final String ENTITY_FOLDER = "entities/";
+    private final String INFO_PROPERTIES = "/service.info.properties";
+    private Properties properties;
     private Map<String, List<Permission>> groups;
     private Class<JsonIgnore> JSON_IGNORE_ANNOTATION = JsonIgnore.class;
 
@@ -44,6 +45,12 @@ public class DocumentationUtil {
     public Logger logger = LoggerFactory.getLogger(this.getClass());
     
     public void generate(PermissionService permissionService, ServletContext servletContext) {
+        properties = new Properties();
+        try {
+            properties.load(servletContext.getResourceAsStream("/WEB-INF" + INFO_PROPERTIES));
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e.getCause());
+        }
         List<Permission> allPermissions = permissionService.findAll();
         groups = new HashMap<>();
         File file = new File(servletContext.getRealPath("/") + ZIP_FILE_NAME);
@@ -129,6 +136,7 @@ public class DocumentationUtil {
         while (setOfUsedClasses.size() > 0) {
             setOfUsedClasses = new HashSet<>();
             current.forEach(usedClass -> process(usedClass, all));
+            current = new HashSet<>(setOfUsedClasses);
         }
 
     }
@@ -254,6 +262,16 @@ public class DocumentationUtil {
                 .append("\n")
                 .append(resolveReturn(permission.getReturnValue()));
 
+        String note = properties.getProperty(permission.getEntityName() + "." + permission.getMethodName());
+        if (note != null) {
+            methodInfo.append("\n")
+                    .append(".. note::")
+                    .append("\n")
+                    .append("   ")
+                    .append(note)
+                    .append("\n")
+                    .append("\n");
+        }
 
         return methodInfo.toString();
 
@@ -437,6 +455,9 @@ public class DocumentationUtil {
             }
 
             if (!fieldAnnotated && !getterAnnotated && isPersistenceField) {
+                fieldJsonType.put(toSnackCaseFromCamelCase(field.getName()), resolveReturnType(field));
+            //exclusions
+            } else if (field.getDeclaringClass().equals(SearchCriteries.SearchCriteriaResult.class)) {
                 fieldJsonType.put(toSnackCaseFromCamelCase(field.getName()), resolveReturnType(field));
             }
         }
