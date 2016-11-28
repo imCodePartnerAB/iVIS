@@ -106,7 +106,7 @@ public class DocumentationUtil {
                 .append(" entity)``")
                 .append("\n")
                 .append("\n")
-                .append("Provides following method for `API <index.html>`_ calls:")
+                .append("Provides following method for `API <http://docs.ivis.se/en/latest/api/index.html>`_ calls:")
                 .append("\n")
                 .append("\n")
                 .append(generateMethodsNameList(sortedByMethodName))
@@ -301,6 +301,8 @@ public class DocumentationUtil {
 
         if (clazz == null) {
             return "        Starting downloading of file";
+        } else if (Number.class.isAssignableFrom(clazz)) {
+            return "        ARRAY<NUMBER>";
         }
 
         Map<String, String> fieldJsonType = new JsonFieldResolver(clazz).getFieldJsonType();
@@ -340,7 +342,7 @@ public class DocumentationUtil {
 
             if (typeFullName.contains(",")) {
                 String[] split = typeFullName.split(",");
-                return "KEY_ENUM_OBJECT_PAIR<" + split[0].replace(split[0], wrapType(split[0])) + ","
+                return "KEY_ENUM_OBJECT_PAIR<" + split[0].replace(split[0], wrapType(split[0])) + ", "
                         + split[1].replace(split[1], wrapType(split[1])).substring(1)
                         + ">";
             }
