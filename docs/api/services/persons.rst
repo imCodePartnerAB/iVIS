@@ -3,7 +3,7 @@ Persons
 
 ``(implementation of Person entity)``
 
-Provides following method for `API <index.html>`_ calls:
+Provides following method for `API <http://docs.ivis.se/en/latest/api/index.html>`_ calls:
 
     * `Create`_
     * `Delete`_
@@ -45,9 +45,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`Delete`:
@@ -76,9 +76,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`DeleteByIds`:
@@ -107,9 +107,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`FindByCriteria`:
@@ -138,9 +138,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`Get`:
@@ -169,9 +169,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`GetAll`:
@@ -200,9 +200,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`GetByPersonalId`:
@@ -231,9 +231,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`GetFirstByPersonalId`:
@@ -262,9 +262,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`SaveAll`:
@@ -293,9 +293,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`SaveAllAndReturnIds`:
@@ -322,8 +322,7 @@ Parameters response:
     *Array*
 
     Description:
-
-
+        ARRAY<NUMBER>
 .. _`Search`:
 
 Search
@@ -350,9 +349,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`SearchFirst`:
@@ -381,9 +380,9 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`Update`:
@@ -412,8 +411,8 @@ Parameters response:
         #. personal_id(STRING)
         #. first_name(STRING)
         #. last_name(STRING)
-        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ ,`Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
-        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
-        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ ,`Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 

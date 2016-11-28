@@ -3,7 +3,7 @@ Activities
 
 ``(implementation of Activity entity)``
 
-Provides following method for `API <index.html>`_ calls:
+Provides following method for `API <http://docs.ivis.se/en/latest/api/index.html>`_ calls:
 
     * `Create`_
     * `Delete`_
@@ -191,6 +191,10 @@ Parameters response:
 
     Description:
         Starting downloading of file
+
+.. note::
+   After redirecting user to url, will be started downloading.
+
 .. _`SaveAll`:
 
 SaveAll
@@ -245,8 +249,7 @@ Parameters response:
     *Array*
 
     Description:
-
-
+        ARRAY<NUMBER>
 .. _`Search`:
 
 Search
@@ -330,6 +333,14 @@ Parameters response:
 
     Description:
 
+
+
+.. note::
+   You need submit form with action url.
+
+    In form must be input file!
+
+    Max file size 20Mb.
 
 .. _`Update`:
 

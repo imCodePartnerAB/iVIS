@@ -3,7 +3,7 @@ EntityVersions
 
 ``(implementation of EntityVersion entity)``
 
-Provides following method for `API <index.html>`_ calls:
+Provides following method for `API <http://docs.ivis.se/en/latest/api/index.html>`_ calls:
 
     * `Create`_
     * `Delete`_
@@ -244,8 +244,7 @@ Parameters response:
     *Array*
 
     Description:
-
-
+        ARRAY<NUMBER>
 .. _`Search`:
 
 Search
