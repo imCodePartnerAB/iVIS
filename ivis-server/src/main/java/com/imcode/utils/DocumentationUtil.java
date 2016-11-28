@@ -1,9 +1,14 @@
 package com.imcode.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.imcode.entities.Permission;
+import com.imcode.entities.superclasses.ContactInformation;
 import com.imcode.services.PermissionService;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
@@ -12,9 +17,7 @@ import org.springframework.util.ReflectionUtils;
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,8 +30,8 @@ import java.util.zip.ZipOutputStream;
 public class DocumentationUtil {
 
     private final String ZIP_FILE_NAME = "/api_docs.zip";
-    private final String SERVICE_FOLDER = "service/";
-    private ServletContext servletContext;
+    private final String SERVICE_FOLDER = "services/";
+    private final String ENTITY_FOLDER = "entities/";
     private Map<String, List<Permission>> groups;
     private Class<JsonIgnore> JSON_IGNORE_ANNOTATION = JsonIgnore.class;
 
@@ -36,22 +39,31 @@ public class DocumentationUtil {
 
     private Set<String> setOfUsedClasses = new HashSet<>();
 
+    private String contactInformationType;
+
+    public Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     public void generate(PermissionService permissionService, ServletContext servletContext) {
-        this.servletContext = servletContext;
         List<Permission> allPermissions = permissionService.findAll();
         groups = new HashMap<>();
         File file = new File(servletContext.getRealPath("/") + ZIP_FILE_NAME);
+
+        if (file.exists()) {
+            file.delete();
+        }
+
         try {
             zipOutputStream = new ZipOutputStream(new FileOutputStream(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e.getCause());
         }
         allPermissions.forEach(this::separateOnGroups);
         groups.forEach(this::process);
+        generateRelatedInfo();
         try {
             zipOutputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e.getCause());
         }
     }
 
@@ -95,16 +107,85 @@ public class DocumentationUtil {
                 .append("\n")
                 .append(generateMethodsInfo(sortedByMethodName));
 
-        ZipEntry entry = new ZipEntry(SERVICE_FOLDER + toLowerCaseInPluralForm(entityName));
+        createZipEntry(SERVICE_FOLDER + toLowerCaseInPluralForm(entityName) + ".rst", content.toString());
+
+    }
+
+    private void createZipEntry(String name, String content) {
+        ZipEntry entry = new ZipEntry(name);
         try {
             zipOutputStream.putNextEntry(entry);
-            byte[] data = content.toString().getBytes();
+            byte[] data = content.getBytes();
             zipOutputStream.write(data, 0, data.length);
             zipOutputStream.closeEntry();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e.getCause());
+        }
+    }
+
+    private void generateRelatedInfo() {
+        Set<String> all = new HashSet<>();
+        Set<String> current = new HashSet<>(setOfUsedClasses);
+        while (setOfUsedClasses.size() > 0) {
+            setOfUsedClasses = new HashSet<>();
+            current.forEach(usedClass -> process(usedClass, all));
         }
 
+    }
+
+    private void process(String className, Set<String> all) {
+        boolean add = all.add(className);
+        if (add) {
+            StringBuilder content = new StringBuilder();
+            String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
+
+            Class<?> clazz = null;
+            try {
+                clazz = Class.forName(className.trim());
+            } catch (ClassNotFoundException e) {
+                logger.error(e.getMessage(), e.getCause());
+            }
+            assert clazz != null;
+            String prefix = "List of properties from ";
+            content
+                    .append(prefix)
+                    .append(simpleClassName)
+                    .append('\n')
+                    .append(generateStringFromRepeating('=', (prefix + simpleClassName).length()));
+            if (clazz.isEnum()) {
+                content.append('\n')
+                        .append('\n')
+                        .append("It is enum, that has STRING values.")
+                        .append('\n')
+                        .append('\n')
+                        .append("Values:")
+                        .append('\n')
+                        .append("    ")
+                        .append(genEnumList(clazz))
+                        .append(".");
+            } else {
+                content.append(genListOfReturnType(className.trim()));
+            }
+
+            createZipEntry(ENTITY_FOLDER + simpleClassName + ".rst", content.toString());
+
+        }
+    }
+
+    private String genEnumList(Class<?> clazz) {
+        Object[] values = clazz.getEnumConstants();
+        final String prefixAndSuffix = "\"";
+        return Arrays.stream(values)
+                .map(value -> {
+                    try {
+                        return (String) ReflectionUtils.invokeMethod(clazz.getMethod("name"), value);
+                    } catch (NoSuchMethodException | ClassCastException e) {
+                        logger.error(e.getMessage(), e.getCause());
+                    }
+                    return null;
+                })
+                .map(s -> prefixAndSuffix + s + prefixAndSuffix)
+                .collect(Collectors.joining(", "));
     }
 
     private String generateMethodsNameList(List<Permission> permissions) {
@@ -251,7 +332,7 @@ public class DocumentationUtil {
             try {
                 clazz = Class.forName(typeFullName);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e.getCause());
             }
             if (clazz != null) {
                 if (clazz.equals(String.class)) {
@@ -268,7 +349,7 @@ public class DocumentationUtil {
     }
 
     private String wrapType(String typeFullName) {
-        String prefix = "http://docs.ivis.se/en/latest/api/services/";
+        String prefix = "http://docs.ivis.se/en/latest/api/entities/";
         setOfUsedClasses.add(typeFullName);
         String simpleTypeName = typeFullName.substring(typeFullName.lastIndexOf('.') + 1);
         return  " `" + simpleTypeName + " <" + prefix + simpleTypeName + ".html>`_ ";
@@ -303,7 +384,7 @@ public class DocumentationUtil {
                     try {
                         return Class.forName(bean.getBeanClassName());
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        LoggerFactory.getLogger(DocumentationUtil.class).error(e.getMessage(), e.getCause());
                     }
                     return null;
                 })
@@ -328,6 +409,9 @@ public class DocumentationUtil {
         private Map<String, String> fieldJsonType = new LinkedHashMap<>();
 
         public JsonFieldResolver(Class<?> clazz) {
+            if (ContactInformation.class.isAssignableFrom(clazz)) {
+                contactInformationType = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
+            }
             ReflectionUtils.doWithFields(clazz, this::process);
         }
 
@@ -348,7 +432,7 @@ public class DocumentationUtil {
                     Method getter = field.getDeclaringClass().getMethod("get" + StringUtils.capitalize(field.getName()));
                     getterAnnotated = getter.getAnnotation(JSON_IGNORE_ANNOTATION) != null;
                 } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage(), e.getCause());
                 }
             }
 
@@ -368,24 +452,25 @@ public class DocumentationUtil {
             Class<?> type = field.getType();
             String typeName;
             String TYPE_COLLECTION_OR_OBJECT;
-            boolean isMap = true;
-
             if (type.equals(Serializable.class)) {
                 return TYPE_NUMBER;
             } else if (type.equals(Date.class)) {
                 return TYPE_NUMBER + "(Date representation wrapped)";
-            } else if (type.isAssignableFrom(Number.class)) {
+            } else if (Number.class.isAssignableFrom(type)) {
                 return TYPE_NUMBER;
             } else if (type.equals(String.class)) {
                 return TYPE_STRING;
             } else if (type.equals(Boolean.class)) {
                 return TYPE_BOOLEAN;
-            } else if (type.isAssignableFrom(Map.class)) {
-                typeName = getTypeName(field, isMap);
+            } else if (contactInformationType != null) {
+                typeName = contactInformationType;
+                TYPE_COLLECTION_OR_OBJECT = TYPE_OBJECT;
+                contactInformationType = null;
+            } else if (Map.class.isAssignableFrom(type)) {
+                typeName = getTypeName(field, true);
                 TYPE_COLLECTION_OR_OBJECT = TYPE_KEY_VALUE_PAIR;
             } else if (Collection.class.isAssignableFrom(type)) {
-                isMap = false;
-                typeName = getTypeName(field, isMap);
+                typeName = getTypeName(field, false);
                 TYPE_COLLECTION_OR_OBJECT = TYPE_ARRAY;
             } else {
                 typeName = type.getTypeName();
@@ -416,7 +501,6 @@ public class DocumentationUtil {
             }
             return typeName;
         }
-
     }
 
 }
