@@ -267,7 +267,7 @@ public class DocumentationUtil {
             methodInfo.append("\n")
                     .append(".. note::")
                     .append("\n")
-                    .append("   ")
+                    .append("    ")
                     .append(note)
                     .append("\n")
                     .append("\n");
