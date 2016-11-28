@@ -1,0 +1,17 @@
+List of properties from Issue
+=============================
+        #. title(STRING)
+        #. description(STRING)
+        #. status(OBJECT< `Status <http://docs.ivis.se/en/latest/api/entities/Status.html>`_ >)
+        #. responsible_person(OBJECT< `Person <http://docs.ivis.se/en/latest/api/entities/Person.html>`_ >)
+        #. authorized_persons(ARRAY< `Person <http://docs.ivis.se/en/latest/api/entities/Person.html>`_ >)
+        #. incidents(ARRAY< `Incident <http://docs.ivis.se/en/latest/api/entities/Incident.html>`_ >)
+        #. reported_date(NUMBER(Date representation wrapped))
+        #. reported_by(OBJECT< `Person <http://docs.ivis.se/en/latest/api/entities/Person.html>`_ >)
+        #. modified_by(OBJECT< `Person <http://docs.ivis.se/en/latest/api/entities/Person.html>`_ >)
+        #. modified_date(NUMBER(Date representation wrapped))
+        #. activities(ARRAY< `Activity <http://docs.ivis.se/en/latest/api/entities/Activity.html>`_ >)
+        #. categories(ARRAY< `Category <http://docs.ivis.se/en/latest/api/entities/Category.html>`_ >)
+        #. priority(OBJECT< `Priority <http://docs.ivis.se/en/latest/api/entities/Priority.html>`_ >)
+        #. pupils(ARRAY< `Pupil <http://docs.ivis.se/en/latest/api/entities/Pupil.html>`_ >)
+        #. id(NUMBER)

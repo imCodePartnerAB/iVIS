@@ -4,10 +4,10 @@ APPLICATION
 .. toctree::
     :titlesonly:
 
-    applicationformquestiongroups
-    applicationformquestions
-    applicationforms
-    applicationformsteps
-    applications
-    entityversions
-    schooltransports
+    /services/applicationformquestiongroups
+    /services/applicationformquestions
+    /services/applicationforms
+    /services/applicationformsteps
+    /services/applications
+    /services/entityversions
+    /services/schooltransports

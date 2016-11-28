@@ -4,11 +4,11 @@ BASE
 .. toctree::
     :titlesonly:
 
-    academicyears
-    afterschoolcentersections
-    guardians
-    persons
-    pupils
-    schoolclasses
-    schools
-    users
+    /services/academicyears
+    /services/afterschoolcentersections
+    /services/guardians
+    /services/persons
+    /services/pupils
+    /services/schoolclasses
+    /services/schools
+    /services/users

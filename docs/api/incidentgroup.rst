@@ -3,11 +3,10 @@ INCIDENT
 .. toctree::
     :titlesonly:
 
-    activities
-    categories
-    incidents
-    issues
-    logevents
-    priorities
-    roles
-    statuses
+    /services/activities
+    /services/categories
+    /services/incidents
+    /services/issues
+    /services/logevents
+    /services/priorities
+    /services/statuses
