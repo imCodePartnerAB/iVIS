@@ -1,0 +1,215 @@
+AUTHORIZATION
+Для того чтоб получить токен ты должен:
+1. Пройти овторизацию и получить авторизационный код
+Отправить запрос GET на адресс
+/oauth/authorize?response_type=code&client_id=ff11397c-3e3b-4398-80a9-feba203f1928&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fclient%2Fapi%2Fcontent%2Fivis%2Fcode&display=popup&scope=read+write
+client_id - это идентификотор клиента, выдается администратором ИВИСа список клиентов доступен по адрессу /clients
+redirect_uri адресс куда нужно перенаправить клиента после авторизиции
+display=popup - вызывает форму для открытия в новом окне(Она меньше)
+scope - это список запрашиваемых разрешений которые будут отображаться пользователю при авторизиции. пока доступны {read,write}
+После успешной авторизации клиент будет перенаправлен на адресс редиректа с параметром code (пример: http://localhost:8080/client/api/content/ivis/code?code=o32b53)
+2. Обменять авторизационный код на токен
+Отправить POST запрос на адресс
+/oauth/token
+Параметры
+grant_type = authorization_code
+code = Код который получили ранее(o32b53)
+redirect_uri = адрес куда отправить токен (http://localhost:8080/client/api/content/ivis/code)
+В хедер нужно добавить параметр для авторизации
+Authorization = Basic ZmYxMTM5N2MtM2UzYi00Mzk4LTgwYTktZmViYTIwM2YxOTI4OnNlY3JldA==
+ZmYxMTM5N2MtM2UzYi00Mzk4LTgwYTktZmViYTIwM2YxOTI4OnNlY3JldA== -это упакованый в Base64 строка состоящая из ClientId:ClientSecret (двоеточие обязательно)
+в ответ должен прити токен
+access_token = 28cc01de-b9a0-418c-bd32-1b1e52b9d467 - это сам токен, теперь его нужно пихать как параметр к каждому запросу к API
+expiration_date = 2016-04-07T03:41:04.112+0300 это дата "протухания" токена
+refresh_token c70470b8-5515-40c3-baf8-5745c7a05af9 - этот токен необходимо для того чтоб заменить устаревший токен на новый без повторной авторизации
+для обмена refresh_token на access_token нужно отправить запрос на
+http://localhost:8080/ivis/oauth/token?grant_type=refresh_token&refresh_token=c70470b8-5515-40c3-baf8-5745c7a05af9
+
+format = {json/xml}
+
+School
+MAIN URL: /api/v1/{format}/schools
+CREATE
+    url: /
+    method: POST
+    params: entity(School)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(School)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+    example: http://localhost:8080/ivis/api/v1/json/schools?access_token=28cc01de-b9a0-418c-bd32-1b1e52b9d467
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+SchoolClass
+MAIN URL: /api/v1/{format}/schoolclasses
+CREATE
+    url: /
+    method: POST
+    params: entity(SchoolClass)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(SchoolClass)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+Application
+MAIN URL: /api/v1/{format}/applications
+CREATE
+    url: /
+    method: POST
+    params: entity(Application)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(Application)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+    example: http://localhost:8080/ivis/api/v1/json/applications?access_token=28cc01de-b9a0-418c-bd32-1b1e52b9d467
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+
+ApplicationForm
+MAIN URL: /api/v1/{format}/applicationforms
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationForm)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationForm)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+ApplicationFormStep
+MAIN URL: /api/v1/{format}/applicationformsteps
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationFormStep)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationFormStep)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+ApplicationFormQuestionGroup
+MAIN URL: /api/v1/{format}/applicationformquestiongroups
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationFormQuestionGroup)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationFormQuestionGroup)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)
+
+ApplicationFormQuestion
+MAIN URL: /api/v1/{format}/applicationformquestion
+CREATE
+    url: /
+    method: POST
+    params: entity(ApplicationFormQuestion)
+UPDATE:
+    url: /{id}
+    method: PUT
+    params: entity(ApplicationFormQuestion)
+DELETE:
+    url: /{id}
+    method: DELETE
+    params:
+FIND ALL:
+    url: /
+    method: GET
+    params:
+FIND ONE:
+    url: /{id}
+    method: GET
+    params:
+FIND BY NAME:
+    url: /
+    method: GET
+    params: name(String)

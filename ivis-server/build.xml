@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+
+<project name="iVIS" default="package">
+
+    <condition property="ant.maven.executable" value="mvn.bat">
+        <os family="windows"/>
+    </condition>
+
+    <property name="ant.maven.executable" value="mvn"/>
+    <property file="tomcat.properties"/>
+
+    <macrodef name="maven">
+        <attribute name="goal"/>
+        <sequential>
+            <exec executable="${ant.maven.executable}" failonerror="true">
+                <arg value="@{goal}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <target name="clean">
+        <maven goal="clean"/>
+    </target>
+
+    <target name="package">
+        <maven goal="package"/>
+    </target>
+
+    <target name="tomcat-package" depends="package">
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/lib"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/classes"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/spring"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/i18n"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/views"/>
+        <delete dir="${tomcat.webapps.dir}/WEB-INF/web-resources"/>
+        <delete file="${tomcat.webapps.dir}/WEB-INF/*.*"/>
+
+        <!--<delete dir="${tomcat.webapps.dir}/WEB-INF/lib"/>-->
+        <delete dir="${tomcat.webapps.dir}/*"/>
+        <copy todir="${tomcat.webapps.dir}">
+            <fileset dir="target/iVIS"/>
+        </copy>
+    </target>
+
+    <target name="tomcat-quick-copy">
+        <copy todir="${tomcat.webapps.dir}">
+            <fileset dir="src/main/webapp"/>
+        </copy>
+    </target>
+
+    <target name="quick-copy-to-target">
+        <copy todir="target/iVIS">
+            <fileset dir="src/main/webapp" />
+        </copy>
+    </target>
+
+    <target name="tomcat-reload">
+            <maven goal="tomcat:reload"/>
+    </target>
+
+    <target name="idea">
+        <maven goal="idea:idea"/>
+    </target>
+
+</project>

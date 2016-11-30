@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/integration"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:c="http://www.springframework.org/schema/c"
+             xmlns:tx="http://www.springframework.org/schema/tx"
+             xmlns:aop="http://www.springframework.org/schema/aop"
+             xmlns:task="http://www.springframework.org/schema/task"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+                  http://www.springframework.org/schema/beans/spring-beans.xsd
+                  http://www.springframework.org/schema/data/jpa
+                  http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+                  http://www.springframework.org/schema/integration
+                  http://www.springframework.org/schema/integration/spring-integration.xsd
+                  http://www.springframework.org/schema/context
+                  http://www.springframework.org/schema/context/spring-context.xsd
+                  http://www.springframework.org/schema/tx
+                  http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!-- Настраивает управление транзакциями с помощью аннотации @Transactional -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--Async-->
+    <task:annotation-driven executor="myExecutor"/>
+    <task:executor id="myExecutor" pool-size="7-42" queue-capacity="11"/>
+
+    <!--<beans:bean id="messageSource"-->
+    <!--class="org.springframework.context.support.ReloadableResourceBundleMessageSource">-->
+    <!--&lt;!&ndash;<property name="basename" value="messages" />&ndash;&gt;-->
+    <!--<beans:property name="basename" value="classpath:messages" />-->
+    <!--<beans:property name="defaultEncoding" value="UTF-8" />-->
+    <!--</beans:bean>-->
+
+    <!--propertyConfigurer-->
+    <beans:bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <beans:property name="locations">
+            <beans:list>
+                <beans:value>/WEB-INF/server.properties</beans:value>
+                <!--<beans:value>classpath:server.properties</beans:value>-->
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+    <!--dataSource-->
+    <beans:bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <beans:property name="driverClassName" value="${JdbcDriver}"/>
+        <beans:property name="url" value="${JdbcUrl}"/>
+        <beans:property name="username" value="${User}"/>
+        <beans:property name="password" value="${Password}"/>
+    </beans:bean>
+
+    <beans:bean id="hibernatePersistence" class="org.hibernate.ejb.HibernatePersistence">
+    </beans:bean>
+
+    <beans:bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <beans:property name="dataSource" ref="dataSource"/>
+        <beans:property name="persistenceProvider" ref="hibernatePersistence"/>
+        <beans:property name="packagesToScan">
+            <beans:list>
+                <beans:value>com.imcode.entities</beans:value>
+                <beans:value>com.imcode.entities.oauth2</beans:value>
+                <beans:value>com.imcode.misc</beans:value>
+            </beans:list>
+        </beans:property>
+        <beans:property name="jpaProperties">
+            <beans:props>
+                <!--<beans:prop key="hibernate.dialect">${Hibernate.dialect}</beans:prop>-->
+                <beans:prop key="hibernate.dialect">${Hibernate.dialect}</beans:prop>
+                <beans:prop key="connection.pool_size">1</beans:prop>
+                <beans:prop key="current_session_context_class">thread</beans:prop>
+                <beans:prop key="cache.provider_class">org.hibernate.cache.NoCacheProvider</beans:prop>
+                <beans:prop key="show_sql">true</beans:prop>
+                <beans:prop key="hibernate.hbm2ddl.auto">${Hibernate.hbm2ddl}</beans:prop>
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+
+    <jpa:repositories base-package="com.imcode.repositories" entity-manager-factory-ref="myEmf"/>
+
+    <beans:bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+                c:emf-ref="myEmf"/>
+    <!--<beans:property name="entityManagerFactory" ref="myEmf"/>-->
+    <!--</beans:bean>-->
+
+
+    <!--<beans:bean id="securityService" class="com.imcode.misc.SecurityServiceImpl" init-method="initialize">-->
+    <!--<beans:property name="applicationService" ref="applicationServiceRepoImpl"/>-->
+    <!--<beans:property name="userService" ref="userServiceRepoImpl"/>-->
+    <!--<beans:property name="tokenInfoRepository" ref="tokenInfoRepository"/>-->
+    <!--</beans:bean>-->
+
+    <beans:bean id="errorFactory" class="com.imcode.misc.errors.ErrorFactory">
+        <beans:property name="messageSource">
+            <beans:bean class="org.springframework.context.support.ResourceBundleMessageSource">
+                <beans:property name="basenames">
+                    <beans:list>
+                        <beans:value>errors</beans:value>
+                    </beans:list>
+                </beans:property>
+            </beans:bean>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="messages" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+                p:basenames="classpath:/messages" p:defaultEncoding="UTF-8"/>
+
+    <!--<beans:bean id="clientDetails" class="org.springframework.security.oauth2.provider.client.JdbcClientDetailsService"-->
+    <!--c:dataSource-ref="dataSource"/>-->
+
+
+    <!--<beans:constructor-arg name="dataSource" ref="dataSource"/>-->
+    <!--</beans:bean>-->
+
+    <context:component-scan base-package="com.imcode.services"/>
+    <context:component-scan base-package="com.imcode.validators"/>
+    <!--<beans:bean id="tokenCheckAdvice" class="com.imcode.oauth2.TokenCheckAdvice"/>-->
+    <!--<aop:aspectj-autoproxy />-->
+    <!--&lt;!&ndash;<aop:config>&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:pointcut id="tokenRequared" expression="execution(* com.imcode.controllers.restful.SchoolClassControllerImpl.test(..))"/>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<aop:aspect ref="tokenCheckAdvice">&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:around method="aroundAdvice" pointcut-ref="tokenRequared"/>&ndash;&gt;-->
+    <!--&lt;!&ndash;</aop:aspect>&ndash;&gt;-->
+    <!--&lt;!&ndash;</aop:config>&ndash;&gt;-->
+    <!--<aop:aspectj-autoproxy>-->
+    <!--<aop:include name="tokenCheckAdvice"/>-->
+    <!--</aop:aspectj-autoproxy>-->
+
+    <!--<beans:bean id="initializator" class="com.imcode.misc.Initializator"/>-->
+    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.LoaderService">
+        <beans:property name="loaders">
+            <beans:map>
+                <beans:entry key="com.imcode.entities.Guardian">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.Guardian"
+                                c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="guardianServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="guardianServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="person.personalId">
+                                    <beans:bean
+                                            class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
+                                            c:entityServise-ref="guardianServiceRepoImpl"/>
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>pupils</beans:value>
+                                <beans:value>person.personalId</beans:value>
+                                <beans:value>person.firstName</beans:value>
+                                <beans:value>person.lastName</beans:value>
+                                <beans:value>person.phone</beans:value>
+                                <beans:value>person.email</beans:value>
+                                <beans:value>person.addresses[REGISTERED].postalCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].municipalityCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].city</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street2</beans:value>
+                                <beans:value>person.addresses[REGISTERED].careOf</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+                <beans:entry key="com.imcode.entities.Pupil">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.Pupil" c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="pupilServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="pupilServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="person.personalId">
+                                    <beans:bean
+                                            class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
+                                            c:entityServise-ref="pupilServiceRepoImpl"/>
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>guardians</beans:value>
+                                <beans:value>person.personalId</beans:value>
+                                <beans:value>person.firstName</beans:value>
+                                <beans:value>person.lastName</beans:value>
+                                <beans:value>person.phone</beans:value>
+                                <beans:value>person.email</beans:value>
+                                <beans:value>person.addresses[REGISTERED].postalCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].municipalityCode</beans:value>
+                                <beans:value>person.addresses[REGISTERED].city</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street</beans:value>
+                                <beans:value>person.addresses[REGISTERED].street2</beans:value>
+                                <beans:value>person.addresses[REGISTERED].careOf</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+                <beans:entry key="com.imcode.entities.Person">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.Person"
+                                c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="personServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="personServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="personalId">
+                                    <beans:bean
+                                            class="com.imcode.controllers.html.form.upload.loaders.ByPersonalIdFinder"
+                                            c:entityServise-ref="personServiceRepoImpl"/>
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>personalId</beans:value>
+                                <beans:value>firstName</beans:value>
+                                <beans:value>lastName</beans:value>
+                                <beans:value>phone</beans:value>
+                                <beans:value>email</beans:value>
+                                <beans:value>addresses[REGISTERED].postalCode</beans:value>
+                                <beans:value>addresses[REGISTERED].municipalityCode</beans:value>
+                                <beans:value>addresses[REGISTERED].city</beans:value>
+                                <beans:value>addresses[REGISTERED].street</beans:value>
+                                <beans:value>addresses[REGISTERED].street2</beans:value>
+                                <beans:value>addresses[REGISTERED].careOf</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+                <beans:entry key="com.imcode.entities.School">
+                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.EntityLoader"
+                                c:entityType="com.imcode.entities.School"
+                                c:conversionService-ref="csvConversionService">
+                        <beans:property name="entityServise" ref="schoolServiceRepoImpl"/>
+                        <beans:property name="finders">
+                            <beans:map>
+                                <beans:entry key="id">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByIdFinder"
+                                                c:entityServise-ref="schoolServiceRepoImpl" c:idClass="java.lang.Long"
+                                                c:conversionService-ref="csvConversionService"/>
+                                </beans:entry>
+                                <beans:entry key="name">
+                                    <beans:bean class="com.imcode.controllers.html.form.upload.loaders.ByNameFinder"
+                                                c:entityServise-ref="schoolServiceRepoImpl"/>
+                                </beans:entry>
+                            </beans:map>
+                        </beans:property>
+                        <beans:property name="allowedFieldSet">
+                            <beans:set value-type="java.lang.String">
+                                <beans:value>name</beans:value>
+                                <beans:value>schoolId</beans:value>
+                                <beans:value>afterSchoolCenterSections</beans:value>
+                                <beans:value>schoolClasses</beans:value>
+                                <beans:value>services</beans:value>
+                            </beans:set>
+                        </beans:property>
+                    </beans:bean>
+                </beans:entry>
+            </beans:map>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="csvConversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <beans:property name="converters">
+            <beans:set>
+                <beans:bean class="com.imcode.controllers.converters.PhoneConverter"/>
+                <beans:bean class="com.imcode.controllers.converters.EmailConverter"/>
+                <beans:bean class="com.imcode.controllers.converters.GuardianConverter"
+                            c:entityService-ref="guardianServiceRepoImpl"/>
+                <beans:bean class="com.imcode.controllers.converters.PupilConverter"
+                            c:entityService-ref="pupilServiceRepoImpl"/>
+                <beans:bean class="com.imcode.controllers.converters.PersonConverter"
+                            c:entityService-ref="personServiceRepoImpl"/>
+            </beans:set>
+        </beans:property>
+    </beans:bean>
+
+    <!--This converter don't insert the null items to collections-->
+    <beans:bean class="com.imcode.controllers.converters.NotNullStringToCollectionConverter"
+                c:conversionService-ref="csvConversionService"/>
+
+    <beans:bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- max upload size in bytes -->
+        <beans:property name="maxUploadSize" value="20971520" /> <!-- 20MB -->
+
+        <!-- max size of file in memory (in bytes) -->
+        <beans:property name="maxInMemorySize" value="20971520" /> <!-- 20MB -->
+
+    </beans:bean>
+
+    <beans:bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <!-- SMTP settings -->
+        <beans:property name="host" value="${mail.smtp.host}" />
+        <beans:property name="port" value="${mail.smtp.port}" />
+        <beans:property name="username" value="${mail.smtp.username}" />
+        <beans:property name="password" value="${mail.smtp.password}" />
+
+        <beans:property name="javaMailProperties">
+            <!-- additional properties specific mailTo JavaMail -->
+            <beans:props>
+                <beans:prop key="mail.transport.protocol">smtp</beans:prop>
+                <beans:prop key="mail.smtp.auth">true</beans:prop>
+                <!--<beans:prop key="mail.smtp.user">${Mail.smtp.username}</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.submitter">${Mail.smtp.submitter}</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.from"></beans:prop>-->
+                <!--<beans:prop key="mail.smtp.starttls.enable">true</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.ssl.enable">false</beans:prop>-->
+                <!--<beans:prop key="mail.smtp.ssl.checkserveridentity">false</beans:prop>-->
+                <beans:prop key="mail.debug">true</beans:prop>
+
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+
+</beans:beans>

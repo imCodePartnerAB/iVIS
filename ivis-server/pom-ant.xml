@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+
+<project name="imCMS" default="process-webapp-sources">
+
+    <!--
+    Creates webapp sources.
+    -->
+
+    <property name="version" value="SET BY MAVEN"/>
+
+    <property file="build.properties"/>
+
+    <property name="build.webapp.dir" value="SET BY MAVEN"/>
+    <property name="build.webapp.webinf.dir" value="${build.webapp.dir}/WEB-INF"/>
+
+    <property name="main.resources-conf.dir" value="src/main/resources"/>
+
+    <property name="versionfile" value="${build.webapp.webinf.dir}/version.txt"/>
+
+    <property name="srcincludes" value="MANIFEST.TXT"/>
+
+    <property name="webinf.conf.dir" value="${build.webapp.webinf.dir}"/>
+
+    <target name="process-webapp-sources" depends="init"
+            description="Translates and copies the webapp sources to webapp.">
+
+        <dependset>
+            <srcfileset file="build.properties"/>
+            <targetfileset dir="${webinf.conf.dir}">
+                <include name="server.properties"/>
+            </targetfileset>
+        </dependset>
+
+
+        <echo message="${version}" file="${versionfile}"/>
+
+        <!-- Copy and filter webinf, conf and classes resources to main webapp dir -->
+        <copy todir="${webinf.conf.dir}" filtering="true" encoding="utf-8">
+            <fileset dir="${main.resources-conf.dir}"/>
+        </copy>
+
+    </target>
+
+    <target name="init" depends="init-global-filters"
+            description="Handy target for everything else to depend on.">
+
+        <record name="build.log"/>
+
+        <tstamp/>
+
+    </target>
+
+
+    <target name="init-global-filters">
+        <filter token="db-name" value="${db-name}"/>
+        <filter token="db-url-without-db-name" value="${db-url-without-db-name}"/>
+
+        <filter token="db-driver" value="${db-driver}"/>
+        <filter token="db-url" value="${db-url}"/>
+        <filter token="db-name" value="${db-name}"/>
+        <filter token="db-user" value="${db-user}"/>
+        <filter token="db-pass" value="${db-pass}"/>
+        <filter token="db-maxconnections" value="${db-maxconnections}"/>
+
+        <filter token="hibernate-dialect" value="${hibernate-dialect}"/>
+        <filter token="hibernate-hbm2ddl-auto" value="${hibernate-hbm2ddl-auto}"/>
+</target>
+
+</project>

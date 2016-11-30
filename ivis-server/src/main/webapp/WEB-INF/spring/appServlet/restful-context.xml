@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- DispatcherServlet Context: определяет настройки одного сервлета; бины, которые доступны только ему -->
+
+    <!--propertyConfigurer-->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>/WEB-INF/server.properties</value>
+                <!--<beans:value>classpath:server1.properties</beans:value>-->
+                <!--<beans:value>classpath:server.properties</beans:value>-->
+            </list>
+        </property>
+    </bean>
+
+    <!-- Разрешаем использование аннотаций Spring MVC (то есть @Controller и.т.д) -->
+    <!--<mvc:annotation-driven/>-->
+    <mvc:annotation-driven content-negotiation-manager="cnManager">
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jacksonObjectMapper"/>
+            </bean>
+            <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter"
+                  p:marshaller-ref="castorMarshaller" p:unmarshaller-ref="castorMarshaller"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" >
+        <property name="propertyNamingStrategy" value="CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES"/>
+    </bean>
+
+    <mvc:interceptors>
+        <bean class="com.imcode.security.interceptors.AccessApiInterceptor"/>
+    </mvc:interceptors>
+
+    <bean id="cnManager" class="com.imcode.spring.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="true"/>
+        <property name="ignoreAcceptHeader" value="true" />
+        <property name="defaultContentType" value="application/json" />
+        <property name="useJaf" value="false"/>
+        <property name="mediaTypes">
+            <map>
+                <!--<entry key="html" value="text/html" />-->
+                <entry key="json" value="application/json" />
+                <entry key="xml" value="application/xml" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"
+          p:mappingLocation="classpath:oxm-mapping.xml"/>
+
+    <context:component-scan base-package="com.imcode.controllers.restful"/>
+</beans>

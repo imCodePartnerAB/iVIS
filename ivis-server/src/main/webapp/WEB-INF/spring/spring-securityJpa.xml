@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xmlns:sec="http://www.springframework.org/schema/security" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/security/oauth2
+       http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+
+    <http pattern="/favicon.ico" security="none" xmlns="http://www.springframework.org/schema/security"/>
+    <http pattern="/mock/**" security="none" xmlns="http://www.springframework.org/schema/security"/>
+
+    <http pattern="/oauth/token" create-session="never"
+          authentication-manager-ref="clientAuthenticationManager"
+          xmlns="http://www.springframework.org/schema/security">
+        <intercept-url pattern="/**" method="GET" access="ROLE_DENY" />
+        <intercept-url pattern="/**" method="PUT" access="ROLE_DENY" />
+        <intercept-url pattern="/**" method="DELETE" access="ROLE_DENY" />
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+        <anonymous enabled="false" />
+        <http-basic entry-point-ref="clientAuthenticationEntryPoint" />
+        <!-- include this only if you need to authenticate clients via request parameters -->
+        <custom-filter ref="clientCredentialsTokenEndpointFilter"
+                       after="BASIC_AUTH_FILTER" />
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+    </http>
+
+    <!--Helps to redirect cpecified request parameters to login page-->
+    <bean id="loginUrlAuthenticationEntryPoint" class="com.imcode.security.IvisLoginUrlAuthenticationEntryPoint"
+          p:redirectParameterNames="#{{'display'}}" p:loginFormUrl="/login"/>
+
+    <!-- The OAuth2 protected resources are separated out into their own block
+        so we can deal with authorization and error handling separately. This isn't
+        mandatory, but it makes it easier to control the behaviour. -->
+    <http pattern="/oauth/(users|clients)/.*"
+          request-matcher="regex"
+          create-session="never"
+          entry-point-ref="oauthAuthenticationEntryPoint"
+          use-expressions="true" xmlns="http://www.springframework.org/schema/security">
+        <anonymous enabled="false" />
+        <intercept-url pattern="/oauth/users/([^/].*?)/tokens/.*"
+                       access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('write')"
+                       method="DELETE" />
+        <intercept-url pattern="/oauth/users/.*"
+                       access="#oauth2.clientHasRole('ROLE_CLIENT') and (hasRole('ROLE_USER') or #oauth2.isClient()) and #oauth2.hasScope('read')"
+                       method="GET" />
+        <intercept-url pattern="/oauth/clients/.*"
+                       access="#oauth2.clientHasRole('ROLE_CLIENT') and #oauth2.isClient() and #oauth2.hasScope('read')"
+                       method="GET" />
+        <intercept-url pattern="/**" access="denyAll()" />
+        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+        <expression-handler ref="oauthWebExpressionHandler" />
+    </http>
+
+    <http pattern="/(users|clients|csv).*" request-matcher="regex"
+          entry-point-ref="loginUrlAuthenticationEntryPoint"
+          xmlns="http://www.springframework.org/schema/security">
+
+        <intercept-url pattern="/users/(\d+)\?form"
+                       access="ROLE_USER" />
+
+        <intercept-url
+                pattern="/(users|clients|csv|domain|pupils|schema_versions|schools|sql|roles).*"
+                access="ROLE_ADMIN" />
+
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+    </http>
+
+    <!-- The OAuth2 protected resources are separated out into their own block
+        so we can deal with authorization and error handling separately. This isn't
+        mandatory, but it makes it easier to control the behaviour. -->
+    <http pattern="/api/v1/**" create-session="never"
+          entry-point-ref="oauthAuthenticationEntryPoint"
+          xmlns="http://www.springframework.org/schema/security">
+        <anonymous enabled="false" />
+        <custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+        <access-denied-handler ref="oauthAccessDeniedHandler" />
+    </http>
+
+    <http access-denied-page="/login?authorization_error=true"
+          disable-url-rewriting="true"
+          entry-point-ref="loginUrlAuthenticationEntryPoint"
+          xmlns="http://www.springframework.org/schema/security">
+        <!--<intercept-url pattern="/oauth/authorize" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <intercept-url pattern="/acs/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/registration/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/restore_password/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <!--<intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <intercept-url pattern="/resources/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <!--<intercept-url pattern="/aсs/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <!--<intercept-url pattern="/aсs" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <!--<intercept-url pattern="/csv/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <!--<intercept-url pattern="/sql/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+
+
+        <form-login authentication-failure-url="/login?authentication_error=true"
+                    default-target-url="/" login-page="/login"
+                    login-processing-url="/login.do" />
+        <logout invalidate-session="true" success-handler-ref="ivisLogoutSuccessHandler" logout-url="/logout.do" />
+        <anonymous />
+        <!--<csrf/>-->
+    </http>
+
+    <bean id="ivisLogoutSuccessHandler" class="com.imcode.controllers.html.oauth2.IvisLogoutSuccessHandler"/>
+
+    <bean id="oauthAuthenticationEntryPoint"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="realmName" value="sparklr2" />
+    </bean>
+
+    <bean id="clientAuthenticationEntryPoint"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <property name="realmName" value="sparklr2/client" />
+        <property name="typeName" value="Basic" />
+    </bean>
+
+    <bean id="oauthAccessDeniedHandler"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
+
+    <bean id="clientCredentialsTokenEndpointFilter"
+          class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
+        <property name="authenticationManager" ref="clientAuthenticationManager" />
+    </bean>
+
+    <authentication-manager id="clientAuthenticationManager"
+                            xmlns="http://www.springframework.org/schema/security">
+        <authentication-provider user-service-ref="clientDetailsUserService" />
+    </authentication-manager>
+
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <authentication-manager alias="authenticationManager"
+                            xmlns="http://www.springframework.org/schema/security">
+        <authentication-provider user-service-ref="userServiceRepoImpl">
+            <!--<jdbc-user-service data-source-ref="dataSource"/>-->
+            <!--&lt;!&ndash;<user-service id="userDetailsService">&ndash;&gt;-->
+                <!--&lt;!&ndash;<user name="admin" password="pass" authorities="ROLE_USER" />&ndash;&gt;-->
+                <!--&lt;!&ndash;<user name="user1" password="1111" authorities="ROLE_USER" />&ndash;&gt;-->
+            <!--&lt;!&ndash;</user-service>&ndash;&gt;-->
+            <password-encoder ref="encoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <bean id="clientDetailsUserService"
+          class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+        <constructor-arg name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />
+    </bean>
+
+    <!--TODO Override JdbcTokenStore onto the JpaTokenStore-->
+    <!--<bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" />-->
+    <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore"
+          c:dataSource-ref="dataSource"/>
+
+
+    <bean id="tokenServices"
+          class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <property name="tokenStore" ref="tokenStore" />
+        <property name="tokenEnhancer" ref="tokenEnhancer" />
+        <property name="supportRefreshToken" value="true" />
+        <property name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />
+    </bean>
+
+    <bean id="tokenEnhancer"
+          class="com.imcode.oauth2.IvisTokenEnhancer" />
+
+    <bean id="requestFactory"
+          class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
+
+        <constructor-arg name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />
+    </bean>
+
+    <bean id="userApprovalHandler"
+          class="com.imcode.oauth2.IvisUserApprovalHandler">
+        <property name="approvalStore" ref="approvalStore" />
+        <property name="clientDetailsService" ref="clientDetailsServiceRepoImpl" />
+        <property name="requestFactory" ref="requestFactory" />
+    </bean>
+
+    <bean id="approvalStore"
+          class="org.springframework.security.oauth2.provider.approval.TokenApprovalStore">
+        <property name="tokenStore" ref="tokenStore" />
+    </bean>
+
+    <bean id="ivisOAuth2RequestValidator" class="com.imcode.security.validators.IvisOAuth2RequestValidator"></bean>
+
+    <oauth:authorization-server
+            client-details-service-ref="clientDetailsServiceRepoImpl" token-services-ref="tokenServices"
+            request-validator-ref="ivisOAuth2RequestValidator"
+            user-approval-handler-ref="userApprovalHandler">
+        <oauth:authorization-code />
+        <oauth:implicit />
+        <oauth:refresh-token />
+        <oauth:client-credentials />
+        <oauth:password />
+    </oauth:authorization-server>
+
+    <oauth:resource-server id="resourceServerFilter"
+                           resource-id="ivis" token-services-ref="tokenServices"/>
+
+
+    <mvc:annotation-driven />
+
+    <mvc:default-servlet-handler />
+
+    <sec:global-method-security
+            pre-post-annotations="enabled" proxy-target-class="true">
+        <!--you could also wire in the expression handler up at the layer of the
+            http filters. See https://jira.springsource.org/browse/SEC-1452 -->
+        <sec:expression-handler ref="oauthExpressionHandler" />
+    </sec:global-method-security>
+
+    <oauth:expression-handler id="oauthExpressionHandler"/>
+
+    <oauth:web-expression-handler id="oauthWebExpressionHandler" />
+
+</beans>
