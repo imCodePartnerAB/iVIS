@@ -1,4 +1,4 @@
-﻿Software Installation
+﻿﻿Software Installation
 =====================
 
 Process will be describe in Ubuntu Terminal (Ctrl+Alt+T), and all following code you need input there.
