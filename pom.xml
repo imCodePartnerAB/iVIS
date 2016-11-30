@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.imcode.ivis</groupId>
     <artifactId>iVIS</artifactId>
-    <version>1.0.0-alpha1-SNAPSHOT</version>
+    <version>1.0.0-alpha1</version>
     <modules>
         <module>ivis-core</module>
         <module>ivis-services</module>
