@@ -2,6 +2,7 @@ Walkthrough: iVIS Server Configuration
 ======================================
 
     * `Create or edit iVIS client`_
+    * `Create or edit iVIS role`_
 
 .. _`Create or edit iVIS client`:
 
@@ -26,34 +27,12 @@ The name of resource which client obtain.
 Owner
 ~~~~~
 
-The name of User which has got client.
+The id of User which obtain client.
 
 Secret
 ~~~~~~
 
-The password of client for access to resources
-
-Scope
-~~~~~
-
-Scope for client activity.
-
-There are 3 parameters for scope:
-
-.. envvar:: read
-
-    Requires only read data of resources (GET requests)
-
-.. envvar:: write
-
-    Requires change data of resources (POST, PUT, DELETE)
-
-.. note::
-    If you want create client based on API, you will be enough read and write
-
-.. envvar:: execute
-
-    Requires change data of resources through proxy. This client needs ivis-core and ivis-sdk dependencies.
+The password of client for access to resources.
 
 Authorized Grant Types
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -84,13 +63,9 @@ URL for access token or authorization code response.
 Roles
 ~~~~~
 
-.. envvar:: ROLE_ADMIN
+Role (roles) that consist from set of permission for API access.
 
-    Can edit/view information
-
-.. envvar:: ROLE_USER
-
-    Can only view information
+Described next at `Create or edit iVIS role`_ .
 
 Access Token Validity(sec)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -111,8 +86,37 @@ Number of seconds after which the refresh token expires, and is no longer valid.
     Read about `Access Token <https://tools.ietf.org/html/rfc6749#section-1.4>`_ and
     `Refresh Token <https://tools.ietf.org/html/rfc6749#section-1.5>`_
 
+.. _`Create or edit iVIS role`:
 
+Create or edit iVIS role
+------------------------
 
+Role in iVIS is a set of permissions to access method API, separated into groups by entity name.
+
+.. image:: /images/ivisRole.png
+
+Name
+~~~~
+
+The name of role.
+
+For
+~~~
+
+Define role purpose.
+
+List of permissions
+~~~~~~~~~~~~~~~~~~~
+
+Permission represents as method API with detail description.
+
+.. image:: /images/permissions.png
+
+.. image:: /images/permission.png
+
+.. tip::
+    Checkbox near entity name has three state. It indicates that in group checked no one/all/some.
+    Also it provides possibility check/uncheck all permissions in group.
 
 
 
