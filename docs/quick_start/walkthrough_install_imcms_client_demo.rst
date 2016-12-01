@@ -1,5 +1,5 @@
-Walkthrough: Install iVIS Server Client Application
-===================================================
+Walkthrough: Install iVIS Server Imcms Client Demo Application
+==============================================================
 
 Prerequisites
 -------------
@@ -49,14 +49,14 @@ Run Tomcat by executing following command in the Terminal:
 
     ./startup.sh
 
-Open iVIS Сlient in your browser: http://localhost:8080/client.
+Open iVIS ?lient in your browser: http://localhost:8080/client.
 
 Login: admin
 
 Password: password
 
 .. note::
-    Default installations of the iVIS Server and iVIS Client have configured client in the database.
+Default installations of the iVIS Server and iVIS Client have configured client in the database.
     You can read more about it `here </en/latest/api/authorization.html>`_.
 
 If you see this image, everything is good, congratulations!
