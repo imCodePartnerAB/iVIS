@@ -18,10 +18,10 @@ For detailed instructions of installing this components visit `this page </en/la
 Project structure
 -----------------
 
-iVIS maven project from GitHub consists of 4 modules:
+`iVIS <https://github.com/imCodePartnerAB/iVIS>`_ maven project from GitHub consists of 4 modules:
 
     #. ivis-core - entities that you can use in API;
-    #. ivis-services - service interfaces for entities, they are define what method are provided;
+    #. ivis-services - service interfaces for entities; they are define provided methods;
     #. ivis-sdk - sdk for easier work with the API;
     #. ivis-server - iVIS server, implementation of the application logic.
 
@@ -32,17 +32,11 @@ Clone project from GitHub repository:
 
 .. code-block:: bash
 
-    cd /home/username/directory #Directory in what you want to clone project
+    cd /../directory #Directory where project folder with content must be placed
 
     git clone https://github.com/imCodePartnerAB/iVIS.git
 
-First of all you need switch to the branch of the latest changes. This branch is NewApplicationFormArchitect. Run following commands in the Terminal for that:
-
-.. code-block:: bash
-
-    cd /home/../iVIS #path to iVIS project directory
-
-    git checkout NewApplicationFormArchitect
+After cloning will created subdirectory iVIS with content.
 
 Database configuration
 ----------------------
@@ -53,9 +47,9 @@ In the Terminal (Ctrl+ALt+T) input following commands to create the database:
 
     mysql -u {username} -p{password} #{username} - database username, {password} - database password
 
-    CREATE DATABASE {databaseName}; #{databaseName} - database name
+    CREATE DATABASE db_ivis_test; #or custom {databaseName}
 
-Edit file **server.properties** from *ivis-server/src/main/webapp/WEB-INF* in the next way:
+Edit file **local.server.properties** from *ivis-server* subfolder in the next way:
 
     * User [#]_;
     * Password [#]_;
@@ -72,26 +66,11 @@ Edit file **server.properties** from *ivis-server/src/main/webapp/WEB-INF* in th
 .. [#] for mysql is *org.hibernate.dialect.MySQL5InnoDBDialect*
 .. [#] **host** of server (default *http://localhost:8080*)
 
-Put file :download:`import.sql <../files/import.sql>` into *ivis-server/src/main/resources*.
+Put file `import.sql <https://github.com/imCodePartnerAB/iVIS/releases/download/v1.0.0-alpha1/import.sql>`_
+from Github project repository (v1.0.0-alpha1 release) into *ivis-server/src/main/resources*.
 
 Run application
 ---------------
-
-In the Terminal (Ctrl+ALt+T) execute following commands:
-
-.. code-block:: bash
-
-    cd /home/../iVIS #path to iVIS project directory
-
-    mvn clean install -DskipTests
-
-Go to project folder (/home/../iVIS/ivis-server/target).
-
-Find there file iVIS.war, rename to ROOT.war.
-
-Delete ROOT directory in Tomcat (/home/../apache-tomcat-{version}/webapps/ROOT)
-
-Copy file (ROOT.war) to directory where you download Tomcat (/home/../apache-tomcat-{version}/webapps).
 
 If you have process on port 8080 you must kill it by executing following command in the Terminal:
 
@@ -99,7 +78,14 @@ If you have process on port 8080 you must kill it by executing following command
 
     fuser -k 8080/tcp
 
-Then go to Tomcat folder (/home/../apache-tomcat-{version}/bin).
+Then go to Tomcat folder (*{tomcat-folder}*).
+
+.. important::
+    In Tomcat must be configured user with roles: manager-script, manager-gui, admin, manager-jmx.
+    They are configured in this :download:`instance </files/apache-tomcat-8.5.8.tar.gz>`.
+
+.. note::
+    In this manual uses username=admin and password=admin for that authority.
 
 Run Tomcat by executing following command in the Terminal:
 
@@ -111,29 +97,41 @@ Run Tomcat by executing following command in the Terminal:
 
     ./startup.sh
 
-Open the iVIS Server administration console in your browser: http://localhost:8080/ivis.
+Go to m2 local repository (user/.m2).
 
-Login: admin
+Create/edit file :download:`settings.xml </files/settings.xml>` in next way.
 
-Password: password
+.. literalinclude:: /files/settings.xml
+    :language: xml
+    :linenos:
+    :lineno-start: 5
+    :lines: 5-11
 
-.. note::
-    Default installations of the iVIS Server have configured user and person related in the database.
-    You can read more about it `here </en/latest/api/authorization.html>`_.
+In browser input address: http://localhost:8080/manager .
+
+Enter login "admin" and password "admin".
+
+Click Undeploy where root path ("/").
+
+.. image:: /images/undeployPointer.png
+
+In the Terminal (Ctrl+ALt+T) execute following commands:
+
+.. code-block:: bash
+
+    cd /../iVIS #path to iVIS project directory
+
+    mvn tomcat7:deploy #deploy configured to localhost:8080.
+
+Type http://localhost:8080 in browser.
+
+Input Login=admin and Password=pass.
 
 If you see this image, everything is good, congratulations!
 
 .. image:: /images/ivisServerStartPage.png
 
-Shutdown Tomcat by executing following command in the Terminal:
 
-.. code-block:: bash
-
-    cd  /home/../apache-tomcat-{version}/bin
-
-    chmod +x shutdown.sh
-
-    ./shutdown.sh
 
 
 
