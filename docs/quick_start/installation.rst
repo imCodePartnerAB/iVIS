@@ -13,7 +13,7 @@ Install Git
 Install Java
 ~~~~~~~~~~~~
 
-Project uses Java 1.8, so we recommend you to install Oracle JDK 1.8
+Project uses Java 1.8, so we are recommended install Oracle JDK 1.8.
 
 .. code-block:: bash
 
@@ -48,9 +48,12 @@ Download Tomcat server
 
 You can download it from the `official site <https://tomcat.apache.org//>`_
 
-Or use this one: :download:`apache-tomcat-8.5.4.tar.gz <../files/apache-tomcat-8.5.4.tar.gz>`.
+Or use this one: :download:`apache-tomcat-8.5.8.tar.gz <../files/apache-tomcat-8.5.8.tar.gz>`.
 
 Extract Tomcat folder from the archive in the location you want.
+
+.. note::
+    In this Tomcat instance configured user admin (password=admin) with the admin authorities.
 
 
 
