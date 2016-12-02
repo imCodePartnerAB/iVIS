@@ -121,6 +121,8 @@ In the Terminal (Ctrl+ALt+T) execute following commands:
 
     cd /../iVIS #path to iVIS project directory
 
+    cd ivis-server
+
     mvn tomcat7:deploy #deploy configured to localhost:8080.
 
 Type http://localhost:8080 in browser.

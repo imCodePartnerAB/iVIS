@@ -63,7 +63,7 @@ URL for access token or authorization code response.
 Roles
 ~~~~~
 
-Role (roles) that consist from set of permission for API access.
+Role (roles) that consist from set of permissions for API access.
 
 Described next at `Create or edit iVIS role`_ .
 
@@ -116,7 +116,7 @@ Permission represents as method API with detail description.
 
 .. tip::
     Checkbox near entity name has three state. It indicates that in group checked no one/all/some.
-    Also it provides possibility check/uncheck all permissions in group.
+    Also it provides possibility to check/uncheck all permissions in any group.
 
 
 

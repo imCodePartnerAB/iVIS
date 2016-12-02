@@ -1,7 +1,7 @@
 ﻿﻿Software Installation
-=====================
+======================
 
-Process will be describe in Ubuntu Terminal (Ctrl+Alt+T), and all following code you need input there.
+Process will be described in Ubuntu Terminal (Ctrl+Alt+T), and all following code you need input there.
 
 Install Git
 ~~~~~~~~~~~
