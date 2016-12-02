@@ -7,7 +7,7 @@ You think login, token management, api calls etc very hard to implement and will
 In this chapter you will look how to do routines jobs by few lines of code and iVIS SDK.
 
 And as conclusion in `Use cases <http://docs.ivis.se/en/latest/use_cases/index.html>`
-`Client example <http://docs.ivis.se/en/latest/use_cases/index.html>` chapter created simple client based on SDK.
+`Client example <http://docs.ivis.se/en/latest/use_cases/index.html>` described how create step by step client application.
 
 .. toctree::
     :titlesonly:
