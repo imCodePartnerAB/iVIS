@@ -18,10 +18,10 @@ public class Configuration {
     @Value("${client-secret}")
     private String clientSecret;
 
-    @Value("#{'${api-server-address}' + '${user-authorization-relate-uri}'}")
+    @Value("#{'${api-server-address}' + '${user-authorization-relative-uri}'}")
     private String userAuthorizationUri;
 
-    @Value("#{'${api-server-address}' + '${access-token-relate-uri}'}")
+    @Value("#{'${api-server-address}' + '${access-token-relative-uri}'}")
     private String accessTokenUri;
 
     @Bean
@@ -33,8 +33,8 @@ public class Configuration {
         client.setClientSecret(clientSecret);
         client.setAccessTokenUri(accessTokenUri);
         client.setUserAuthorizationUri(userAuthorizationUri);
-        client.setScope(CollectionBuilder.asLinkedList("read", "write"));
         return client;
+
     }
 
     @Bean

@@ -15,7 +15,7 @@ And also refresh token value from access token object put in cookie.
 
 .. important::
 
-    Cookie has expiration time. It is defined by value refresh token validity seconds,
+    Cookie has expiration time. It is defined by value "Refresh token validity" in seconds,
     contact system administrator to know that.
 
 So tokens flow looks like
@@ -40,17 +40,14 @@ As you can see this method also logout user from iVIS.
 
 .. note::
 
-    Don't forget write information about error page in web.xml.
+    In `Access to protected resources <http://docs.ivis.se/en/latest/sdk/routines/access_to_protected_resources.html>`_
+    routine described IvisAuthorizedFilter.
 
-    .. code-block:: xml
+    If user not logged in, filter intercept access to protected resources with response 401 status code.
 
-        <error-page>
-            <error-code>401</error-code>
-            <location>/unauthorized</location>
-        </error-page>
+.. importent::
 
-    Or use something other way for redirect to /unauthorized.
-
+    Need in some way redirect user to /unauthorized handler method, when request has code 401.
 
 
 

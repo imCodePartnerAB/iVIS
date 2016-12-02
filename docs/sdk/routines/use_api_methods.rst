@@ -29,9 +29,9 @@ And then just invoke API methods like Java methods.
 
     List<Application> allApplications = applicationService.findAll();
 
-.. tip::
+All API services described at `ivis-services <https://github.com/imCodePartnerAB/iVIS/tree/master/ivis-services/src/main/java/com/imcode/services>`_ module.
 
-    How to know what concrete method needs? Just see service interface methods: name, in parameters and return type.
+:download:`Class diagram </images/services.png>` of all interfaces with methods.
 
 
 

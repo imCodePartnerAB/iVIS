@@ -17,12 +17,12 @@ Properties
 
     api-server-address = http://ivis.dev.imcode.com
     client-address = http://client.of.ivis.com
-    #client id that you receive form system administrator
+    #client id that you receive from system administrator
     client-id = ff11397c-3e3b-4398-80a9-feba203f1928
-    redirect-relate-uri = /redirecttome
-    user-authorization-relate-uri = /oauth/authorize
-    access-token-relate-uri = /oauth/token
-    ivis-logout-relate-uri = /logout.do
+    redirect-relative-uri = /redirecttome
+    user-authorization-relative-uri = /oauth/authorize
+    access-token-relative-uri = /oauth/token
+    ivis-logout-relative-uri = /logout.do
 
 Beans for injection
 -------------------

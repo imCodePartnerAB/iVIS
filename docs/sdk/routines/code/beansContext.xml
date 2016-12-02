@@ -10,8 +10,8 @@
           p:grantType="authorization_code"
           p:clientId="${client-id}"
           p:clientSecret="secret"
-          p:accessTokenUri="#{'${api-server-address}' + '${user-authorization-relate-uri}'}"
-          p:userAuthorizationUri="#{'${api-server-address}' + '${access-token-relate-uri}'}"
-          p:scope="#{{'read', 'write'}}"/>
+          p:accessTokenUri="#{'${api-server-address}' + '${user-authorization-relative-uri}'}"
+          p:userAuthorizationUri="#{'${api-server-address}' + '${access-token-relative-uri}'}"
+          />
 
 </beans>

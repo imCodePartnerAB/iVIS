@@ -19,13 +19,13 @@ import java.net.URISyntaxException;
 @Controller
 public class IvisAuthorizationController {
 
-    @Value("#{'${client-address}' + '${redirect-relate-uri}'}")
+    @Value("#{'${client-address}' + '${redirect-relative-uri}'}")
     private String redirectUri;
 
     @Value("${refresh-token-validity-seconds")
     private Integer refreshTokenValiditySeconds;
 
-    @Value("#{'${api-server-address}' + '${ivis-logout-relate-uri}'}")
+    @Value("#{'${api-server-address}' + '${ivis-logout-relative-uri}'}")
     private String ivisLogoutUrl;
 
     @Value("${client-address}")
@@ -45,7 +45,7 @@ public class IvisAuthorizationController {
         return view;
     }
 
-    @RequestMapping(value = "${redirect-relate-uri}", method = RequestMethod.GET)
+    @RequestMapping(value = "${redirect-relative-uri}", method = RequestMethod.GET)
     public ModelAndView authorizationClientProcess(ModelAndView view,
                                                    HttpServletRequest request,
                                                    HttpServletResponse response,

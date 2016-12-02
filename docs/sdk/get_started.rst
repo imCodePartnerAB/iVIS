@@ -70,12 +70,17 @@ Write in your pom.xml
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-core</artifactId>
-            <version>1.0.0-alpha1-SNAPSHOT</version>
+            <version>1.0.0-alpha1</version>
         </dependency>
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-sdk</artifactId>
-            <version>1.0.0-alpha1-SNAPSHOT</version>
+            <version>1.0.0-alpha1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.imcode.ivis</groupId>
+            <artifactId>ivis-services</artifactId>
+            <version>1.0.0-alpha1</version>
         </dependency>
     </dependencies>
 
@@ -89,6 +94,7 @@ Write in your build.gradle
 .. code-block:: js
 
     dependencies {
-        compile group:'com.imcode.ivis', name:'ivis-core', version:'1.0.0-alpha1-SNAPSHOT'
-        compile group:'com.imcode.ivis', name:'ivis-sdk',version:'1.0.0-alpha1-SNAPSHOT'
+        compile group:'com.imcode.ivis', name:'ivis-core', version:'1.0.0-alpha1'
+        compile group:'com.imcode.ivis', name:'ivis-sdk', version:'1.0.0-alpha1'
+        compile group:'com.imcode.ivis', name:'ivis-services', version:'1.0.0-alpha1'
     }
