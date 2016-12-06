@@ -1,6 +1,11 @@
 package com.imcode.security.interceptors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.imcode.entities.User;
+import com.imcode.exceptions.factories.ErrorBuilder;
+import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.services.PermissionService;
 import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -34,6 +40,7 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
 
         if (!(authentication instanceof OAuth2Authentication)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            setErrorInResponse("Authorization without OAuth2 protocol.", response);
             return false;
         }
 
@@ -48,9 +55,18 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         Boolean permitted = permissionService.isPermitted(clientId, userId, hash);
         if (Objects.isNull(permitted)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            setErrorInResponse("Client and/or user haven't permission to access this method.", response);
             return false;
         }
 
         return permitted;
+    }
+
+    private void setErrorInResponse(String message, HttpServletResponse response) throws IOException {
+        GeneralError generalError = ErrorBuilder.buildSecurityException(message);
+        String errorAsJson = new ObjectMapper()
+                .setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
+                .writeValueAsString(generalError);
+        response.getOutputStream().print(errorAsJson);
     }
 }
