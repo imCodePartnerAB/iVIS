@@ -42,14 +42,16 @@ public class StaticUtls {
             @Override
             public void copyProperty(Object dest, String name, Object value)
                     throws IllegalAccessException, InvocationTargetException {
-                if (value instanceof Collection<?>) {
-                    if (!((Collection) value).isEmpty()) {
-                        super.copyProperty(dest, name, value);
-                        isCopied[0] = true;
-                    }
-                } else if (value != null) {
-                    super.copyProperty(dest, name, value);
+
+                boolean isCollNotEmpty = value instanceof Collection<?>
+                        && !((Collection) value).isEmpty();
+
+                boolean isMapNotEmpty = value instanceof Map<?, ?>
+                        && !((Map) value).isEmpty();
+
+                if ( isCollNotEmpty || isMapNotEmpty || Objects.nonNull(value) ) {
                     isCopied[0] = true;
+                    super.copyProperty(dest, name, value);
                 }
             }
         }.copyProperties(dest, source);
