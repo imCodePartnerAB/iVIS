@@ -29,12 +29,12 @@
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-core</artifactId>
-            <version>1.0.0-alpha1</version>
+            <version>1.0.0-alpha2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-services</artifactId>
-            <version>1.0.0-alpha1</version>
+            <version>1.0.0-alpha2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
