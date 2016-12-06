@@ -21,8 +21,8 @@ public class IvisAuthorizedFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest servletRequest = null;
-        HttpServletResponse servletResponse = null;
+        HttpServletRequest servletRequest;
+        HttpServletResponse servletResponse;
         try {
             servletRequest = (HttpServletRequest) request;
             servletResponse = (HttpServletResponse) response;
