@@ -1,4 +1,4 @@
-package com.imcode.configuration;
+package imcode.services.argumentresolver;
 
 import com.imcode.services.GenericService;
 import imcode.services.IvisServiceFactory;
