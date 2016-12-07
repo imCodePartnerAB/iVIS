@@ -34,18 +34,18 @@ public class IvisAuthorizedFilter implements Filter {
             return;
         }
 
-        logger.debug("Access to protected resources.");
+        logger.info("Access to protected resources.");
         if (!IvisOAuth2Utils.isTokenGood(servletRequest)) { // if token no good than skip
             servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            logger.info("Token no good.");
+            logger.info("Token isn't good.");
         } else if (roles == null){ // if token good, but you don't need use roles based
             servletResponse.setStatus(servletResponse.getStatus());
-            logger.info("Token good not need use roles.");
+            logger.info("Token is good, roles isn't need to check.");
         } else if (IvisOAuth2Utils.getIvisLoggedInUser(servletRequest).hasRoles(roles.split(","))){ // if you need use roles based
-            logger.info("Token and roles good.");
+            logger.info("Token and roles are good.");
             servletResponse.setStatus(servletResponse.getStatus());
         } else {
-            logger.info("Token good, but roles aren't.");
+            logger.info("Token is good, but roles aren't.");
             servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 
