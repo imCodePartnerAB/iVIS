@@ -19,7 +19,7 @@ public class GeneralValidator implements Validator {
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     public static final String URL_PATTERN =
-            "^http(s{0,1})://[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*";
+            "(\\s*|^)(((ht|f)tp(s?)://(www)?)|www)((?:[a-z0-9.-]|%[0-9A-F]{2}){3,})(?::(\\d+))?((?:\\/(?:[a-z0-9-._~!$&'()*+,;=:@]|%[0-9A-F]{2})*)*)(?:\\?((?:[a-z0-9-._~!$&'()*+,;=:\\/?@]|%[0-9A-F]{2})*))?(?:#((?:[a-z0-9-._~!$&'()*+,;=:\\/?@]|%[0-9A-F]{2})*))?(\\s*|$)";
 
     public enum Constraint {NOT_NULL_OR_EMPTY, MAX, MIN, REGEX, MATCH_WITH, NULL}
 
