@@ -3,11 +3,16 @@ package imcode.services.filter;
 import imcode.services.utils.IvisOAuth2Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.oauth2.client.http.AccessTokenRequiredException;
+import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Created by ruslan on 01.11.16.
@@ -26,28 +31,20 @@ public class IvisAuthorizedFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletRequest;
-        HttpServletResponse servletResponse;
         try {
             servletRequest = (HttpServletRequest) request;
-            servletResponse = (HttpServletResponse) response;
         } catch (ClassCastException e) {
             return;
         }
 
         logger.info("Access to protected resources.");
-        if (!IvisOAuth2Utils.isTokenGood(servletRequest)) { // if token no good than skip
-            servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            logger.info("Token isn't good.");
-        } else if (roles == null){ // if token good, but you don't need use roles based
-            servletResponse.setStatus(servletResponse.getStatus());
-            logger.info("Token is good, roles isn't need to check.");
-        } else if (IvisOAuth2Utils.getIvisLoggedInUser(servletRequest).hasRoles(roles.split(","))){ // if you need use roles based
-            logger.info("Token and roles are good.");
-            servletResponse.setStatus(servletResponse.getStatus());
-        } else {
-            logger.info("Token is good, but roles aren't.");
-            servletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if (!IvisOAuth2Utils.isTokenGood(servletRequest)) {
+            throw new UnauthorizedUserException("Token isn't good.");
+        } else if (Objects.nonNull(roles)
+                && !IvisOAuth2Utils.getIvisLoggedInUser(servletRequest).hasRoles(roles.split(","))){
+            throw new AccessDeniedException("Token is good, but roles aren't.");
         }
+        logger.info("Access is permitted");
 
         chain.doFilter(request, response);
     }
