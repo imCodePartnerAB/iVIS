@@ -159,7 +159,7 @@ public class IvisOAuth2Utils {
         } catch (Exception e) {
             logger.error("Error has occurred: ", e);
         }
-        return null;
+        return new User();
     }
 
     private static void loginUser(HttpSession session, User user) {
