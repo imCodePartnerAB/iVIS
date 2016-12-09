@@ -35,19 +35,19 @@ public class IvisResponseErrorHandler extends OAuth2ErrorHandler {
     public void handleError(ClientHttpResponse response) throws IOException, GeneralException {
 
         InputStream body = response.getBody();
-        byte[] bytes = StreamUtils.copyToByteArray(body);
-        logger.error(new String(bytes, StandardCharsets.UTF_8));
+        byte[] error = StreamUtils.copyToByteArray(body);
+        logger.error(new String(error, StandardCharsets.UTF_8));
 
         switch (response.getStatusCode()) {
 
             case BAD_REQUEST:
-                throw buildException(body);
+                throw buildException(error);
 
             case UNAUTHORIZED:
-                throw buildException(body);
+                throw buildException(error);
 
             case FORBIDDEN:
-                throw buildException(body);
+                throw buildException(error);
 
             default:
                 super.handleError(response);
@@ -56,10 +56,10 @@ public class IvisResponseErrorHandler extends OAuth2ErrorHandler {
         }
     }
 
-    private GeneralException buildException(InputStream responseBody) throws IOException {
+    private GeneralException buildException(byte [] error) throws IOException {
         return new ObjectMapper()
                 .setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES)
-                .readValue(responseBody, GeneralException.class);
+                .readValue(error, GeneralException.class);
     }
 
  }

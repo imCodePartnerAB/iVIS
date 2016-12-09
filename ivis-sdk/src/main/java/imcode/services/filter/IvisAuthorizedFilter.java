@@ -4,13 +4,10 @@ import imcode.services.utils.IvisOAuth2Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.oauth2.client.http.AccessTokenRequiredException;
-import org.springframework.security.oauth2.client.resource.UserRedirectRequiredException;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -18,6 +15,8 @@ import java.util.Objects;
  * Created by ruslan on 01.11.16.
  */
 public class IvisAuthorizedFilter implements Filter {
+
+    public static final String REQUEST_URI_ATTRIBUTE_NAME = "protectedResourceUrl";
 
     private static final Logger logger = LoggerFactory.getLogger(IvisAuthorizedFilter.class);
 
@@ -36,7 +35,8 @@ public class IvisAuthorizedFilter implements Filter {
         } catch (ClassCastException e) {
             return;
         }
-
+        String ruquestUri = servletRequest.getRequestURI();
+        servletRequest.getSession(true).setAttribute(REQUEST_URI_ATTRIBUTE_NAME, ruquestUri);
         logger.info("Access to protected resources.");
         if (!IvisOAuth2Utils.isTokenGood(servletRequest)) {
             throw new UnauthorizedUserException("Token isn't good.");
