@@ -55,7 +55,13 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         Boolean permitted = permissionService.isPermitted(clientId, userId, hash);
         if (Objects.isNull(permitted)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            setErrorInResponse("Client and/or user haven't permission to access this method.", response);
+            setErrorInResponse(
+                    "Client and/or user haven't permission to access "
+                    + handlerMethod.getBeanType().getSimpleName().replace("RestControllerImpl", "")
+                    + "["
+                    + handlerMethod.getMethod().getName()
+                    + "]"
+                    + " method.", response);
             return false;
         }
 
