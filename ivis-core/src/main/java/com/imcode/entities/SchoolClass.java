@@ -95,11 +95,12 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
         this.diaries = diaries;
     }
 
-
+    @JsonIgnore
     public List<Diary> getDiaryList() {
         return new LinkedList<>(diaries);
     }
 
+    @JsonIgnore
     public void setDiaryList(List<Diary> diaries) {
         this.diaries.addAll(diaries);
     }
