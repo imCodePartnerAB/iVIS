@@ -2,7 +2,7 @@ Client MVC configuration
 ========================
 
 Client MVC configuration represented at
-`this <https://github.com/imCodePartnerAB/iVIS-Client-Sample/blob/master/src/main/java/com/imcode/configuration/ClientConfiguration.java>`_
+`this <https://github.com/imCodePartnerAB/iVIS-Client-Sample/blob/master/src/main/java/com/imcode/configuration/ClientMvcConfiguration.java>`_
 file.
 
 When invoking ModelAndView method setViewName next configuration concatenates it with viewPrefix and viewSuffix:
@@ -61,7 +61,7 @@ Converter that used for init Ivis entity object instead id property:
 
 Custom error views:
 
- .. code-block:: java
+.. code-block:: java
 
     @Bean
     public ServerProperties errorHandling() {
