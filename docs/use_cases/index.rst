@@ -4,7 +4,7 @@ Use cases
 .. toctree::
     :titlesonly:
 
-    client_example
+    developing_client
     school_transport
     incidents
     validation

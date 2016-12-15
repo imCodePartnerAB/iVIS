@@ -1,5 +1,0 @@
-Client example
-==============
-
-Developing...
-
