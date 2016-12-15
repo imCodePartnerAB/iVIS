@@ -7,7 +7,6 @@ And as conclusion we will create simple web application which calls iVIS API. So
 .. toctree::
     :titlesonly:
 
-    routines/project_structure
     routines/build_configuration
     routines/configuration_properties
     routines/beans_configuration

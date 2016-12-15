@@ -2,26 +2,14 @@
 Get started
 ===========
 
-    * `Add repository`_
-        * `Maven <http://docs.ivis.se/en/latest/sdk/get_started.html#mvn1>`_
-        * `Gradle <http://docs.ivis.se/en/latest/sdk/get_started.html#grdl1>`_
-    * `Add dependencies`_
-        * `Maven <http://docs.ivis.se/en/latest/sdk/get_started.html#mvn2>`_
-        * `Gradle <http://docs.ivis.se/en/latest/sdk/get_started.html#grdl2>`_
+    * `Add Maven repository`_
+    * `Add Maven dependencies`_
 
+iVIS SDK consists of ivis-core, ivis-services and ivis-sdk dependencies.
+To use them you need include dependencies from Imcode |copy| maven repository to your Maven configuration file (pom.xml).
 
-iVIS SDK consists of ivis-core and ivis-sdk dependencies.
-To use them you need include dependencies from Imcode |copy| maven repository to your Maven or Gradle configuration file.
-
-Add repository
---------------
-
-.. _`mvn1`:
-
-Maven
-~~~~~
-
-Write in your pom.xml
+Add Maven repository
+--------------------
 
 .. code-block:: xml
 
@@ -40,61 +28,29 @@ Write in your pom.xml
         </repository>
     </repositories>
 
-.. _`grdl1`:
-
-Gradle
-~~~~~~
-
-Write in your build.gradle
-
-.. code-block:: js
-
-    repositories {
-        maven { url "http://repo.imcode.com/maven2" }
-        mavenCentral()
-    }
-
-Add dependencies
-----------------
-
-.. _`mvn2`:
-
-Maven
-~~~~~
-
-Write in your pom.xml
+Add Maven dependencies
+----------------------
 
 .. code-block:: xml
+
+    <properties>
+        <ivis.version>1.0.0-alpha2</ivis.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-core</artifactId>
-            <version>1.0.0-alpha1</version>
+            <version>${ivis.version}</version>
         </dependency>
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-sdk</artifactId>
-            <version>1.0.0-alpha1</version>
+            <version>${ivis.version}</version>
         </dependency>
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-services</artifactId>
-            <version>1.0.0-alpha1</version>
+            <version>${ivis.version}</version>
         </dependency>
     </dependencies>
-
-.. _`grdl2`:
-
-Gradle
-~~~~~~
-
-Write in your build.gradle
-
-.. code-block:: js
-
-    dependencies {
-        compile group:'com.imcode.ivis', name:'ivis-core', version:'1.0.0-alpha1'
-        compile group:'com.imcode.ivis', name:'ivis-sdk', version:'1.0.0-alpha1'
-        compile group:'com.imcode.ivis', name:'ivis-services', version:'1.0.0-alpha1'
-    }
