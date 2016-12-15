@@ -12,5 +12,6 @@ Complete client example placed at Github repository (https://github.com/imCodePa
     developing_client/project_structure
     developing_client/maven_pom_conf
     developing_client/client_properties
+    developing_client/client_configuration
 
 
