@@ -1,7 +1,7 @@
 Beans configuration
 ===================
 
-To use services with provided method we need next beans.
+To use services with provided methods we need next beans:
 
 .. code-block:: java
 

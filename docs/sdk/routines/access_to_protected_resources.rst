@@ -8,7 +8,7 @@ Prerequisites
 
 You can limit access to specific urls, or some code areas on JSP page. iVIS provides SDK in both cases.
 
-Both variants has optional parameter roles (String). "role" it is comma separated list of roles which gives user access
+Both variants has optional parameter roles (String). "roles" it is comma separated list of roles which gives user access
 to protected resources.
 
 Filter

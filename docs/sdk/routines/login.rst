@@ -49,9 +49,7 @@ Let's see how it looks like.
         return new RedirectView(redirect, true);
     }
 
-If user unauthorized you need redirect to login page.
 
-.. code-block:: java
 
 
 

@@ -79,8 +79,8 @@ As you can see this method also logout user from iVIS.
 
     If user not logged in, filter intercept access to protected resources by error thrown:
 
-    1. org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException with message Token isn't good.
-    2. org.springframework.security.access.AccessDeniedException Token is good, but roles aren't.
+    1. org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException with message "Token isn't good".
+    2. org.springframework.security.access.AccessDeniedException with message "Token is good, but roles aren't".
 
 
 

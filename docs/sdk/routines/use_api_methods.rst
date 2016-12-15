@@ -33,6 +33,20 @@ All API services described at `ivis-services <https://github.com/imCodePartnerAB
 
 :download:`Class diagram </images/services.png>` of all interfaces with methods.
 
+.. note::
+    Registered bean IvisServiceArgumentResolver provide you possibility use SDK in handler method next way. Also IvisIdToDomainClassConverter allow use id definition instead whole object.
+
+    .. code-block:: java
+
+        @RequestMapping(value = "/classes/save", method = RequestMethod.POST)
+        public ModelAndView saveSchoolClass(@ModelAttribute("schoolClass") SchoolClass schoolClass,
+                                            SchoolClassService classService) {
+            //in this object pupils and school fields are objects with only one non null property id
+            classService.save(schoolClass);
+            view.setViewName("school_classes/created");
+            return view;
+        }
+
 
 
 

@@ -1,7 +1,7 @@
 Mvc configuration
 =================
 
-To use services direct in handler methods
+To use services direct in handler methods we need following:
 
 .. code-block:: java
 
