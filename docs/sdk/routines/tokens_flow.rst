@@ -26,15 +26,49 @@ So tokens flow looks like
 
 Let's see how it looks like.
 
-In IvisAuthorizationController.java for last two points let's define method that will work with unauthorized users.
+For last two points let's define handler that will work with unauthorized users.
 
-:download:`IvisAuthorizationController.java </sdk/routines/code/IvisAuthorizationController.java>`
+.. code-block:: java
 
-.. literalinclude:: /sdk/routines/code/IvisAuthorizationController.java
-    :language: java
-    :linenos:
-    :lineno-start: 61
-    :lines: 61-80
+    public static final String PATH = "/unauthorized";
+
+    private final AuthorizationCodeResourceDetails client;
+    private final ClientProperties clientProperties;
+
+    private final String ivisLogoutUrl;
+
+    @Autowired
+    public UnauthorizedErrorController(
+            @Qualifier("clientInformation")
+                    AuthorizationCodeResourceDetails client,
+            ClientProperties clientProperties) {
+        this.client = client;
+        this.clientProperties = clientProperties;
+        this.ivisLogoutUrl = clientProperties.getApiServerAddress() + clientProperties.getIvisLogoutRelativeUri();
+    }
+
+    @RequestMapping(value = PATH)
+    public View unauthorizedUsers(ModelAndView view,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  @CookieValue(value = "refreshToken", required = false) String refreshTokenCookie) throws UnsupportedEncodingException, URISyntaxException {
+        logger.info("User unauthorized!");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        OAuth2AccessToken accessToken = IvisOAuth2Utils.getAccessToken(client, refreshTokenCookie);
+        //logout client
+        if (accessToken == null) {
+            String loginUrl = clientProperties.getClientAddress() + IvisAuthorizationController.LOGIN_RELATIVE_URI;
+            String redirectUrl = new URIBuilder(ivisLogoutUrl)
+                    .addParameter("redirect_url", loginUrl)
+                    .build()
+                    .toString();
+            logger.debug(redirectUrl);
+            return new RedirectView(redirectUrl, false);
+        }
+
+        IvisOAuth2Utils.setAccessToken(request, accessToken);
+        return new RedirectView("/", true);
+    }
 
 As you can see this method also logout user from iVIS.
 
@@ -43,11 +77,10 @@ As you can see this method also logout user from iVIS.
     In `Access to protected resources <http://docs.ivis.se/en/latest/sdk/routines/access_to_protected_resources.html>`_
     routine described IvisAuthorizedFilter.
 
-    If user not logged in, filter intercept access to protected resources with response 401 status code.
+    If user not logged in, filter intercept access to protected resources by error thrown:
 
-.. importent::
-
-    Need in some way redirect user to /unauthorized handler method, when request has code 401.
+    1. org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException with message Token isn't good.
+    2. org.springframework.security.access.AccessDeniedException Token is good, but roles aren't.
 
 
 

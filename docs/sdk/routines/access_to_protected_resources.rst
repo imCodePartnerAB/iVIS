@@ -6,45 +6,34 @@ Prerequisites
 
     * `Tokens flow <http://docs.ivis.se/en/latest/sdk/routines/tokens_flow.html>`_
 
-You can limit access to specific urls, or some code areas on JSP page. iVIS provides SDK in both case.
+You can limit access to specific urls, or some code areas on JSP page. iVIS provides SDK in both cases.
 
-Both variants has optional parameter roles (String), it is comma separated list of roles that access give user access
+Both variants has optional parameter roles (String). "role" it is comma separated list of roles which gives user access
 to protected resources.
 
 Filter
 ------
 
-Java config
-~~~~~~~~~~~
+Beans config
+~~~~~~~~~~~~
 
-:download:`Configuration.java </sdk/routines/code/Configuration.java>`
+.. code-block:: java
 
-.. literalinclude:: /sdk/routines/code/Configuration.java
-    :language: java
-    :linenos:
-    :lineno-start: 40
-    :lines: 40-55
+    @Bean(name = "ivisAuthorizedFilter")
+    public Filter ivisAuthorizedFilter() {
+        IvisAuthorizedFilter ivisAuthorizedFilter = new IvisAuthorizedFilter();
+        return ivisAuthorizedFilter;
+    }
 
-XML config
-~~~~~~~~~~
-
-You need write in web.xml following.
-
-.. code-block:: xml
-
-    <filter>
-        <filter-name>ivisAuthorizedFilter</filter-name>
-        <filter-class>imcode.services.filter.IvisAuthorizedFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>ivisAuthorizedFilter</filter-name>
-        <url-pattern>/persons/*</url-pattern>
-        <url-pattern>/pupils/*</ur l-pattern>
-        <init-param>
-           <param-name>roles</param-name>
-           <param-value>ROLE_ADMIN,ROLE_DEVELOPER</param-value>
-        </init-param>
-    </filter-mapping>
+    @Bean
+    public FilterRegistrationBean ivisAuthorizedFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(ivisAuthorizedFilter());
+        registration.addUrlPatterns("/services/classes/*");
+        registration.setName("ivisAuthorizedFilter");
+        registration.setOrder(1);
+        return registration;
+    }
 
 Tag
 ---
