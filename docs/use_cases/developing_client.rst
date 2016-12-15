@@ -13,5 +13,6 @@ Complete client example placed at Github repository (https://github.com/imCodePa
     developing_client/maven_pom_conf
     developing_client/client_properties
     developing_client/client_configuration
+    developing_client/client_mvc_configuration
 
 
