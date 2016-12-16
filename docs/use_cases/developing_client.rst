@@ -16,5 +16,6 @@ Complete client example placed at Github repository (https://github.com/imCodePa
     developing_client/client_mvc_configuration
     developing_client/client_customization
     developing_client/ivis_authorization_controller
+    developing_client/unauthorized_error_controller
 
 
