@@ -5,7 +5,7 @@
     <parent>
         <artifactId>iVIS</artifactId>
         <groupId>com.imcode.ivis</groupId>
-        <version>1.0.0-alpha2-SNAPSHOT</version>
+        <version>1.0.0-alpha2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.imcode.ivis</groupId>
             <artifactId>ivis-core</artifactId>
-            <version>1.0.0-alpha2-SNAPSHOT</version>
+            <version>${ivis.version}</version>
         </dependency>
     </dependencies>
 
