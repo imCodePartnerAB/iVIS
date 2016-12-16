@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -41,6 +43,10 @@ import java.util.regex.Pattern;
  * Created by vitaly on 28.05.15.
  */
 public class IvisOAuth2Utils {
+
+    private static final Logger logger = LoggerFactory.getLogger(IvisOAuth2Utils.class);
+
+
     public static final String CLIENT_CONTEXT_PARAMETER_NAME = "oauth2ClientContext";
     public static final String LOGGED_IN_USER_PARAMETER_NAME = "loggedInUser";
     public static final String IVIS_SERVICE_FACTORY_PARAMETER_NAME = "ivisServiceFactory";
@@ -103,7 +109,7 @@ public class IvisOAuth2Utils {
     }
 
     public static OAuth2AccessToken getAccessToken(AuthorizationCodeResourceDetails client, String refreshToken) throws UnsupportedEncodingException {
-        if (refreshToken == null) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
             return null;
         }
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
@@ -139,16 +145,21 @@ public class IvisOAuth2Utils {
     private static User getIvisLoggedInUser(HttpSession session) {
         Object user = session.getAttribute(LOGGED_IN_USER_PARAMETER_NAME);
 
-        if ( user != null ) {
-            return user instanceof User ? (User) user : null;
-        }  else {
-            User currentUser = getServiceFactory(session).getService(UserService.class).getCurrentUser();
-            if (currentUser == null) {
+        try {
+            if ( user != null ) {
+                return user instanceof User ? (User) user : null;
+            }  else {
+                User currentUser = getServiceFactory(session).getService(UserService.class).getCurrentUser();
+                if (currentUser == null) {
+                    return currentUser;
+                }
+                loginUser(session, currentUser);
                 return currentUser;
             }
-            loginUser(session, currentUser);
-            return currentUser;
+        } catch (Exception e) {
+            logger.error("Error has occurred: ", e);
         }
+        return new User();
     }
 
     private static void loginUser(HttpSession session, User user) {

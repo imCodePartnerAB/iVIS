@@ -2,17 +2,10 @@ package com.imcode.utils;
 
 import com.imcode.entities.OnceTimeAccessToken;
 import com.imcode.entities.User;
-import com.imcode.entities.interfaces.JpaEntity;
-import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.http.client.utils.URIBuilder;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.MethodParameter;
-import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -22,14 +15,11 @@ import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Created by vitaly on 09.12.15.
@@ -42,14 +32,16 @@ public class StaticUtls {
             @Override
             public void copyProperty(Object dest, String name, Object value)
                     throws IllegalAccessException, InvocationTargetException {
-                if (value instanceof Collection<?>) {
-                    if (!((Collection) value).isEmpty()) {
-                        super.copyProperty(dest, name, value);
-                        isCopied[0] = true;
-                    }
-                } else if (value != null) {
-                    super.copyProperty(dest, name, value);
+
+                boolean isCollNotEmpty = value instanceof Collection<?>
+                        && !((Collection) value).isEmpty();
+
+                boolean isMapNotEmpty = value instanceof Map<?, ?>
+                        && !((Map) value).isEmpty();
+
+                if ( isCollNotEmpty || isMapNotEmpty || Objects.nonNull(value) ) {
                     isCopied[0] = true;
+                    super.copyProperty(dest, name, value);
                 }
             }
         }.copyProperties(dest, source);

@@ -160,13 +160,12 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
             Class serviceEntityClass = getClassOfTypeArgument(serviceClass, 0);
 
             if (serviceEntityClass.equals(entityClass)) {
-                logger.info("find favorite implementation " + serviceClass + " for entity " + entityClass);
+                logger.info("find direct implementation " + serviceClass + " for entity " + entityClass);
                 return service;
             }
         }
 
         Class<? extends Serializable> entityIdClass = getEntityIdClass(entityClass);
-
         return getAbstractOAuth2ServiceImplementation(entityClass, entityIdClass);
     }
 
@@ -231,7 +230,7 @@ public class ProxyIvisServiceFactory implements IvisServiceFactory {
                 } catch (NoSuchMethodException e) {
                     logger.error("Constructor not fuond \"" + className + "\"");
                 } catch (Exception e) {
-                    logger.error(e.getMessage());
+                    logger.error("Unexpected exception: ", e.getMessage());
                 }
             }
         }

@@ -30,10 +30,6 @@ public class ClientDetailsServiceRepoImpl implements IvisClientDetailsService {
     public JpaClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         JpaClientDetails clientDetails = clietnDetailsRepository.findOne(clientId);
 
-        if (clientDetails == null) {
-            throw new NoSuchClientException("No client with requested id: " + clientId);
-        }
-
         return clientDetails;
     }
 
