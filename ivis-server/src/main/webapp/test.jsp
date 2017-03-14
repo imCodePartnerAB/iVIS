@@ -13,13 +13,13 @@
 
 <sec:authorize access="hasRole('ROLE_ADMIN')">
 <%
-    String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
-    String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
-    String redirectURI = "http://ivis.dev.imcode.com/test.jsp";
+//    String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
+//    String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
+//    String redirectURI = "http://ivis.dev.imcode.com/test.jsp";
 
-//    String authorizeURI = "http://localhost:8080/oauth/authorize";
-//    String tokenURI = "http://localhost:8080/oauth/token";
-//    String redirectURI = "http://localhost:8080/test.jsp";
+    String authorizeURI = "http://localhost:8080/oauth/authorize";
+    String tokenURI = "http://localhost:8080/oauth/token";
+    String redirectURI = "http://localhost:8080/test.jsp";
 
     String clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
     String clientSecret = "secret";
@@ -98,6 +98,8 @@
             <option>/api/v1/json/personroles</option>
             <option>/schema_versions</option>
         </select>
+        <input id="saveall" type="checkbox">
+        /saveall
         <br/>
         <br/>
         {id}
@@ -140,7 +142,7 @@
 
     <script>
         function makeRequest() {
-            var URL = $('#idOf').val() == "/" ? $('#path').find(":selected").text()
+            var URL = $('#idOf').val() == "/" ? $('#path').find(":selected").text() + ($('#saveall').is(':checked') ? '/saveall' : '')
                     : $('#path').find(":selected").text() + $('#idOf').val();
             var typeMethod = $('#typeMethod').find(":selected").text();
             var $jsonInput = $('#jsonInput').val();
