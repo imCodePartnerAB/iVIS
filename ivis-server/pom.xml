@@ -12,12 +12,8 @@
     <url>http://maven.apache.org</url>
     <properties>
         <jackson.databind-version>2.2.3</jackson.databind-version>
-        <!--<spring-framework.version>4.1.5.RELEASE</spring-framework.version>-->
         <spring-security.version>3.2.5.RELEASE</spring-security.version>
-        <!--<spring-security.version>4.0.1.RELEASE</spring-security.version>-->
-        <!--<spring-framework.version>4.0.3.RELEASE</spring-framework.version>-->
         <hibernate.version>4.3.10.Final</hibernate.version>
-        <!--<hibernate.version>3.6.10.Final</hibernate.version>-->
         <org.aspectj-version>1.7.4</org.aspectj-version>
         <org.slf4j-version>1.7.5</org.slf4j-version>
         <build.webapp.dir>${project.build.directory}/${project.artifactId}</build.webapp.dir>
@@ -412,12 +408,6 @@
     </dependencies>
     <build>
         <finalName>iVIS</finalName>
-        <filters>
-            <filter>
-                build.properties
-            </filter>
-        </filters>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -458,125 +448,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-
-                <executions>
-                    <execution>
-                        <id>validate-build-properties</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <target>
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-
-                                <if>
-                                    <not>
-                                        <available file="${project.basedir}/build.properties"/>
-                                    </not>
-                                    <then>
-                                        <copy file="${project.basedir}/build.properties.template"
-                                              tofile="${project.basedir}/build.properties"/>
-                                    </then>
-                                </if>
-
-                                <uptodate targetfile="${project.basedir}/build.properties"
-                                          property="build-properties-up-to-date">
-                                    <srcfiles dir="${project.basedir}" includes="build.properties.template"/>
-                                </uptodate>
-
-                                <!--<fail unless="build-properties-up-to-date">-->
-                                <!--'build.properties.template' is newer than 'build.properties'. (See docs/BUILD.TXT-->
-                                <!--for details.)-->
-                                <!--Copy 'build.properties.template' content into 'build.properties' and edit it!-->
-                                <!--</fail>-->
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>process-webapp-sources</id>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <target>
-                                <ant antfile="${project.basedir}/pom-ant.xml" target="process-webapp-sources">
-                                    <property name="version" value="${project.version}"/>
-                                    <property name="build.webapp.dir" value="${build.webapp.dir}"/>
-                                </ant>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <phase>package</phase>
-                        <configuration>
-                            <tasks>
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-
-                                <if>
-                                    <not>
-                                        <available file="${basedir}/local.server.properties"/>
-                                    </not>
-                                    <then>
-                                        <copy file="${basedir}/local.server.properties.template"
-                                              tofile="${basedir}/local.server.properties"/>
-                                        <fail>Edit "local.server.properties".</fail>
-                                    </then>
-                                </if>
-
-                                <taskdef name="mergeproperties" classname="com.imcode.ant.tasks.PropertiesMerge"/>
-                                <mergeproperties
-                                        srcFile="target/${project.build.finalName}/WEB-INF/classes/server.properties"
-                                        mergeFile="${basedir}/local.server.properties"
-                                        destFile="target/${project.build.finalName}/WEB-INF/classes/server.properties"/>
-                                <if>
-                                    <available file="target/classes/server.properties"/>
-                                    <then>
-                                        <mergeproperties
-                                                srcFile="target/classes/server.properties"
-                                                mergeFile="${basedir}/local.server.properties"
-                                                destFile="target/${project.build.finalName}/WEB-INF/server.properties"/>
-                                    </then>
-                                </if>
-
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b3</version>
-
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant-trax</artifactId>
-                        <version>1.8.0</version>
-                    </dependency>
-
-                    <dependency>
-                        <groupId>com.imcode.ant.tasks</groupId>
-                        <artifactId>imcode-ant-tasks</artifactId>
-                        <version>1.3</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
