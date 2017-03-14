@@ -18,7 +18,7 @@ public abstract class AbstractNamedEntity<ID extends Serializable> extends Abstr
 
     @NotNull
     @Size(min = 4, max = 200)
-    @Column(length = 200, columnDefinition = "")
+    @Column(length = 200)
     protected String name;
 
     public AbstractNamedEntity() {
