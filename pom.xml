@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.imcode.ivis</groupId>
     <artifactId>iVIS</artifactId>
-    <version>1.0.0-alpha2</version>
+    <version>1.0.0-alpha3-SNAPSHOT</version>
     <modules>
         <module>ivis-core</module>
         <module>ivis-services</module>
@@ -14,7 +14,7 @@
         <spring-oauth2.version>2.0.5.RELEASE</spring-oauth2.version>
         <spring-framework.version>4.1.6.RELEASE</spring-framework.version>
         <jackson.databind-version>2.4.0</jackson.databind-version>
-        <ivis.version>1.0.0-alpha2</ivis.version>
+        <ivis.version>1.0.0-alpha3-SNAPSHOT</ivis.version>
     </properties>
     <packaging>pom</packaging>
     <name>iVIS</name>
