@@ -16,6 +16,11 @@
     String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
     String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
     String redirectURI = "http://ivis.dev.imcode.com/test.jsp";
+
+//    String authorizeURI = "http://localhost:8080/oauth/authorize";
+//    String tokenURI = "http://localhost:8080/oauth/token";
+//    String redirectURI = "http://localhost:8080/test.jsp";
+
     String clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
     String clientSecret = "secret";
     String scope = "read+write";
@@ -89,6 +94,8 @@
             <option>/api/v1/json/applicationformsteps</option>
             <option>/api/v1/json/schoolclasses</option>
             <option>/api/v1/json/schools</option>
+            <option>/api/v1/json/workroles</option>
+            <option>/api/v1/json/personroles</option>
             <option>/schema_versions</option>
         </select>
         <br/>
