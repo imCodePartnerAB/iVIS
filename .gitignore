@@ -1,5 +1,14 @@
-target
 .idea/*
 .idea
 **/*.iml
+
+.classpath
+.project
+.settings
+
 build.log
+
+ivis-core/target/*
+ivis-sdk/target/*
+ivis-server/target/*
+ivis-services/target/*
