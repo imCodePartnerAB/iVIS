@@ -13,13 +13,13 @@
 
 <sec:authorize access="hasRole('ROLE_ADMIN')">
 <%
-//    String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
-//    String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
-//    String redirectURI = "http://ivis.dev.imcode.com/test.jsp";
+    String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
+    String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
+    String redirectURI = "http://ivis.dev.imcode.com/test.jsp";
 
-    String authorizeURI = "http://localhost:8080/oauth/authorize";
-    String tokenURI = "http://localhost:8080/oauth/token";
-    String redirectURI = "http://localhost:8080/test.jsp";
+//    String authorizeURI = "http://localhost:8080/oauth/authorize";
+//    String tokenURI = "http://localhost:8080/oauth/token";
+//    String redirectURI = "http://localhost:8080/test.jsp";
 
     String clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
     String clientSecret = "secret";
