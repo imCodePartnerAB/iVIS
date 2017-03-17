@@ -19,6 +19,7 @@ Contents
    overview/index
    quick_start/index
    basic_concepts/index
+   authorization/index
    api/index
    sdk/index
    use_cases/index
