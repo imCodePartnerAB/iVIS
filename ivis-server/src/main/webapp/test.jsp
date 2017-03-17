@@ -6,9 +6,10 @@
 <%@ page import="org.apache.http.client.methods.HttpPost" %>
 <%@ page import="org.apache.http.client.entity.UrlEncodedFormEntity" %>
 <%@ page import="org.apache.http.client.HttpClient" %>
-<%@ page import="org.apache.http.impl.client.DefaultHttpClient" %>
 <%@ page import="org.apache.http.HttpResponse" %>
 <%@ page import="org.apache.http.util.EntityUtils" %>
+<%@ page import="org.apache.http.impl.client.HttpClientBuilder" %>
+<%@ page import="java.util.Base64" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -23,7 +24,6 @@
 
     String clientId = "ff11397c-3e3b-4398-80a9-feba203f1928";
     String clientSecret = "secret";
-    String scope = "read+write";
 
     if (request.getParameter("code") == null) {
         URIBuilder builder = new URIBuilder(authorizeURI);
@@ -31,21 +31,25 @@
         builder.addParameter("client_id", clientId);
         builder.addParameter("redirect_uri", redirectURI);
         builder.addParameter("display", "popup");
-        builder.addParameter("scope", scope);
         String path = builder.build().toString();
         response.sendRedirect(path);
     } else {
         List<NameValuePair> pairsPost = new LinkedList<NameValuePair>();
         pairsPost.add(new BasicNameValuePair("code", request.getParameter("code")));
-        pairsPost.add(new BasicNameValuePair("client_id", clientId));
-        pairsPost.add(new BasicNameValuePair("client_secret", clientSecret));
         pairsPost.add(new BasicNameValuePair("redirect_uri", redirectURI));
         pairsPost.add(new BasicNameValuePair("grant_type", "authorization_code"));
 
+        String base64IdAndSecretColonSeparated = new String(
+                Base64.getEncoder().encode(
+                        (clientId + ":" + clientSecret)
+                                .getBytes())
+        );
+
         HttpPost post = new HttpPost(tokenURI);
         post.setEntity(new UrlEncodedFormEntity(pairsPost));
+        post.setHeader("Authorization", "Basic " + base64IdAndSecretColonSeparated);
 
-        HttpClient client = new DefaultHttpClient();
+        HttpClient client = HttpClientBuilder.create().build();
         HttpResponse responses = client.execute(post);
 
         String responseBody = EntityUtils.toString(responses.getEntity());
