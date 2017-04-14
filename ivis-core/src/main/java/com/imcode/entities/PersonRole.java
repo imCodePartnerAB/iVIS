@@ -1,5 +1,6 @@
 package com.imcode.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.superclasses.AbstractIdEntity;
 
 import javax.persistence.*;
@@ -25,10 +26,12 @@ public class PersonRole extends AbstractIdEntity<Long> implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "school_id")
+    @JsonIgnoreProperties(value = "school_classes")
     private School school;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "school_class_id")
+    @JsonIgnoreProperties(value = {"pupils", "school"})
     private SchoolClass schoolClass;
 
     @Column(name = "date_from")
