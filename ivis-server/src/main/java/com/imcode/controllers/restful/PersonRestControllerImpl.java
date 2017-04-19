@@ -3,6 +3,8 @@ package com.imcode.controllers.restful;
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.Person;
 import com.imcode.services.PersonService;
+import com.imcode.services.UserService;
+import com.imcode.utils.StaticUtls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,9 +24,9 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
 //        Person person = getService().findFirstByPersonalId(personId);
 //        return person;
 //    }
-    @Autowired
-    PersonService personService;
 
+    @Autowired
+    UserService userService;
 
     @RequestMapping(method = RequestMethod.GET, params = {"search_text", "order_by"})
     public List<Person> findByCriteria (@RequestParam(value = "search_text") String searchText,
@@ -34,9 +36,8 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
 
         if (orderBy.equals("last_name") || orderBy.equals("first_name")) {
             String validateOrderBy = orderBy.replace("_n", "N");
-            return personService.findBySearchCriteria(searchText, validateOrderBy);
+            return getService().findBySearchCriteria(searchText, validateOrderBy);
         }
-
 
         return null;
 
@@ -56,5 +57,10 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
                                          HttpServletResponse response
     ) {
         return super.getFirstByPersonalId(personId, response);
+    }
+
+    @RequestMapping(value = "/ofcurrentuser", method = RequestMethod.GET)
+    public Person getPersonOfCurrentUser(WebRequest webRequest) {
+        return StaticUtls.getCurrentUser(webRequest, userService).getPerson();
     }
 }
