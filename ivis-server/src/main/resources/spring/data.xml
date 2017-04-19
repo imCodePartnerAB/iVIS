@@ -69,10 +69,13 @@
             <beans:props>
                 <!--<beans:prop key="hibernate.dialect">${Hibernate.dialect}</beans:prop>-->
                 <beans:prop key="hibernate.dialect">${Hibernate.dialect}</beans:prop>
-                <beans:prop key="connection.pool_size">1</beans:prop>
-                <beans:prop key="current_session_context_class">thread</beans:prop>
+                <beans:prop key="connection.pool_size">10</beans:prop>
+                <beans:prop key="hibernate.max_fetch_depth">3</beans:prop>
+                <beans:prop key="hibernate.jdbc.fetch_size">50</beans:prop>
+                <beans:prop key="hibernate.jdbc.batch_size">10</beans:prop>
+                <beans:prop key="current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</beans:prop>
                 <beans:prop key="cache.provider_class">org.hibernate.cache.NoCacheProvider</beans:prop>
-                <beans:prop key="show_sql">true</beans:prop>
+                <beans:prop key="hibernate.show_sql">true</beans:prop>
                 <beans:prop key="hibernate.hbm2ddl.auto">${Hibernate.hbm2ddl}</beans:prop>
             </beans:props>
         </beans:property>
