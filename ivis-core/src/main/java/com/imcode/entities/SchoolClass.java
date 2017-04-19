@@ -29,6 +29,7 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "school_id")
+    @JsonIgnoreProperties(value = "school_classes")
     private School school;
 
     @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)

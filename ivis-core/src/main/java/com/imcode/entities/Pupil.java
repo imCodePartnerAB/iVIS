@@ -39,10 +39,12 @@ public class Pupil extends AbstractIdEntity<Long> implements Serializable, JpaPe
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "school_class_id")
+    @JsonIgnoreProperties(value = "school")
     private SchoolClass schoolClass;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "school_id")
+    @JsonIgnoreProperties(value = "school_classes")
     private School school;
 
     @ManyToOne(fetch = FetchType.EAGER)
