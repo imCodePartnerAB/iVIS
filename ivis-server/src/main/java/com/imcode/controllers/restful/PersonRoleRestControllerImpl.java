@@ -27,7 +27,7 @@ public class PersonRoleRestControllerImpl extends AbstractRestController<PersonR
 
     @RequestMapping(value = "/ofcurrentuser", method = RequestMethod.GET)
     public List<PersonRole> getPersonRolesOfCurrentUser(WebRequest webRequest) {
-        return getService().findByPerson(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
+        return _getPersonRolesOfCurrentUser(webRequest);
     }
 
     @RequestMapping(value = "/schools/ofcurrentuser", method = RequestMethod.GET)
@@ -41,13 +41,17 @@ public class PersonRoleRestControllerImpl extends AbstractRestController<PersonR
     }
 
     @RequestMapping(value = "/workroles/ofcurrentuser", method = RequestMethod.GET)
-    public List<WorkRole> getDistinctWorkRolesOfCurrentUser(WebRequest webRequest) {
+    public List<WorkRole> getDistinctRolesOfCurrentUser(WebRequest webRequest) {
         return getDistinctItemsOfCurrentUser(webRequest, PersonRole::getRole);
+    }
+
+    private List<PersonRole> _getPersonRolesOfCurrentUser(WebRequest webRequest) {
+        return getService().findByPerson(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
     }
 
     private <T extends AbstractIdEntity<Long>> List<T> getDistinctItemsOfCurrentUser(WebRequest webRequest, Function<PersonRole, T> t) {
         final Map<Long, T> distinct = new HashMap<>();
-        getPersonRolesOfCurrentUser(webRequest)
+        _getPersonRolesOfCurrentUser(webRequest)
                 .stream()
                 .map(t)
                 .forEach(item -> distinct.putIfAbsent(item.getId(), item));
