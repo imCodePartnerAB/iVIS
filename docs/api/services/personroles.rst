@@ -10,6 +10,10 @@ Provides following method for `API <http://docs.ivis.se/en/latest/api/index.html
     * `DeleteByIds`_
     * `Get`_
     * `GetAll`_
+    * `GetDistinctRolesOfCurrentUser`_
+    * `GetDistinctSchoolClassesOfCurrentUser`_
+    * `GetDistinctSchoolsOfCurrentUser`_
+    * `GetPersonRolesOfCurrentUser`_
     * `SaveAll`_
     * `SaveAllAndReturnIds`_
     * `Search`_
@@ -148,6 +152,124 @@ GetAll
 URL:
 ~~~~
     */api/v1/{format}/personroles*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+    Description:
+
+        #. person(OBJECT< `Person <http://docs.ivis.se/en/latest/api/entities/Person.html>`_ >)
+        #. role(OBJECT< `WorkRole <http://docs.ivis.se/en/latest/api/entities/WorkRole.html>`_ >)
+        #. school(OBJECT< `School <http://docs.ivis.se/en/latest/api/entities/School.html>`_ >)
+        #. school_class(OBJECT< `SchoolClass <http://docs.ivis.se/en/latest/api/entities/SchoolClass.html>`_ >)
+        #. date_from(NUMBER(Date representation wrapped))
+        #. date_to(NUMBER(Date representation wrapped))
+        #. id(NUMBER)
+
+.. _`GetDistinctRolesOfCurrentUser`:
+
+GetDistinctRolesOfCurrentUser
+-----------------------------
+
+URL:
+~~~~
+    */api/v1/{format}/personroles/workroles/ofcurrentuser*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+    Description:
+
+        #. name(STRING)
+        #. id(NUMBER)
+
+.. _`GetDistinctSchoolClassesOfCurrentUser`:
+
+GetDistinctSchoolClassesOfCurrentUser
+-------------------------------------
+
+URL:
+~~~~
+    */api/v1/{format}/personroles/schoolclasses/ofcurrentuser*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+    Description:
+
+        #. school_day_start(NUMBER(Date representation wrapped))
+        #. school_day_end(NUMBER(Date representation wrapped))
+        #. school(OBJECT< `School <http://docs.ivis.se/en/latest/api/entities/School.html>`_ >)
+        #. pupils(ARRAY< `Pupil <http://docs.ivis.se/en/latest/api/entities/Pupil.html>`_ >)
+        #. diaries(ARRAY< `Diary <http://docs.ivis.se/en/latest/api/entities/Diary.html>`_ >)
+        #. name(STRING)
+        #. id(NUMBER)
+
+.. _`GetDistinctSchoolsOfCurrentUser`:
+
+GetDistinctSchoolsOfCurrentUser
+-------------------------------
+
+URL:
+~~~~
+    */api/v1/{format}/personroles/schools/ofcurrentuser*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+    Description:
+
+        #. school_id(STRING)
+        #. services(ARRAY< `ServiceTypeEnum <http://docs.ivis.se/en/latest/api/entities/ServiceTypeEnum.html>`_ >)
+        #. school_classes(ARRAY< `SchoolClass <http://docs.ivis.se/en/latest/api/entities/SchoolClass.html>`_ >)
+        #. after_school_center_sections(ARRAY< `AfterSchoolCenterSection <http://docs.ivis.se/en/latest/api/entities/AfterSchoolCenterSection.html>`_ >)
+        #. name(STRING)
+        #. id(NUMBER)
+
+.. _`GetPersonRolesOfCurrentUser`:
+
+GetPersonRolesOfCurrentUser
+---------------------------
+
+URL:
+~~~~
+    */api/v1/{format}/personroles/ofcurrentuser*
 
 Method:
 ~~~~~~~
