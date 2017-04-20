@@ -31,21 +31,21 @@ public class PersonRoleRestControllerImpl extends AbstractRestController<PersonR
     }
 
     @RequestMapping(value = "/schools/ofcurrentuser", method = RequestMethod.GET)
-    public List<School> getSchoolsOfCurrentUser(WebRequest webRequest) {
-        return getItemsOfCurrentUser(webRequest, PersonRole::getSchool);
+    public List<School> getDistinctSchoolsOfCurrentUser(WebRequest webRequest) {
+        return getDistinctItemsOfCurrentUser(webRequest, PersonRole::getSchool);
     }
 
     @RequestMapping(value = "/schoolclasses/ofcurrentuser", method = RequestMethod.GET)
-    public List<SchoolClass> getSchoolClassesOfCurrentUser(WebRequest webRequest) {
-        return getItemsOfCurrentUser(webRequest, PersonRole::getSchoolClass);
+    public List<SchoolClass> getDistinctSchoolClassesOfCurrentUser(WebRequest webRequest) {
+        return getDistinctItemsOfCurrentUser(webRequest, PersonRole::getSchoolClass);
     }
 
     @RequestMapping(value = "/workroles/ofcurrentuser", method = RequestMethod.GET)
-    public List<WorkRole> getWorkRolesOfCurrentUser(WebRequest webRequest) {
-        return getItemsOfCurrentUser(webRequest, PersonRole::getRole);
+    public List<WorkRole> getDistinctWorkRolesOfCurrentUser(WebRequest webRequest) {
+        return getDistinctItemsOfCurrentUser(webRequest, PersonRole::getRole);
     }
 
-    private <T extends AbstractIdEntity<Long>> List<T> getItemsOfCurrentUser(WebRequest webRequest, Function<PersonRole, T> t) {
+    private <T extends AbstractIdEntity<Long>> List<T> getDistinctItemsOfCurrentUser(WebRequest webRequest, Function<PersonRole, T> t) {
         final Map<Long, T> distinct = new HashMap<>();
         getPersonRolesOfCurrentUser(webRequest)
                 .stream()
