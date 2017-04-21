@@ -19,14 +19,14 @@ public class SchoolClassRestControllerImpl extends AbstractRestController<School
     @RequestMapping(method = RequestMethod.GET, params = {"name"})
     public List<SchoolClass> getByName(WebRequest webRequest, Model model,
                                         HttpServletResponse response,
-                                        @RequestParam("name") String name) {
+                                        @RequestParam("name") String name) throws Exception {
         return super.getByName(webRequest, model, response, name);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"name", "first"})
     public SchoolClass getFirstByName(WebRequest webRequest, Model model, HttpServletResponse response,
-                                       @RequestParam("name") String name) {
+                                       @RequestParam("name") String name) throws Exception {
         return super.getFirstByName(webRequest, model, response, name);
     }
 }

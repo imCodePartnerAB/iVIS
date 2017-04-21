@@ -166,7 +166,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     // if need override
     public List<T> getByName(WebRequest webRequest, Model model,
                             HttpServletResponse response,
-                            @RequestParam("name") String name) {
+                            @RequestParam("name") String name) throws Exception {
 
         if (service instanceof NamedService) {
             NamedService<T> namedService = (NamedService<T>) service;
@@ -179,10 +179,9 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
 
     }
 
-    // if need override
     public T getFirstByName(WebRequest webRequest, Model model,
                              HttpServletResponse response,
-                             @RequestParam("name") String name) {
+                             @RequestParam("name") String name) throws Exception {
 
         if (service instanceof NamedService) {
             NamedService<T> namedService = (NamedService<T>) service;
@@ -196,8 +195,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     public List<T> getByPersonalId(@RequestParam("personalId") String personId,
-                                  HttpServletResponse response
-    ) {
+                                  HttpServletResponse response) throws Exception {
 
         if (service instanceof PersonalizedService) {
             PersonalizedService<T> personalizedService = (PersonalizedService<T>) service;
@@ -211,8 +209,7 @@ public abstract class AbstractRestController<T extends JpaEntity<ID>, ID extends
     }
 
     public T getFirstByPersonalId(@RequestParam("personalId") String personId,
-                                  HttpServletResponse response
-    ) {
+                                  HttpServletResponse response) throws Exception {
 
         if (service instanceof PersonalizedService) {
             PersonalizedService<T> personalizedService = (PersonalizedService<T>) service;

@@ -54,8 +54,7 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
     public List<User> getByPersonalId(@RequestParam("personalId") String personId,
-                                       HttpServletResponse response
-    ) {
+                                       HttpServletResponse response) throws Exception {
         return super.getByPersonalId(personId, response);
     }
 

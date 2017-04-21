@@ -18,16 +18,14 @@ public class GuardianRestControllerImpl extends AbstractRestController<Guardian,
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
     public List<Guardian> getByPersonalId(@RequestParam("personalId") String personId,
-                                         HttpServletResponse response
-    ) {
+                                         HttpServletResponse response) throws Exception {
         return super.getByPersonalId(personId, response);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId", "first"})
     public Guardian getFirstByPersonalId(@RequestParam("personalId") String personId,
-                                  HttpServletResponse response
-    ) {
+                                  HttpServletResponse response) throws Exception {
         return super.getFirstByPersonalId(personId, response);
     }
 }

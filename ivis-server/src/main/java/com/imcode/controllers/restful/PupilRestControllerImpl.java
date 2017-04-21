@@ -61,16 +61,14 @@ public class PupilRestControllerImpl extends AbstractRestController<Pupil, Long,
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId"})
     public List<Pupil> getByPersonalId(@RequestParam("personalId") String personId,
-                                       HttpServletResponse response
-    ) {
+                                       HttpServletResponse response) throws Exception {
         return super.getByPersonalId(personId, response);
     }
 
     @Override
     @RequestMapping(method = RequestMethod.GET, params = {"personalId", "first"})
     public Pupil getFirstByPersonalId(@RequestParam("personalId") String personId,
-                                      HttpServletResponse response
-    ) {
+                                      HttpServletResponse response) throws Exception {
         return super.getFirstByPersonalId(personId, response);
     }
 

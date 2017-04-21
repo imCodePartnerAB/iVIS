@@ -21,41 +21,4 @@ import java.util.function.Function;
 @RestController
 @RequestMapping("/v1/{format}/personroles")
 public class PersonRoleRestControllerImpl extends AbstractRestController<PersonRole, Long, PersonRoleService> {
-
-    @Autowired
-    UserService userService;
-
-    @RequestMapping(value = "/ofcurrentuser", method = RequestMethod.GET)
-    public List<PersonRole> getPersonRolesOfCurrentUser(WebRequest webRequest) {
-        return _getPersonRolesOfCurrentUser(webRequest);
-    }
-
-    @RequestMapping(value = "/schools/ofcurrentuser", method = RequestMethod.GET)
-    public List<School> getDistinctSchoolsOfCurrentUser(WebRequest webRequest) {
-        return getDistinctItemsOfCurrentUser(webRequest, PersonRole::getSchool);
-    }
-
-    @RequestMapping(value = "/schoolclasses/ofcurrentuser", method = RequestMethod.GET)
-    public List<SchoolClass> getDistinctSchoolClassesOfCurrentUser(WebRequest webRequest) {
-        return getDistinctItemsOfCurrentUser(webRequest, PersonRole::getSchoolClass);
-    }
-
-    @RequestMapping(value = "/workroles/ofcurrentuser", method = RequestMethod.GET)
-    public List<WorkRole> getDistinctRolesOfCurrentUser(WebRequest webRequest) {
-        return getDistinctItemsOfCurrentUser(webRequest, PersonRole::getRole);
-    }
-
-    private List<PersonRole> _getPersonRolesOfCurrentUser(WebRequest webRequest) {
-        return getService().findByPerson(StaticUtls.getCurrentUser(webRequest, userService).getPerson());
-    }
-
-    private <T extends AbstractIdEntity<Long>> List<T> getDistinctItemsOfCurrentUser(WebRequest webRequest, Function<PersonRole, T> t) {
-        final Map<Long, T> distinct = new HashMap<>();
-        _getPersonRolesOfCurrentUser(webRequest)
-                .stream()
-                .map(t)
-                .forEach(item -> distinct.putIfAbsent(item.getId(), item));
-        return new ArrayList<>(distinct.values());
-    }
-
 }
