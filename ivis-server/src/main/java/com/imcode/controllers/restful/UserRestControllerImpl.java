@@ -1,6 +1,7 @@
 package com.imcode.controllers.restful;
 
 import com.imcode.controllers.AbstractRestController;
+import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.services.UserService;
 import com.imcode.utils.StaticUtls;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/{format}/users")
@@ -34,7 +37,11 @@ public class UserRestControllerImpl extends AbstractRestController<User, Long, U
         Map<String, Object> loggedInUser = new LinkedHashMap<>();
         loggedInUser.put("id", user.getId());
         loggedInUser.put("person", user.getPerson());
-        loggedInUser.put("roles", user.getRoles());
+        final Set<Role> roles = user
+                .getRoles()
+                .stream()
+                .filter( role -> !role.getInternal() ).collect(Collectors.toSet() );
+        loggedInUser.put("roles", roles);
 
         return loggedInUser;
     }
