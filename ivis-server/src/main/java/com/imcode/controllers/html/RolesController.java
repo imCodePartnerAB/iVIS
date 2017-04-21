@@ -1,5 +1,6 @@
 package com.imcode.controllers.html;
 
+import com.imcode.entities.Permission;
 import com.imcode.entities.Role;
 import com.imcode.services.PermissionService;
 import com.imcode.services.RoleService;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by ruslan on 16.11.16.
@@ -103,5 +107,17 @@ public class RolesController {
 
         mainService.delete(id);
 
+    }
+
+
+    @RequestMapping(value = "/available_urls", method = RequestMethod.GET)
+    @ResponseBody
+    public Set<String> getAllAvailableUrls() {
+        return permissionService
+                .findAll()
+                .stream()
+                .map(permission -> permission.getUrl().replace("/api/v1/{format}/", ""))
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

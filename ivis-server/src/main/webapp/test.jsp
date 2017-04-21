@@ -12,7 +12,6 @@
 <%@ page import="java.util.Base64" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<sec:authorize access="hasRole('ROLE_ADMIN')">
 <%
     String authorizeURI = "http://ivis.dev.imcode.com/oauth/authorize";
     String tokenURI = "http://ivis.dev.imcode.com/oauth/token";
@@ -54,7 +53,6 @@
 
         String responseBody = EntityUtils.toString(responses.getEntity());
         request.setAttribute("token", responseBody);
-
     }
 %>
 
@@ -69,47 +67,13 @@
 </head>
 <body>
 
-    <div id="jsonResponse">
-        <button onclick="hideResult();">Hide result</button>
-        <pre id="formatText">
-    </pre>
-        <div id="responseText">
-
+    <div class="testUsual" style="float:left; width:500px;">
+        URL: /api/v1/json/<select id="path"></select>
+        <br/>
+        <br/>
+        <div id="idOf-wrapper" style="display: none;">
+            {id}<input id="idOf"><br/>
         </div>
-    </div>
-
-    <div class="testUsual">
-        URL:
-        <select id="path">
-            <option>/api/v1/json/users/loggedin</option>
-            <option>/api/v1/json/priorities</option>
-            <option>/api/v1/json/categories</option>
-            <option>/api/v1/json/statuses</option>
-            <option>/api/v1/json/persons</option>
-            <option>/api/v1/json/pupils</option>
-            <option>/api/v1/json/incidents</option>
-            <option>/api/v1/json/issues</option>
-            <option>/api/v1/json/activities</option>
-            <option>/api/v1/json/activities/attach</option>
-            <option>/api/v1/json/applications</option>
-            <option>/api/v1/json/applicationformquestiongroups</option>
-            <option>/api/v1/json/applicationformquestions</option>
-            <option>/api/v1/json/applicationforms</option>
-            <option>/api/v1/json/applicationformsteps</option>
-            <option>/api/v1/json/schoolclasses</option>
-            <option>/api/v1/json/schools</option>
-            <option>/api/v1/json/workroles</option>
-            <option>/api/v1/json/personroles</option>
-            <option>/schema_versions</option>
-        </select>
-        <input id="saveall" type="checkbox">
-        /saveall
-        <br/>
-        <br/>
-        {id}
-        <input id="idOf" value="/">
-        (if not need, not delete "/")
-        <br/>
         <br/>
         HTTP Method:
         <select id="typeMethod">
@@ -143,11 +107,48 @@
 
     </div>
 
+    <div id="jsonResponse" style="float:left; whitespace:pre;">
+        <pre id="formatText">
+        </pre>
+        <div id="error-placement"></div>
+    </div>
 
     <script>
+
+        $(function () {
+            var $path = $('#path');
+            $.get('/roles/available_urls', function (data) {
+                $.each(data, function (index, item) {
+                    $('<option></option>')
+                        .text(item)
+                        .val('${pageContext.request.contextPath}/api/v1/json/' + item)
+                        .appendTo($path);
+                });
+                $('<option></option>')
+                    .text('/admin_action/')
+                    .val('/admin_action/{id}')
+                    .appendTo($path);
+
+                $path.change(function () {
+                    var $idOf = $('#idOf-wrapper');
+                    $('#idOf').val('');
+                    if ($(this).val().indexOf('{id}') !== -1) {
+                        $idOf.show();
+                    } else {
+                        $idOf.hide();
+                    }
+                });
+
+                $path.change();
+            });
+        });
+
         function makeRequest() {
-            var URL = $('#idOf').val() == "/" ? $('#path').find(":selected").text() + ($('#saveall').is(':checked') ? '/saveall' : '')
-                    : $('#path').find(":selected").text() + $('#idOf').val();
+            var URL = $('#path').val();
+            URL = URL.replace('{id}', $('#idOf').val());
+            if (URL.indexOf('/admin_action/') !== -1) {
+                URL = '${pageContext.request.contextPath}' + $('#idOf').val();
+            }
             var typeMethod = $('#typeMethod').find(":selected").text();
             var $jsonInput = $('#jsonInput').val();
             var data = {};
@@ -165,8 +166,17 @@
                 URL += "?access_token=" + access_token;
             }
 
+            var $jsonResponse = $('#jsonResponse');
+            if ($jsonResponse.is(':hidden')) {
+                $jsonResponse.show();
+            }
+            var $formatText = $('#formatText');
+            $formatText.html('');
+
+            var $errorPlacement = $('#error-placement');
+            $errorPlacement.html('');
+
             $.ajax({
-//            url: '/ivis' + URL,
                 url: URL,
                 contentType: typeMethod == 'GET' ? 'application/x-www-form-urlencoded; charset=UTF-8' : 'application/json; charset=utf-8',
                 data: typeMethod == 'GET' ? data : JSON.stringify(data),
@@ -182,21 +192,26 @@
                         } else {
                             jsonResult = JSON.stringify(result, null, '\t');
                         }
-                        $('#formatText').text(jsonResult);
-                        $('#jsonResponse').show();
+                        $formatText.text(jsonResult);
                     } catch (err) {
-                        $('#formatText').text("ERROR:\n" + err.toString());
-                        $('#formatText').css('color', 'red');
-                        $('#jsonResponse').show();
+                        $('<div></div>')
+                            .text("ERROR: " + err.toString())
+                            .css('color', 'red')
+                            .appendTo($errorPlacement);
                     }
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    var result = "ERROR:\n";
-                    result += "Status: " + jqXHR.status + "(" + jqXHR.statusText + ")\n";
 
-                    $('#formatText').text(result);
-                    $('#formatText').css('color', 'red');
+                    $('<div></div>')
+                        .text("ERROR!")
+                        .css('color', 'red')
+                        .appendTo($errorPlacement);
+
+                    $('<div></div>')
+                        .text("Status: " + jqXHR.status)
+                        .css('color', 'red')
+                        .appendTo($errorPlacement);
 
                     var respText = null;
                     try {
@@ -205,8 +220,9 @@
                     } catch (ex) {
                         respText = jqXHR.responseText;
                     }
-                    $('#responseText').html('<pre>' + respText + '</pre>');
-                    $('#jsonResponse').show();
+                    $('<pre></pre>')
+                        .html(respText)
+                        .appendTo($errorPlacement);
 
                 }
             });
@@ -214,24 +230,26 @@
 
         function attachFile() {
             var accessToken = $.parseJSON('${token}');
-            var URL = $('#path').find(":selected").text() + $('#idOf').val() + "?access_token=" + accessToken["access_token"];
+            var URL = $('#path').val()  + "?access_token=" + accessToken["access_token"];
+            URL = URL.replace('{id}', $('#idOf').val());
+            if (URL.indexOf('/admin_action/') !== -1) {
+                URL = '${pageContext.request.contextPath}' + $('#idOf').val();
+            }
             var typeMethod = $('#typeMethod').find(":selected").text().toLowerCase();
-
             var $form = $('#formUpload');
             $form.attr("action", URL);
             $form.attr("method", typeMethod);
-
             $form.submit();
         }
 
 
         function downloadFile() {
-            var URL = $('#path').find(":selected").text() + $('#idOf').val();
+            var URL = $('#path').val();
+            URL = URL.replace('{id}', $('#idOf').val());
+            if (URL.indexOf('/admin_action/') !== -1) {
+                URL = '${pageContext.request.contextPath}' + $('#idOf').val();
+            }
             location.href = URL;
-        }
-
-        function hideResult() {
-            $('#jsonResponse').hide();
         }
 
 //        function getAccessToken() {
@@ -265,14 +283,6 @@
 
     </script>
 
-    <style>
-        #jsonResponse {
-            float: right;
-            display: none;
-            width: 70%;
-        }
-    </style>
-
     <%--<br>--%>
     <%--Get access token for client--%>
 
@@ -287,13 +297,6 @@
         <%--<button onclick="getAccessToken();">Get access token for client</button>--%>
         <%--<br>--%>
     <%--</div>--%>
-
-
-</sec:authorize>
-
-<sec:authorize access="!hasRole('ROLE_ADMIN')">
-    You are not admin. Access denied.
-</sec:authorize>
 
 </body>
 </html>
