@@ -2,7 +2,6 @@ package com.imcode.controllers.restful;
 
 import com.imcode.controllers.AbstractRestController;
 import com.imcode.entities.*;
-import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.search.SearchCriteries;
 import com.imcode.services.PersonRoleService;
 import com.imcode.services.PersonService;
@@ -17,11 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 @RestController
 @RequestMapping("/v1/{format}")
@@ -137,7 +132,7 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
 
     @RequestMapping(value = PATH_SINGLE + "/current", method = RequestMethod.GET)
     public Person getCurrentPerson(WebRequest webRequest) {
-        return StaticUtls.getCurrentUser(webRequest, userService).getPerson();
+        return _getCurrentPerson(webRequest);
     }
 
     @RequestMapping(value =  PATH_SINGLE + "/current/personroles", method = RequestMethod.GET)
@@ -152,51 +147,46 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
 
     @RequestMapping(value =  PATH_SINGLE + "/current/schools", method = RequestMethod.GET)
     public List<School> getSchoolsOfCurrentPerson(WebRequest webRequest) {
-        return getDistinctItemsOfPerson(CURRENT_FLAG, webRequest, PersonRole::getSchool);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(CURRENT_FLAG, webRequest), PersonRole::getSchool);
     }
 
     @RequestMapping(value =  PATH_SINGLE + "/{id}/schools", method = RequestMethod.GET)
     public List<School> getSchoolsByPerson(@PathVariable("id") Long id, WebRequest webRequest) {
-        return getDistinctItemsOfPerson(id, webRequest, PersonRole::getSchool);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(id, webRequest), PersonRole::getSchool);
     }
 
     @RequestMapping(value =  PATH_SINGLE + "/current/schoolclasses", method = RequestMethod.GET)
     public List<SchoolClass> getSchoolClassesOfCurrentPerson(WebRequest webRequest) {
-        return getDistinctItemsOfPerson(CURRENT_FLAG, webRequest, PersonRole::getSchoolClass);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(CURRENT_FLAG, webRequest), PersonRole::getSchoolClass);
     }
 
     @RequestMapping(value =  PATH_SINGLE + "/{id}/schoolclasses", method = RequestMethod.GET)
     public List<SchoolClass> getSchoolClassesByPerson(@PathVariable("id") Long id, WebRequest webRequest) {
-        return getDistinctItemsOfPerson(id, webRequest, PersonRole::getSchoolClass);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(id, webRequest), PersonRole::getSchoolClass);
     }
 
     @RequestMapping(value =  PATH_SINGLE + "/current/workroles", method = RequestMethod.GET)
     public List<WorkRole> getWorkRolesOfCurrentPerson(WebRequest webRequest) {
-        return getDistinctItemsOfPerson(CURRENT_FLAG, webRequest, PersonRole::getRole);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(CURRENT_FLAG, webRequest), PersonRole::getRole);
     }
 
     @RequestMapping(value =  PATH_SINGLE + "/{id}/workroles", method = RequestMethod.GET)
     public List<WorkRole> getWorkRolesByPerson(@PathVariable("id") Long id, WebRequest webRequest) {
-        return getDistinctItemsOfPerson(id, webRequest, PersonRole::getRole);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(id, webRequest), PersonRole::getRole);
+    }
+
+    private Person _getCurrentPerson(WebRequest webRequest) {
+        return StaticUtls.getCurrentUser(webRequest, userService).getPerson();
     }
 
     private List<PersonRole> getPersonRoles(Long id, WebRequest webRequest) {
         final Person person;
         if (id.equals(CURRENT_FLAG)) {
-            person = getCurrentPerson(webRequest);
+            person = _getCurrentPerson(webRequest);
         } else {
             person = getService().find(id);
         }
         return personRoleService.findByPerson(person);
-    }
-
-    private <T extends AbstractIdEntity<Long>> List<T> getDistinctItemsOfPerson(Long id, WebRequest webRequest, Function<PersonRole, T> t) {
-        final Map<Long, T> distinct = new HashMap<>();
-        getPersonRoles(id, webRequest)
-                .stream()
-                .map(t)
-                .forEach(item -> distinct.putIfAbsent(item.getId(), item));
-        return new ArrayList<>(distinct.values());
     }
 
 }

@@ -2,6 +2,7 @@ package com.imcode.utils;
 
 import com.imcode.entities.OnceTimeAccessToken;
 import com.imcode.entities.User;
+import com.imcode.entities.superclasses.AbstractIdEntity;
 import com.imcode.services.UserService;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.http.client.utils.URIBuilder;
@@ -20,6 +21,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Created by vitaly on 09.12.15.
@@ -177,6 +179,14 @@ public class StaticUtls {
         return hash;
     }
 
-
+    public static <T extends AbstractIdEntity<Long>, E extends AbstractIdEntity<Long>> List<T> mapByRuleAndGetDistinct(Collection<E> items, Function<E, T> mapRule) {
+        final Map<Long, T> distinct = new HashMap<>();
+        items
+                .stream()
+                .map(mapRule)
+                .filter(Objects::nonNull)
+                .forEach(item -> distinct.putIfAbsent(item.getId(), item));
+        return new ArrayList<>(distinct.values());
+    }
 
 }
