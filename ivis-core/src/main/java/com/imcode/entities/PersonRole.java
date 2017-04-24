@@ -21,8 +21,8 @@ public class PersonRole extends AbstractIdEntity<Long> implements Serializable {
     private Person person;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private WorkRole role;
+    @JoinColumn(name = "work_role_id")
+    private WorkRole workRole;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "school_id")
@@ -57,12 +57,12 @@ public class PersonRole extends AbstractIdEntity<Long> implements Serializable {
         this.person = person;
     }
 
-    public WorkRole getRole() {
-        return role;
+    public WorkRole getWorkRole() {
+        return workRole;
     }
 
-    public void setRole(WorkRole role) {
-        this.role = role;
+    public void setWorkRole(WorkRole workRole) {
+        this.workRole = workRole;
     }
 
     public School getSchool() {
