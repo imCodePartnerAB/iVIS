@@ -50,7 +50,12 @@ public class AccessApiInterceptor extends HandlerInterceptorAdapter {
         Long userId = ((User) oauth2Authentication.getUserAuthentication().getPrincipal()).getId();
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Integer hash = StaticUtls.getHashFrom(handlerMethod);
+        String url = request.getRequestURI();
+        url = url.replaceAll("/\\d+", "/{id}");
+        final String replacement = "/{format}/";
+        url = url.replace("/json/", replacement);
+        url = url.replace("/xml/", replacement);
+        Integer hash = StaticUtls.getHashFrom(handlerMethod) + url.hashCode();
 
         Boolean permitted = permissionService.isPermitted(clientId, userId, hash);
         if (Objects.isNull(permitted)) {

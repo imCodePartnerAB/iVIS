@@ -94,7 +94,8 @@ public class PermissionRestController {
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
         String controllerClassName = handlerMethod.getBeanType().getSimpleName();
         permission.setEntityName(controllerClassName.substring(0, controllerClassName.lastIndexOf(REST_CONTROLLER_SUFIX)));
-        permission.setHash(StaticUtls.getHashFrom(handlerMethod));
+        final String url = permission.getUrl();
+        permission.setHash(StaticUtls.getHashFrom(handlerMethod) + url.hashCode());
         permission.setMethodName(handlerMethod.getMethod().getName());
         permission.setReturnValue(
                 determineJsonType(handlerMethod.getReturnType())
