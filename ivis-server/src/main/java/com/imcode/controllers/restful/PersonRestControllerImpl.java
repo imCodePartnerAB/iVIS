@@ -167,12 +167,12 @@ public class PersonRestControllerImpl extends AbstractRestController<Person, Lon
 
     @RequestMapping(value =  PATH_SINGLE + "/current/workroles", method = RequestMethod.GET)
     public List<WorkRole> getWorkRolesOfCurrentPerson(WebRequest webRequest) {
-        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(CURRENT_FLAG, webRequest), PersonRole::getRole);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(CURRENT_FLAG, webRequest), PersonRole::getWorkRole);
     }
 
     @RequestMapping(value =  PATH_SINGLE + "/{id}/workroles", method = RequestMethod.GET)
     public List<WorkRole> getWorkRolesByPerson(@PathVariable("id") Long id, WebRequest webRequest) {
-        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(id, webRequest), PersonRole::getRole);
+        return StaticUtls.mapByRuleAndGetDistinct(getPersonRoles(id, webRequest), PersonRole::getWorkRole);
     }
 
     private Person _getCurrentPerson(WebRequest webRequest) {
