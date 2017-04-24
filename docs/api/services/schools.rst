@@ -12,6 +12,7 @@ Provides following method for `API <http://docs.ivis.se/en/latest/api/index.html
     * `GetAll`_
     * `GetByName`_
     * `GetFirstByName`_
+    * `GetPersonsBySchool`_
     * `SaveAll`_
     * `SaveAllAndReturnIds`_
     * `Search`_
@@ -25,7 +26,7 @@ Create
 
 URL:
 ~~~~
-    */api/v1/{format}/schools*
+    */api/v1/{format}/school*
 
 Method:
 ~~~~~~~
@@ -55,7 +56,7 @@ Delete
 
 URL:
 ~~~~
-    */api/v1/{format}/schools/{id}*
+    */api/v1/{format}/school/{id}*
 
 Method:
 ~~~~~~~
@@ -115,7 +116,7 @@ Get
 
 URL:
 ~~~~
-    */api/v1/{format}/schools/{id}*
+    */api/v1/{format}/school/{id}*
 
 Method:
 ~~~~~~~
@@ -205,7 +206,7 @@ GetFirstByName
 
 URL:
 ~~~~
-    */api/v1/{format}/schools*
+    */api/v1/{format}/school*
 
 Method:
 ~~~~~~~
@@ -226,6 +227,37 @@ Parameters response:
         #. school_classes(ARRAY< `SchoolClass <http://docs.ivis.se/en/latest/api/entities/SchoolClass.html>`_ >)
         #. after_school_center_sections(ARRAY< `AfterSchoolCenterSection <http://docs.ivis.se/en/latest/api/entities/AfterSchoolCenterSection.html>`_ >)
         #. name(STRING)
+        #. id(NUMBER)
+
+.. _`GetPersonsBySchool`:
+
+GetPersonsBySchool
+------------------
+
+URL:
+~~~~
+    */api/v1/{format}/school/{id}/persons*
+
+Method:
+~~~~~~~
+    *GET*
+
+Parameters request:
+~~~~~~~~~~~~~~~~~~~
+    *null*
+
+Parameters response:
+~~~~~~~~~~~~~~~~~~~~
+    *Array*
+
+    Description:
+
+        #. personal_id(STRING)
+        #. first_name(STRING)
+        #. last_name(STRING)
+        #. addresses(KEY_ENUM_OBJECT_PAIR< `AddressTypeEnum <http://docs.ivis.se/en/latest/api/entities/AddressTypeEnum.html>`_ , `Address <http://docs.ivis.se/en/latest/api/entities/Address.html>`_ >)
+        #. emails(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Email <http://docs.ivis.se/en/latest/api/entities/Email.html>`_ >)
+        #. phones(KEY_ENUM_OBJECT_PAIR< `CommunicationTypeEnum <http://docs.ivis.se/en/latest/api/entities/CommunicationTypeEnum.html>`_ , `Phone <http://docs.ivis.se/en/latest/api/entities/Phone.html>`_ >)
         #. id(NUMBER)
 
 .. _`SaveAll`:
@@ -320,7 +352,7 @@ SearchFirst
 
 URL:
 ~~~~
-    */api/v1/{format}/schools/search/first*
+    */api/v1/{format}/school/search*
 
 Method:
 ~~~~~~~
@@ -350,7 +382,7 @@ Update
 
 URL:
 ~~~~
-    */api/v1/{format}/schools/{id}*
+    */api/v1/{format}/school/{id}*
 
 Method:
 ~~~~~~~
@@ -358,7 +390,7 @@ Method:
 
 Parameters request:
 ~~~~~~~~~~~~~~~~~~~
-    Object< `School <http://docs.ivis.se/en/latest/api/entities/School.html>`_ >
+    *null*
 
 Parameters response:
 ~~~~~~~~~~~~~~~~~~~~
@@ -372,4 +404,3 @@ Parameters response:
         #. after_school_center_sections(ARRAY< `AfterSchoolCenterSection <http://docs.ivis.se/en/latest/api/entities/AfterSchoolCenterSection.html>`_ >)
         #. name(STRING)
         #. id(NUMBER)
-
