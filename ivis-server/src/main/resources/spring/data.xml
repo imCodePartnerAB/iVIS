@@ -7,7 +7,6 @@
              xmlns:p="http://www.springframework.org/schema/p"
              xmlns:c="http://www.springframework.org/schema/c"
              xmlns:tx="http://www.springframework.org/schema/tx"
-             xmlns:aop="http://www.springframework.org/schema/aop"
              xmlns:task="http://www.springframework.org/schema/task"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
                   http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -18,7 +17,7 @@
                   http://www.springframework.org/schema/context
                   http://www.springframework.org/schema/context/spring-context.xsd
                   http://www.springframework.org/schema/tx
-                  http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+                  http://www.springframework.org/schema/tx/spring-tx.xsd   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <!-- Настраивает управление транзакциями с помощью аннотации @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -331,4 +330,19 @@
         </beans:property>
     </beans:bean>
 
+    <beans:bean id="samlMessageHandler" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <beans:property name="targetClass" value="com.imcode.saml2.auth.server.SamlMessageHandlerFactory"/>
+        <beans:property name="targetMethod" value="getSamlMessageHandler"/>
+        <beans:property name="arguments">
+            <beans:list>
+                <beans:value>${idp.clock_skew}</beans:value>
+                <beans:value>${idp.expires}</beans:value>
+                <beans:value>${server.name}</beans:value>
+                <beans:value>${idp.entity_id}</beans:value>
+                <beans:value>${idp.certificate}</beans:value>
+                <beans:value>${idp.private_key}</beans:value>
+                <beans:value>${idp.passphrase}</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
 </beans:beans>
