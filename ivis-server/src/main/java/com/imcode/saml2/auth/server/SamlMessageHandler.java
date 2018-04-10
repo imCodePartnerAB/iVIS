@@ -104,6 +104,7 @@ public class SamlMessageHandler {
             encoder.encode(messageContext);
         } catch (Exception e) {
             logger.error("Error is occurred during sending SAML response.", e);
+            throw new RuntimeException(e);
         }
     }
 }
