@@ -1,20 +1,16 @@
 package com.imcode.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.imcode.entities.enums.ApiEntities;
-import com.imcode.entities.enums.HttpMethod;
 import com.imcode.entities.interfaces.JpaPersonalizedEntity;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * Created by vitaly on 12.05.15.
@@ -37,6 +33,9 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     @Column
     private Boolean enabled = false;
+
+    @Column(name = "next_cloud_enabled")
+    private Boolean nextCloudEnabled = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
@@ -102,6 +101,14 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Boolean getNextCloudEnabled() {
+        return nextCloudEnabled;
+    }
+
+    public void setNextCloudEnabled(Boolean nextCloudEnabled) {
+        this.nextCloudEnabled = nextCloudEnabled;
     }
 
     @Override
