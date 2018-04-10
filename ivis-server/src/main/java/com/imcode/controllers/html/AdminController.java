@@ -15,8 +15,8 @@
  */
 package com.imcode.controllers.html;
 
-import com.imcode.entities.Person;
 import com.imcode.entities.OnceTimeAccessToken;
+import com.imcode.entities.Person;
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
 import com.imcode.entities.embed.Email;
@@ -25,8 +25,8 @@ import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.exceptions.factories.ErrorBuilder;
 import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.oauth2.IvisClientDetailsService;
-import com.imcode.services.PersonService;
 import com.imcode.services.OnceTimeAccessTokenService;
+import com.imcode.services.PersonService;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
@@ -40,7 +40,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.AccessDeniedException;
-//import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -57,8 +56,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
+
+//import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
 
 @Controller
 public class AdminController {
@@ -102,8 +103,7 @@ public class AdminController {
 	private String serverName;
 
 	@RequestMapping(value = "/oauth/users/{user}/tokens/{token}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> revokeToken(@PathVariable String user, @PathVariable String token, Principal principal)
-			throws Exception {
+    public ResponseEntity<Void> revokeToken(@PathVariable String user, @PathVariable String token, Principal principal) {
 		checkResourceOwner(user, principal);
 		if (tokenServices.revokeToken(token)) {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -114,7 +114,7 @@ public class AdminController {
 
 	@RequestMapping("/oauth/clients/{client}/tokens")
 	@ResponseBody
-	public Collection<OAuth2AccessToken> listTokensForClient(@PathVariable String client) throws Exception {
+    public Collection<OAuth2AccessToken> listTokensForClient(@PathVariable String client) {
 		return tokenStore.findTokensByClientId(client);
 	}
 
@@ -146,16 +146,12 @@ public class AdminController {
 
 	@RequestMapping("/login")
 	public ModelAndView login(@RequestParam(value = "display", required = false) String display,
-							  WebRequest webRequest,
 							  ModelAndView model) {
 
-		boolean isPopup = display != null && "popup".equals(display);
+        final boolean isPopup = display != null && "popup".equals(display);
 
-		if (isPopup) {
-			model.setViewName("security/login_popup");
-		} else {
-			model.setViewName("security/login");
-		}
+        final String viewName = isPopup ? "security/login_popup" : "security/login";
+        model.setViewName(viewName);
 
 		return model;
 	}
@@ -468,7 +464,7 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/errorhandler", params = "body", method = RequestMethod.GET)
-	public ModelAndView errorHandlerWithBody(HttpServletRequest request, ModelAndView modelAndView) throws Exception {
+    public ModelAndView errorHandlerWithBody(HttpServletRequest request, ModelAndView modelAndView) {
 		GeneralError generalError = new GeneralError();
 		generalError.setErrorCode(Integer.parseInt(request.getParameter("error_code")));
 		generalError.setErrorMessage(request.getParameter("error_message"));
