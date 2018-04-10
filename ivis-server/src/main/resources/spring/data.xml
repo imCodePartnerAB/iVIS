@@ -335,8 +335,6 @@
         <beans:property name="targetMethod" value="getSamlMessageHandler"/>
         <beans:property name="arguments">
             <beans:list>
-                <beans:value>${idp.clock_skew}</beans:value>
-                <beans:value>${idp.expires}</beans:value>
                 <beans:value>${server.name}</beans:value>
                 <beans:value>${idp.entity_id}</beans:value>
                 <beans:value>${idp.certificate}</beans:value>

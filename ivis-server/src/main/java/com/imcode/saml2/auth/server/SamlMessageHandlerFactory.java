@@ -23,9 +23,10 @@ public class SamlMessageHandlerFactory {
 
     private static final String DEFAULT_TEMPLATE_ID = "/templates/saml2-post-simplesign-binding.vm";
     private static final int DEFAULT_DURATION = 14400000;
+    private static final int DEFAULT_CLOCK_SKEW = 300;
+    private static final int DEFAULT_MESSAGE_EXPIRES = 300;
 
-    public static SamlMessageHandler getSamlMessageHandler(final int clockSkew, final int messageExpires,
-                                                           final String idpBaseUrl, final String entityId,
+    public static SamlMessageHandler getSamlMessageHandler(final String idpBaseUrl, final String entityId,
                                                            final String certificate, final String privateKey,
                                                            final String idpPassword) throws Exception {
 
@@ -35,7 +36,7 @@ public class SamlMessageHandlerFactory {
         final BasicSecurityPolicy securityPolicy = new BasicSecurityPolicy();
 
         final List<SecurityPolicyRule> policyRules = Arrays.asList(
-                new IssueInstantRule(clockSkew, messageExpires),
+                new IssueInstantRule(DEFAULT_CLOCK_SKEW, DEFAULT_MESSAGE_EXPIRES),
                 new MessageReplayRule(new ReplayCache(new MapBasedStorageService<>(), DEFAULT_DURATION))
         );
 
