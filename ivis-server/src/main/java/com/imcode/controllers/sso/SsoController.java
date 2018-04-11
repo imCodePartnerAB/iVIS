@@ -1,6 +1,6 @@
 package com.imcode.controllers.sso;
 
-import com.imcode.services.SsoAuthenticationService;
+import com.imcode.services.SsoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,15 +13,20 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/idp")
 public class SsoController {
 
-    private final SsoAuthenticationService ssoAuthenticationService;
+    private final SsoService ssoService;
 
     @Autowired
-    public SsoController(SsoAuthenticationService ssoAuthenticationService) {
-        this.ssoAuthenticationService = ssoAuthenticationService;
+    public SsoController(SsoService ssoService) {
+        this.ssoService = ssoService;
     }
 
     @RequestMapping(value = "/SingleSignOnService", method = RequestMethod.GET)
-    public void singleSignOnServiceGet(final HttpServletRequest request, final HttpServletResponse response) {
-        ssoAuthenticationService.authenticate(request, response);
+    public void singleSignOnService(final HttpServletRequest request, final HttpServletResponse response) {
+        ssoService.logIn(request, response);
+    }
+
+    @RequestMapping(value = "/SingleLogoutService", method = RequestMethod.GET)
+    public void singleLogoutService(final HttpServletRequest request, final HttpServletResponse response) {
+        ssoService.logOut(request, response);
     }
 }
