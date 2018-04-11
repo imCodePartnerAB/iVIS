@@ -12,7 +12,6 @@ import org.opensaml.saml2.ecp.RelayState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +54,6 @@ public class SamlSsoService implements SsoService {
     @Override
     public void logOut(final HttpServletRequest request, final HttpServletResponse response) {
         checkLogoutRequest(request, response);
-        invalidateUserSession();
         redirectUser(request, response);
     }
 
@@ -68,10 +66,6 @@ public class SamlSsoService implements SsoService {
             logger.error(errorMessage);
             throw new RuntimeException(errorMessage);
         }
-    }
-
-    private void invalidateUserSession() {
-        SecurityContextHolder.clearContext();
     }
 
     private void redirectUser(final HttpServletRequest request, final HttpServletResponse response) {
