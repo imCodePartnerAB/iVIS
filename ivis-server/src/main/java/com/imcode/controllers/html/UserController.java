@@ -2,9 +2,7 @@ package com.imcode.controllers.html;
 
 import com.imcode.entities.Role;
 import com.imcode.entities.User;
-import com.imcode.entities.enums.ApiEntities;
 import com.imcode.entities.enums.CommunicationTypeEnum;
-import com.imcode.entities.enums.HttpMethod;
 import com.imcode.services.RoleService;
 import com.imcode.services.UserService;
 import com.imcode.utils.MailSenderUtil;
@@ -24,8 +22,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -153,6 +152,8 @@ public class UserController {
         } catch (Exception e) {
             logger.error("Error UserController.update", e);
         }
+
+        persistUser.setEnabled(user.isEnabled());
 
         userService.save(persistUser);
         model.setViewName("redirect:/users");
