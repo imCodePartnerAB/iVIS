@@ -34,8 +34,8 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column
     private Boolean enabled = false;
 
-    @Column(name = "next_cloud_enabled")
-    private Boolean nextCloudEnabled = false;
+    @Column(name = "next_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
+    private Boolean nextCloudEnabled;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
