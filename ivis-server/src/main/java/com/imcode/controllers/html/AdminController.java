@@ -15,20 +15,14 @@
  */
 package com.imcode.controllers.html;
 
-import com.imcode.entities.OnceTimeAccessToken;
-import com.imcode.entities.Person;
-import com.imcode.entities.Role;
-import com.imcode.entities.User;
+import com.imcode.entities.*;
 import com.imcode.entities.embed.Email;
 import com.imcode.entities.embed.Phone;
 import com.imcode.entities.enums.CommunicationTypeEnum;
 import com.imcode.exceptions.factories.ErrorBuilder;
 import com.imcode.exceptions.wrappers.GeneralError;
 import com.imcode.oauth2.IvisClientDetailsService;
-import com.imcode.services.OnceTimeAccessTokenService;
-import com.imcode.services.PersonService;
-import com.imcode.services.RoleService;
-import com.imcode.services.UserService;
+import com.imcode.services.*;
 import com.imcode.utils.MailSenderUtil;
 import com.imcode.utils.StaticUtls;
 import com.imcode.validators.GeneralValidator;
@@ -59,12 +53,13 @@ import java.security.Principal;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 
-//import org.springframework.security.oauth.examples.sparklr.oauth.SparklrUserApprovalHandler;
-
 @Controller
 public class AdminController {
 
 	public Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static final String ROLE_USER = "ROLE_USER";
+    private static final String ROLE_STUDENT = "ROLE_STUDENT";
 
 	@Autowired
 	private ConsumerTokenServices tokenServices;
@@ -86,6 +81,9 @@ public class AdminController {
 
 	@Autowired
 	private PersonService personService;
+
+    @Autowired
+    private PupilService pupilService;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -169,12 +167,13 @@ public class AdminController {
 			method = RequestMethod.POST
 	)
 	public ModelAndView registrationDo(@ModelAttribute("user") User user,
-												 @RequestParam("firstName") String firstName,
-												 @RequestParam("lastName") String lastName,
-												 @RequestParam("email") String email,
-												 @RequestParam("contactPhone") String contactPhone,
-									   			 BindingResult bindingResult,
-												 WebRequest webRequest, ModelAndView model) throws MethodArgumentNotValidException {
+                                       @RequestParam("firstName") String firstName,
+                                       @RequestParam("lastName") String lastName,
+                                       @RequestParam("email") String email,
+                                       @RequestParam("contactPhone") String contactPhone,
+                                       @RequestParam(value = "studentRole", required = false) boolean isStudentRole,
+                                       BindingResult bindingResult,
+                                       ModelAndView model) throws MethodArgumentNotValidException {
 
 		Person person = new Person();
 
@@ -232,6 +231,10 @@ public class AdminController {
 
 		StaticUtls.encodeUserPassword(user);
 
+        if (isStudentRole) {
+            user.setRoles(Collections.singleton(roleService.findFirstByName(ROLE_STUDENT)));
+        }
+
 		OnceTimeAccessToken token = OnceTimeAccessToken.genToken(user, 60 * 24, OnceTimeAccessToken.TokenType.VERIFICATION);
 		onceTimeAccessTokenService.save(token);
 
@@ -271,14 +274,28 @@ public class AdminController {
 
 		user.setEnabled(true);
 
-		Role roleUser = roleService.findFirstByName("ROLE_USER");
+        Person person = personService.save(user.getPerson());
+
+        user.setPerson(person);
+
+        Role roleUser = roleService.findFirstByName(ROLE_USER);
 		Set<Role> roles = new HashSet<>();
 		roles.add(roleUser);
+
+        final Set<Role> predefinedUserRoles = user.getRoles();
+
+        if (!predefinedUserRoles.isEmpty()) {
+            roles.addAll(predefinedUserRoles);
+
+            if (predefinedUserRoles.contains(roleService.findFirstByName(ROLE_STUDENT))) {
+                final Pupil pupil = new Pupil();
+                pupil.setPerson(person);
+
+                pupilService.save(pupil);
+            }
+        }
+
 		user.setRoles(roles);
-
-		Person person = personService.save(user.getPerson());
-
-		user.setPerson(person);
 
 		userService.save(user);
 
