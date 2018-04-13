@@ -1,13 +1,17 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.imcode.entities.embed.Diary;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
-import java.io.Serializable;
-import java.util.*;
 import javax.persistence.*;
-import javax.persistence.Entity;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by vitaly on 09.02.15.
@@ -31,6 +35,9 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
     @JoinColumn(name = "school_id")
     @JsonIgnoreProperties(value = "school_classes")
     private School school;
+
+    @Column(name = "next_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
+    private Boolean nextCloudEnabled = false;
 
     @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
     private Set<Pupil> pupils;
@@ -109,6 +116,14 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
     @Override
     public String toString() {
         return name;
+    }
+
+    public Boolean getNextCloudEnabled() {
+        return nextCloudEnabled;
+    }
+
+    public void setNextCloudEnabled(Boolean nextCloudEnabled) {
+        this.nextCloudEnabled = nextCloudEnabled;
     }
 
     //    public Set<Pupil> getPupils() {
