@@ -14,8 +14,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.HandlerMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -63,6 +64,10 @@ public class StaticUtls {
         }
 
         return user;
+    }
+
+    public static User getCurrentUser(final HttpServletRequest request) {
+        return (User) ((Authentication) request.getUserPrincipal()).getPrincipal();
     }
 
     public static boolean executeCmd(String command) {
