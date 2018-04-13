@@ -67,6 +67,11 @@
             <input id="contactPhone" name="contactPhone"/>
         </div>
 
+        <div class="checkbox">
+            <label for="studentRole">Roles</label> <br/>
+            <input type="checkbox" id="studentRole" name="studentRole" value="true"/> USER STUDENT
+        </div>
+
         <div class="buttons">
             <button type="submit" class="positive" name="registration" value="Register">Register</button>
         </div>
