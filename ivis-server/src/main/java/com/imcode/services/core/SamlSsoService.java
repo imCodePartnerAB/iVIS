@@ -1,4 +1,4 @@
-package com.imcode.services.jpa;
+package com.imcode.services.core;
 
 import com.imcode.saml2.auth.server.SAMLAttribute;
 import com.imcode.saml2.auth.server.SAMLPrincipal;
