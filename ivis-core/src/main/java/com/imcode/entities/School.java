@@ -1,11 +1,10 @@
 package com.imcode.entities;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imcode.entities.enums.ServiceTypeEnum;
 import com.imcode.entities.superclasses.AbstractNamedEntity;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -34,6 +33,9 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "school")
     private Set<AfterSchoolCenterSection> afterSchoolCenterSections;
+
+    @Column(name = "next_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
+    private Boolean nextCloudEnabled = false;
 
     public Set<ServiceTypeEnum> getServices() {
         return services;
@@ -71,6 +73,14 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
 
     public void setAfterSchoolCenterSections(Set<AfterSchoolCenterSection> afterSchoolCenterSections) {
         this.afterSchoolCenterSections = afterSchoolCenterSections;
+    }
+
+    public Boolean getNextCloudEnabled() {
+        return nextCloudEnabled;
+    }
+
+    public void setNextCloudEnabled(Boolean nextCloudEnabled) {
+        this.nextCloudEnabled = nextCloudEnabled;
     }
 
     @Override
