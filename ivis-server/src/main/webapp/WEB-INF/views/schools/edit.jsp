@@ -16,6 +16,11 @@
         <%--<form:errors path="enabled" cssClass="error-description"/>--%>
     <%--</div>--%>
 
+    <div class="checkbox">
+        <form:checkbox path="nextCloudEnabled" value="true" cssErrorClass="error" label="Next Cloud Enabled"/>
+        <form:errors path="nextCloudEnabled" cssClass="error-description"/>
+    </div>
+
     <div class="field">
         <form:label path="name">
             Name*
