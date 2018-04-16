@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 @Table(name="dbo_user")
 @AttributeOverride(name="name", column = @Column(unique = true, length = 150, nullable = false))
 public class User extends AbstractNamedEntity<Long> implements UserDetails, Serializable, JpaPersonalizedEntity {
+
+    private static final long serialVersionUID = -4438213352510780615L;
+
     public static final String DEFAULT_PASSWORD = "";
 
     @NotNull(message = "password is required")
