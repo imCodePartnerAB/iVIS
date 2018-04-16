@@ -37,8 +37,8 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
     @Column
     private Boolean enabled = false;
 
-    @Column(name = "next_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
-    private Boolean nextCloudEnabled = false;
+    @Column(name = "school_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
+    private Boolean schoolCloudEnabled = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
@@ -106,12 +106,12 @@ public class User extends AbstractNamedEntity<Long> implements UserDetails, Seri
         this.enabled = enabled;
     }
 
-    public Boolean getNextCloudEnabled() {
-        return nextCloudEnabled;
+    public Boolean getSchoolCloudEnabled() {
+        return schoolCloudEnabled;
     }
 
-    public void setNextCloudEnabled(Boolean nextCloudEnabled) {
-        this.nextCloudEnabled = nextCloudEnabled;
+    public void setSchoolCloudEnabled(Boolean schoolCloudEnabled) {
+        this.schoolCloudEnabled = schoolCloudEnabled;
     }
 
     @Override

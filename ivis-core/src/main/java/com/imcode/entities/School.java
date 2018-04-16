@@ -34,8 +34,8 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "school")
     private Set<AfterSchoolCenterSection> afterSchoolCenterSections;
 
-    @Column(name = "next_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
-    private Boolean nextCloudEnabled = false;
+    @Column(name = "school_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
+    private Boolean schoolCloudEnabled = false;
 
     public Set<ServiceTypeEnum> getServices() {
         return services;
@@ -75,12 +75,12 @@ public class School extends AbstractNamedEntity<Long> implements Serializable {
         this.afterSchoolCenterSections = afterSchoolCenterSections;
     }
 
-    public Boolean getNextCloudEnabled() {
-        return nextCloudEnabled;
+    public Boolean getSchoolCloudEnabled() {
+        return schoolCloudEnabled;
     }
 
-    public void setNextCloudEnabled(Boolean nextCloudEnabled) {
-        this.nextCloudEnabled = nextCloudEnabled;
+    public void setSchoolCloudEnabled(Boolean schoolCloudEnabled) {
+        this.schoolCloudEnabled = schoolCloudEnabled;
     }
 
     @Override

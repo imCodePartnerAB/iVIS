@@ -28,16 +28,16 @@ public class DefaultSchoolCloudPermissionService implements SchoolCloudPermissio
 
         final Pupil pupil = pupilService.getPupilByPerson(user.getPerson());
 
-        return isApprovedBySchool(pupil) && isApprovedBySchoolClass(pupil) && user.getNextCloudEnabled();
+        return isApprovedBySchool(pupil) && isApprovedBySchoolClass(pupil) && user.getSchoolCloudEnabled();
     }
 
     private boolean isApprovedBySchool(final Pupil pupil) {
         final School pupilSchool = pupil.getSchool();
-        return pupilSchool == null || pupilSchool.getNextCloudEnabled();
+        return pupilSchool == null || pupilSchool.getSchoolCloudEnabled();
     }
 
     private boolean isApprovedBySchoolClass(final Pupil pupil) {
         final SchoolClass schoolClass = pupil.getSchoolClass();
-        return schoolClass == null || schoolClass.getNextCloudEnabled();
+        return schoolClass == null || schoolClass.getSchoolCloudEnabled();
     }
 }

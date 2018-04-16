@@ -36,8 +36,8 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
     @JsonIgnoreProperties(value = "school_classes")
     private School school;
 
-    @Column(name = "next_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
-    private Boolean nextCloudEnabled = false;
+    @Column(name = "school_cloud_enabled", columnDefinition = "BIT DEFAULT FALSE")
+    private Boolean schoolCloudEnabled = false;
 
     @OneToMany(mappedBy = "schoolClass", fetch = FetchType.EAGER)
     private Set<Pupil> pupils;
@@ -118,12 +118,12 @@ public class SchoolClass extends AbstractNamedEntity<Long> implements Serializab
         return name;
     }
 
-    public Boolean getNextCloudEnabled() {
-        return nextCloudEnabled;
+    public Boolean getSchoolCloudEnabled() {
+        return schoolCloudEnabled;
     }
 
-    public void setNextCloudEnabled(Boolean nextCloudEnabled) {
-        this.nextCloudEnabled = nextCloudEnabled;
+    public void setSchoolCloudEnabled(Boolean schoolCloudEnabled) {
+        this.schoolCloudEnabled = schoolCloudEnabled;
     }
 
     //    public Set<Pupil> getPupils() {

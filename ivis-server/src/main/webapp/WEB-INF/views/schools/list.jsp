@@ -18,7 +18,7 @@
         <th class="ordered-by">Name</th>
         <th>School ID</th>
         <th>Services</th>
-        <th>Next Cloud Enabled</th>
+        <th>School Cloud Enabled</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
@@ -34,7 +34,7 @@
                         <c:if test="${!fileOptionStatus.last}">, </c:if>
                     </c:forEach>
                 </td>
-                <td>${embeded.nextCloudEnabled}</td>
+                <td>${embeded.schoolCloudEnabled}</td>
                 <td class="buttons">
                     <a class="button positive" href="${mainUrl}/${embeded.id}?form">Edit</a>
                     <button class="negative" type="button" onclick="deleteElement('${mainUrl}',${embeded.id})">Remove</button>

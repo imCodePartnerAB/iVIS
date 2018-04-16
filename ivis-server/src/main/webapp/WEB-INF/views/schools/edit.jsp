@@ -18,8 +18,8 @@
     <%--</div>--%>
 
     <div class="checkbox">
-        <form:checkbox path="nextCloudEnabled" value="true" cssErrorClass="error" label="Next Cloud Enabled"/>
-        <form:errors path="nextCloudEnabled" cssClass="error-description"/>
+        <form:checkbox path="schoolCloudEnabled" value="true" cssErrorClass="error" label="School Cloud Enabled"/>
+        <form:errors path="schoolCloudEnabled" cssClass="error-description"/>
     </div>
 
     <div class="field">
@@ -57,7 +57,7 @@
         <tr>
             <th>Id</th>
             <th class="ordered-by">Name</th>
-            <th>Next Cloud Enabled</th>
+            <th>School Cloud Enabled</th>
             <%--<th>School ID</th>--%>
             <%--<th>Services</th>--%>
             <th>&nbsp;</th>
@@ -68,7 +68,7 @@
                 <tr data-object-id="${embeded.id}">
                     <td>${embeded.id}</td>
                     <td>${embeded.name}</td>
-                    <td>${embeded.nextCloudEnabled}</td>
+                    <td>${embeded.schoolCloudEnabled}</td>
                     <td class="buttons">
                         <a class="button positive" href="${schoolClassesUrl}/${embeded.id}?form">Edit</a>
                     </td>

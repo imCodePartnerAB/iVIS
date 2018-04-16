@@ -46,7 +46,7 @@ public class SchoolClassController {
 
         StaticUtls.rejectNullValue(persistEntity, "Try update non exist school");
 
-        schoolClassService.setSchoolCloudEnabling(persistEntity, entity.getNextCloudEnabled());
+        schoolClassService.setSchoolCloudEnabling(persistEntity, entity.getSchoolCloudEnabled());
 
         model.setViewName("redirect:" + getBackURL(persistEntity.getSchool().getId()));
 

@@ -5,8 +5,8 @@
 <form:form modelAttribute="entity" method="post">
 
     <div class="checkbox">
-        <form:checkbox path="nextCloudEnabled" value="true" cssErrorClass="error" label="Next Cloud Enabled"/>
-        <form:errors path="nextCloudEnabled" cssClass="error-description"/>
+        <form:checkbox path="schoolCloudEnabled" value="true" cssErrorClass="error" label="School Cloud Enabled"/>
+        <form:errors path="schoolCloudEnabled" cssClass="error-description"/>
     </div>
 
     <form:hidden path="name"/>

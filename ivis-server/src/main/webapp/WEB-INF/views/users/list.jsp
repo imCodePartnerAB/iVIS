@@ -16,7 +16,7 @@
         <th class="ordered-by">Name</th>
         <th>Roles</th>
         <th>Enabled</th>
-        <th>Next Cloud Enabled</th>
+        <th>School Cloud Enabled</th>
         <th>&nbsp;</th>
     </tr>
     </thead>
@@ -34,7 +34,7 @@
                     </c:forEach>
                 </td>
                 <td>${embeded.enabled}</td>
-                <td>${embeded.nextCloudEnabled}</td>
+                <td>${embeded.schoolCloudEnabled}</td>
                 <td class="buttons">
                     <a class="button positive" href="users/${embeded.id}?form">Edit</a>
                     <button class="negative" type="button" onclick="deleteElement('${listUrl}',${embeded.id})">Remove</button>

@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface SchoolClassRepository extends JpaRepository<SchoolClass, Long>, NamedService<SchoolClass>, JpaSpecificationExecutor<SchoolClass> {
 
     @Modifying
-    @Query("UPDATE SchoolClass sc SET sc.nextCloudEnabled = ?2 WHERE sc.id = ?1")
+    @Query("UPDATE SchoolClass sc SET sc.schoolCloudEnabled = ?2 WHERE sc.id = ?1")
     void updateSchoolCloudEnabling(Long id, boolean nextCloudEnabled);
 }
