@@ -63,6 +63,11 @@
         <put-attribute name="content" value="/WEB-INF/views/schools/edit.jsp"/>
     </definition>
 
+    <!--School Classes-->
+    <definition name="schoolClasses/edit" extends="default">
+        <put-attribute name="content" value="/WEB-INF/views/school-classes/edit.jsp"/>
+    </definition>
+
     <!--Pupils-->
     <definition name="pupils/list" extends="default">
         <put-attribute name="content" value="/WEB-INF/views/pupils/list.jsp"/>
