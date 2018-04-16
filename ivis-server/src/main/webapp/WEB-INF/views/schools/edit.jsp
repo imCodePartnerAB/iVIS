@@ -6,6 +6,7 @@
 <c:set value="/schools" var="mainPath"/>
 <spring:url value="${mainPath}" var="mainUrl"/>
 <spring:url value="${mainPath}" var="backUrl"/>
+<spring:url value="/schoolClasses" var="schoolClassesUrl"/>
 <h1>Edit School</h1>
 <form:form modelAttribute="entity" id="schoolUpdateForm" method="post">
     <%--<c:if test="${not empty message}">--%>
@@ -56,6 +57,7 @@
         <tr>
             <th>Id</th>
             <th class="ordered-by">Name</th>
+            <th>Next Cloud Enabled</th>
             <%--<th>School ID</th>--%>
             <%--<th>Services</th>--%>
             <th>&nbsp;</th>
@@ -66,6 +68,10 @@
                 <tr data-object-id="${embeded.id}">
                     <td>${embeded.id}</td>
                     <td>${embeded.name}</td>
+                    <td>${embeded.nextCloudEnabled}</td>
+                    <td class="buttons">
+                        <a class="button positive" href="${schoolClassesUrl}/${embeded.id}?form">Edit</a>
+                    </td>
                     <%--<td>${embeded.schoolId}</td>--%>
                     <%--<td>--%>
                         <%--<c:forEach items="${embeded.services}" var="service" varStatus="status">--%>
