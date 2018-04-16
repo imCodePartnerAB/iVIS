@@ -6,4 +6,6 @@ import com.imcode.entities.SchoolClass;
  * Created by vitaly on 17.02.15.
  */
 public interface SchoolClassService extends GenericService<SchoolClass, Long>, NamedService<SchoolClass> {
+
+    void setSchoolCloudEnabling(SchoolClass persistEntity, boolean nextCloudEnabled);
 }
