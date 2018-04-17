@@ -22,5 +22,6 @@ Contents
    api/index
    sdk/index
    use_cases/index
+   nextcloud_authentication/index
 
 .. include:: /common/contribute.txt
